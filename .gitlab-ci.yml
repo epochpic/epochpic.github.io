@@ -5,6 +5,8 @@ variables:
 
 pages:
   script:
+  - rm -rf public
+  - git clone https://$GITHUB_ACCESS@github.com/epochpic/epochpic.github.io.git public
   - cd public
   - git checkout master
   - git reset --hard origin/master
@@ -15,7 +17,7 @@ pages:
   - git config --global user.name "CFSA GitLab"
   - git add -A
   - git commit -am "Build from $CI_SERVER_NAME $CI_PIPELINE_ID $CI_COMMIT_SHORT_SHA" || true
-  - git push https://$GITHUB_ACCESS@github.com/epochpic/epochpic.github.io.git
+  - git push
   #artifacts:
   #  paths:
   #  - public
