@@ -1,0 +1,26 @@
+image: registry.gitlab.com/pages/hugo:latest
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+pages:
+  script:
+  - cd public
+  - git checkout master
+  - git reset --hard origin/master
+  - cd ..
+  - hugo
+  - cd public
+  - git config user.email "<cfsa.gitlab@gmail.com>"
+  - git config --global user.name "CFSA GitLab"
+  - git add -A
+  - git commit -am "Build from $CI_SERVER_NAME $CI_PIPELINE_ID $CI_COMMIT_SHORT_SHA" || true
+  - git push https://$GITHUB_ACCESS@github.com/epochpic/epochpic.github.io.git
+  #artifacts:
+  #  paths:
+  #  - public
+  only:
+  - master
+  tags:
+    - ubuntu
+    - gfortran
