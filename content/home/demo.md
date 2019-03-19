@@ -8,8 +8,9 @@ active = true  # Activate this widget? true/false
 weight = 15  # Order that this section will appear.
 
 # Note: a full width section format can be enabled by commenting out the `title` and `subtitle` with a `#`.
-title = "Examples"
-subtitle = ""
+#title = "Examples"
+#subtitle = ""
+headless = true
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
@@ -37,10 +38,10 @@ subtitle = ""
 
 [advanced]
  # Custom CSS. 
- css_style = "padding-top: 20px; padding-bottom: 20px;"
+ css_style = "padding-top: 40px; padding-bottom: 100px;"
  
  # CSS class.
  css_class = ""
 +++
 
-Example runs will go here
+<center><img src="/img/epoch-logo-menu.png" width="70%"></center>
