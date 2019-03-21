@@ -44,4 +44,4 @@ headless = true
  css_class = ""
 +++
 
-<center><img src="/img/epoch-logo-menu.png" width="70%"></center>
+<center><img src="/img/epoch-logo-large.png" width="70%"></center>
