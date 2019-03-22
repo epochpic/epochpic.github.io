@@ -9,6 +9,11 @@
   weight = 10
 
 [[main]]
+  name = "License"
+  url = "/license"
+  weight = 20
+
+[[main]]
   name = "Publications"
   url = "#featured"
   weight = 40
