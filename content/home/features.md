@@ -16,7 +16,7 @@ weight = 30
 # For available icons, see: https://sourcethemes.com/academic/docs/widgets/#icons
 
 [[feature]]
-  icon = "thumbs-up"
+  icon = "user-check"
   icon_pack = "fas"
   name = "Ease of Use"
   description = "No coding required"
