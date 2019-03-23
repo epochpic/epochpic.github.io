@@ -1,23 +1,11 @@
 +++
-# Contact widget.
-widget = "contact"  # Do not modify this line!
-active = true  # Activate this widget? true/false
-
 title = "License"
-subtitle = ""
-
-# Order that this section will appear in.
-weight = 130
-
-# Automatically link email and phone?
-autolink = false
-
-# Email form provider
-#   0: Disable email form
-#   1: Netlify (requires that the site is hosted by Netlify)
-#   2: formspree.io
-email_form = 0
+widget = "blank"
+weight = 1
+[design]
+  columns = "1"
 +++
+
 EPOCH is freely available under GPLv3 the details of which are below. For academic use this imposes no restrictions on your use of EPOCH. 
 
 In addition to abiding by the GPL licensing rules all users should acknowledge the EPOCH project in any publications or documents where EPOCH has been used. There are two ways that EPOCH should be acknowldged, and both are needed, 
