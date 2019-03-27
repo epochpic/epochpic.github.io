@@ -26,9 +26,14 @@ logo = "epoch-logo-menu.png"
 
 # Enable global source code highlighting? true/false
 # Documentation: https://sourcethemes.com/academic/docs/writing-markdown-latex/#highlighting-options
-highlight = true
-# highlight_languages = ["r"]  # Add support for highlighting additional languages
-# highlight_style = "github"  # For supported styles, see https://cdnjs.com/libraries/highlight.js/
+highlight = false
+#highlight_languages = ["fortran"]  # Add support for highlighting additional languages
+#highlight_style = "agate"  # For supported styles, see https://cdnjs.com/libraries/highlight.js/
+pygmentsUseClassic=true
+pygmentsUseClasses=false
+pygmentsCodeFences=true
+pygmentsCodefencesGuessSyntax=true
+pygmentsStyle="monokai"
 
 # Enable global LaTeX math rendering?
 #   If false, you can enable it locally on a per page basis.
