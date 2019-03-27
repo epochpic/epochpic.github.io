@@ -52,7 +52,7 @@ time_format = "3:04 PM"
 # Enter contact details (optional). To hide a field, clear it to "".
 email = "k.bennett@warwick.ac.uk"
 phone = ""
-address = "Physics Building, University of Warwick, United Kingdom"
+address = "Physical Sciences, University of Warwick, United Kingdom"
 
 # Office hours: use `<br>` to insert a line break, or set to "" to remove office hours
 office_hours = ""
@@ -90,8 +90,8 @@ contact_links = [
 #   3: OpenStreetMap (Mapbox)
 map = 2
 map_api_key = ""
-latitude = "52.38296477139031"
-longitude = "-1.563385507434663"
+latitude = "52.382845"
+longitude = "-1.563057"
 zoom = 15
 
 ############################
