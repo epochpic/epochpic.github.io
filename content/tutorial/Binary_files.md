@@ -31,31 +31,19 @@ Fortran programs.
 For illustration purposes, here is a simple example of writing a 2D
 array to file using Fortran:
 
-```python
-def fun(self):
-    self.x = 1
-```
-
 ```fortran
 PROGRAM output_array
 
 INTEGER :: iu, istat 
 INTEGER, PARAMETER :: nx = 10, ny = 20 
 DOUBLE PRECISION :: array(nx,ny) 
-CHARACTER(LEN=*), PARAMETER :: filename = 'array.dat'
+CHARACTER(LEN=*), PARAMETER :: filename = ’array.dat’
 
 array = 2.0d0
 
-OPEN(newunit=iu, file=filename, status='NEW', form='UNFORMATTED', &
-     access='STREAM', iostat=istat)
+OPEN(newunit=iu, file=filename, status=’NEW’, form=’UNFORMATTED’, &amp; access=’STREAM’, iostat=istat)
 
-IF (istat == 0) THEN
-  WRITE(iu) array
-  CLOSE(iu, iostat=istat)
-ELSE
-  PRINT*, 'ERROR: failed to open file ', '"' // filename // '"', &
-  ' for writing'
-END IF
+IF (istat == 0) THEN WRITE(iu) array CLOSE(iu, iostat=istat) ELSE PRINT*, ’ERROR: failed to open file ’, ’“’ // filename // ’”’, &amp; ’ for writing’ END IF
 
 END PROGRAM output_array
 ```

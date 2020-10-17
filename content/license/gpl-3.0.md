@@ -1,5 +1,6 @@
 +++
 widget = "blank"
+headless = true  # This file represents a page section.
 weight = 2
 [design]
   columns = "1"

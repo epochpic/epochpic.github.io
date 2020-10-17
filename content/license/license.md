@@ -1,5 +1,6 @@
 +++
 title = "License"
+headless = true  # This file represents a page section.
 widget = "blank"
 weight = 1
 [design]
@@ -16,4 +17,4 @@ In addition to abiding by the GPL licensing rules all users should acknowledge t
 
 These citations and acknowledgements are important as they help continue the funding stream which maintains and extends EPOCH
 
-Finally if your use of EPOCH has lead to an impact outside of academia then we may occassionally ask for a letter of support to maintain EPOCH funding.
+Finally if you your of EPOCH has lead to an impact outside of academia then we may occassional ask for a letter of support to maintain EPOCH funding.
