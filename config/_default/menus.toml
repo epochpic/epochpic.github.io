@@ -20,11 +20,11 @@
 
 [[main]]
   name = "Quick Start"
-  url = "#quickstart"
+  url = "/quickstart"
   weight = 50
 
 [[main]]
-  name = "Tutorials"
+  name = "Documentation"
   url = "/tutorial/"
   weight = 50
 
