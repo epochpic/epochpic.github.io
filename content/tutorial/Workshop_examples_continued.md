@@ -871,14 +871,14 @@ code will fail to run if the needed species are not specified.
 ### Bug reports, feature requests and questions {#bug_reports_feature_requests_and_questions}
 
 All questions and requests after the workshop should be posted on the
-GitLab EPOCH project [web page](https://cfsa-pmw.warwick.ac.uk/).
+GitHub EPOCH project [web page](https://github.com/Warwick-Plasma/epoch)
 
 ### The VisIt programme {#the_visit_programme}
 
 The VisIt programme is free. It can be downloaded from
 <https://wci.llnl.gov/simulation/computer-codes/visit/> There are many
 pre-compiled binaries so this ought to be easy. If you have any problems
-post a question on the GitLab EPOCH project.
+post a question on the GitHub EPOCH project.
 
 ### GDL not IDL {#gdl_not_idl}
 

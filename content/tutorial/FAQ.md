@@ -166,7 +166,7 @@ A slightly outdated developers manual exists which should be sufficient
 to cover most aspects of the code functionality. However, the code is
 written in a fairly modular and consistent manner, so reading through
 that is the best source of information. If you get stuck then you can
-post questions on the CCPForge forums.
+post questions on the GitHub forums.
 
 ## I want to have a full understanding of how **EPOCH** works. How do I do that? {#i-want-to-have-a-full-understanding-of-how-epoch-works.-how-do-i-do-that}
 

@@ -55,40 +55,16 @@ code.\
 
 These instructions should work in your host institute if you have git.
 
-1.  First, ensure that you have registered for an EPOCH account on
-    Warwick's Gitlab server (see
-    [below](#registering_on_gitlab))
-2.  Login to workstation using guest account.
-3.  Open a terminal.
-4.  Type the following command at the prompt:\
-    `git clone --recursive `[`https://cfsa-pmw.warwick.ac.uk/EPOCH/epoch.git`](https://cfsa-pmw.warwick.ac.uk/EPOCH/epoch.git)
-5.  When prompted, type in your GitLab username and password.
+1.  Login to workstation using guest account.
+2.  Open a terminal.
+3.  Type the following command at the prompt:\
+    `git clone --recursive https://github.com/Warwick-Plasma/epoch.git`
 
 You will now have a directory called 'epoch'. Inside this directory will
 be three EPOCH sub-directories epoch1d, epoch2d and epoch3d, an SDF
 directory and a few other files. Change directory into the epoch1d
 directory and start working through the ['Getting Started with
 EPOCH'](#getting_started_with_epoch) guide.
-
-### Registering on GitLab {#registering_on_gitlab}
-
-The EPOCH git repository is hosted on Warwick's GitLab server. This is a
-site which hosts git repositories and facilitates collaborative
-development in a similar way to GitHub. In addition to the repository
-there is an issue tracker where bugs, feature requests and support
-queries can be posted.
-
-To obtain an account, navigate to
-[<https://cfsa-pmw.warwick.ac.uk>](https://cfsa-pmw.warwick.ac.uk) and
-fill in the online form. You will now be sent a confirmation email with
-a link for confirming the account. When you log in to the site, you will
-see a section with the title "Join the EPOCH project" and a button
-labeled "EPOCH group". If you click this, you will be taken to the EPOCH
-group page where there is a "Request Access" button. This sends the
-maintainers a request to join the EPOCH group where you can access the
-code and participate in the user forums. Note that this approval stage
-is done manually, so please be patient but approval usually occurs
-within a day or two.
 
 ### Running the codes {#running_the_codes}
 
@@ -97,7 +73,8 @@ parallel job: `> echo Data | mpiexec -n 4 bin/epoch2d`
 
 **Note:** If you don't have git on your home computer you can always
 download a tar file of epoch when you return to your lab. This you get
-from the 'Wiki' section on the EPOCH GitLab webpage. However I recommend
+from the ['Releases'][https://github.com/Warwick-Plasma/epoch/releases]
+section on the EPOCH GitHub webpage. However I recommend
 you get, and learn, git and join the 21st century.
 
 # Getting Started with EPOCH {#getting_started_with_epoch}

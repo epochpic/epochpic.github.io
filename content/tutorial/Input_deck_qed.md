@@ -108,7 +108,7 @@ specified.
 The basic input deck has now been considered fully but it is possible
 for an end user to add new blocks to the input deck As a result, a
 version of the code which you have obtained from a source other than the
-Warwick GitLab server may include other input deck blocks. These should
+GitHub server may include other input deck blocks. These should
 be described in additional documentation provided with the version of
 the code that you have.
 

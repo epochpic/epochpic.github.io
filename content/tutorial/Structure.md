@@ -18,9 +18,9 @@ extracted contents will consist of a directory named
 "`$HOME/epoch-4.12.0`" (with "4.12.0" substituted by the current version
 number) and the subdirectories and files listed below.
 
-Alternatively, if the code is checked out from the GitLab git repository
-with the command\
-`git clone --recursive `[`https://cfsa-pmw.warwick.ac.uk/EPOCH/epoch.git`](https://cfsa-pmw.warwick.ac.uk/EPOCH/epoch.git)\
+Alternatively, if the code is checked out from the GitHub git repository
+with the command
+`git clone --recursive https://github.com/Warwick-Plasma/epoch.git`
 then the directory will be "`$HOME/epoch`".
 
 Once the code has been obtained, the top-level directory will contain
@@ -45,7 +45,7 @@ the following 4 directories and several files
 -   README.md - A brief overview of obtaining and using the EPOCH code.
 -   make_tarball.sh - This is a shell script which is used for creating
     the tarred and gzipped archives of EPOCH which are posted to the
-    Warwick GitLab server each time a new release is made.
+    GitHub server each time a new release is made.
 -   test_all.sh - A regression test script used when testing the code.
 
 The three EPOCH subdirectories all have a similar structure. Inside each
