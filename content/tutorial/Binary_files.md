@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Binary files"
-[menu.tutorial]
-  parent = "Content"
-  weight = 120
-+++
+linktitle: Binary files
+menu:
+  tutorial:
+    parent: Content
+    weight: 120
+---
 
 There are several input deck blocks which can read conditions directly
 from a user-specified file. These include the , and . In all such cases,

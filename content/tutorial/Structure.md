@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Structure"
-[menu.tutorial]
-  parent = "Content"
-  weight = 540
-+++
+linktitle: Structure
+menu:
+  tutorial:
+    parent: Content
+    weight: 540
+---
 
 When obtained, the EPOCH codes all have a similar structure. If the
 tarred and gzipped archive (commonly referred to as a tarball) is

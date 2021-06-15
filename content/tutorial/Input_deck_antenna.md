@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck antenna"
-[menu.tutorial]
-  parent = "Content"
-  weight = 230
-+++
+linktitle: Input deck antenna
+menu:
+  tutorial:
+    parent: Content
+    weight: 230
+---
 
 Antennae allow you to specify currents in the simulation domain that are
 added to the self consistent currents from the core solver. You can

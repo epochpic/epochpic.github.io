@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck control"
-[menu.tutorial]
-  parent = "Content"
-  weight = 270
-+++
+linktitle: Input deck control
+menu:
+  tutorial:
+    parent: Content
+    weight: 270
+---
 
 The *control* block contains information about the general code setup.
 See [EPOCH input deck][Input_deck] for more information

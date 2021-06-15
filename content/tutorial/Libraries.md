@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Libraries"
-[menu.tutorial]
-  parent = "Content"
-  weight = 460
-+++
+linktitle: Libraries
+menu:
+  tutorial:
+    parent: Content
+    weight: 460
+---
 
 The EPOCH codes are written using MPI for parallelism, but have no other
 libraries or dependencies. Currently, the codes are written to only

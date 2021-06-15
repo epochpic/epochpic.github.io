@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck particle file"
-[menu.tutorial]
-  parent = "Content"
-  weight = 370
-+++
+linktitle: Input deck particle file
+menu:
+  tutorial:
+    parent: Content
+    weight: 370
+---
 
 This block contains information about the block used to load particles
 from file. See [EPOCH input deck][Input_deck] for more

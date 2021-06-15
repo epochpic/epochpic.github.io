@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Using EPOCH in practice"
-[menu.tutorial]
-  parent = "Content"
-  weight = 590
-+++
+linktitle: Using EPOCH in practice
+menu:
+  tutorial:
+    parent: Content
+    weight: 590
+---
 
 # Specifying initial conditions for particles using the input deck {#specifying_initial_conditions_for_particles_using_the_input_deck}
 

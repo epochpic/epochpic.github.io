@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Compiling"
-[menu.tutorial]
-  parent = "Content"
-  weight = 150
-+++
+linktitle: Compiling
+menu:
+  tutorial:
+    parent: Content
+    weight: 150
+---
 
 To compile EPOCH in the supplied state, you must first change to the
 correct working directory. As explained in , the root directory for

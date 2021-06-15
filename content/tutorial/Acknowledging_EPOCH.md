@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Acknowledging EPOCH"
-[menu.tutorial]
-  parent = "Content"
-  weight = 100
-+++
+linktitle: Acknowledging EPOCH
+menu:
+  tutorial:
+    parent: Content
+    weight: 100
+---
 
 ## How do I acknowledge use of the code? {#how-do-i-acknowledge-use-of-the-code}
 

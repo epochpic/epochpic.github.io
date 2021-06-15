@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck fields"
-[menu.tutorial]
-  parent = "Content"
-  weight = 300
-+++
+linktitle: Input deck fields
+menu:
+  tutorial:
+    parent: Content
+    weight: 300
+---
 
 This block contains information about the EM fields specified at the
 start of the simulation. See [EPOCH input

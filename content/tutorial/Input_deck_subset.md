@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck subset"
-[menu.tutorial]
-  parent = "Content"
-  weight = 420
-+++
+linktitle: Input deck subset
+menu:
+  tutorial:
+    parent: Content
+    weight: 420
+---
 
 This block contains configuration for filters which can be used to
 modify the data to be output. See [EPOCH input

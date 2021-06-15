@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck probe"
-[menu.tutorial]
-  parent = "Content"
-  weight = 390
-+++
+linktitle: Input deck probe
+menu:
+  tutorial:
+    parent: Content
+    weight: 390
+---
 
 This block contains information about particle probes used for output.
 See [EPOCH input deck][Input_deck] for more information

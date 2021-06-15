@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck dist fn"
-[menu.tutorial]
-  parent = "Content"
-  weight = 280
-+++
+linktitle: Input deck dist fn
+menu:
+  tutorial:
+    parent: Content
+    weight: 280
+---
 
 This block contains information about distribution functions that should
 be calculated for output. See [EPOCH input

@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Workshop examples continued"
-[menu.tutorial]
-  parent = "Content"
-  weight = 600
-+++
+linktitle: Workshop examples continued
+menu:
+  tutorial:
+    parent: Content
+    weight: 600
+---
 
 # Other Laser-Plasma example decks {#other_laser_plasma_example_decks}
 

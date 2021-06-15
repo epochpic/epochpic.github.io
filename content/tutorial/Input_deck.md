@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck"
-[menu.tutorial]
-  parent = "Content"
-  weight = 330
-+++
+linktitle: Input deck
+menu:
+  tutorial:
+    parent: Content
+    weight: 330
+---
 
 Most of the control of EPOCH is through a text file called `input.deck`.
 The input deck file must be in the output directory which is passed to

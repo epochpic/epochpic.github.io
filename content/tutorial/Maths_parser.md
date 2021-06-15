@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Maths parser"
-[menu.tutorial]
-  parent = "Content"
-  weight = 480
-+++
+linktitle: Maths parser
+menu:
+  tutorial:
+    parent: Content
+    weight: 480
+---
 
 A discussion of the input deck for EPOCH would not be complete without
 consideration of the maths parser. The maths parser is the code which

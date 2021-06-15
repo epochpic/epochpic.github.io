@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Using delta f"
-[menu.tutorial]
-  parent = "Content"
-  weight = 580
-+++
+linktitle: Using delta f
+menu:
+  tutorial:
+    parent: Content
+    weight: 580
+---
 
 To help reduce the impact of numerical noise in certain simulations, the
 delta-f method may be used in for specified particle species. The

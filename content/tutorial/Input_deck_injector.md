@@ -1,15 +1,14 @@
-+++
-title = ""
-draft = false  # Is this a draft? true/false
-toc = true  # Show table of contents? true/false
-type = "docs"  # Do not modify.
+---
+draft: false
+toc: true
+type: docs
 
-# Add menu entry to sidebar.
-linktitle = "Input deck injector"
-[menu.tutorial]
-  parent = "Content"
-  weight = 310
-+++
+linktitle: Input deck injector
+menu:
+  tutorial:
+    parent: Content
+    weight: 310
+---
 
 The *injector* block specifies a particle source to be introduced
 through a simulation boundary. Each injector block specifies a source of
