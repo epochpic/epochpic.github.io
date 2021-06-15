@@ -129,7 +129,7 @@ Figures are best included as thumbnails such as
 
     [[File:Two Stream Late.png|right|200px|thumb|Caption]]
 
-![Caption](/tutorial/img/Two_Stream_Late.png)
+![Caption](/img/Two_Stream_Late.png)
 
 [^1]: J. Bloggs, "The Chicken Paper", The Journal of Chickens, page
     10, 2017[1](http://link)

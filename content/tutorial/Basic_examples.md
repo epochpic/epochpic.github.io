@@ -100,7 +100,7 @@ end:output
 
 ![The final state of the electron phase space for the two stream
 instability
-example](/tutorial/img/Two_Stream_Late.png)
+example](/img/Two_Stream_Late.png)
 In this example, the constant block sets up constants for the momentum
 space drift, the temperature and the electron number density. The two
 species blocks set up the two drifting Maxwellian distributions and the
@@ -110,7 +110,7 @@ in the figure.
 # Structured density profile in EPOCH2D {#structured_density_profile_in_epoch2d}
 
 ![Complex 2D density
-structure](/tutorial/img/EPOCH_density_example.png)
+structure](/img/EPOCH_density_example.png)
 
 A simple but useful example for EPOCH2D is to have a highly structured
 initial condition to show that this is still easy to implement in EPOCH.
@@ -232,10 +232,10 @@ end:species
 ```
 
 #### Cone initial conditions in 3D {#3d_cone}
-![Cone initial conditions in 3D](/tutorial/img/3dcone.png)
+![Cone initial conditions in 3D](/img/3dcone.png)
 
 #### Cone initial conditions in 2D {#2d_cone}
-![Cone initial conditions in 2D](/tutorial/img/2dcone.png)
+![Cone initial conditions in 2D](/img/2dcone.png)
 
 To convert this to 2D, simply replace the line `r = sqrt(y^2+z^2)` with
 the line `r = abs(y)`. The actual work in these initial conditions is
@@ -335,7 +335,7 @@ begin:output
 end:output
 ```
 
-![The focussed beam](/tutorial/img/FocussedBeam.png)
+![The focussed beam](/img/FocussedBeam.png)
 
 The deck is based on the laser test deck supplied with Epoch, with a
 modified laser and longer runtime. Other classes of beam (Bessel etc)

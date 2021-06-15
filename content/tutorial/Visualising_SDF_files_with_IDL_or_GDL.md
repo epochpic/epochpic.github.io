@@ -204,7 +204,7 @@ comprehensive array of documentation. This can be accessed by typing
     % ONLINE_HELP: Starting the online help browser.
     IDL&gt;
 
-![The IDL help browser](/tutorial/img/Idl_help.png)
+![The IDL help browser](/img/Idl_help.png)
 
 The documentation is divided into books aimed at users or developers and
 is fully searchable and cross indexed.
@@ -256,7 +256,7 @@ example:
 
 Gives rise to the following plot:
 
-![A simple IDL plot](/tutorial/img/Idl_simple_plot.png)
+![A simple IDL plot](/img/Idl_simple_plot.png)
 
 As a more concrete example, we will now take a one-dimensional slice
 through the 2D array "Number Density" read in from our SDF data file. In
@@ -271,7 +271,7 @@ in the on-line documentation. In this example we also make use of the
 
 This command generates the following plot:
 
-![A slice of a 2D array](/tutorial/img/Idl_plot.png)
+![A slice of a 2D array](/img/Idl_plot.png)
 
 # Postscript Plots {#postscript_plots}
 
@@ -302,7 +302,7 @@ plot we can resume plotting to screen by setting the device back to "x".
 This set of commands results in the following plot being written to a
 file named "out.ps".
 
-![A simple PS plot](/tutorial/img/Idl_ps_plot.png)
+![A simple PS plot](/img/Idl_ps_plot.png)
 
 By default, IDL draws its own set of fonts called "Hershey vector
 fonts". Much better looking results can be obtained by using a
@@ -340,7 +340,7 @@ Issuing these commands gives us the contour plot shown below. Note that
 the colour table used is not the default one but has been constructed to
 be similar to the one used by VisIt.
 
-![A simple contour plot](/tutorial/img/Idl_contour.png)
+![A simple contour plot](/img/Idl_contour.png)
 
 # Shaded Surface Plots in IDL {#shaded_surface_plots_in_idl}
 
@@ -358,7 +358,7 @@ colour table which is"RED_TEMPERATURE".
     IDL&gt; shade_surf,data.number_density,data.x,data.y,xstyle=1, $
     IDL&gt;    ystyle=1,xtitle='x',ytitle='y',ztitle='number density',charsize=3
 
-![A shaded surface plot](/tutorial/img/Idl_shade_surf.png)
+![A shaded surface plot](/img/Idl_shade_surf.png)
 
 # Interactive Plotting {#interactive_plotting}
 
@@ -369,7 +369,7 @@ interface. The corresponding procedures are launched with the commands
 
     IDL&gt; iplot,data.x,data.number_density[*,256]
 
-![Interactive plotting](/tutorial/img/Idl_iplot.png)
+![Interactive plotting](/img/Idl_iplot.png)
 
 IDL is an extremely useful tool but it also comes with a fairly hefty
 price tag. If you are not part of an organisation that will buy it for
