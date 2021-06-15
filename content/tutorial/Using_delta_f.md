@@ -79,10 +79,6 @@ simulations shows a substantial decrease in noise.
 Further details of the method are provided [ in this
 pdf](Media:talk_deltaf.pdf "wikilink").
 
-# Next section {#next_section}
-
-[Basic examples with EPOCH][Basic_examples]
-
 
 <!-- ########################  Cross references  ######################## -->
 

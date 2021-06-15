@@ -112,10 +112,6 @@ GitHub server may include other input deck blocks. These should
 be described in additional documentation provided with the version of
 the code that you have.
 
-# Next section {#next_section}
-
-[The subset block][Input_deck_subset]
-
 # References
 
 <references />

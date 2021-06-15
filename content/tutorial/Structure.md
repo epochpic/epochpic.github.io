@@ -67,10 +67,6 @@ there are also 3 files:
     given restart dump. It is run from the command line and must be
     passed the name of the restart dump file.
 
-# Next section {#next_section}
-
-[Libraries and requirements][Libraries]
-
 
 <!-- ########################  Cross references  ######################## -->
 

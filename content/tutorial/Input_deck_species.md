@@ -492,10 +492,6 @@ begin:species
 end:species
 ```
 
-# Next section {#next_section}
-
-[The laser block][Input_deck_laser]
-
 
 <!-- ########################  Cross references  ######################## -->
 

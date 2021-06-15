@@ -158,10 +158,6 @@ requested using the keyword "thermal". For example:
        bc_x_max = thermal
     end:boundaries
 
-# Next section {#next_section}
-
-[The species block][Input_deck_species]
-
 # References
 
 <references />

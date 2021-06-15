@@ -70,10 +70,6 @@ must be supplied.
     the file to be ignored, may be specified multiple times. see for
     more details of behaviour.\
 
-# Next section {#next_section}
-
-[The window block][Input_deck_window]
-
 
 <!-- ########################  Cross references  ######################## -->
 

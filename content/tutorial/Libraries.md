@@ -25,9 +25,6 @@ In theory it is possible to compile the code without a
 *`*make*`* utility, but it is much easier to compile the code
 using the supplied makefile.
 
-# Next section {#next_section}
-
-[ Compiling EPOCH][Compiling]
 
 
 <!-- ########################  Cross references  ######################## -->

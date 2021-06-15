@@ -445,10 +445,6 @@ and remove the "DUMP" file. By default, the file written will be a
 restart dump but if the "DUMP" file contains the name of an output
 block then this will be used instead.
 
-# Next section {#next_section}
-
-[The boundaries block][Input_deck_boundaries]
-
 # References
 
 <references />

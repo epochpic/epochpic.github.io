@@ -765,10 +765,6 @@ end:species
 This changes the code to run with a Gaussian density profile rather then
 a step function. Again, this can be extended as far as required.
 
-# Next section {#next_section}
-
-[EPOCH in delta-f form][Using_delta_f]
-
 
 <!-- ########################  Cross references  ######################## -->
 

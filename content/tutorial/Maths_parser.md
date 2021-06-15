@@ -178,10 +178,6 @@ an operator would be:\
  length_x = 10.0 + 12.0 
 ```
 
-# Next section {#next_section}
-
-[Using EPOCH][Using_EPOCH_in_practice]
-
 
 <!-- ########################  Cross references  ######################## -->
 

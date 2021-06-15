@@ -160,10 +160,6 @@ gradients. This is an inferior solution since the FDTD scheme has
 increased error as the timestep is reduced from that for EM waves. EPOCH
 includes a high order field solver to attempt to reduce this.
 
-# Next section {#next_section}
-
-[The fields block][Input_deck_fields]
-
 
 <!-- ########################  Cross references  ######################## -->
 

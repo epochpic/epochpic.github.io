@@ -170,9 +170,6 @@ below all the DEFINE flags there is the following line:
 Just uncomment this line and source code in restart dumps will be
 permanently disabled.
 
-# Next section {#next_section}
-
-[Running EPOCH][Running]
 
 
 <!-- ########################  Cross references  ######################## -->

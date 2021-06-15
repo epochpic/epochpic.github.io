@@ -71,10 +71,6 @@ and *c*) and also several functions (*critical*, *exp*, *gauss* and
 [here][maths_parser__constants] and
 [here][maths_parser__functions].
 
-# Next section {#next_section}
-
-[The maths parser][maths_parser]
-
 
 <!-- ########################  Cross references  ######################## -->
 

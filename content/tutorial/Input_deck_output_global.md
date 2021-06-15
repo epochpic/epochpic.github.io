@@ -90,10 +90,6 @@ ignored when restarting. To force a dump to occur immediately after
 restart, set `dump_first_after_restart = T` in the output block. The
 default value is "F".
 
-# Next section {#next_section}
-
-[The dist_fn block][Input_deck_dist_fn]
-
 
 <!-- ########################  Cross references  ######################## -->
 

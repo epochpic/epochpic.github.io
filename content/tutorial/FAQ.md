@@ -178,8 +178,6 @@ commented.
 
 See [here][Acknowledging_EPOCH].
 
-## Next Section {#next-section}
 
-[The structure of the EPOCH codes][Structure]
 
 

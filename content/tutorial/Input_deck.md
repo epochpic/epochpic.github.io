@@ -92,9 +92,6 @@ built in blocks are:
     expressions. These are designed to simplify the initial condition
     setup. See [here][Input_deck_constant].
 
-# Next section {#next_section}
-
-[The control block][Input_deck_control]
 
 
 <!-- ########################  Cross references  ######################## -->

@@ -165,10 +165,6 @@ If the input deck is edited on restart to add a new persistent subset
 then it must be added **after** existing persistent subsets or problems
 may occur on restart.
 
-# Next section {#next_section}
-
-[The constant block][Input_deck_constant]
-
 
 <!-- ########################  Cross references  ######################## -->
 

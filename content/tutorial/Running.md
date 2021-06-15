@@ -42,10 +42,6 @@ file named "USE_DATA_DIRECTORY" before prompting at the command-line.
 This allows the code to be run without waiting for input at the
 command-line.
 
-# Next section {#next_section}
-
-[ The EPOCH input deck][Input_deck]
-
 
 <!-- ########################  Cross references  ######################## -->
 

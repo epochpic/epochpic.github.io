@@ -83,10 +83,6 @@ issues with certain features. In particular:
 -   Load of particles from file is not supported since it can't be made
     to work in general.
 
-# Next section {#next_section}
-
-[The output block][Input_deck_output_block]
-
 
 <!-- ########################  Cross references  ######################## -->
 

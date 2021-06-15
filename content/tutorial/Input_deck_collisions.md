@@ -80,10 +80,6 @@ All values of the frequency array are set to one except (spec1,spec2) is
 set to minus one (and also (spec2,spec1)) and (spec2,spec3) is set to
 0.1
 
-# Next section {#next_section}
-
-[The qed block][Input_deck_qed]
-
 # References
 
 <references />

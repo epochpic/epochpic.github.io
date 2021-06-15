@@ -127,10 +127,6 @@ limitation: it ignores particle shape functions when calculating
 properties on the spatial axis, meaning that the result is less smooth
 than normal properties from the code.
 
-# Next section {#next_section}
-
-[The probe block][Input_deck_probe]
-
 
 <!-- ########################  Cross references  ######################## -->
 

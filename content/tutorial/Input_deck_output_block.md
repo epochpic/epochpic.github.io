@@ -681,10 +681,6 @@ end:output
 In this example, at step 2 a0000.sdf contains ex, step 3 a0001.sdf
 contains ey, step 4 a0002.sdf contains ex, ey and b0000.sdf contains ez.
 
-# Next section {#next_section}
-
-[The output global block][Input_deck_output_global]
-
 
 <!-- ########################  Cross references  ######################## -->
 

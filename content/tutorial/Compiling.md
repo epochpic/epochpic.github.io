@@ -92,9 +92,6 @@ You can also compile the code with debugging flags by adding
 this is just to speed up the compilation process; the resulting binary
 can be run on any number of processors.
 
-# Next section {#next_section}
-
-[Compiler flags][Compiler_Flags]
 
 
 <!-- ########################  Cross references  ######################## -->

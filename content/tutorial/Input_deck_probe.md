@@ -75,10 +75,6 @@ end:probe
     probe information infrequently. If this is set to **never** then the
     code effectively never uses the probe.\
 
-# Next section {#next_section}
-
-[The collisions block][Input_deck_collisions]
-
 
 <!-- ########################  Cross references  ######################## -->
 

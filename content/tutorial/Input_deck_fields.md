@@ -47,11 +47,6 @@ for more details.\
 Any valid maths parser expression can be used to set up the fields, and
 no check is made to ensure that the $\nabla.B = 0$ is satisfied.
 
-# Next section {#next_section}
-
-[The particles from file
-block][Input_deck_particle_file]
-
 
 <!-- ########################  Cross references  ######################## -->
 
