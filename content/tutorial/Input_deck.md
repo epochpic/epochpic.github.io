@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: The EPOCH input deck
 linktitle: Input deck
+weight: 80
 menu:
   tutorial:
-    parent: Content
-    weight: 330
+    name: Input deck
+    weight: 20
 ---
 
 Most of the control of EPOCH is through a text file called `input.deck`.

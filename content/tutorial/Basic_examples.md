@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Basic examples
 linktitle: Basic examples
+weight: 340
 menu:
   tutorial:
-    parent: Content
-    weight: 110
+    parent: Examples
+    weight: 10
 ---
 
 In this section we outline a few worked examples of setting up problems

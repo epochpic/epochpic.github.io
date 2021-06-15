@@ -3,11 +3,12 @@ draft: false
 toc: true
 type: docs
 
+title: Code structure
 linktitle: Structure
+weight: 20
 menu:
   tutorial:
-    parent: Content
-    weight: 540
+    parent: Basic usage
 ---
 
 When obtained, the EPOCH codes all have a similar structure. If the

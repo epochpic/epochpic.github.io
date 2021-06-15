@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: SDF:Visualising SDF files with LLNL VisIt
+title: LLNL VisIt
+linktitle: LLNL VisIt
+weight: 320
 menu:
   tutorial:
-    parent: Content
-    weight: 680
+    parent: Visualising output
+    weight: 20
 ---
 
 Using VisIt to visualise data {#using_visit_to_visualise_data}

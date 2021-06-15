@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Input deck antenna
 linktitle: Input deck antenna
+weight: 240
 menu:
   tutorial:
-    parent: Content
-    weight: 230
+    parent: Input deck
+    weight: 160
 ---
 
 Antennae allow you to specify currents in the simulation domain that are

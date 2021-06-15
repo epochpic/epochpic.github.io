@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck control
+title: control block
+linktitle: control block
+weight: 90
 menu:
   tutorial:
-    parent: Content
-    weight: 270
+    parent: Input deck
+    weight: 20
 ---
 
 The *control* block contains information about the general code setup.

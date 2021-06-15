@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Compiling EPOCH
 linktitle: Compiling
+weight: 40
 menu:
   tutorial:
-    parent: Content
-    weight: 150
+    parent: Basic usage
+    weight: 40
 ---
 
 To compile EPOCH in the supplied state, you must first change to the

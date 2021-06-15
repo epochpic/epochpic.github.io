@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Workshop examples
 linktitle: Workshop examples
+weight: 350
 menu:
   tutorial:
-    parent: Content
-    weight: 610
+    parent: Examples
+    weight: 20
 ---
 
 # EPOCH workshop overview {#epoch_workshop_overview}

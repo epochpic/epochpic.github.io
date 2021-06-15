@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Using EPOCH in practice
 linktitle: Using EPOCH in practice
+weight: 280
 menu:
   tutorial:
-    parent: Content
-    weight: 590
+    parent: Code details
+    weight: 20
 ---
 
 # Specifying initial conditions for particles using the input deck {#specifying_initial_conditions_for_particles_using_the_input_deck}

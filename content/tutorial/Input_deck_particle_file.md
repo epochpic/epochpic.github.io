@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Input deck particle file
 linktitle: Input deck particle file
+weight: 250
 menu:
   tutorial:
-    parent: Content
-    weight: 370
+    parent: Input deck
+    weight: 170
 ---
 
 This block contains information about the block used to load particles

@@ -3,14 +3,12 @@ draft: false
 toc: true
 type: docs
 
-linktitle: FAQ
+title: FAQs
+weight: 10
 menu:
   tutorial:
-    parent: Content
-    weight: 190
+    parent: Basic usage
 ---
-
-# FAQs {#faqs}
 
 ## Is this manual up to date? {#is-this-manual-up-to-date}
 

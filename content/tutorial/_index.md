@@ -11,7 +11,7 @@ type: docs
 menu:
   tutorial:
     name: Overview
-    weight: 10
+    weight: 1
 
 ---
 

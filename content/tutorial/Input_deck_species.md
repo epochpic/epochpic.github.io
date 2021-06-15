@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck species
+title: species block
+linktitle: species block
+weight: 110
 menu:
   tutorial:
-    parent: Content
-    weight: 410
+    parent: Input deck
+    weight: 40
 ---
 
 This block contains information about the species of particles which are

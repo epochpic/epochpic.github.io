@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Running EPOCH and basic control of EPOCH
 linktitle: Running
+weight: 60
 menu:
   tutorial:
-    parent: Content
-    weight: 520
+    parent: Basic usage
+    weight: 60
 ---
 
 When the code is run, the output is

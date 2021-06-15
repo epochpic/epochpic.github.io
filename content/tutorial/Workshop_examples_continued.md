@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Workshop examples continued
 linktitle: Workshop examples continued
+weight: 360
 menu:
   tutorial:
-    parent: Content
-    weight: 600
+    parent: Examples
+    weight: 30
 ---
 
 # Other Laser-Plasma example decks {#other_laser_plasma_example_decks}

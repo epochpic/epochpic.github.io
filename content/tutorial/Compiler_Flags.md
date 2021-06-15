@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Compiler flags and preprocessor defines
 linktitle: Compiler Flags
+weight: 50
 menu:
   tutorial:
-    parent: Content
-    weight: 140
+    parent: Basic usage
+    weight: 50
 ---
 
 As already stated, some features of the code are controlled by compiler

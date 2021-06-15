@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Using delta f
 linktitle: Using delta f
+weight: 290
 menu:
   tutorial:
-    parent: Content
-    weight: 580
+    parent: Code details
+    weight: 30
 ---
 
 To help reduce the impact of numerical noise in certain simulations, the

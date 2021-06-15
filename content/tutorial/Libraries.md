@@ -3,11 +3,11 @@ draft: false
 toc: true
 type: docs
 
+title: Library requirements for the EPOCH codes
 linktitle: Libraries
 menu:
   tutorial:
-    parent: Content
-    weight: 460
+    parent: Basic usage
 ---
 
 The EPOCH codes are written using MPI for parallelism, but have no other

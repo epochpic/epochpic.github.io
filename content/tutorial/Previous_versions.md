@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Previous versions
 linktitle: Previous versions
+weight: 300
 menu:
   tutorial:
-    parent: Content
-    weight: 510
+    parent: Code details
+    weight: 50
 ---
 
 Changes between version 3.1 and 4.0 {#changes_between_version_3.1_and_4.0}

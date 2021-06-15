@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck laser
+title: laser block
+linktitle: laser block
+weight: 120
 menu:
   tutorial:
-    parent: Content
-    weight: 320
+    parent: Input deck
+    weight: 50
 ---
 
 This block contains information about laser boundary sources. See [EPOCH

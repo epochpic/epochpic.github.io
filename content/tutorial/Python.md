@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: SDF:Python
+title: Python
+linktitle: Python
+weight: 330
 menu:
   tutorial:
-    parent: Content
-    weight: 650
+    parent: Visualising output
+    weight: 30
 ---
 
 # Installing the python sdf readers {#installing_the_python_sdf_readers}

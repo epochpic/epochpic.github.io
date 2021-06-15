@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Acknowledging EPOCH
 linktitle: Acknowledging EPOCH
+weight: 70
 menu:
   tutorial:
-    parent: Content
-    weight: 100
+    parent: Basic usage
+    weight: 70
 ---
 
 ## How do I acknowledge use of the code? {#how-do-i-acknowledge-use-of-the-code}

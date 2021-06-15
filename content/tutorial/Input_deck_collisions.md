@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck collisions
+title: collisions block
+linktitle: collisions block
+weight: 190
 menu:
   tutorial:
-    parent: Content
-    weight: 250
+    parent: Input deck
+    weight: 120
 ---
 
 This block contains information about particle collisions. See [EPOCH

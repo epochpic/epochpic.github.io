@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck output global
+title: output_global block
+linktitle: output_global block
+weight: 160
 menu:
   tutorial:
-    parent: Content
-    weight: 360
+    parent: Input deck
+    weight: 90
 ---
 
 This block contains parameters which should be applied to all output

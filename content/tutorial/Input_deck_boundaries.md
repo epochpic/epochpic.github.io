@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck boundaries
+title: boundaries block
+linktitle: boundaries block
+weight: 100
 menu:
   tutorial:
-    parent: Content
-    weight: 240
+    parent: Input deck
+    weight: 30
 ---
 
 This block contains information about the boundary conditions for this

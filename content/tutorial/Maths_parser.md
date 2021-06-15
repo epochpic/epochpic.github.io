@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Maths parser
 linktitle: Maths parser
+weight: 270
 menu:
   tutorial:
-    parent: Content
-    weight: 480
+    parent: Code details
+    weight: 10
 ---
 
 A discussion of the input deck for EPOCH would not be complete without

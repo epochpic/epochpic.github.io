@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: SDF:Visualising SDF files with IDL or GDL
+title: IDL or GDL
+linktitle: IDL or GDL
+weight: 310
 menu:
   tutorial:
-    parent: Content
-    weight: 670
+    parent: Visualising output
+    weight: 10
 ---
 
 # Using IDL to visualise data {#using_idl_to_visualise_data}

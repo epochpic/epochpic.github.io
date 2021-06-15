@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
-linktitle: Input deck subset
+title: subset block
+linktitle: subset block
+weight: 210
 menu:
   tutorial:
-    parent: Content
-    weight: 420
+    parent: Input deck
+    weight: 130
 ---
 
 This block contains configuration for filters which can be used to

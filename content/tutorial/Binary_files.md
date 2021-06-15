@@ -3,11 +3,13 @@ draft: false
 toc: true
 type: docs
 
+title: Binary files
 linktitle: Binary files
+weight: 260
 menu:
   tutorial:
-    parent: Content
-    weight: 120
+    parent: Input deck
+    weight: 180
 ---
 
 There are several input deck blocks which can read conditions directly
