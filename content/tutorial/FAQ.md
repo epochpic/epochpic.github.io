@@ -110,16 +110,15 @@ input deck, such as the number of grid points in the simulation domain,
 the initial distribution of particles and initial electromagnetic field
 configuration. It is designed to be relatively easy to read and edit.
 For most projects it should be possible to set up a simulation without
-editing the source code at all. For more details, read ""
-(Section [3](#sec:input){reference-type="ref" reference="sec:input"}).
+editing the source code at all. For more details, read the section
+titled ["The EPOCH input deck"][Input_deck]
 
 ## I just want to use the code as a black box, or I'm just starting. How do I do that? {#i-just-want-to-use-the-code-as-a-black-box-or-im-just-starting.-how-do-i-do-that}
 
-Begin by reading "" (Section [5](#sec:examples){reference-type="ref"
-reference="sec:examples"}). There's quite a lot to learn in order to get
+Begin by reading [the basic examples][Basic_examples].
+There's quite a lot to learn in order to get
 started, so you should plan to read through all of this section. You
-will also need to refer to ""
-(Section [3](#sec:input){reference-type="ref" reference="sec:input"}).
+will also need to refer to [the input deck pages][Input_deck].
 Next, look at the code and have a play with some test problems. After
 that re-read this section. This should be enough for testing simple
 problems.
@@ -138,9 +137,8 @@ At present, there is no way to specify a non-Maxwellian particle
 distribution from within the input deck. In such cases, it is necessary
 to edit and recompile the **EPOCH** source code. The recommended method
 for setting the initial particle properties is to use the
-"`manual_load`" function as described in
-Section [4.2](#sec:manualload){reference-type="ref"
-reference="sec:manualload"}.
+"`manual_load`" function as described
+[here][Using_EPOCH_in_practice__manually_overriding_particle_parameters_set_by_the_autoloader].
 
 ## What is a maths parser? {#what-is-a-maths-parser}
 
@@ -151,14 +149,11 @@ mathematical expression. It is evaluated at run time using a section of
 code called the "maths parser". There is no need for the end user to
 know anything about this code. It is just there to enable the use of
 mathematical expressions in the input deck. Further information about
-this facility can be found in
-Section [3.18](#sec:maths_parser){reference-type="ref"
-reference="sec:maths_parser"}.
+this facility can be found [here][Maths_parser].
 
 ## I am an advanced user, but I want to set up the code so that less experienced users can use it. How do I do that? {#i-am-an-advanced-user-but-i-want-to-set-up-the-code-so-that-less-experienced-users-can-use-it.-how-do-i-do-that}
 
-See "" (Section [4.6](#sec:customising){reference-type="ref"
-reference="sec:customising"}).
+See [here][Using_EPOCH_in_practice__parameterising_input_decks].
 
 ## I want to develop an addition to **EPOCH**. How do I do that? {#i-want-to-develop-an-addition-to-epoch.-how-do-i-do-that}
 
@@ -177,7 +172,3 @@ commented.
 ## How do I acknowledge use of the code? {#how-do-i-acknowledge-use-of-the-code}
 
 See [here][Acknowledging_EPOCH].
-
-
-
-
