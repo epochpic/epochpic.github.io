@@ -54,22 +54,22 @@ begin:species
 end:species
 ```
 
-Each species block accepts the following parameters:\
+Each species block accepts the following parameters:
 - `name` - This specifies the name of the particle species
 defined in the current block. This name can include any alphanumeric
 characters in the basic ASCII set. The name is used to identify the
 species in any consequent input block and is also used for labelling
-species data in any output dumps. It is a mandatory parameter.\
+species data in any output dumps. It is a mandatory parameter.
 **`NOTE: IT IS IMPOSSIBLE TO SET TWO SPECIES WITH THE SAME
-NAME!`\
+NAME!`
 **
 
 -   `charge` - This sets the charge of the species in
     multiples of the electron charge. Negative numbers are used for
-    negatively charged particles. This is a mandatory parameter.\
+    negatively charged particles. This is a mandatory parameter.
 -   `mass` - This sets the mass of the species in multiples
     of the electron mass. Cannot be negative. This is a mandatory
-    parameter.\
+    parameter.
 -   `npart` - This specifies the number of pseudoparticles
     which should be loaded into the simulation domain for this species
     block. Using this parameter is the most convenient way of loading
@@ -78,13 +78,13 @@ NAME!`\
     block then any value given for *npart* in the
     [*control*][Input_deck_control] block is ignored.
     *npart* should not be specified at the same time as *frac* within a
-    *species* block.\
+    *species* block.
 -   `frac` - This specifies what fraction of *npart* (the
     global number of particles specified in the control block) should be
-    assigned to the species.\
+    assigned to the species.
 
 **`NOTE: frac should not be specified at the same time as npart for
-a given species.`\
+a given species.`
 **
 
 -   `npart_per_cell` - Integer parameter which specifies
@@ -99,7 +99,7 @@ have also been specified for a species, then they will be ignored.
 To avoid confusion, there is no globally used "npart_per_species". If
 you want to have a single value to change in the input deck then this
 can be achieved using a
-[*constant*][Input_deck_constant] block.\
+[*constant*][Input_deck_constant] block.
 - `dumpmask` - Determines which output dumps will include
 this particle species. The dumpmask has the same semantics as those used
 by variables in the [*output*][Input_deck_output_block]
@@ -107,10 +107,10 @@ block. The actual dumpmask from the output block is applied first and
 then this one is applied afterwards. For example, if the species block
 contains "dumpmask = full" and the output block contains "vx = always"
 then the particle velocity will be only be dumped at full dumps for this
-particle species. The default dumpmask is "always".\
+particle species. The default dumpmask is "always".
 - `dump` - This logical flag is provided for backwards
 compatibility. If set to "F" it has the same meaning as "dumpmask =
-never". If set to "T" it has the same meaning as "dumpmask = always".\
+never". If set to "T" it has the same meaning as "dumpmask = always".
 - `zero_current` - Logical flag switching the particle
 species into zero-current particles. Zero-current particles are enabled
 if the if the "NO_TRACER_PARTICLES" precompiler option has not been
@@ -129,13 +129,13 @@ to unexpected behaviour. If the purpose is merely to track a subset of a
 particle species to use as output then a better mechanism to use is
 "persistent subsets" (see [here][Input_deck_subset]).
 "tracer" is currently accepted as an alias but this will be removed in
-version 5.0. "zero_current = F" is the default value.\
+version 5.0. "zero_current = F" is the default value.
 - `identify` - Used to identify the type of particle.
 Currently this is used primarily by the QED routines. See
-[here][Input_deck_qed] for details.\
+[here][Input_deck_qed] for details.
 - `immobile` - Logical flag. If this parameter is set to "T"
 then the species will be ignored during the particle push. The default
-value is "F".\
+value is "F".
 The species blocks are also used for specifying initial conditions for
 the particle species. The initial conditions in EPOCH can be specified
 in various ways, but the easiest way is to specify the initial
@@ -147,7 +147,7 @@ each species which is then used by the autoloader to actually position
 the particles.
 
 The elements of the species block used for setting initial conditions
-are:\
+are:
 - `number_density` - Particle number density in $m^{-3}$. As
 soon as a number_density= line has been read, the values are calculated
 for the whole domain and are available for reuse on the right hand side
@@ -156,37 +156,37 @@ lines for the Electron species, where the number density is first set
 and then corrected. If you wish to specify the number density in parts
 per cubic metre then you can divide by the "cc" constant (see
 [here][maths_parser__constants]). This parameter is
-mandatory. "density" is accepted as an alias.\
+mandatory. "density" is accepted as an alias.
 - `number_density_min` - Minimum particle number density in
 $m^{-3}$. When the number density in a cell falls below
 number_density_min the autoloader does not load any pseudoparticles
 into that cell to minimise the number of low weight, unimportant
 particles. If set to 0 then all cells are loaded with particles. This is
-the default. "density_min" is accepted as an alias.\
+the default. "density_min" is accepted as an alias.
 - `number_density_max` - Maximum particle number density in
 $m^{-3}$. When the number density in a cell rises above
 number_density_max the autoloader clips the number_density to
 number_density_max allowing easy implementation of exponential rises
 to plateaus. If it is a negative value then no clipping is performed.
-This is the default. "density_max" is accepted as an alias.\
+This is the default. "density_max" is accepted as an alias.
 - `mass_density` - Particle mass density in $kg\,m^{-3}$.
 The same as "number_density" but multiplied by the particle mass. If
 you wish to use units of $g\,cm^{-3}$ then append the appropriate
-multiplication factor. For example: "`mass_density = 2 * 1e3 / cc`".\
+multiplication factor. For example: "`mass_density = 2 * 1e3 / cc`".
 - `temp_{x,y,z}` - The temperature in each direction for a
-thermal distribution in Kelvin.\
+thermal distribution in Kelvin.
 - `temp` - Sets an isotropic temperature distribution in
 Kelvin. If both temp and a specific temp_x, temp_y, temp_z parameter
 is specified then the last to appear in the deck has precedence. If
 neither are given then the species will have a default temperature of
-zero Kelvin.\
+zero Kelvin.
 - `temp_{x,y,z}_ev, temp_ev` - These are the same as the
 temperature parameters described above except the units are given in
-electronvolts rather than Kelvin, i.e. using 1ev = 11604.5K .\
+electronvolts rather than Kelvin, i.e. using 1ev = 11604.5K .
 - `drift_{x,y,z}` - Specifies a momentum space offset in
 $kg\ ms^{-1}$ to the distribution function for this species. By default,
-the drift is zero.\
-- `offset` - File offset. See below for details.\
+the drift is zero.
+- `offset` - File offset. See below for details.
 
 # Loading data from a file {#loading_data_from_a_file}
 
@@ -219,7 +219,7 @@ the data is read and the file is then closed. Therefore, unless the
 offset value is changed between data reading lines the same data will be
 read into all the variables. The data is read in as soon as a line is
 executed, and so it is perfectly possible to load data from a file and
-then modify the data using a mathematical expression.\
+then modify the data using a mathematical expression.
 The example block above is for 10,000 values at double precision, i.e.
 8-bytes each. The density data is the first 80,000 bytes of "ic.dat".
 Bytes 80,000 to 160,000 are the temp_x data.
@@ -227,7 +227,7 @@ Bytes 80,000 to 160,000 are the temp_x data.
 The file should be a simple binary file consisting of floating point
 numbers of the same precision as **_num** in the core EPOCH code. For
 multidimensional arrays, the data is assumed to be written according to
-FORTRAN array ordering rules (i.e. column-major order).\
+FORTRAN array ordering rules (i.e. column-major order).
 **`NOTE: The files that are expected by this block are SIMPLE
 BINARY files, NOT FORTRAN unformatted files. It is possible to read
 FORTRAN unformatted files using the offset element, but care must be
@@ -236,7 +236,7 @@ taken!`**
 # Delta-f parameters {#delta_f_parameters}
 
 The following entries are used for configuring the [Delta-f
-method][Using_delta_f]\
+method][Using_delta_f]
 \*number_density_back
 
 -   drift_{x,y,z}_back
@@ -247,7 +247,7 @@ method][Using_delta_f]\
 
 These all have the same meanings as the parameters listed above that
 don't include the "_back" text, except that they specify the values to
-use for the background distribution function.\
+use for the background distribution function.
 
 # Particle migration between species {#particle_migration_between_species}
 
@@ -255,37 +255,37 @@ It is sometimes useful to separate particle species into separate energy
 bands and to migrate particles between species when they become more or
 less energetic. A method to achieve this functionality has been
 implemented. It is specified using two parameters to the "control"
-block:\
+block:
 - `use_migration` - Logical flag which determines whether or
-not to use particle migration. The default is "F".\
+not to use particle migration. The default is "F".
 - `migration_interval` - The number of timesteps between
-each migration event. The default is 1 (migrate at every timestep).\
-The following parameters are added to the "species" block:\
+each migration event. The default is 1 (migrate at every timestep).
+The following parameters are added to the "species" block:
 - `migrate` - Logical flag which determines whether or not to
-consider this species for migration. The default is "F".\
+consider this species for migration. The default is "F".
 - `promote_to` - The name of the species to promote
-particles to.\
+particles to.
 - `demote_to` - The name of the species to demote particles
-to.\
+to.
 - `promote_multiplier` - The particle is promoted when its
 energy is greater than "promote_multiplier" times the local average.
-The default value is 1.\
+The default value is 1.
 - `demote_multiplier` - The particle is demoted when its
 energy is less than "demote_multiplier" times the local average. The
-default value is 1.\
+default value is 1.
 - `promote_number_density` - The particle is only
 considered for promotion when the local number density is less than
 "promote_number_density". The default value is the largest floating
-point number.\
+point number.
 - `demote_number_density` - The particle is only considered
 for demotion when the local number density is greater than
-"demote_number_density". The default value is 0.\
+"demote_number_density". The default value is 0.
 
 # Ionisation
 
 EPOCH now includes field ionisation which can be activated by defining
 ionisation energies and an electron for the ionising species. This is
-done via the species block using the following parameters:\
+done via the species block using the following parameters:
 - `ionisation_energies` - This is an array of ionisation
 energies (in Joules) starting from the outermost shell. It expects to be
 given all energies down to the fully ionised ion; if the user wishes to
@@ -295,13 +295,13 @@ the outermost electron ionises first always, and that the orbitals are
 filled assuming ground state. When this parameter is specified it turns
 on ionisation modelling. If you wish to specify the values in
 Electron-Volts, add the "ev" [multiplication
-factor][maths_parser__constants].\
+factor][maths_parser__constants].
 - `ionisation_electron_species` - Name of the electron
 species. This can be specified as an array in the event that the user
 wishes some levels to have a different electron species which can be
 handy for monitoring ionisation at specific levels. "electron" and
 "electron_species" are accepted as synonyms. Either one species for
-*all* levels, or one species for *each* species should be specified.\
+*all* levels, or one species for *each* species should be specified.
 For example, ionising carbon species might appear in the input deck as:
 
 ```perl
@@ -360,14 +360,14 @@ tunnelling in which deformation of the atomic Coulomb potential is the
 dominant factor, and barrier suppression ionisation in which the
 electric field is strong enough for an electron to escape classically.
 It is possible to turn off multiphoton or barrier suppression ionisation
-through the input deck using the following control block parameters:\
+through the input deck using the following control block parameters:
 - `use_multiphoton` - Logical flag which turns on modelling
 ionisation by multiple photon absorption. This should be set to "F" if
 there is no laser attached to a boundary as it relies on laser
-frequency. The default is "T".\
+frequency. The default is "T".
 - `use_bsi` - Logical flag which turns on barrier
 suppression ionisation correction to the tunnelling ionisation model for
-high intensity lasers. The default is "T".\
+high intensity lasers. The default is "T".
 
 # Species Boundary Conditions {#species_boundary_conditions}
 

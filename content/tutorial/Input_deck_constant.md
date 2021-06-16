@@ -20,7 +20,7 @@ on the input deck.
 The *constant* block type helps to make the input deck more flexible and
 maintainable. It allows you to define constants and maths parser
 expressions (see [EPOCH maths parser][maths_parser])
-which can be used by name later in the deck.\
+which can be used by name later in the deck.
 Constants are simply maths parser expressions which are assigned to a
 name as shown above. When the name is used on the right hand side of a
 deck expression it is replaced by the expression it was assigned with.
@@ -29,7 +29,7 @@ expression or a function. Constants may contain spatially varying
 information without having to pre-calculate them at every location in
 the domain. To those familiar with FORTRAN codes which use statement
 functions, parameters appearing in the "constant" block are fairly
-similar.\
+similar.
 If a constant name is reused in a constant block then the old constant
 is deleted and replaced with the new one. This happens without warning.
 
@@ -60,11 +60,11 @@ simpler parts. They can also be used to get around the FORTRAN string
 length limitation built into many compilers which prevents deck lines
 being longer then 512 characters long. As a general rule, it is a good
 idea to break down complicated expressions using constants or by other
-means, in order to make the deck look more readable.\
+means, in order to make the deck look more readable.
 Constants are persistent for the entire runtime of the code, allowing
 them to be used when specifying time profiles for lasers, and also
 allowing developers to use maths parser expressions for other internal
-parts of the code where needed.\
+parts of the code where needed.
 In the above example, several pre-defined constants have been used (*pi*
 and *c*) and also several functions (*critical*, *exp*, *gauss* and
 *sqrt*). These are described

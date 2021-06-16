@@ -30,11 +30,11 @@ will exit with an error message. The blocks themselves can also appear
 in any order. The input deck is case sensitive, so true is always "T",
 false is always "F" and the names of the parameters are always lower
 case. Parameter values are evaluated using a maths parser which is
-described in [EPOCH maths parser][maths_parser].\
+described in [EPOCH maths parser][maths_parser].
 If the deck contains a "`\`" character then the rest of the line is
 ignored and the next line becomes a continuation of the current one.
 Also, the comment character is "`#`"; if the "`#`" character is used
-anywhere on a line then the remainder of that line is ignored.\
+anywhere on a line then the remainder of that line is ignored.
 There are three *`input deck directive`* commands, which are:
 
 -   begin:*`block`* - Begin the block named

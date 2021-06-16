@@ -44,31 +44,31 @@ attributed to one particle, the second variable in each file to a second
 electron, and so on. A target species to load to, as well as particle
 position and weight data (unless has been set) must be supplied. With
 the exception of particle ID, any optional parameters which are left
-unspecified will be initialised to zero.\
+unspecified will be initialised to zero.
 If the code has been compiled with or then particle IDs may be loaded
 from a raw binary file of integers of either size 4 or size 8 regardless
 of the compile time flag choice. If no particle ID data is supplied, IDs
-will be generated sequentially from 1.\
+will be generated sequentially from 1.
 All other data should be in the form of floating point numbers of the
-same precision as in the core code.\
-A particles_from_file block accepts the following parameters:\
+same precision as in the core code.
+A particles_from_file block accepts the following parameters:
 - `species` - Name of the species to which the particles will
 be loaded. This is a mandatory parameter and the corresponding species
-block must be defined.\
+block must be defined.
 - `{x,y,z}_data` - File containing particle position data in
 $m$. This data must be supplied, up to the dimensionality of the
-simulation.\
+simulation.
 - `w_data` - File containing pseudoparticle weight, this is
 the number of real particles the pseudoparticle represents. This data
 must be supplied.
 
 -   `{px,py,pz}_data` - File containing particle momentum
-    data in $kg\,ms^{-1}$. The default value is zero.\
+    data in $kg\,ms^{-1}$. The default value is zero.
 -   `id{4,8}_data` - File containing particle IDs in either
-    4 or 8 byte unsigned integer representation.\
+    4 or 8 byte unsigned integer representation.
 -   `offset` - File offset. Number of bytes at the head of
     the file to be ignored, may be specified multiple times. see for
-    more details of behaviour.\
+    more details of behaviour.
 
 
 <!-- ########################  Cross references  ######################## -->

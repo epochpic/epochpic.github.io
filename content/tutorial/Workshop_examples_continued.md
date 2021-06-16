@@ -70,7 +70,7 @@ with anything please don't hesitate to ask. The decks are:
 
 The decks can be downloaded [
 here][Workshop_examples__getting_the_example_decks_for_this_workshop]
-and viewed or copied from here:\
+and viewed or copied from here:
 **04-1d_two_stream_io.deck**
 
 <div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
@@ -898,16 +898,16 @@ You can also checkout an old version of EPOCH, you may want to get the
 version used 18 months ago to reproduce some previous simulations
 exactly for example. In this case it is best to checkout a new branch in
 the EPOCH repository. If you wanted the version from 10 February 2010
-for example you would first enter\
-`git log --before=2010-02-11`\
+for example you would first enter
+`git log --before=2010-02-11`
 This will give you the log of commits in reverse order, starting on the
 11th of February. Identify the commit you want and copy the commit hash
 (the long string of numbers and letters following the word "commit"). To
-checkout a copy of this version of the code, type\
-`git checkout -b old-code `<hash>\
+checkout a copy of this version of the code, type
+`git checkout -b old-code `<hash>
 After this your repository will reflect the state of the code at that
-point in time. To get back to the current version, just type\
-`git checkout master`\
+point in time. To get back to the current version, just type
+`git checkout master`
 
 # References
 

@@ -27,7 +27,7 @@ prepending them with a "`#`" symbol (the "make" system's comment
 character). To turn on the effect controlled by a given preprocessor
 directive, just uncomment the appropriate "DEFINES" line by deleting
 this "`#`" symbol. The options currently controlled by the preprocessor
-are:\
+are:
 
 -   PER_SPECIES_WEIGHT - By default, each pseudoparticle in the code
     can represent a different number of real particles. Memory can be

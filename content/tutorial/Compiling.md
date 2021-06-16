@@ -17,20 +17,20 @@ correct working directory. As explained in , the root directory for
 EPOCH contains several subdirectories, including separate directories
 for each of the 1D, 2D and 3D versions of the code. To compile the 2D
 version of the code, you first switch to the "epoch2d" directory using
-the command\
-**`cd $HOME/epoch/epoch2d`**\
-and then type\
-**`make`**\
+the command
+**`cd $HOME/epoch/epoch2d`**
+and then type
+**`make`**
 and the code will compile. There are certain options within the code
 which are controlled by compiler preprocessors and are described in the
 next section. When the code is compiled, it creates a new directory
 called "bin" containing the compiled binary which will be called
 `epoch1d`, `epoch2d` or `epoch3d`. To run the code, just execute the
-binary file by typing:\
-**`./bin/epoch2d`**\
+binary file by typing:
+**`./bin/epoch2d`**
 or whatever the correct binary is for the dimensionality of the code
 that you have. You should be given a screen which begins with the EPOCH
-logo, and then reads:\
+logo, and then reads:
 
     The code was compiled with no compile time options
 
@@ -48,10 +48,10 @@ MPI implementation. If you want the code to run unattended, then you
 will need to pipe in the output directory name to be used. The method
 for doing this varies between MPI implementations. For many MPI
 implementations (such as recent versions of OpenMPI) this can be
-achieved with the following:\
-**`echo Data | mpirun -np 2 ./bin/epoch2d`**\
-Some cluster setups accept the following instead:\
-**`mpirun -np 2 ./bin/epoch2d < deck.file`**\
+achieved with the following:
+**`echo Data | mpirun -np 2 ./bin/epoch2d`**
+Some cluster setups accept the following instead:
+**`mpirun -np 2 ./bin/epoch2d < deck.file`**
 where "deck.file" is a file containing the name of the output directory.
 Some cluster queueing systems do not allow the use of input pipes to
 mpirun. In this case, there is usually a "-stdin" command line option to
@@ -68,8 +68,8 @@ impossible to pipe in the directory name using a job script.
 The "Makefile" contains configurations for fort, gfortran, pgi, g95,
 hector/archer and ibm (the compiler suite used on IBM's BlueGene
 machines). In order to compile using one of the listed configurations,
-add the "`COMPILER=`" option to the "`make`" command. For example\
-**`make COMPILER=gfortran`**\
+add the "`COMPILER=`" option to the "`make`" command. For example
+**`make COMPILER=gfortran`**
 will compile the code using the gfortran compiler and appropriate
 compiler flags. The options are
 

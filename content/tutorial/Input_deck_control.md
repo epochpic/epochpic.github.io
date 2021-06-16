@@ -55,20 +55,20 @@ end:control
 
 As illustrated in the above code block, the "``#``" symbol is
 treated as a comment character and the code ignores everything on a line
-following this character.\
-The allowed entries are as follows:\
+following this character.
+The allowed entries are as follows:
 - `nx, ny, nz` - Number of grid points in the x,y,z
-direction. This parameter is mandatory.\
+direction. This parameter is mandatory.
 - `npart` - The global number of pseudoparticles in the
 simulation. This parameter does not need to be given if a specific
 number of particles is supplied for each particle species by using the
-"npart" directive in each [**species** block
-][_input_deck_species]. If both are given then the
-value in the **control** block will be ignored.\
+"npart" directive in each [**species** block][input_deck_species].
+If both are given then the
+value in the **control** block will be ignored.
 - `nsteps` - The number of iterations of the core solver
 before the code terminates. Negative numbers instruct the code to only
 terminate at **t_end**. If **nsteps** is not specified then **t_end**
-must be given.\
+must be given.
 - `t_end` - The final simulation time in simulation seconds
 before the code terminates. If **t_end** is not specified then
 **nsteps** must be given. If they are both specified then the first time
@@ -76,79 +76,79 @@ restriction to be satisfied takes precedence. Sometimes it is more
 useful to specify the time in picoseconds or femtoseconds. To accomplish
 this, just append the appropriate multiplication factor. For example,
 "t_end = 3 \* femto" specifies 3 femtoseconds. A list of multiplication
-factors is supplied [here][Maths_parser__constants].\
+factors is supplied [here][Maths_parser__constants].
 - `{x,y,z}_min` - Minimum grid position of the domain in
 metres. These are required parameters. Can be negative. "{x,y,z}_start"
 is accepted as a synonym. In a similar manner to that described above,
 distances can be specified in microns using a multiplication constant.
-eg. "x_min = 4 \* micron" specifies a distance of 4 μm.\
+eg. "x_min = 4 \* micron" specifies a distance of 4 μm.
 - `{x,y,z}_max` - Maximum grid position of the domain in
 metres. These are required parameters. Must be greater than
-*{x,y,z}_min*. "{x,y,z}_end" is accepted as a synonym.\
+*{x,y,z}_min*. "{x,y,z}_end" is accepted as a synonym.
 - `dt_multiplier` - Factor by which the timestep is
 multiplied before it is applied in the code, i.e. a multiplying factor
 applied to the CFL condition on the timestep. Must be less than one. If
 no value is given then the default of 0.95 is used. If maxwell_solver
 is different from "yee" (the default) this parameter becomes
-increasingly relevant.\
+increasingly relevant.
 - `dlb_threshold` - The minimum ratio of the load on the
 least loaded processor to that on the most loaded processor allowed
 before the code load balances. Set to 1 means always balance, set to 0
 means never balance. If this parameter is not specified then the code
-will only be load balanced at initialisation time.\
+will only be load balanced at initialisation time.
 - `restart_snapshot` - The number of a previously written
 restart dump to restart the code from. If not specified then the initial
-conditions from the input deck are used.\
+conditions from the input deck are used.
 Note that as of version 4.2.5, this parameter can now also accept a
 filename in place of a number. If you want to restart from "0012.sdf"
 then it can either be specified using "restart_snapshot = 12", or
 alternatively it can be specified using "restart_snapshot = 0012.sdf".
 This syntax is required if output file prefixes have been used (see the
-[output block][Input_deck_output_block] page).\
+[output block][Input_deck_output_block] page).
 - `field_order` - Order of the finite difference scheme used
 for solving Maxwell's equations. Can be 2, 4 or 6. If not specified, the
-default is to use a second order scheme.\
+default is to use a second order scheme.
 - Choose a Maxwell solver scheme with an extended stencil. This option
 is only active if field_order is set to 2. Possible options are "yee",
 "lehe_{x,y,z}", "pukhov", "cowan" and since v4.12 "custom". Note that
 not all options are available in 1d and 2d. The default is "yee" which
-is the default second order scheme.\
+is the default second order scheme.
 - `stdout_frequency` - If specified then the code will print
 a one line status message to stdout after every given number or
 timesteps. The default is to print nothing to screen (i.e.
-**stdout_frequency = 0**).\
+**stdout_frequency = 0**).
 - `use_random_seed` - The initial particle distribution is
 generated using a random number generator. By default, EPOCH uses a
 fixed value for the random generator seed so that results are
 repeatable. If this flag is set to "T" then the seed will be generated
-using the system clock.\
+using the system clock.
 - `nproc{x,y,z}` - Number of processes in the *x,y,z*
 directions. By default, EPOCH will try to pick the best method of
 splitting the domain amongst the available processors but occasionally
-the user may wish to override this choice.\
+the user may wish to override this choice.
 - `smooth_currents` - This is a logical flag. If set to "T"
 then a smoothing function is applied to the current generated during the
 particle push. This can help to reduce noise and self-heating in a
 simulation. The smoothing function used is the same as that outlined in
-Buneman [^1]. The default value is "F".\
+Buneman [^1]. The default value is "F".
 - `field_ionisation` - Logical flag which turns on field
-ionisation. See [here][_input_deck_species__ionisation]
-.\
+ionisation. See [here][input_deck_species__ionisation]
+.
 - `use_bsi` - Logical flag which turns on barrier
 suppression ionisation correction to the tunnelling ionisation model for
 high intensity lasers. See
-[here][_input_deck_species__ionisation] . This flag
+[here][input_deck_species__ionisation] . This flag
 should always be enabled when using field ionisation and is only
-supplied for testing purposes. The default is "T".\
+supplied for testing purposes. The default is "T".
 - `use_multiphoton` - Logical flag which turns on modelling
 ionisation by multiple photon absorption. This should be set to "F" if
 there is no laser attached to a boundary as it relies on laser
-frequency. See [here][_input_deck_species__ionisation].
+frequency. See [here][input_deck_species__ionisation].
 This flag should always be enabled when using field ionisation and is
-only supplied for testing purposes. The default is "T".\
+only supplied for testing purposes. The default is "T".
 - `particle_tstart` - Specifies the time at which to start
 pushing particles. This allows the field to evolve using the Maxwell
-solver for a specified time before beginning to move the particles.\
+solver for a specified time before beginning to move the particles.
 - `use_exact_restart` - Logical flag which makes a
 simulation restart as close as is numerically possible to if the
 simulation had not been stopped and restarted. Without this flag set to
@@ -159,7 +159,7 @@ normally needed for physical simulations. If set to "T" then the domain
 split amongst processors will be identical along with the seeds for the
 random number generators. Note that the flag will be ignored if the
 number of processors does not match that used in the original run. The
-default value is "F".\
+default value is "F".
 - `use_current_correction` - Logical flag to specify
 whether EPOCH should correct for residual DC current in the initial
 conditions. If set to true, the DC current in the initial conditions is
@@ -171,35 +171,33 @@ calculated and is subtracted from all subsequent current depositions.
     all the processors requested. If this flag is set to "T" then EPOCH
     will continue to run and leave some of the requested CPUs idle. If
     set to "F" then code will exit if all CPUs cannot be utilised. The
-    default value is "T".\
+    default value is "T".
 -   `check_stop_file_frequency` - Integer parameter
     controlling automatic halting of the code. The frequency is
     specified as number of simulation cycles. Refer to description later
-    in this section. The default value is 10.\
+    in this section. The default value is 10.
 -   `stop_at_walltime` - Floating point parameter
     controlling automatic halting of the code. Refer to description
-    later in this section. The default value is -1.0.\
+    later in this section. The default value is -1.0.
 -   `stop_at_walltime_file` - String parameter controlling
     automatic halting of the code. See
     [below](#automatic_halting_of_a_simulation). The default
-    value is an empty string.\
+    value is an empty string.
 -   `simplify_deck` - If this logical flag is set to "T"
     then the deck parser will attempt to simplify the maths expressions
     encountered after the first pass. This can significantly improve the
     speed of evaluation for some input deck blocks. The default value is
-    "F".\
+    "F".
 -   `print_constants` - If this logical flag is set to "T",
     deck constants are printed to the "deck.status" (and
     "const.status" after 4.11) file as they are parsed. The default
-    value is "F".\
+    value is "F".
 -   `use_migration` - Logical flag which determines whether
-    or not to use [particle
-    migration][_input_deck_species__particle_migration_between_species].
-    The default is "F".\
+    or not to use [particle migration][input_deck_species__particle_migration_between_species].
+    The default is "F".
 -   `migration_interval` - The number of timesteps between
-    each [migration
-    event][_input_deck_species__particle_migration_between_species].
-    The default is 1 (migrate at every timestep).\
+    each [migration event][input_deck_species__particle_migration_between_species].
+    The default is 1 (migrate at every timestep).
 -   `allow_missing_restart` - Logical flag to allow code to
     run when a restart dump is absent. When "restart_snapshot" is
     specified then the simulation first checks that the specified
@@ -219,48 +217,92 @@ calculated and is subtracted from all subsequent current depositions.
     default, the code tries to calculate the number of digits required
     by dividing t_end by dt_snapshot. Note that the minimum number of
     digits is 4.
-
-\- If this logical flag is set to "T" then the code performs a more
-rigorous test to determine the number of digits required to accommodate
-all outputs that are to be generated by a run. Since this can be time
-consuming and is overkill for most cases, it is disabled by default. The
-default value is "F". - If this logical flag is set to "T" then the code
-keeps global particle counts for each species on each processor. This
-information isn't needed by the core algorithm, but can be useful for
-developing some types of additional physics packages. It does require
-one additional MPI_ALL_REDUCE per species per timestep, so it is not
-activated by default. The default value is "F". - When restarting from a
-dump file, the current walltime displayed will include the elapsed
-walltime recorded in the restart dump. The user can request that this
-time is ignored by setting the "reset_walltime" flag to "T". The
-default value is "F". - This integer parameter determines the maximum
-number of timesteps to allow between load balancing checks. Each time
-that the load balancing sweep is unable to improve the load balance of
-the simulation, it doubles the number of steps before the next check
-will occur. It will keep increasing the check interval until it reaches
-the value given by **dlb_maximum_interval**. If the value of
-**dlb_maximum_interval** is negative then the check interval will
-increase indefinitely. When the load balancing sweep finds an
-improvement to the load balance of the simulation, the check interval is
-reset to one. The default value is 500.\
-- This integer parameter determines the maximum number of timesteps to
-allow between forcing a full load balance sweep. If the current load
-balance is greater than the value of **dlb_threshold** then the load
-balancer exits before attempting to improve the loading. If
-**dlb_force_interval** is greater than zero, then the full load
-balancer will be run at the requested interval of timesteps, regardless
-of the value of **dlb_threshold**. Note that the simulation will only
-be redistributed if this would result in an improved load balance. The
-default value is 2000.\
-- This logical flag determines whether a load balance will be attempted
-on the first call of the load balancer. The load balancer performs to
-functions: first it attempts to find a domain decomposition that
-balances the load evenly amongst processors. Next, it redistributes the
-domain and particles onto the new layout (if requred). This latter step
-is always required when setting up the simulation, so the load balancer
-is always called once during set-up. This flag controls whether or not a
-load balance is attempted during this call, regardless of the value of
-**dlb_threshold**. The default value is "T".\
+-   `use_accurate_n_zeros` - If this logical flag is set to "T" then the
+    code performs a more
+    rigorous test to determine the number of digits required to accommodate
+    all outputs that are to be generated by a run. Since this can be time
+    consuming and is overkill for most cases, it is disabled by default. The
+    default value is "F".
+-   `use_particle_count_update` - If this logical flag is set to "T" then the code
+    keeps global particle counts for each species on each processor. This
+    information isn't needed by the core algorithm, but can be useful for
+    developing some types of additional physics packages. It does require
+    one additional MPI_ALL_REDUCE per species per timestep, so it is not
+    activated by default. The default value is "F".
+-   `reset_walltime` - When restarting from a
+    dump file, the current walltime displayed will include the elapsed
+    walltime recorded in the restart dump. The user can request that this
+    time is ignored by setting the "reset_walltime" flag to "T". The
+    default value is "F".
+-   `dlb_maximum_interval` - This integer parameter determines the maximum
+    number of timesteps to allow between load balancing checks. Each time
+    that the load balancing sweep is unable to improve the load balance of
+    the simulation, it doubles the number of steps before the next check
+    will occur. It will keep increasing the check interval until it reaches
+    the value given by **dlb_maximum_interval**. If the value of
+    **dlb_maximum_interval** is negative then the check interval will
+    increase indefinitely. When the load balancing sweep finds an
+    improvement to the load balance of the simulation, the check interval is
+    reset to one. The default value is 500.
+-   `dlb_force_interval` - This integer parameter determines the maximum number of timesteps to
+    allow between forcing a full load balance sweep. If the current load
+    balance is greater than the value of **dlb_threshold** then the load
+    balancer exits before attempting to improve the loading. If
+    **dlb_force_interval** is greater than zero, then the full load
+    balancer will be run at the requested interval of timesteps, regardless
+    of the value of **dlb_threshold**. Note that the simulation will only
+    be redistributed if this would result in an improved load balance. The
+    default value is 2000.
+-   `balance_first` - This logical flag determines whether a load balance will be attempted
+    on the first call of the load balancer. The load balancer performs to
+    functions: first it attempts to find a domain decomposition that
+    balances the load evenly amongst processors. Next, it redistributes the
+    domain and particles onto the new layout (if requred). This latter step
+    is always required when setting up the simulation, so the load balancer
+    is always called once during set-up. This flag controls whether or not a
+    load balance is attempted during this call, regardless of the value of
+    **dlb_threshold**. The default value is "T".
+-   `use_pre_balance` - This logical flag determines whether a load balance
+    will be attempted before the particle load occurs. If this flag is set to
+    "T" then the particle auto-loader will be called at setup time, but
+    instead of creating particles it will just populate a particle-per-cell
+    field array. This will then be used to calculate the optimal domain
+    decomposition and all field arrays will be redistributed to use the new
+    layout. Finally, after all of this has been done, the auto-loader will be
+    called again and create just the particles that are present on their
+    optimally load-balanced domains. In contrast, if the flag is set to "F"
+    then the domain is just divided evenly amongst processors and the particles
+    are loaded on this domain decomposition. Balancing is then carried out on
+    to redistribute the work load. For heavily imbalanced problems, this can
+    lead to situations in which there is insufficient memory to setup a
+    simulation, despite there being sufficient resources for the final
+    load-balanced conditions. The default value is "T".
+-   `use_optimal_layout` - This logical flag determines whether the load
+    balancer attempts to find an optimal processor split before loading the
+    particles. The initial domain split is chosen in such a way as to minimize
+    the total surface area of the resulting domains in 3D, or edge lengths in
+    2D. For example, if a 2D square domain is run on 16 CPUs then the domain
+    will be divided by 4 in the x-direction and 4 in the y-direction. The other
+    possible splits (1x16, 2x8, 8x2, 16x1) are rejected because they all yield
+    rectangular subdomains whose total edge length is greater than the 4x4
+    edge length. For some problems (eg. a density ramp or thin foil) this is a
+    poor choice and a better load balance would be obtained by a less even
+    split. It is always possible to specify such a split by using
+    **nproc{x,y,z}** flags but enabling the **use_optimal_layout** flag will
+    automatically determine the best split for you. Future versions of the
+    code will also allow the split to be changed dynamically at run time. The
+    default value is "T".
+-   `use_more_setup_memory` - This logical flag determines whether the extra
+    memory will be used during the initial setup of particle species. If set
+    to false then only one set of arrays will be used for storing temperature,
+    density and drift during species loading. This can be a significant memory
+    saving but omes at the expense of recalculating grid quantities multiple
+    times. Setting the flag to true enables one set of arrays per species. The
+    default value is "F".
+-   `deck_warnings_fatal` - This logical flag controls the behaviour of the
+    deck parser when a warning is encountered. Usually the code will just
+    print a warning message and continue running. Setting this flag to "T"
+    will force the code to abort. The default value is "F".
 
 # Maxwell Solvers {#maxwell_solvers}
 
@@ -283,14 +325,14 @@ dt_multiplier tend to improve on this, while adversely affecting the
 dispersion relation. The implemented solvers behave differently in this
 regard.
 
-Different options are available as follows:\
+Different options are available as follows:
 - `maxwell_solver = lehe_{x,y,z}` - This setting will
 enable an extended stencil proposed by Lehe et al [^2]. This stencil
 focusses on improving the dispersion relation on the $x$-axis, please
 take this into account when defining your laser input. It is available
 in EPOCH1D, EPOCH2D and EPOCH3D. While it is not technically required to
 use a dt_multiplier smaller than unity, the value proposed by Lehe et
-al [^3] is "dt_multiplier=0.96".\
+al [^3] is "dt_multiplier=0.96".
 
 -   `maxwell_solver = pukhov` - This setting will enable an
     extended stencil proposed by Pukhov [^4] under the name of NDFX. It
@@ -299,7 +341,7 @@ al [^3] is "dt_multiplier=0.96".\
     Yee's scheme. Pukhov's NDFX scheme aims at improving the numerical
     dispersion relation by allowing to choose " dt_multiplier= 1.0",
     while smaller values are also valid. The resulting dispersion
-    relation is best along the axis with the smallest grid spacing.\
+    relation is best along the axis with the smallest grid spacing.
 
 <!-- -->
 
@@ -312,13 +354,13 @@ al [^3] is "dt_multiplier=0.96".\
     steps are only slightly below the CFL condition, e.g. " = 0.999".
     When Cowan's scheme is reduced to 2D it is the same as Pukhov's
     scheme with dt_multiplier \<1.0. The resulting dispersion relation
-    is best along the axis with the smallest grid spacing.\
+    is best along the axis with the smallest grid spacing.
 
-\- This setting will enable full user control over the extended stencil
-coefficients. This allows for the specification of optimised
-coefficients as outlined in [^7]. This option must be accompanied by a
-"stencil" block. See
-[below.][Input_deck_control__stencil_block]
+-   `maxwell_solver = custom` - This setting will enable full user control
+    over the extended stencil coefficients. This allows for the specification
+    of optimised coefficients as outlined in [^7]. This option must be
+    accompanied by a "stencil" block. See
+    [below.][Input_deck_control__stencil_block]
 
 # Stencil Block {#stencil_block}
 
@@ -334,23 +376,27 @@ desired coefficient values.
 2D.](/img/Stencil.png)
 This option allows the user to specify an extended stencil scheme that
 has been specifically optimised for the simulation grid spacing and
-timestep. See [^8] for further details.\
+timestep. See [^8] for further details.
 or see [7](https://github.com/Ablinne/optimize-stencil) for stencil
 optimization code. Note that there is no option for changing the value
 of $\alpha_{x,y,z}$ since these are calculated using the following
-equations: $\begin{aligned}
-  \alpha_x &= 1 - 2\beta_{xy} - 2\beta{xz} - 3\delta_x\,, \\
-  \alpha_y &= 1 - 2\beta_{yx} - 2\beta{yz} - 3\delta_y\,, \\
-  \alpha_z &= 1 - 2\beta_{zx} - 2\beta{zy} - 3\delta_z\,.\end{aligned}$
+equations:
+$$
+\begin{aligned}
+  \alpha_x &= 1 - 2\beta_{xy} - 2\beta{xz} - 3\delta_x\\,, \\\\\\
+  \alpha_y &= 1 - 2\beta_{yx} - 2\beta{yz} - 3\delta_y\\,, \\\\\\
+  \alpha_z &= 1 - 2\beta_{zx} - 2\beta{zy} - 3\delta_z\\,.
+\end{aligned}
+$$
 
 -   `delta{x,y,z}, gamma{x,y,z}, beta{xy,xz,yx,yz,zx,zy}` -
     The coefficients to use for the extended stencil points as shown in
     Figure \[stencil\]. See for further details. These coefficients are
     specified as floating point numbers. The default values are to set
     all coefficients to zero which results in $\alpha_{x,y,z}$ having
-    values of unity. This corresponds to the standard Yee scheme.\
+    values of unity. This corresponds to the standard Yee scheme.
 -   `dt` - The timestep restriction to use for the field
-    solver\
+    solver
 
 # Strided Current Filtering {#strided_current_filtering}
 

@@ -20,7 +20,9 @@ number) and the subdirectories and files listed below.
 
 Alternatively, if the code is checked out from the GitHub git repository
 with the command
+
 `git clone --recursive https://github.com/Warwick-Plasma/epoch.git`
+
 then the directory will be "`$HOME/epoch`".
 
 Once the code has been obtained, the top-level directory will contain

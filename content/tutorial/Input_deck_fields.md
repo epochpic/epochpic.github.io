@@ -35,15 +35,15 @@ Once again, this is a very simple block needing only limited
 explanation. All field variables are accessible by name and can be read
 back using the appropriate commands from the maths parser (see
 [here][maths_parser__constants]). The possible
-parameters are as follows:\
+parameters are as follows:
 - `ex,ey,ez` - The electric field vectors pointing in all
-three directions. The default value is zero.\
+three directions. The default value is zero.
 - `bx,by,bz` - The magnetic field vectors pointing in all
-three directions. The default value is zero.\
+three directions. The default value is zero.
 - `offset` - File offset. The field values may also be
 specified using a binary file in a similar way to that used for species
 variables. See [the species block][Input_deck_species]
-for more details.\
+for more details.
 Any valid maths parser expression can be used to set up the fields, and
 no check is made to ensure that the $\nabla.B = 0$ is satisfied.
 

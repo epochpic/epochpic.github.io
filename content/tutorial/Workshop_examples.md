@@ -14,7 +14,7 @@ menu:
 
 # EPOCH workshop overview {#epoch_workshop_overview}
 
-The aims of the Workshop are:\
+The aims of the Workshop are:
 \*After the workshop you should be able to setup and run EPOCH on a
 problem of real importance to your research.
 
@@ -26,8 +26,8 @@ problem of real importance to your research.
     computers.
 -   Give advice to the EPOCH team on new features for the code.
 
-\
-Warwick EPOCH Personnel:\
+
+Warwick EPOCH Personnel:
 \*Tony Arber -- PI on EPOCH project at Warwick.
 
 -   Keith Bennett -- PDRA and senior EPOCH developer.
@@ -37,8 +37,8 @@ Warwick EPOCH Personnel:\
 -   Alexander Seaton - Final year PhD student with extensive experience
     of using EPOCH
 
-\
-Resources:\
+
+Resources:
 \*All machines, and exercises, are linux based.
 
 -   EPOCH is a Fortran90 program which uses MPI for parallelization.
@@ -49,7 +49,7 @@ Resources:\
 # Workstation usage {#workstation_usage}
 
 You can use the workstations for simple 1D tests and looking at the
-code.\
+code.
 
 ### Ultra-simple getting EPOCH guide! {#ultra_simple_getting_epoch_guide}
 
@@ -57,7 +57,7 @@ These instructions should work in your host institute if you have git.
 
 1.  Login to workstation using guest account.
 2.  Open a terminal.
-3.  Type the following command at the prompt:\
+3.  Type the following command at the prompt:
     `git clone --recursive https://github.com/Warwick-Plasma/epoch.git`
 
 You will now have a directory called 'epoch'. Inside this directory will
@@ -137,20 +137,20 @@ the following links. Create a directory "\~/EXAMPLES" to put them in:
     mkdir EXAMPLES
 
 then download the .zip to this folder (either click the link and then
-copy the file, or right-click and select the save-as option).\
+copy the file, or right-click and select the save-as option).
 [All decks as a .zip](media:Workshop_EXAMPLES.zip "wikilink")
 
-[01-1d_laser.deck - A simple laser](media:01-1d_laser.deck "wikilink")\
+[01-1d_laser.deck - A simple laser](media:01-1d_laser.deck "wikilink")
 [02-2d_laser.deck - A simple 2d
-laser](media:02-2d_laser_amended.deck "wikilink")\
+laser](media:02-2d_laser_amended.deck "wikilink")
 [03-1d_two_stream.deck - A simple two-stream
-instability](media:03-1d_two_stream.deck "wikilink")\
+instability](media:03-1d_two_stream.deck "wikilink")
 [04-1d_two_stream_io.deck - The same two-stream instability with
-extended output ](media:04-1d_two_stream_io.deck "wikilink")\
+extended output ](media:04-1d_two_stream_io.deck "wikilink")
 [05-2d_moving_window.deck - Simple moving-window problem with density
-jump and laser ](media:05-2d_moving_window.deck "wikilink")\
+jump and laser ](media:05-2d_moving_window.deck "wikilink")
 [06-2d_ramp.deck - Gaussian laser into a density ramp
-](media:06-2d_ramp.deck "wikilink")\
+](media:06-2d_ramp.deck "wikilink")
 [07-1d_heating.deck - Demonstration of numerical heating
 ](media:07-1d_heating.deck "wikilink")
 

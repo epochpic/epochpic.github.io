@@ -35,35 +35,35 @@ end:laser
 
 As already mentioned in the discussion of laser boundaries in the
 [boundaries][Input_deck_boundaries] block, lasers are
-attached to compatible boundaries here in the initial conditions deck.\
+attached to compatible boundaries here in the initial conditions deck.
 - `boundary` - The boundary on which to attach the laser. In
 1D, the directions can be either x_min or x_max. "left" and "right"
 are accepted as a synonyms. In 2D, y_min and y_max may also be
 specified. These have synonyms of "down" and "up". Finally, 3D adds
-z_min and z_max with synonyms of "back" and "front".\
+z_min and z_max with synonyms of "back" and "front".
 - `amp` - The amplitude of the $E$ field of the laser in
-$V/m$.\
+$V/m$.
 - `intensity` - The intensity of the laser in $W/m^2$. There
 is no need to specify both intensity and amp and the last specified in
 the block is the value used. It is mandatory to specify at least one.
 The amplitude of the laser is calculated from intensity using the
 formula `amp = sqrt(2*intensity/c/epsilon0)`. "irradiance" is accepted
-as a synonym.\
+as a synonym.
 - `intensity_w_cm2` - This is identical to the
 **intensity** parameter described above, except that the units are
-specified in $W/cm^2$.\
+specified in $W/cm^2$.
 - `id` - An id code for the laser. Used if you specify the
 laser time profile in the EPOCH source rather than in the input deck.
 Does not have to be unique, but all lasers with the same id will have
 the same time profile. This parameter is optional and is not used under
-normal conditions.\
-- `omega` - Angular frequency (rad/s not Hz) for the laser.\
+normal conditions.
+- `omega` - Angular frequency (rad/s not Hz) for the laser.
 - `frequency` - Ordinary frequency (Hz not rad/s) for the
-laser.\
+laser.
 - `lambda` - Wavelength in a vacuum for the laser specified
 in $m$. If you want to specify in $\mu m$ then you can multiply by the
 constant "micron". One of **lambda** or **omega** (or **frequency**) is
-a required parameter.\
+a required parameter.
 - `pol_angle` - Polarisation angle for the electric field of
 the laser in radians. This parameter is optional and has a value of zero
 by default. The angle is measured with respect to the right-hand triad
@@ -73,19 +73,19 @@ components. If the laser is on **x_min** then the default $E$ field is
 in the $y$-direction and the $B$ field is the $z$-direction. The
 polarisation angle is measured clockwise about the $x$-axis with zero
 along the $E_y$ direction. If the laser is on **x_max** then the angle
-is anti-clockwise.\
-\*\*Similarly, for propagation directions:\
-\*\**y_min* - angle about $y$-axis, zero along $z$-axis\
-\*\**z_min* - angle about $z$-axis, zero along $x$-axis\
-\*\**y_max* - angle anti-clockwise about $y$-axis, zero along $z$-axis\
-\*\**z_max* - angle anti-clockwise about $z$-axis, zero along $x$-axis\
+is anti-clockwise.
+\*\*Similarly, for propagation directions:
+\*\**y_min* - angle about $y$-axis, zero along $z$-axis
+\*\**z_min* - angle about $z$-axis, zero along $x$-axis
+\*\**y_max* - angle anti-clockwise about $y$-axis, zero along $z$-axis
+\*\**z_max* - angle anti-clockwise about $z$-axis, zero along $x$-axis
 - `pol` - This is identical to *pol_angle* with the angle
 specified in degrees rather than radians. If both are specified then the
-last one is used.\
+last one is used.
 - `phase` - The phase profile of the laser wavefront given in
 radians. Phase may be a function of both space and time. The laser is
 driven using ${\rm{sin}}(\omega t + \phi)$ and **phase** is the $\phi$
-parameter. There is zero phase shift applied by default.\
+parameter. There is zero phase shift applied by default.
 - `profile` - The spatial profile of the laser. This should
 be a spatial function not including any values in the direction normal
 to the boundary on which the laser is attached, and the expression will
@@ -94,7 +94,7 @@ field is multiplied by the profile to give its final amplitude so the
 intention is to use a value between zero and one. By default it is a
 unit constant and therefore has no affect on the laser amplitude. This
 parameter is redundant in 1D and is only included for consistency with
-2D and 3D versions of the code.\
+2D and 3D versions of the code.
 - `t_profile` - Used to specify the time profile for the
 laser amplitude. Like **profile** the laser field is multiplied by this
 parameter but it is only a function of time and not space. In a similar
@@ -106,17 +106,17 @@ parameter was used to impose time-dependance. Since **profile** can now
 vary in time, **t_profile** is no longer needed but it has been kept to
 facilitate backwards compatibility. It can also make input decks clearer
 if the time dependance is given separately. The default value of
-**t_profile** is just the real constant value of 1.0.\
+**t_profile** is just the real constant value of 1.0.
 - `t_start` - Start time for the laser in seconds. Can be
 set to the string "start" to start at the beginning of the simulation.
 This is the default value. When using this parameter, the laser start is
 hard. To get a soft start use the **t_profile** parameter to ramp the
-laser up to full strength.\
+laser up to full strength.
 - `t_end` - End time for the laser in seconds, can be set to
 the string "end" to end at the end of the simulation. This is the
 default value. When using this parameter, the laser end is clipped
 straight to zero at $t > t_end$. To get a soft end use the
-**t_profile** parameter to ramp the laser down to zero.\
+**t_profile** parameter to ramp the laser down to zero.
 If you add multiple laser blocks to the initial conditions file then the
 multiple lasers will be additively combined on the boundary.
 

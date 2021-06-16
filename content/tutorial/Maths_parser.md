@@ -62,7 +62,7 @@ The maths parser in EPOCH has the following constants
 
 It is also possible for an end user to specify custom constants both
 within the code and from the input deck. These topics are covered later
-in this subsection. An example of using a constant would be:\
+in this subsection. An example of using a constant would be:
 **length_x = pi**
 
 ### Functions
@@ -129,8 +129,8 @@ quadrant.
     $n_{crit}(\omega) = \omega^2 m_0 \epsilon_0 / e^2$
 
 It is also possible for an end user to specify custom functions within
-the code. An example of using a function would be:\
-**length_x = exp(pi)**\
+the code. An example of using a function would be:
+**length_x = exp(pi)**
 The use of most of these functions is fairly simple, but "interpolate"
 requires some additional explanation. This function allows a user to
 specify a set of position,value pairs and have the code linearly
@@ -172,7 +172,7 @@ These follow the usual rules for operator precedence, although it is
 best to surround more complex expressions in parenthesis if the
 precedence is important. It is not possible at this time to specify
 custom operators without major changes to the code. An example of using
-an operator would be:\
+an operator would be:
 
 ```perl
  length_x = 10.0 + 12.0 

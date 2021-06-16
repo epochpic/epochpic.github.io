@@ -28,7 +28,7 @@ through the plane. To use particle probes, the code must not have been
 compiled with the **`-DNO_PARTICLE_PROBES`** compiler option. This is a
 fairly heavyweight diagnostic since each particle position must be
 tested from within the particle push. The code will run faster if it is
-not compiled in.\
+not compiled in.
 The probe is specified in terms of a point in the plane and the normal
 vector to the plane which is to be monitored. Particles are only
 recorded if they cross the plane in the direction given by the normal
@@ -55,25 +55,25 @@ end:probe
     dumps. Output variables are then named this as a prefix. For
     example, the block shown above will result in the name
     **electron_back_probe_px** for the x momentum. The particle
-    positions would just be called **electron_back_probe**.\
--   `point` - An arbitrary point in the plane of the probe.\
+    positions would just be called **electron_back_probe**.
+-   `point` - An arbitrary point in the plane of the probe.
 -   `normal` - A vector normal to the plane of the probe, in
-    the direction of crossings you wish to monitor.\
+    the direction of crossings you wish to monitor.
 -   `include_species` - The species to which this probe
     should be applied. To probe several species, use several probe
     blocks in the input deck. "probe_species" is accepted as a
-    synonym.\
+    synonym.
 -   `ek_min` - The minimum kinetic energy of particles to
-    store information about. Set to 0 for no minimum kinetic energy.\
+    store information about. Set to 0 for no minimum kinetic energy.
 -   `ek_max` - The maximum kinetic energy of particles to
-    store information about. Set to -1 for no maximum kinetic energy.\
+    store information about. Set to -1 for no maximum kinetic energy.
 -   `dumpmask` - The dump code for this particle probe. This
     is the same as that for the main output controls in **input.deck**.
     Note that the code has to store copies of particles which pass
     through the probe until a dump occurs. This means that the code's
     memory requirements can increase drastically if this code only dumps
     probe information infrequently. If this is set to **never** then the
-    code effectively never uses the probe.\
+    code effectively never uses the probe.
 
 
 <!-- ########################  Cross references  ######################## -->

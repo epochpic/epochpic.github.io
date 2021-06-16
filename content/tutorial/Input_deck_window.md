@@ -38,25 +38,25 @@ end:window
 
 -   `move_window` - Logical flag determining whether or not
     to move the window. If the window block is absent then this is the
-    same as setting move_window to "F".\
--   `window_v_x` - The speed in m/s of the window.\
+    same as setting move_window to "F".
+-   `window_v_x` - The speed in m/s of the window.
 -   `window_start_time` - The time in seconds at which the
-    window should start moving.\
+    window should start moving.
 
-\- The time in seconds at which the window should stop moving.\
+\- The time in seconds at which the window should stop moving.
 - `bc_x_min_after_move` - The boundary condition which
 should apply to the left boundary after the window has started moving.
 This is to allow the swapping of a laser boundary to a simple outflow
 boundary. Boundary codes are the same as when just specifying normal
 boundaries. If a boundary value isn't specified then it is assumed that
 the boundary isn't changed when the window starts moving.
-"xbc_left_after_move" is accepted as a synonym.\
+"xbc_left_after_move" is accepted as a synonym.
 - `bc_x_max_after_move` - The boundary condition which
 should apply to the right boundary after the window has started moving.
 "xbc_right_after_move" is accepted as a synonym. - "y" and "z"
 versions of the previous two parameters. **ybc_down_after_move**,
 **ybc_up_after_move**, **zbc_back_after_move** and
-**zbc_front_after_move** are accepted as synonyms.\
+**zbc_front_after_move** are accepted as synonyms.
 
 # Compatibility
 

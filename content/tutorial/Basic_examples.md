@@ -20,7 +20,7 @@ using the EPOCH input deck.
 An obvious simple test problem to do with EPOCH is the electron two
 stream instability. An example of a nice dramatic two stream instability
 can be obtained using EPOCH1D by setting the code with the following
-input deck file:\
+input deck file:
 
 ```perl
 begin:control

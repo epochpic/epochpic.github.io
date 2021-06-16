@@ -23,34 +23,34 @@ momentum of all particles which have a gamma lower than 1.8 or the
 positions of a randomly chosen subset of a given species.
 
 A new input deck block named "subset" is defined which accepts the
-following parameters:\
+following parameters:
 - `name` - The name given to this subset. This is used to
 identify the subset in the output block and is also used when labelling
-the data in the SDF files.\
+the data in the SDF files.
 - `include_species` - Add the given particle species to the
 set of particles that this subset applies to. By default, no particle
-species are included.\
+species are included.
 - `dumpmask` - The dumpmask to use when considering this
 subset in an output block. This takes the same form as the output block
-dumpmask. The default value is "always".\
+dumpmask. The default value is "always".
 - `random_fraction` - Select a random percentage of the
 particle species. This is a real value between zero and one. If 0 is
 specified, no particles are selected. If 1 is specified, all the
 particles are selected. If 0.2 is specified, 20% of the particles are
-selected.\
+selected.
 - `{px,py,pz,weight,charge,mass,gamma}_min` - Select only
 the particles with momentum, weight, charge, mass or gamma which is
-greater than the given value.\
+greater than the given value.
 - `{px,py,pz,weight,charge,mass,gamma}_max` - Select only
 the particles with momentum, weight, charge, mass or gamma which is less
-than the given value.\
+than the given value.
 - `{x,y,z}_min` - Select only the particles whose position
-lies above the given value.\
+lies above the given value.
 - `{x,y,z}_max` - Select only the particles whose position
-lies below the given value.\
+lies below the given value.
 - `id_min,max` - Select only the particles whose "id" is
 greater than or less than the given values. The "id" field is explained
-below.\
+below.
 - `skip,skip_{x,y,z}` - Integer parameter for subsampling
 output. If set to a positive integer then all grid-based variables using
 the subset restriction will be reduced when being written to file. This
@@ -156,10 +156,10 @@ by setting either
     of particles to be tracked. Throughout the rest of the simulation
     this recorded list will be used whenever requesting output for this
     subset. "persist_after_time" is accepted as an alias. Set to 0
-    to record from the start of the simulation.\
+    to record from the start of the simulation.
 -   `persist_start_step` - Similar to persist_start_time
     except this specifies a simulation step number to use instead of
-    time. "persist_after_step" is accepted as an alias.\
+    time. "persist_after_step" is accepted as an alias.
 
 If the input deck is edited on restart to add a new persistent subset
 then it must be added **after** existing persistent subsets or problems

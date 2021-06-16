@@ -18,7 +18,7 @@ Changes between version 3.1 and 4.0 {#changes_between_version_3.1_and_4.0}
 # Changes to the Makefile {#changes_to_the_makefile}
 
 Some changes have been made to the Makefile. These are documented
-[here][Compiler_Flags].\
+[here][Compiler_Flags].
 The following compile-time defines have been added to the Makefile:
 
 -   NO_IO
@@ -83,7 +83,7 @@ Changes between version 4.0 and 4.3 {#changes_between_version_4.0_and_4.3}
 # Changes to the Makefile {#changes_to_the_makefile_1}
 
 Some changes have been made to the Makefile. These are documented
-[here][Compiler_Flags] .\
+[here][Compiler_Flags] .
 The following compile-time define has been added to the Makefile:
 
 -   MPI_DEBUG
@@ -202,7 +202,7 @@ Changes between version 4.3 and 4.8 {#changes_between_version_4.3_and_4.8}
 # Changes to the Makefile {#changes_to_the_makefile_2}
 
 Some changes have been made to the Makefile. These are documented
-[here][Compiler_Flags].\
+[here][Compiler_Flags].
 The following compile-time define has been added to the Makefile:
 
 -   PER_SPECIES_WEIGHT
@@ -259,7 +259,7 @@ Version 4.9 adds significant new capabilities as follows:
 
 # Changes to the Makefile {#changes_to_the_makefile_3}
 
-Some changes have been made to the Makefile. These are documented in .\
+Some changes have been made to the Makefile. These are documented in .
 The following compile-time define has been added to the Makefile:
 
 -   DELTAF_METHOD

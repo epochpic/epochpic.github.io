@@ -485,7 +485,7 @@ initial conditions are specified.
 When running EPOCH in 2D or 3D, the laser can be modified spatially via
 the `profile` and `phase` parameters. These are briefly outlined
 [here][Input_deck_laser] but in this section we will
-describe them in a little more depth.\
+describe them in a little more depth.
 - `profile` - The spatial profile for the laser. This is
 essentially an array defined along the edge (or surface) that the laser
 is attached to. It is clear that the spatial profile is only meaningful
@@ -507,7 +507,7 @@ directions. So a laser travelling parallel to the x axis in 3D would
 have a profile in y and z. Since 3D lasers are very similar to 2D
 lasers, they will not be considered here in greater detail, but in 3D,
 it is possible to freely specify the laser profile across the entire
-face where a laser is attached.\
+face where a laser is attached.
 ![Uniform laser profile in
 EPOCH2D](/img/Profile_flat.png)
 ![Gaussian laser profile in
@@ -575,7 +575,7 @@ restart dump is loaded. The output files don't include all of the
 information needed to restart the code fully since some of this
 information is contained in the input deck. However, a restart dump also
 contains a full copy of the input deck used and this can be unpacked
-before running the code.\
+before running the code.
 If specific "restart" dumps are specified in the input deck, or the
 "force_final_to_be_restartable" flag is set then in some cases the
 output is forced to contain enough information to output all the data.

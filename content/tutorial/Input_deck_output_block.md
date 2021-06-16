@@ -124,49 +124,49 @@ When specifying which type of output dump to write a variable to there
 are eight options which can be specified for each variable and can be
 combined by addition. Some combinations make no sense but are formally
 valid. The first four options specify at which output types the variable
-is to be dumped:\
+is to be dumped:
 - `never` - If the variable is not a required restart
 variable then it will never be written. If it is a required restart
-variable then it will be written only at restart dumps.\
-- `full` - This variable will be written at full dumps only.\
+variable then it will be written only at restart dumps.
+- `full` - This variable will be written at full dumps only.
 - `always` - This variable will be written at full, normal
-and restart dumps.\
+and restart dumps.
 - `restart` - This variable will be written at restart dumps
 only. Note that variables required for restarting the code are always
 written to restart dumps. This flag is to enable the writing of
-additional variables into such dump files.\
+additional variables into such dump files.
 For grid variables derived from summing over particles (ie. "ekbar",
 "mass_density", "charge_density", "number_density", "temperature")
-the following two parameters also apply.\
+the following two parameters also apply.
 - `species` - The derived variable should be output on a
 species by species basis. It is combined with a dumpmask code by
-addition as in:\
-**charge_density = always + species** .\
+addition as in:
+**charge_density = always + species** .
 - `no_sum` - The output for this derived variable should not
 be summed over all species. By default, derived variables are summed
 over all species. If you don't want to include this sum, you must use
 the "no_sum" flag. It is combined with a dumpmask code by addition as
-in:\
-**charge_density = always + species + no_sum** .\
+in:
+**charge_density = always + species + no_sum** .
 Most grid variables may be averaged over time. A more detailed
 description of this is given in [\#Data
 Averaging](#data_averaging). Data averaging is specified
-using the following dumpmask parameters.\
+using the following dumpmask parameters.
 - `average` - The output for this variable should be averaged
 over time. The time span over which the variable will be averaged is
-controlled using flags described [below](#directives).\
+controlled using flags described [below](#directives).
 - `snapshot` - By default, the "average" parameter replaces
 the variable with an averaged version of the data. Adding this flag
-specifies that the non-averaged variable should also be dumped to file.\
+specifies that the non-averaged variable should also be dumped to file.
 When applied to a variable, these codes are referred to as a *dumpmask*.
 
 # Directives
 
 The first set of options control the type and frequency of output dumps.
-They are used as follows\
+They are used as follows
 - `disabled` - Logical flag. If this is set to "T" then the
 block is ignored and never generates any output. The default value is
-"F".\
+"F".
 - `dt_snapshot` - Sets the interval between normal output
 dumps in simulation seconds. Setting zero or negative means that the
 code will not output based on this condition. The code does NOT
@@ -177,106 +177,106 @@ output. As with other variables which specify a unit of time, it can be
 specified in more convenient unit by using a multiplication factor (see
 [here][maths_parser__constants]). For example,
 "dt_snapshot = 5 \* femto" will set it to be 5 femtoseconds. The
-default value is a large number which will never trigger an output.\
+default value is a large number which will never trigger an output.
 - `nstep_snapshot` - Sets the number of timesteps between
 normal output dumps. Setting zero or negative means that the code will
 not output based on this condition. If *dt_snapshot* is also specified
 then both conditions are considered and output will be generated when
 either condition is met. The default value is a large integer which will
-never trigger an output.\
+never trigger an output.
 - `full_dump_every` - The number of normal output dumps
 between full output dumps. Setting to zero makes every dump a full dump.
 Setting to a negative number stops the code from producing any full
-dumps. This is the default.\
+dumps. This is the default.
 - `restart_dump_every` - The number of normal output dumps
 between restart dumps. Setting to zero makes every dump a restart dump.
 Setting to a negative number stops the code from producing any restart
-dumps. This is the default.\
+dumps. This is the default.
 - `force_first_to_be_restartable` - Logical flag which
 determines whether the file written at time zero is a restart dump. The
-default value is "F".\
+default value is "F".
 - `force_last_to_be_restartable` - Force the code to
 override other output settings and make the last output dump it writes
 be a restart dump. Any internal condition which causes the code to
 terminate will make the code write a restart dump, but code crashes or
 scheduler terminations will not cause the code to write a restart dump.
 "force_final_to_be_restartable" is accepted as a synonym. The
-default value is "T".\
+default value is "T".
 - `dump_first` - Logical flag which determines whether to
 write an output file immediately after initialising the simulation. The
-default is "T".\
+default is "T".
 - `dump_last` - Logical flag which determines whether to
 write an output file just before ending the simulation. The default is
 "T" if an output block exists in the input deck and "F" otherwise.
-"dump_final" is accepted as a synonym.\
+"dump_final" is accepted as a synonym.
 - `time_start` - Floating point parameter which specifies
 the simulation time at which to start considering output for the block.
 Note that if "dump_first" or "dump_last" are set to true for this
 block then dumps will occur at the first or last timestep regardless of
 the value of the *time_start* parameter. This also applies to the three
-following parameters. The default value is 0.\
+following parameters. The default value is 0.
 - `time_stop` - Floating point parameter which specifies the
 simulation time at which to stop considering output for the block. The
-default value is the largest possible float.\
+default value is the largest possible float.
 - `nstep_start` - Integer parameter which specifies the step
 number at which to start considering output for the block. The default
-value is 0.\
+value is 0.
 - `nstep_stop` - Integer parameter which specifies the step
 number at which to stop considering output for the block. The default
-value is the largest possible integer.\
+value is the largest possible integer.
 - Floating point parameter which specifies the elapsed walltime in
 seconds at which to start considering output for the block. Note that if
 **dump_first** or **dump_last** are set to true for this block then
 dumps will occur at the first or last timestep regardless of the value
-of the **walltime_start** parameter. The default value is 0.\
+of the **walltime_start** parameter. The default value is 0.
 - Floating point parameter which specifies the elapsed walltime in
 seconds at which to stop considering output for the block. The default
-value is the largest possible float.\
+value is the largest possible float.
 - `dump_cycle` - If this is set to a positive integer then
 the output file number will be reset to zero after the specified cycle
 number is reached. eg. if "dump_cycle = 2" then the sequence of output
 dumps will be 0000.sdf, 0001.sdf, 0002.sdf, 0000.sdf, 0001.sdf, etc. The
-default is 0, so dump cycling never occurs.\
+default is 0, so dump cycling never occurs.
 - `dump_cycle_first_index` - If this is set to a positive
 integer then the value is used as the first index to use when cycling
 output dumps due to the "dump_cycle" parameter. For example, if
 "dump_cycle = 2" and "dump_cycle_first_index = 1" then the sequence
 of output dumps will be 0000.sdf, 0001.sdf, 0002.sdf, 0001.sdf,
-0002.sdf, 0001.sdf, etc. The default is 0.\
+0002.sdf, 0001.sdf, etc. The default is 0.
 - `dump_source_code` - EPOCH has the ability to write its
 own source code into restart dumps. This is generated at compile time
 and embedded into the binary and so is guaranteed to match that
 corresponding to the running code. EPOCH comes with a script called
 *unpack_source_from_restart* which can be used to unpack the source
-code from a restart dump. To use this script, just type\
+code from a restart dump. To use this script, just type
 **unpack_source_from_restart <sdf_filename>** at the command-line. If
 this logical flag is set to false then the feature will be disabled. The
-default value is "T".\
+default value is "T".
 - `dump_input_decks` - If this logical flag is set to true
 then a copy of the input decks for the currently running simulation is
-written into the restart dumps. The default value is "T".\
+written into the restart dumps. The default value is "T".
 - `dt_average` - When averaged variables are being output to
 file, this parameter specifies the simulation time period over which
-averaging is to occur. "averaging_period" is accepted as a synonym.\
+averaging is to occur. "averaging_period" is accepted as a synonym.
 - `nstep_average` - When averaged variables are being output
 to file, this parameter specifies the number of time steps over which
 averaging is to occur. "min_cycles_per_average" is accepted as a
 synonym. If both *dt_average* and *nstep_average* are specified, the
-code will use the one which gives the longest simulation time-span.\
+code will use the one which gives the longest simulation time-span.
 - `use_offset_grid` - When using moving windows some
 visualisation programs (notably VisIt) show the motion of the window by
 moving the visualisation window rather than by changing the x-axis.
 Setting this option to "T" causes the code to write another grid which
 always gives the offset relative to the left hand edge of the window
 rather than the true origin. Performs no function when not using the
-moving window. The default value is "F".\
+moving window. The default value is "F".
 - `filesystem` - String parameter. Some filesystems can be
 unreliable when performing parallel I/O. Often this is fixable by
 prefixing the filename with 'ufs' or 'nfs'. This parameter supplies the
-prefix to be used. The default value is an empty string.\
+prefix to be used. The default value is an empty string.
 - `file_prefix` - Although this parameter is supported by
 the traditional style of output block, its primary purpose is for use
-with multiple output blocks so it is documented in .\
+with multiple output blocks so it is documented in .
 A few additional parameters have been added for use with the new style
 of output block. These are documented
 [below](#multiple_output_blocks).
@@ -286,28 +286,28 @@ of output block. These are documented
 The next set are per particle properties. If you wish to plot these
 according to their spatial positions, you must include the
 "particle_grid" in your output variables. All entries have a default
-dumpmask of "never".\
+dumpmask of "never".
 - `particle_grid` - Requests the output of particle
 positions. This is a restart variable. No particle variables can be
 plotted in VisIt unless this is dumped. If any particle variables are
 written then the "particle_grid" is automatically written unless
 "particle_grid = never" is specified. The synonym "particles" may also
-be used.\
+be used.
 - `px,py,pz` - The dumpmasks for the particle momenta.
-Restart variable.\
-- `vx,vy,vz` - The dumpmasks for the particle velocities.\
+Restart variable.
+- `vx,vy,vz` - The dumpmasks for the particle velocities.
 - `charge` - The dumpmask for the charge of a given particle.
 This has no effect if the code is not compiled with the flag
 "-DPER_PARTICLE_CHARGE_MASS" (see
-[here][Compiler_Flags] ).\
+[here][Compiler_Flags] ).
 - `mass` - The dumpmask for the mass of a given particles.
 This has no effect if the code is not compiled with the flag
 "-DPER_PARTICLE_CHARGE_MASS" (see
 [here][Compiler_Flags]). The synonym
-"rest_mass" may also be used.\
+"rest_mass" may also be used.
 - `particle_weight` - The dumpmask for the weighting
 function which describes how many real particles each pseudoparticle
-represents. Restart variable. The synonym "weight" may also be used.\
+represents. Restart variable. The synonym "weight" may also be used.
 - `ejected_particles` - If requested then all the particles
 which have left the simulation domain since the last output dump of this
 type are included in the output. The list of ejected particles is
@@ -315,32 +315,32 @@ treated as if it were a separate species and the particle variables
 which get written are requested using the other particle variable flags
 (ie. "particle_grid", etc). Once the data has been written, the ejected
 particle lists are reset and will accumulate particles until the next
-requested output dump.\
+requested output dump.
 - `particle_energy` - The dumpmask for per-particle kinetic
-energy.\
+energy.
 - `relativistic_mass` - The dumpmask for per-particle
-relativistic mass (ie. not rest mass).\
+relativistic mass (ie. not rest mass).
 - `gamma` - The dumpmask for per-particle relativistic gamma
-(ie. $[1-(v/c)^2]^{-1/2}$).\
+(ie. $[1-(v/c)^2]^{-1/2}$).
 - `optical_depth` - The dumpmask for per-particle optical
 depth. Restart variable. This option is only supplied for debugging
-purposes and should not be required by most users.\
+purposes and should not be required by most users.
 - `trident_optical_depth` - The dumpmask for per-particle
 optical depth used by the Trident model. Restart variable. This option
 is only supplied for debugging purposes and should not be required by
-most users.\
+most users.
 - `qed_energy` - The dumpmask for per-particle QED-related
 particle energy. Restart variable. This option is only supplied for
-debugging purposes and should not be required by most users.\
+debugging purposes and should not be required by most users.
 - The dumpmask for the work exerted by the fields on each particle
 during the last time step. The work is divided into its three spatial
 components. The output is in numbers of $mc^2$ corresponding to the
 particle's $\gamma$-factor. Requires compiler flag
-"WORK_DONE_INTEGRATED".\
+"WORK_DONE_INTEGRATED".
 - Same as above, but the work is integrated over the entire simulation
 duration. The sum of all three components equals the particle's
-$\gamma$-factor. Requires compiler flag "WORK_DONE_INTEGRATED".\
-- `id` - Global particle ID. See below for details.\
+$\gamma$-factor. Requires compiler flag "WORK_DONE_INTEGRATED".
+- `id` - Global particle ID. See below for details.
 Particle IDs are useful if you want to track the progress of each
 particle throughout the simulation. Since they increase the size of each
 particle data structure, they are disabled by default and must be
@@ -358,20 +358,20 @@ $2^{24} = 16777216$. Probably not big enough.
 # Grid Variables {#grid_variables}
 
 The next set of parameters specify properties which are defined on a
-regular cartesian mesh. All entries have a default dumpmask of "never".\
+regular cartesian mesh. All entries have a default dumpmask of "never".
 - `grid` - The dumpmask for the Cartesian grid which defines
 the locations of the grid variables. No grid variables can be plotted in
 VisIt unless this variable is output. If any grid variables are written
 then the "grid" is automatically written unless "grid = never" is
-specified. The synonym "field_grid" may also be used.\
+specified. The synonym "field_grid" may also be used.
 - `ex,ey,ez` - The electric field vectors pointing in all
-three directions. Restart variables.\
+three directions. Restart variables.
 - `bx,by,bz` - The magnetic field vectors pointing in all
 three directions. Restart variables. In 1D bx is a trivial variable
 because of the Solenoidal condition. It is included simply for symmetry
-with higher dimension codes.\
+with higher dimension codes.
 - `jx,jy,jz` - The current densities pointing in all three
-directions. Restart variables. Can have species dumpmask.\
+directions. Restart variables. Can have species dumpmask.
 
 # Derived Variables {#derived_variables}
 
@@ -379,30 +379,30 @@ The final set of parameters specify properties which are not variables
 used in the code but are derived from them. The first six variables are
 derived by summing properties of all the particles in each grid cell.
 The resulting quantities are defined on the regular cartesian mesh used
-for grid variables. All entries have a default dumpmask of "never".\
+for grid variables. All entries have a default dumpmask of "never".
 - `ekbar` - Mean kinetic energy on grid in $J$. Can have
-species dumpmask.\
+species dumpmask.
 - `ekflux` - Mean kinetic energy flux in each direction on
-the grid in $W/m^2$. Can have species dumpmask.\
+the grid in $W/m^2$. Can have species dumpmask.
 - `mass_density` - Mass density on grid in $kg/m^3$. Can
-have species dumpmask.\
+have species dumpmask.
 - `charge_density` - Charge density on grid in $C/m^3$. Can
-have species dumpmask.\
+have species dumpmask.
 - `number_density` - Number density on grid in $m^{-3}$. Can
-have species dumpmask.\
+have species dumpmask.
 - `particles per cell` - Number of particles per cell. Can
-have species dumpmask. The synonym "ppc" may also be used.\
+have species dumpmask. The synonym "ppc" may also be used.
 - `average weight` - Average of weight of the particles in
-each cell. Can have species dumpmask.\
+each cell. Can have species dumpmask.
 - `temperature` - Isotropic temperature on grid in $K$.
 Calculated from standard deviation of particle momenta, so in general
 matches mean kinetic energy only for isotropic plasma with no net drift.
-The synonym "temp" may also be used. Can have species dump mask.\
+The synonym "temp" may also be used. Can have species dump mask.
 -The temperature in each of the {x,y,z} directions, respectively, in
 $K$. The synonyms "temp_{x,y,z}" and "t{x,y,z}" may also be used.
-Can have species dumpmask.\
+Can have species dumpmask.
 - `poynt_flux` - Poynting flux in each direction in
-$W/m^2$.\
+$W/m^2$.
 
 # Other Variables {#other_variables}
 
@@ -414,14 +414,14 @@ $W/m^2$.\
     "distribution_functions = full" and the dist_fn block (see
     [here][Input_deck_dist_fn])
     contains "dumpmask = always" then the distribution function will
-    only be output at full dumps.\
+    only be output at full dumps.
 -   `particle_probes` - Dumpmask for outputting particle
     probes specified in the input deck. Each individual particle probe
     can have its own dumpmask and these will be applied after the value
     of "particle_probes" has been considered. For example, if the
     output block contains "particle_probes = always" and the dist_fn
     block contains "dumpmask = full" then the particle probe will only
-    be output at full dumps.\
+    be output at full dumps.
 -   `absorption` - This is a two-valued output variable. It
     accepts a dumpmask in the same manner as other output variables.
     When selected, two numbers will be calculated and written to file:
@@ -543,21 +543,21 @@ The following parameters are supported by the new style of output block
 in addition to those for the traditional style:
 
 -   `name` - Identifies the output block with a name which is
-    required when multiple output blocks are used.\
+    required when multiple output blocks are used.
 -   `restartable` - Specifies whether or not the output for
-    this block is a restartable dump.\
+    this block is a restartable dump.
 -   `dump_at_times` - Floating point parameter which
     specifies a set of simulation times at which to write the current
     output block. This can only be used with named output blocks. The
     values are given as a comma separated list. eg. "dump_at_times =
     0, 0.15, 1.1". The name "times_dump" is accepted as a synonym. By
-    default the list is empty.\
+    default the list is empty.
 -   `dump_at_nsteps` - Integer parameter which specifies a
     set of step numbers at which to write the current output block. This
     can only be used with named output blocks. The values are given as a
     comma separated list. eg. "dump_at_nsteps = 5, 11, 15". The name
     "nsteps_dump" is accepted as a synonym. By default the list is
-    empty.\
+    empty.
 
 \- Floating point parameter which specifies a set of elapsed walltimes
 at which to write the current output block. This can only be used with
@@ -567,16 +567,16 @@ elapsed time in seconds since the start of the simulation. Note that if
 the simulation has been restarted then the total elapsed time will
 include the accumulated walltime of all previous runs that were used to
 produce the restart dump. The name **walltimes_dump** is accepted as a
-synonym. By default the list is empty.\
+synonym. By default the list is empty.
 - Floating point parameter which specifies the interval between output
 dumps in elapsed walltime seconds. Setting zero or negative means that
 the code will not output based on this condition. The default value is
--1.0.\
+-1.0.
 - `file_prefix` - String parameter. It is sometimes useful
 to distinguish between dumps generated by the different output blocks.
 This parameter allows the user to supply a file prefix to be prepended
 to all dumps generated by the current output block. See below for
-further details. The default value is an empty string.\
+further details. The default value is an empty string.
 - `rolling_restart` - Logical flag. If set to "T", this sets
 the parameters required for performing rolling restarts on the current
 block. It is a shorthand for setting the following flags: "dump_cycle =
@@ -585,7 +585,7 @@ enabled the first file will be named "roll0000.sdf" and the second will
 be "roll0001.sdf". The third dump will again be named "roll0000.sdf",
 overwriting the first one. In this way, restart dumps can be generated
 throughout the duration of the simulation whilst limiting the amount of
-disk space used.\
+disk space used.
 The following parameters cannot be used in conjunction with the new
 style of output block:
 
