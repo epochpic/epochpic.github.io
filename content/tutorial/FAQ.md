@@ -65,6 +65,20 @@ updates and particle push routines. **EPOCH** was written to add more
 modern features and to structure the code in such a way that future
 expansion of the code is made as easy as possible.
 
+## How do I obtain the code? {#how_do_i_obtain_the_code}
+
+The latest version of **EPOCH** can be found on GitHub at
+https://github.com/Warwick-Plasma/epoch
+
+A tarred and gzipped archive (commonly referred to as a tarball) of the latest
+release is always made available in the [Releases](https://github.com/Warwick-Plasma/epoch/releases) section
+
+Alternately, using git the code can be cloned using the following command.
+Note that it is important to include the ''recursive'' flag in order to
+download the SDF submodules..
+
+<code>git clone --recursive https://github.com/Warwick-Plasma/epoch.git</code>
+
 ## What normalisations are used in **EPOCH**? {#what-normalisations-are-used-in-epoch}
 
 Since the idea from the start was that **EPOCH** would be used by a
