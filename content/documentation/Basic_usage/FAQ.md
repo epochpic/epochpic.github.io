@@ -172,3 +172,15 @@ commented.
 ## How do I acknowledge use of the code? {#how-do-i-acknowledge-use-of-the-code}
 
 See [here][Acknowledging_EPOCH].
+
+
+
+<!-- ########################  Cross references  ######################## -->
+
+
+[Acknowledging_EPOCH]: /documentation/basic_usage/acknowledging_epoch
+[Basic_examples]: /documentation/examples/basic_examples
+[Input_deck]: /documentation/input_deck/input_deck
+[Maths_parser]: /documentation/code_details/maths_parser
+[Using_EPOCH_in_practice__manually_overriding_particle_parameters_set_by_the_autoloader]: /documentation/code_details/using_epoch_in_practice/#manually_overriding_particle_parameters_set_by_the_autoloader
+[Using_EPOCH_in_practice__parameterising_input_decks]: /documentation/code_details/using_epoch_in_practice/#parameterising_input_decks
