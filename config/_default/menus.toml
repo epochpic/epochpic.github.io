@@ -9,9 +9,14 @@
   weight = 10
 
 [[main]]
-  name = "License"
-  url = "/license"
+  name = "Quick Start"
+  url = "/quickstart"
   weight = 20
+
+[[main]]
+  name = "Documentation"
+  url = "/documentation/"
+  weight = 30
 
 [[main]]
   name = "Publications"
@@ -19,13 +24,8 @@
   weight = 40
 
 [[main]]
-  name = "Quick Start"
-  url = "/quickstart"
-  weight = 50
-
-[[main]]
-  name = "Documentation"
-  url = "/documentation/"
+  name = "License"
+  url = "/license"
   weight = 50
 
 [[main]]
