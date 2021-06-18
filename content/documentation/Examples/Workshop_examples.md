@@ -808,7 +808,7 @@ has two groups of particles which are identical in every respect except
 that one set is drifting in the opposite direction to the other. ![The
 two-stream instability in
 Matplotlib](/img/WorkshopTwoStreamPython.png)
-![The two-stream instability in GDL](/img//img/WorkshopTwoStreamGDL.png)
+![The two-stream instability in GDL](/img/WorkshopTwoStreamGDL.png)
 
 In the output block we have added a couple of parameters for outputting
 particle data. The first parameter, "particles", outputs the grid on
