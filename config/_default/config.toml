@@ -24,6 +24,7 @@ theme = "academic"
 
 # Get last modified date for content from Git?
 enableGitInfo = true
+uglyURLs = true
 
 # Default language to use (if you setup multilingual support)
 defaultContentLanguage = "en"

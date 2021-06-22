@@ -373,7 +373,7 @@ the control block and then supplying a "stencil" block to provide the
 desired coefficient values.
 
 ![Coefficient locations for the B_z field computational stencil in
-2D.](../Stencil.png)
+2D.](Stencil.png)
 This option allows the user to specify an extended stencil scheme that
 has been specifically optimised for the simulation grid spacing and
 timestep. See [^8] for further details.

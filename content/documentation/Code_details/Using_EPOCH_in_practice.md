@@ -505,9 +505,9 @@ lasers, they will not be considered here in greater detail, but in 3D,
 it is possible to freely specify the laser profile across the entire
 face where a laser is attached.
 ![Uniform laser profile in
-EPOCH2D](../Profile_flat.png)
+EPOCH2D](Profile_flat.png)
 ![Gaussian laser profile in
-EPOCH2D](../Profile_gauss.png)
+EPOCH2D](Profile_gauss.png)
 
 -   `phase` - Phase shift for the laser in radians. This is a
     spatial variable which is also defined across the whole of the
@@ -534,9 +534,9 @@ EPOCH2D](../Profile_gauss.png)
     at an angle.
 
 ![Laser propagating at an angle in
-EPOCH2D](../Profile_angle.png)
+EPOCH2D](Profile_angle.png)
 ![Schematic diagram of a laser propagating at an angle in
-2D](../Wave_angle.png)
+2D](Wave_angle.png)
 
 Using this technique it is also possible to focus a laser. This is done
 by using the same technique as above but making the angle of

@@ -132,10 +132,10 @@ observed on the front of the pulse.
 
 ![A laser pulse with a sharp cutoff shows numerical artefacts behind the
 pulse.
-](../Pulse2.png)
+](Pulse2.png)
 
 ![A laser pulse with a smooth temporal profile shows no
-artefacts.](../Pulse1.png)
+artefacts.](Pulse1.png)
 
 The second figure instead used a Gaussian window function with a
 characteristic width of 8fs as well as using *t_end* to introduce a
