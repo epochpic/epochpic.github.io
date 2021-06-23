@@ -9,18 +9,28 @@
   weight = 10
 
 [[main]]
-  name = "License"
-  url = "/license"
+  name = "Quick Start"
+  url = "/quickstart.html"
   weight = 20
 
 [[main]]
+  name = "Documentation"
+  url = "/documentation.html"
+  weight = 30
+
+[[main]]
   name = "Publications"
-  url = "/publication"
+  url = "/publication.html"
   weight = 40
 
 [[main]]
+  name = "License"
+  url = "/license.html"
+  weight = 50
+
+[[main]]
   name = "Contact"
-  url = "/contact"
+  url = "/contact.html"
   weight = 60
 
 # Link to a PDF of your resume/CV from the menu.
