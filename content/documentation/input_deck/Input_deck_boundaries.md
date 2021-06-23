@@ -128,7 +128,7 @@ terms of the number of grid cells. The default value is 6.
 affect the behaviour of the absorbing media. The notation follows that
 used in the two references quoted above. Note that the
 "cpml_sigma_max" parameter is normalised by $\sigma_{\rm opt}$ which
-is taken to be 3.2/dx (see Taflove and Hagness[^3] for details). These
+is taken to be 3.2/dx (see Taflove and Hagness[^1] for details). These
 are real valued parameters which take the following default values:
 cpml_kappa_max=20, cpml_a_max=0.15, cpml_sigma_max=0.7
 An example usage is as follows:

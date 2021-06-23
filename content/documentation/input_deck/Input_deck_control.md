@@ -332,10 +332,10 @@ focusses on improving the dispersion relation on the $x$-axis, please
 take this into account when defining your laser input. It is available
 in EPOCH1D, EPOCH2D and EPOCH3D. While it is not technically required to
 use a dt_multiplier smaller than unity, the value proposed by Lehe et
-al [^3] is "dt_multiplier=0.96".
+al [^2] is "dt_multiplier=0.96".
 
 -   `maxwell_solver = pukhov` - This setting will enable an
-    extended stencil proposed by Pukhov [^4] under the name of NDFX. It
+    extended stencil proposed by Pukhov [^3] under the name of NDFX. It
     is available in EPOCH2D and EPOCH3D. In EPOCH1D, setting
     maxwell_solver = pukhov will make the code fall back silently to
     Yee's scheme. Pukhov's NDFX scheme aims at improving the numerical
@@ -346,10 +346,10 @@ al [^3] is "dt_multiplier=0.96".
 <!-- -->
 
 -   `maxwell_solver = cowan` - This setting will enable en
-    extended stencil proposed by Cowan et al [^5]. It is available only
+    extended stencil proposed by Cowan et al [^4]. It is available only
     in EPOCH3D. In EPOCH1D and EPOCH2D, setting maxwell_solver = cowan
     will make the code fall back silently to Yee's scheme. Cowan et al
-    [^6] proposes to numerically calculate a time step that has the
+    [^4] proposes to numerically calculate a time step that has the
     correct group velocity for the input laser. Typically these time
     steps are only slightly below the CFL condition, e.g. " = 0.999".
     When Cowan's scheme is reduced to 2D it is the same as Pukhov's
@@ -358,7 +358,7 @@ al [^3] is "dt_multiplier=0.96".
 
 -   `maxwell_solver = custom` - This setting will enable full user control
     over the extended stencil coefficients. This allows for the specification
-    of optimised coefficients as outlined in [^7]. This option must be
+    of optimised coefficients as outlined in [^5]. This option must be
     accompanied by a "stencil" block. See
     [below.][Input_deck_control__stencil_block]
 
@@ -376,8 +376,8 @@ desired coefficient values.
 2D.](Stencil.png)
 This option allows the user to specify an extended stencil scheme that
 has been specifically optimised for the simulation grid spacing and
-timestep. See [^8] for further details.
-or see [7](https://github.com/Ablinne/optimize-stencil) for stencil
+timestep. See [^5] for further details.
+or see [6](https://github.com/Ablinne/optimize-stencil) for stencil
 optimization code. Note that there is no option for changing the value
 of $\alpha_{x,y,z}$ since these are calculated using the following
 equations:
@@ -401,7 +401,7 @@ $$
 # Strided Current Filtering {#strided_current_filtering}
 
 EPOCH 4.15 introduces strided multipass digital current filtering as
-described and benchmarked in the review by [Vey and
+described and benchmarked in the review by [Vay and
 Godfrey](https://www.sciencedirect.com/science/article/abs/pii/S163107211400148X).
 This can be tuned to substantially damp high frequencies in the currents
 and can be used to reduce the effect of numerical Cherenkov radiation.
@@ -413,7 +413,7 @@ you can then set the following keys
     one iteration. More iterations will produce smoother results but
     will be slower.
 -   `smooth_compensation` - Logical flag. If true then
-    perform a compensation step (see Vey and Godfrey) after the
+    perform a compensation step (see Vay and Godfrey [^6]) after the
     smoothing steps are performed. Total number of iterations if true is
     smooth_iterations + 1. If not specified defaults to false
 -   `smooth_strides` - Either a comma separated list of
@@ -505,32 +505,26 @@ block then this will be used instead.
     2013
     [2](https://www.researchgate.net/publication/258097872_Numerical_growth_of_emittance_in_simulations_of_laser-wakefield_acceleration).
 
-[^3]: 
-
-[^4]: Pukhov, A., "Three-dimensional electromagnetic relativistic
+[^3]: Pukhov, A., "Three-dimensional electromagnetic relativistic
     particle-in-cell code VLPL (Virtual Laser Plasma Lab)", J. Plasma
     Phys., vol. 61, no. 3, p. 425, 1999
     [3](https://www.cambridge.org/core/journals/journal-of-plasma-physics/article/three-dimensional-electromagnetic-relativistic-particle-in-cell-code-vlpl-virtual-laser-plasma-lab/7FBA476D599E2F19DFEA3F0F2F84FFAB).
 
-[^5]: B. Cowan, D. Bruhwiler, J. Cary, E. Cormier-Michel, and C. Geddes,
+[^4]: B. Cowan, D. Bruhwiler, J. Cary, E. Cormier-Michel, and C. Geddes,
     "Generalized algorithm for control of numerical dispersion in
     explicit time-domain electromagnetic simulations", Phys. Rev.
     Accel. Beams, vol. 16, no. 4, p. 041303, 2013
     [4](https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.16.041303).
 
-[^6]: 
-
-[^7]: A. Blinne, D. Schinkel, S. Kuschel, N. Elkina, S. G. Rykovanov,
+[^5]: A. Blinne, D. Schinkel, S. Kuschel, N. Elkina, S. G. Rykovanov,
     and M. Zepf, "A systematic approach to numerical dispersion in
     Maxwell solvers", Computer Physics Communications, 00104655,
     2017[5](https://arxiv.org/pdf/1710.06829.pdf)
 
-[^8]: A. Blinne, D. Schinkel, S. Kuschel, N. Elkina, S. G. Rykovanov,
-    and M. Zepf, "A systematic approach to numerical dispersion in
-    Maxwell solvers", Computer Physics Communications, 00104655,
-    2017[6](https://arxiv.org/pdf/1710.06829.pdf)
-
-
+[^6]: J. L. Vay and B. B. Godfrey,
+"Modeling of relativistic plasmas with the particle-in-cell method",
+Comptes Rendus Mcanique, 2014
+[6](http://www.sciencedirect.com/science/article/pii/S163107211400148X)
 
 <!-- ########################  Cross references  ######################## -->
 
