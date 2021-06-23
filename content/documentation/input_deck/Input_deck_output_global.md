@@ -57,12 +57,12 @@ value is 0.
 - `nstep_stop` - Integer parameter which specifies the step
 number at which to stop considering output for the block. The default
 value is the largest possible integer.
-- Floating point parameter which specifies the elapsed walltime in
+- `walltime_start` - Floating point parameter which specifies the elapsed walltime in
 seconds at which to start considering output for all output blocks. Note
 that if **dump_first** or **dump_last** are set to true for any blocks
 then dumps will occur at the first or last timestep regardless of the
 value of the **walltime_start** parameter. The default value is 0.
-- Floating point parameter which specifies the elapsed walltime in
+- `walltime_stop` - Floating point parameter which specifies the elapsed walltime in
 seconds at which to stop considering output all output blocks. The
 default value is the largest possible float.
 - `sdf_buffer_size` - Integer parameter. When writing

@@ -25,10 +25,9 @@ accepts the following four parameters.
 whether or not to call the collision routine. If omitted, the default is
 "T" if any of the frequency factors are non-zero (see below) and "F"
 otherwise.
-- This logical flag determines whether the scattering angle of
+- `use_nanbu` - This logical flag determines whether the scattering angle of
 Pérez/Nanbu will be used. The default is "T". If "F", the
 Sentoku-Kemp algorithm will be used.
-
 -   `coulomb_log` - This may either be set to a real value,
     specifying the Coulomb logarithm to use when scattering the
     particles or to the special value "auto". If "auto" is used then the

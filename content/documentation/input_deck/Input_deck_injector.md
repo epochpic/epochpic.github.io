@@ -71,38 +71,54 @@ be injected and then starts again once the injection is complete.
 
 # Keys
 
--   boundary - specifies which boundary to attach the particle source
+-   `boundary` - specifies which boundary to attach the particle source
     too. Same specification as the
     [laser block][Input_deck_laser], so
     permitted values are x_min, x_max, y_min, y_max, z_min and
     z_max
--   species - specifies which species should be injected through the
+-   `species` - specifies which species should be injected through the
     boundary. Just specify the name of the species required.
--   t_start - Time at which to start the injector
--   t_end - Time at which to end the injector
--   npart_per_cell - target pseudo-particle density for the injector.
+-   `t_start` - Time at which to start the injector
+-   `t_end` - Time at which to end the injector
+-   `npart_per_cell` - target pseudo-particle density for the injector.
     Average number of particles injected will be this value or slightly
     higher if very few particles are specified
--   number_density - Number density of the particle source in $m^{-3}$.
+-   `number_density` - Number density of the particle source in $m^{-3}$.
     Can be space varying along the boundary to which the injector is
     attached and time varying
--   number_density_min - Minimum number density in $m^{-3}$ below
+-   `number_density_min` - Minimum number density in $m^{-3}$ below
     which pseudo particles are not loaded. Use if the density has a
     profile to avoid injecting low weight particles in low density
     regions
--   temp_x - Temperature in x direction (K)
--   temp_y - Temperature in y direction (K)
--   temp_z - Temperature in z direction (K)
--   temp - Temperature in all directions (K)
--   drift_x - Momentum drift in x direction in $kgm/s$
--   drift_y - Momentum drift in x direction in $kgm/s$
--   drift_z - Momentum drift in x direction in $kgm/s$
-
-\- Logical flag to determine whether to use an accelerated flux
-Maxwellian rather than a drifting Maxwellian. This calculates the flux
-due to passing a Maxwellian source into an electrostatic accelerator
-instead of a drifting Maxwellian. If your particle source is a lab
-accelerator then you may want to set this to true.
+-   `number_density_max` - Maximum particle number density in $m^{-3}$.
+    When the number density in a cell rises above *number_density_max*
+    the injector clips the density to number_density_max allowing easy
+    implementation of exponential rises to plateaus for time-varying injectors.
+    Note that the number of particles per cell is kept fixed and the number
+    density adjustment is achieved by modifying the particle weight. This
+    flag has no effect for particles with per-species weighting.  If the
+    flag has a negative value then no clipping is performed.
+    This is the default.
+-   `temp_x` - Temperature in x direction (K)
+-   `temp_y` - Temperature in y direction (K)
+-   `temp_z` - Temperature in z direction (K)
+-   `temp` - Sets an isotropic temperature distribution in Kelvin. If both temp
+    and a specific temp_x, temp_y, temp_z parameter is specified then the last
+    to appear in the deck has precedence. If neither are given then the
+    injector will have a default temperature of zero Kelvin.
+-   `temp_{x,y,z}_ev, temp_ev` - These are the same as the temperature
+    parameters described above except the units are given in electronvolts
+    rather than Kelvin, i.e. using 1ev = 11604.5K .
+-   `drift_x` - Momentum drift in x direction in $kg.m/s$
+-   `drift_y` - Momentum drift in y direction in $kg.m/s$
+-   `drift_z` - Momentum drift in z direction in $kg.m/s$
+-   `drift_{x,y,z}` - Specifies a momentum space offset in $kg m/s$ to the
+    distribution function for this injector. By default, the drift is zero.
+-   `use_flux_maxwellian` - Logical flag to determine whether to use an
+    accelerated flux Maxwellian rather than a drifting Maxwellian. This
+    calculates the flux due to passing a Maxwellian source into an
+    electrostatic accelerator instead of a drifting Maxwellian. If your
+    particle source is a lab accelerator then you may want to set this to true.
 
 # Example Deck {#example_deck}
 

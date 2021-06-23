@@ -80,13 +80,11 @@ The maths parser in EPOCH has the following functions
 -   asin(a) - Arcsine.
 -   acos(a) - Arccosine.
 -   atan(a) - Arctangent.
-
-\- Arctangent using the Fortran ATAN2 function. This computes the
+-   atan2(Y,X) - Arctangent using the Fortran ATAN2 function. This computes the
 principal value of the argument function of the complex number
 $X + i Y$. This function can be used to transform from Cartesian into
 polar coordinates and allows to determine the angle in the correct
 quadrant.
-
 -   sinh(a) - Hyperbolic sine.
 -   cosh(a) - Hyperbolic cosine.
 -   tanh(a) - Hyperbolic tangent.

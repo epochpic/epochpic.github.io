@@ -95,15 +95,15 @@ end:output
 There are three types of output dump in EPOCH which are used for
 different purposes. These types are:
 
--   normal - The most frequent type of output dump in EPOCH is a normal
+-   `normal` - The most frequent type of output dump in EPOCH is a normal
     dump.
--   full - A full dump is usually written every 10 or so normal dumps. A
+-   `full` - A full dump is usually written every 10 or so normal dumps. A
     full dump contains all the data that a normal dump contains and
     should also contain any information which is needed only
     infrequently, whether this is the full particle information or a
     large distribution function. It is possible to turn off full dumps
     completely.
--   restart - A restart dump is a dump where the code guarantees to
+-   `restart` - A restart dump is a dump where the code guarantees to
     write enough data to allow the code to restart from the output.
     Output dumps are guaranteed to contain all the information in a
     normal dump and, if they coincide with the timing for a full dump,
@@ -224,12 +224,12 @@ value is 0.
 - `nstep_stop` - Integer parameter which specifies the step
 number at which to stop considering output for the block. The default
 value is the largest possible integer.
-- Floating point parameter which specifies the elapsed walltime in
+- `walltime_start` - Floating point parameter which specifies the elapsed walltime in
 seconds at which to start considering output for the block. Note that if
 **dump_first** or **dump_last** are set to true for this block then
 dumps will occur at the first or last timestep regardless of the value
 of the **walltime_start** parameter. The default value is 0.
-- Floating point parameter which specifies the elapsed walltime in
+- `walltime_stop` - Floating point parameter which specifies the elapsed walltime in
 seconds at which to stop considering output for the block. The default
 value is the largest possible float.
 - `dump_cycle` - If this is set to a positive integer then
@@ -332,12 +332,12 @@ most users.
 - `qed_energy` - The dumpmask for per-particle QED-related
 particle energy. Restart variable. This option is only supplied for
 debugging purposes and should not be required by most users.
-- The dumpmask for the work exerted by the fields on each particle
+- `work_{x,y,z}` - The dumpmask for the work exerted by the fields on each particle
 during the last time step. The work is divided into its three spatial
 components. The output is in numbers of $mc^2$ corresponding to the
 particle's $\gamma$-factor. Requires compiler flag
 "WORK_DONE_INTEGRATED".
-- Same as above, but the work is integrated over the entire simulation
+- `work_{x,y,z}_total` - Same as above, but the work is integrated over the entire simulation
 duration. The sum of all three components equals the particle's
 $\gamma$-factor. Requires compiler flag "WORK_DONE_INTEGRATED".
 - `id` - Global particle ID. See below for details.
@@ -394,15 +394,15 @@ have species dumpmask.
 have species dumpmask. The synonym "ppc" may also be used.
 - `average weight` - Average of weight of the particles in
 each cell. Can have species dumpmask.
+- `average_p{x,y,z}` - Average momentum in each direction of the particles in each cell. Can have species dumpmask.
 - `temperature` - Isotropic temperature on grid in $K$.
 Calculated from standard deviation of particle momenta, so in general
 matches mean kinetic energy only for isotropic plasma with no net drift.
 The synonym "temp" may also be used. Can have species dump mask.
--The temperature in each of the {x,y,z} directions, respectively, in
+- `temperature_{x,y,z}` - The temperature in each of the {x,y,z} directions, respectively, in
 $K$. The synonyms "temp_{x,y,z}" and "t{x,y,z}" may also be used.
 Can have species dumpmask.
-- `poynt_flux` - Poynting flux in each direction in
-$W/m^2$.
+- `poynt_flux` - Poynting flux in each direction in $W/m^2$.
 
 # Other Variables {#other_variables}
 
@@ -558,8 +558,7 @@ in addition to those for the traditional style:
     comma separated list. eg. "dump_at_nsteps = 5, 11, 15". The name
     "nsteps_dump" is accepted as a synonym. By default the list is
     empty.
-
-\- Floating point parameter which specifies a set of elapsed walltimes
+-   `dump_at_walltimes` - Floating point parameter which specifies a set of elapsed walltimes
 at which to write the current output block. This can only be used with
 named output blocks. The values are given as a comma separated list. eg.
 "dump_at_walltimes = 10, 100.1, 250.5". These times are the total
@@ -568,10 +567,9 @@ the simulation has been restarted then the total elapsed time will
 include the accumulated walltime of all previous runs that were used to
 produce the restart dump. The name **walltimes_dump** is accepted as a
 synonym. By default the list is empty.
-- Floating point parameter which specifies the interval between output
+-   `walltime_interval` - Floating point parameter which specifies the interval between output
 dumps in elapsed walltime seconds. Setting zero or negative means that
-the code will not output based on this condition. The default value is
--1.0.
+the code will not output based on this condition. The default value is -1.0.
 - `file_prefix` - String parameter. It is sometimes useful
 to distinguish between dumps generated by the different output blocks.
 This parameter allows the user to supply a file prefix to be prepended
@@ -586,14 +584,15 @@ be "roll0001.sdf". The third dump will again be named "roll0000.sdf",
 overwriting the first one. In this way, restart dumps can be generated
 throughout the duration of the simulation whilst limiting the amount of
 disk space used.
+
 The following parameters cannot be used in conjunction with the new
 style of output block:
 
--   full_dump_every
--   restart_dump_every
--   force_first_to_be_restartable
--   force_last_to_be_restartable
--   use_offset_grid
+-  `full_dump_every`
+-  `restart_dump_every`
+-  `force_first_to_be_restartable`
+-  `force_last_to_be_restartable`
+-  `use_offset_grid`
 
 The "file_prefix" parameter warrants some further discussion. This
 parameter prepends the given prefix to all files generated by the output

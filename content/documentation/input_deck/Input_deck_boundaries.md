@@ -100,12 +100,13 @@ conditions](#cpml_boundary_conditions).
 conditions](#cpml_boundary_conditions).
 - `thermal` - See [\#Thermal
 boundaries](#thermal_boundaries).
-- `**NOTE: If simple_laser, simple_outflow, cpml_laser,
+
+**NOTE: If simple_laser, simple_outflow, cpml_laser,
 cpml_outflow or open are specified on one or more boundaries then the
-code will no longer necessarily conserve mass.**`
-<span style="color:#ff0000">Note also that it is possible for the user
+code will no longer necessarily conserve mass.
+Note also that it is possible for the user
 to specify contradictory, unphysical boundary conditions. It is the
-users responsibility that these flags are set correctly.`
+users responsibility that these flags are set correctly.**
 
 # CPML boundary conditions {#cpml_boundary_conditions}
 

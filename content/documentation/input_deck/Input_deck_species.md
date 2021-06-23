@@ -237,13 +237,13 @@ taken!`**
 
 The following entries are used for configuring the [Delta-f
 method][Using_delta_f]
-\*number_density_back
 
--   drift_{x,y,z}_back
--   temp_{x,y,z}_back
--   temp_{x,y,z}_back_ev
--   temp_back
--   temp_back_ev
+-  `number_density_back`
+-  `drift_{x,y,z}_back`
+-  `temp_{x,y,z}_back`
+-  `temp_{x,y,z}_back_ev`
+-  `temp_back`
+-  `temp_back_ev`
 
 These all have the same meanings as the parameters listed above that
 don't include the "_back" text, except that they specify the values to
@@ -417,9 +417,7 @@ moving window.
     the particle species. If "T" then Maxwell-Jüttner is used and if
     "F" Maxwellian is used. The default value is "F".
 
-<!-- -->
-
--   `fractional_tail_cutoff - The sampling is carried out using a
+-   `fractional_tail_cutoff` - The sampling is carried out using a
     rejection method with an arbitrary cut-off. This parameter takes a
     floating-point argument which specifies the fraction of maximum
     value at which the sampling should be cut off. Smaller values lead

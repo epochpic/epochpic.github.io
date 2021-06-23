@@ -108,7 +108,7 @@ This syntax is required if output file prefixes have been used (see the
 - `field_order` - Order of the finite difference scheme used
 for solving Maxwell's equations. Can be 2, 4 or 6. If not specified, the
 default is to use a second order scheme.
-- Choose a Maxwell solver scheme with an extended stencil. This option
+- `maxwell_solver` - Choose a Maxwell solver scheme with an extended stencil. This option
 is only active if field_order is set to 2. Possible options are "yee",
 "lehe_{x,y,z}", "pukhov", "cowan" and since v4.12 "custom". Note that
 not all options are available in 1d and 2d. The default is "yee" which

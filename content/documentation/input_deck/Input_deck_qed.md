@@ -33,8 +33,7 @@ then the radiation reaction force is calculated but the properties of
 the emitted photons are not tracked. The default is "F".
 - `photon_energy_min` - Minimum energy of produced photons.
 Radiation reaction is calculated for photons of all energies, but
-photons with energy below this cutoff are not tracked. The default is
-0.
+photons with energy below this cutoff are not tracked. The default is 0.
 - `photon_dynamics` - Logical flag which specifies whether
 to push photons. If "F" then photons are generated, but their motion
 through the domain is not simulated and they stay where they were

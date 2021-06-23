@@ -42,9 +42,8 @@ end:window
 -   `window_v_x` - The speed in m/s of the window.
 -   `window_start_time` - The time in seconds at which the
     window should start moving.
-
-\- The time in seconds at which the window should stop moving.
-- `bc_x_min_after_move` - The boundary condition which
+-   `window_stop_time` - The time in seconds at which the window should stop moving.
+-   `bc_x_min_after_move` - The boundary condition which
 should apply to the left boundary after the window has started moving.
 This is to allow the swapping of a laser boundary to a simple outflow
 boundary. Boundary codes are the same as when just specifying normal
@@ -53,7 +52,8 @@ the boundary isn't changed when the window starts moving.
 "xbc_left_after_move" is accepted as a synonym.
 - `bc_x_max_after_move` - The boundary condition which
 should apply to the right boundary after the window has started moving.
-"xbc_right_after_move" is accepted as a synonym. - "y" and "z"
+"xbc_right_after_move" is accepted as a synonym.
+- `bc_{y,z}_{min,max}_after_move` - "y" and "z"
 versions of the previous two parameters. **ybc_down_after_move**,
 **ybc_up_after_move**, **zbc_back_after_move** and
 **zbc_front_after_move** are accepted as synonyms.

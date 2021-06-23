@@ -36,22 +36,22 @@ end:antenna
 
 # Keys
 
--   jx - Profile for current in x direction. If you do not specify the
+-   `jx` - Profile for current in x direction. If you do not specify the
     omega key then you should include any time dependence manually. If
     the omega key is specified any time variation in jx will be
     multiplicatively combined with the sinusoidal variation from omega.
     Can be time and space varying.
--   jy - Profile for current in y direction. If you do not specify the
+-   `jy` - Profile for current in y direction. If you do not specify the
     omega key then you should include any time dependence manually. If
     the omega key is specified any time variation in jy will be
     multiplicatively combined with the sinusoidal variation from omega.
     Can be time and space varying.
--   jz - Profile for current in z direction. If you do not specify the
+-   `jz` - Profile for current in z direction. If you do not specify the
     omega key then you should include any time dependence manually. If
     the omega key is specified any time variation in jz will be
     multiplicatively combined with the sinusoidal variation from omega.
     Can be time and space varying.
--   ranges - Array of (min,max) pairs for each dimension of your
+-   `ranges` - Array of (min,max) pairs for each dimension of your
     simulation (1 pair for EPOCH1d, 2 pairs for EPOCH2D and 3 pairs for
     EPOCH3D) showing the domain over which the antenna should operate.
     Describes the region of space over which the current from the
@@ -60,17 +60,17 @@ end:antenna
     present then the antenna will be applied to the whole domain.
     Performance of the antenna block will be highest if you set the
     smallest range possible.
--   omega - Optional frequency for the antenna. If this key is set then
+-   `omega` - Optional frequency for the antenna. If this key is set then
     the current will vary sinusoidally with the specified frequency.
     This is faster to run than specifying a sinusoidal profile in the
     jx, jy or jz keys but performs the same (for a frequency that
     doesn't change in time, see Time variability section). Can be time
     varying, but not space varying
--   start_time - Time after which to start applying the antenna
+-   `start_time` - Time after which to start applying the antenna
     currents. Can be "start" to apply from the start of the
     simulation. If key is not present antenna runs from the start of the
     simulation.
--   stop_time - Time after which to cease applying the antenna
+-   `stop_time` - Time after which to cease applying the antenna
     currents. Can be "end" to apply until the end of the simulation.
     If key is not present antenna runs until the end of the simulation.
 
