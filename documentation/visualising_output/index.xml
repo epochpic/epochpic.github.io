@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Visualising output | EPOCH</title><link>/documentation/visualising_output.html</link><atom:link href="/documentation/visualising_output/index.xml" rel="self" type="application/rss+xml"/><description>Visualising output</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Visualising output</title><link>/documentation/visualising_output.html</link></image><item><title>IDL or GDL</title><link>/documentation/visualising_output/visualising_sdf_files_with_idl_or_gdl.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/visualising_sdf_files_with_idl_or_gdl.html</guid><description>&lt;h1 id="using_idl_to_visualise_data">Using IDL to visualise data&lt;/h1>
+&lt;p>The EPOCH distribution comes with procedures for loading and inspecting
+SDF self-describing data files. The IDL routines are held in the
+&lt;code>SDF/IDL/&lt;/code> directory. There is also a procedure named
+&lt;code>Start.pro&lt;/code> in each of the &lt;code>epoch\*d/&lt;/code> directories
+which is used to set up the IDL environment.&lt;/p>
+&lt;p>To load data into IDL, navigate to one of the base directories (eg.
+&lt;code>epoch/epoch2d/&lt;/code> where &lt;code>epoch/&lt;/code> is the directory in which you have
+checked out the git repository) and type the following:&lt;/p>
+&lt;pre>&lt;code>$&amp;amp;gt; idl Start.pro
+IDL Version 8.1 (linux x86_64 m64). (c) 2011, ITT Visual Information Solutions
+Installation number: .
++Licensed for use by: STAR404570-5University of Warwick
+.
+% Compiled module: TRACKEX_EVENT.
+% Compiled module: ISOPLOT.
+% Compiled module: READVAR.
+% Compiled module: LOADSDFFILE.
+% Compiled module: SDFHANDLEBLOCK.
+% Compiled module: SDFGETPLAINMESH.
+% Compiled module: SDFGETLAGRANMESH.
+% Compiled module: SDFGETPOINTMESH.
+% Compiled module: SDFGETPLAINVAR.
+% Compiled module: SDFGETPOINTVAR.
+% Compiled module: SDFGETCONSTANT.
+% Compiled module: SDFCHECKNAME.
+% Compiled module: INIT_SDFHELP.
+% Compiled module: GETDATA.
+% Compiled module: GETSTRUCT.
+% Compiled module: EXPLORE_DATA.
+% Compiled module: EXPLORE_STRUCT.
+% Compiled module: LIST_VARIABLES.
+% Compiled module: QUICK_VIEW.
+% Compiled module: GET_WKDIR.
+% Compiled module: SET_WKDIR.
+% Compiled module: INIT_STARTPIC.
+% Compiled module: INIT_WIDGET.
+% Compiled module: GENERATE_FILENAME.
+% Compiled module: COUNT_FILES.
+% Compiled module: LOAD_RAW.
+% Compiled module: GET_SDF_METATEXT.
+% Compiled module: VIEWER_EVENT_HANDLER.
+% Compiled module: EXPLORER_EVENT_HANDLER.
+% Compiled module: XLOADCT_CALLBACK.
+% Compiled module: LOAD_DATA.
+% Compiled module: DRAW_IMAGE.
+% Compiled module: LOAD_META_AND_POPULATE_SDF.
+% Compiled module: CLEAR_DRAW_SURFACE.
+% Compiled module: SDF_EXPLORER.
+% Compiled module: EXPLORER_LOAD_NEW_FILE.
+% Compiled module: CREATE_SDF_VISUALIZER.
+% Compiled module: VIEWER_LOAD_NEW_FILE.
+% LOADCT: Loading table RED TEMPERATURE
+IDL&amp;amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>This starts up the IDL interpreter and loads in all of the libraries for
+loading and inspecting SDF files.&lt;/p>
+&lt;p>We begin by inspecting SDF file contents and finding out what variables
+it contains. To do this we execute the &lt;strong>list variables&lt;/strong> procedure call
+which is provided by the EPOCH IDL library.&lt;/p>
+&lt;p>At each timestep for which EPOCH is instructed to dump a set of
+variables a new data file is created. These files take the form
+&lt;em>0000.sdf&lt;/em>. For each new dump the number is incremented. The procedure
+call accepts up to two arguments. The first argument is mandatory and
+specifies the number of the SDF file to be read in. This argument can be
+any integer from 0 to 9999. It is padded with zeros and the suffix
+&amp;lsquo;.sdf&amp;rsquo; appended to the end to give the name of the data file. eg. 99 ⇒
+&amp;lsquo;0099.sdf&amp;rsquo;. The next arguments is optional. The keyword &lt;strong>wkdir&lt;/strong>
+specifies the directory in which the data files are located. If this
+argument is omitted then the currently defined global default is used.
+Initially, this takes the value &lt;strong>Data&lt;/strong> but this can be changed using
+the &lt;strong>set_wkdir&lt;/strong> procedure and queried using the &lt;strong>get_wkdir()&lt;/strong>
+function.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; list_variables,0,&amp;amp;quot;Data&amp;amp;quot;
+Available elements are
+1) EX (ELECTRIC_FIELD) : 2D Plain variable
+2) EY (ELECTRIC_FIELD) : 2D Plain variable
+3) EZ (ELECTRIC_FIELD) : 2D Plain variable
+4) BX (MAGNETIC_FIELD) : 2D Plain variable
+5) BY (MAGNETIC_FIELD) : 2D Plain variable
+6) BZ (MAGNETIC_FIELD) : 2D Plain variable
+7) JX (CURRENT) : 2D Plain variable
+8) JY (CURRENT) : 2D Plain variable
+9) JZ (CURRENT) : 2D Plain variable
+10) WEIGHT_ELECTRON (PARTICLES) : 1D Point variable
+11) WEIGHT_PROTON (PARTICLES) : 1D Point variable
+12) PX_ELECTRON (PARTICLES) : 1D Point variable
+13) PX_PROTON (PARTICLES) : 1D Point variable
+14) GRID_ELECTRON (GRID) : 2D Point mesh
+15) GRID_PROTON (GRID) : 2D Point mesh
+16) EKBAR (DERIVED) : 2D Plain variable
+17) EKBAR_ELECTRON (DERIVED) : 2D Plain variable
+18) EKBAR_PROTON (DERIVED) : 2D Plain variable
+19) CHARGE_DENSITY (DERIVED) : 2D Plain variable
+20) NUMBER_DENSITY (DERIVED) : 2D Plain variable
+21) NUMBER_DENSITY_ELECTRON (DERIVED) : 2D Plain variable
+22) NUMBER_DENSITY_PROTON (DERIVED) : 2D Plain variable
+23) GRID (GRID) : 2D Plain mesh
+24) GRID_EN_ELECTRON (GRID) : 1D Plain mesh
+25) EN_ELECTRON (DIST_FN) : 3D Plain variable
+26) GRID_X_EN_ELECTRON (GRID) : 2D Plain mesh
+27) X_EN_ELECTRON (DIST_FN) : 3D Plain variable
+28) GRID_X_PX_ELECTRON (GRID) : 2D Plain mesh
+29) X_PX_ELECTRON (DIST_FN) : 3D Plain variable
+IDL&amp;amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>Each variable in the SDF self-describing file format is assigned a name
+and a class as well as being defined by a given variable type. The
+&amp;ldquo;list_variables&amp;rdquo; procedure prints out the variable name
+followed by the variable&amp;rsquo;s class in parenthesis. Following the colon is
+a description of the variable type.&lt;/p>
+&lt;p>To retrieve the data, you must use the &lt;strong>getdata()&lt;/strong> function call. The
+function must be passed a snapshot number, either as the first argument
+or as a keyword parameter &amp;ldquo;snapshot&amp;rdquo;. It also accepts the wkdir as
+either the second argument or the keyword parameter &amp;ldquo;wkdir&amp;rdquo;. If it is
+omitted altogether, the current global default is used. Finally, it
+accepts a list of variables or class of variables to load. Since it is a
+function, the result must be assigned to a variable. The object returned
+is an IDL data structure containing a list of named variables.&lt;/p>
+&lt;p>To load either a specific variable or a class of variables, specify the
+name prefixed by a forward slash. It should be noted here that the IDL
+scripting language is not case sensitive so $P_x$ can be specified as
+either &amp;ldquo;/Px&amp;rdquo; or &amp;ldquo;/px&amp;rdquo;.&lt;/p>
+&lt;p>We will now load and inspect the &amp;ldquo;Grid&amp;rdquo; class, this time omitting the
+optional &amp;ldquo;wkdir&amp;rdquo; parameter. This time we will load from the third dump
+file generated by the EPOCH run, which is found in the file &lt;em>0002.sdf&lt;/em>
+since the dump files are numbered starting from zero.&lt;/p>
+&lt;h1 id="inspecting_data">Inspecting Data&lt;/h1>
+&lt;pre>&lt;code>IDL&amp;amp;gt; gridclass = getdata(1,/grid)
+IDL&amp;amp;gt; help,gridclass,/structures
+** Structure &amp;amp;lt;22806408&amp;amp;gt;, 11 tags, length=536825024, data length=536825016, refs=1:
+FILENAME STRING 'Data/0001.sdf'
+TIMESTEP LONG 43
+TIME DOUBLE 5.0705572e-15
+GRID_ELECTRON STRUCT -&amp;amp;gt; &amp;amp;lt;Anonymous&amp;amp;gt; Array[1]
+GRID_PROTON STRUCT -&amp;amp;gt; &amp;amp;lt;Anonymous&amp;amp;gt; Array[1]
+GRID STRUCT -&amp;amp;gt; &amp;amp;lt;Anonymous&amp;amp;gt; Array[1]
+X DOUBLE Array[1024]
+Y DOUBLE Array[512]
+GRID_EN_ELECTRON
+STRUCT -&amp;amp;gt; &amp;amp;lt;Anonymous&amp;amp;gt; Array[1]
+GRID_X_EN_ELECTRON
+STRUCT -&amp;amp;gt; &amp;amp;lt;Anonymous&amp;amp;gt; Array[1]
+GRID_X_PX_ELECTRON
+STRUCT -&amp;amp;gt; &amp;amp;lt;Anonymous&amp;amp;gt; Array[1]
+IDL&amp;amp;gt; help,gridclass.grid,/structures
+** Structure &amp;amp;lt;1701168&amp;amp;gt;, 5 tags, length=12376, data length=12376, refs=2:
+X DOUBLE Array[1025]
+Y DOUBLE Array[513]
+LABELS STRING Array[2]
+UNITS STRING Array[2]
+NPTS LONG Array[2]
+&lt;/code>&lt;/pre>
+&lt;p>Here we have used IDL&amp;rsquo;s built in &amp;ldquo;help&amp;rdquo; routine and passed the
+&amp;ldquo;/structures&amp;rdquo; keyword which prints information about a structure&amp;rsquo;s
+contents rather than just the structure itself.&lt;/p>
+&lt;p>Since &amp;ldquo;Grid&amp;rdquo; is a class name, all variables of that class have been
+loaded into the returned data structure. It is a nested type so many of
+the variables returned are structures themselves and those variables may
+contain structures of their own.&lt;/p>
+&lt;p>The &amp;ldquo;Grid&amp;rdquo; variable itself contains x&amp;quot; and &amp;ldquo;y&amp;rdquo; arrays containing the $x$
+and $y$ coordinates of the 2D cartesian grid. The other variables in
+&amp;ldquo;Grid&amp;rdquo; the structure are metadata used to identify the type and
+properties of the variable. In order to access the &amp;ldquo;Grid&amp;rdquo; variable
+contained within the &amp;ldquo;gridclass&amp;rdquo; data structure we have used the &amp;ldquo;.&amp;rdquo;
+operator. In a similar way, we would access the &amp;ldquo;x&amp;rdquo; array contained
+within the &amp;ldquo;Grid&amp;rdquo; variable using the identifier &amp;ldquo;gridclass.grid.x&amp;rdquo;.&lt;/p>
+&lt;h1 id="getting_help_in_idl">Getting Help in IDL&lt;/h1>
+&lt;p>IDL is a fairly sophisticated scripting environment with a large library
+of tools for manipulating data. Fortunately, it comes with a fairly
+comprehensive array of documentation. This can be accessed by typing
+&lt;strong>?&lt;/strong> at the IDL prompt.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; ?
+% ONLINE_HELP: Starting the online help browser.
+IDL&amp;amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="Idl_help.png" alt="The IDL help browser">&lt;/p>
+&lt;p>The documentation is divided into books aimed at users or developers and
+is fully searchable and cross indexed.&lt;/p>
+&lt;h1 id="manipulating_and_plotting_data">Manipulating And Plotting Data&lt;/h1>
+&lt;p>Once the data has been loaded from the SDF file we will want to extract
+the specific data we wish to analyse, perhaps perform some mathematical
+operations on it and then plot the results.&lt;/p>
+&lt;p>To do this we must learn a few basic essentials about the IDL scripting
+language. Since we are all familiar with the basic concepts shared by
+all computer programming languages, I will just provide a brief overview
+of the essentials and leave other details to the excellent on-line
+documentation.&lt;/p>
+&lt;p>IDL supports multidimensional arrays similar to those found in the
+FORTRAN programming language. Whole array operations are supported such
+as &amp;ldquo;5*array&amp;rdquo; to multiply every element of &amp;ldquo;array&amp;rdquo; by 5. Also matrix
+operations such as addition and multiplication are supported.&lt;/p>
+&lt;p>The preferred method for indexing arrays is to use brackets. It is
+possible to use parenthesis instead but this usage is deprecated. Column
+ordering is the same as that used by FORTRAN, so to access the
+$(i,j,k)$th element of an array you would use &amp;ldquo;array[i,j,k]&amp;rdquo;. IDL
+arrays also support ranges so &amp;ldquo;array[5:10,3,4]&amp;rdquo; will return a one
+dimensional array with five elements. &amp;ldquo;array[5:*]&amp;rdquo; specifies elements
+five to $n$ of an $n$ element array. &amp;ldquo;array[*,3]&amp;rdquo; picks out the third
+row of an array.&lt;/p>
+&lt;p>There are also a wide range of routines for querying and transforming
+arrays of data. For example, finding minimum and maximum values,
+performing FFTs, etc. These details can all be found by searching the
+on-line documentation.&lt;/p>
+&lt;p>Finally, IDL is a full programming language so you can write your own
+functions and procedures for processing the data to suit your needs.&lt;/p>
+&lt;h1 id="d_plotting_in_idl">1D Plotting in IDL&lt;/h1>
+&lt;p>The most commonly performed plot and perhaps the most useful data
+analysis tool is the 1D plot. In IDL, this is performed by issuing the
+command &lt;strong>plot,x,y&lt;/strong> where &amp;ldquo;x&amp;rdquo; and &amp;ldquo;y&amp;rdquo; are one dimensional arrays of
+equal length. For each element &amp;ldquo;x[i]&amp;rdquo; plotted on the $x$-axis the
+corresponding value &amp;ldquo;y[i]&amp;rdquo; is plotted along the $y$-axis. As a simple
+example:&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; plot,[1,2,3],[2,2,5]
+&lt;/code>&lt;/pre>
+&lt;p>Gives rise to the following plot:&lt;/p>
+&lt;p>&lt;img src="Idl_simple_plot.png" alt="A simple IDL plot">&lt;/p>
+&lt;p>As a more concrete example, we will now take a one-dimensional slice
+through the 2D array &amp;ldquo;Number Density&amp;rdquo; read in from our SDF data file. In
+this example we will give the $x$ and $y$ axes labels by passing extra
+parameters to the &amp;ldquo;plot&amp;rdquo; routine. A full list of parameters can be found
+in the on-line documentation. In this example we also make use of the
+&amp;ldquo;$&amp;rdquo; symbol which is IDL&amp;rsquo;s line continuation character.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; data = getdata(0)
+IDL&amp;amp;gt; plot,data.x,data.number_density[*,256],xtitle='x', $
+IDL&amp;amp;gt; ytitle='number density'
+&lt;/code>&lt;/pre>
+&lt;p>This command generates the following plot:&lt;/p>
+&lt;p>&lt;img src="Idl_plot.png" alt="A slice of a 2D array">&lt;/p>
+&lt;h1 id="postscript_plots">Postscript Plots&lt;/h1>
+&lt;p>The plots shown so far have just been screen-shots of the interactive
+IDL plotting window. These are fairly low quality and could included as
+figures in a paper.&lt;/p>
+&lt;p>In order to generate publication quality plots, we must output to the
+postscript device. IDL maintains a graphics context which is set using
+&lt;strong>set plot&lt;/strong> the command. The two most commonly used output devices are
+&amp;ldquo;x&amp;rdquo; which denotes the X-server and &amp;ldquo;ps&amp;rdquo; which is the postscript device.
+Once the desired device has been selected, various attributes of its
+behaviour can be altered using the &lt;strong>device&lt;/strong> procedure. For example, we
+can set the output file to use for the postscript plot. By default, a
+file with the name &amp;ldquo;idl.ps&amp;rdquo; is used.&lt;/p>
+&lt;p>Note that this file is not fully written until the postscript device is
+closed using the &lt;strong>device,/close&lt;/strong> command. When we have finished our
+plot we can resume plotting to screen by setting the device back to &amp;ldquo;x&amp;rdquo;.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; set_plot,'ps'
+IDL&amp;amp;gt; device,filename='out.ps'
+IDL&amp;amp;gt; plot,data.x,data.number_density[*,256],xtitle='x', $
+IDL&amp;amp;gt; ytitle='number density',charsize=1.5
+IDL&amp;amp;gt; device,/close
+IDL&amp;amp;gt; set_plot,'x'
+&lt;/code>&lt;/pre>
+&lt;p>This set of commands results in the following plot being written to a
+file named &amp;ldquo;out.ps&amp;rdquo;.&lt;/p>
+&lt;p>&lt;img src="Idl_ps_plot.png" alt="A simple PS plot">&lt;/p>
+&lt;p>By default, IDL draws its own set of fonts called &amp;ldquo;Hershey vector
+fonts&amp;rdquo;. Much better looking results can be obtained by using a
+postscript font instead. These options are passed as parameters to the
+&lt;strong>device&lt;/strong> procedure. More details can be found in the on-line
+documentation under &amp;ldquo;Reference Guides $\Rightarrow$ IDL Reference Guide
+$\Rightarrow$ Appendices $\Rightarrow$ Fonts&amp;rdquo;.&lt;/p>
+&lt;h1 id="contour_plots_in_idl">Contour Plots in IDL&lt;/h1>
+&lt;p>Whilst 1D plots are excellent tools for quantitive analysis of data, we
+can often get a better qualitative overview of the data using 2D or 3D
+plots.&lt;/p>
+&lt;p>One commonly used plot for 2D is the contour plot. The aptly named
+&lt;strong>contour,z,x,y&lt;/strong> procedure takes a 2D array of data values, &amp;ldquo;z&amp;rdquo;, and
+plots them against $x$ and $y$ axes which are specified in the 1D &amp;ldquo;x&amp;rdquo;
+and &amp;ldquo;y&amp;rdquo; arrays. The number of contour lines to plot is specified by the
+&amp;ldquo;nlevels&amp;rdquo; parameter. If the &amp;ldquo;/fill&amp;rdquo; parameter is used then IDL will fill
+each contour level with a solid colour rather than just drawing a line
+at the contour value.&lt;/p>
+&lt;p>The example given below plots a huge number of levels so that a smooth
+looking plot is produced. &amp;ldquo;xstyle=1&amp;rdquo; requests that the $x$ axes drawn
+exactly matches the data in the variable rather than just using a nearby
+rounded value and similarly for &amp;ldquo;ystyle=1&amp;rdquo;.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; n=100
+IDL&amp;amp;gt; levels=max(data.number_density)*findgen(n)/(n-1)
+IDL&amp;amp;gt; colors=253.*findgen(n)/(n-1)+1
+IDL&amp;amp;gt; contour,data.number_density,data.x,data.y,xstyle=1,ystyle=1, $
+IDL&amp;amp;gt; levels=levels,/fill,c_colors=colors
+&lt;/code>&lt;/pre>
+&lt;p>Issuing these commands gives us the contour plot shown below. Note that
+the colour table used is not the default one but has been constructed to
+be similar to the one used by VisIt.&lt;/p>
+&lt;p>&lt;img src="Idl_contour.png" alt="A simple contour plot">&lt;/p>
+&lt;h1 id="shaded_surface_plots_in_idl">Shaded Surface Plots in IDL&lt;/h1>
+&lt;p>Another method for visualising 2D datasets is to produce a 3D plot in
+which the data is elevated in the $z$ direction by a height proportional
+to its value. IDL has two versions of the surface plot. &lt;strong>surface&lt;/strong>
+produces a wireframe plot and &lt;strong>shade surf&lt;/strong> produces a filled and
+shaded one. As we can see from the following example, many of IDL&amp;rsquo;s
+plotting routines accept the same parameters and keywords.&lt;/p>
+&lt;p>The first command shown here, &lt;strong>loadct,3&lt;/strong>, asks IDL to load the third
+colour table which is&amp;quot;RED_TEMPERATURE&amp;quot;.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; loadct,3
+IDL&amp;amp;gt; shade_surf,data.number_density,data.x,data.y,xstyle=1, $
+IDL&amp;amp;gt; ystyle=1,xtitle='x',ytitle='y',ztitle='number density',charsize=3
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="Idl_shade_surf.png" alt="A shaded surface plot">&lt;/p>
+&lt;h1 id="interactive_plotting">Interactive Plotting&lt;/h1>
+&lt;p>Finally, in recent versions of IDL (not GDL) it is now possible to
+perform all of these plot types in an interactive graphical user
+interface. The corresponding procedures are launched with the commands
+&lt;strong>iplot&lt;/strong>, &lt;strong>icontour&lt;/strong> and &lt;strong>isurface&lt;/strong>.&lt;/p>
+&lt;pre>&lt;code>IDL&amp;amp;gt; iplot,data.x,data.number_density[*,256]
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="Idl_iplot.png" alt="Interactive plotting">&lt;/p>
+&lt;p>IDL is an extremely useful tool but it also comes with a fairly hefty
+price tag. If you are not part of an organisation that will buy it for
+you then you may wish to look into a free alternative. It is also a
+proprietary tool and you may not wish to work within the restrictions
+that this imposes.&lt;/p>
+&lt;p>There are a number of free tools available which offer similar
+functionality to that of IDL, occasionally producing superior results.&lt;/p>
+&lt;p>For a simple drop-in replacement, the GDL project aims to be fully
+compatible and works with the existing EPOCH IDL libraries after a
+couple of small changes. Other tools worth investigating are
+&lt;em>&lt;code>&amp;quot;yorick&amp;quot;&lt;/code>&lt;/em> and &lt;em>&lt;code>&amp;quot;python&amp;quot;&lt;/code>&lt;/em> with the
+&lt;em>&lt;code>&amp;quot;SciPy&amp;quot;&lt;/code>&lt;/em> libraries. The python SDF reader documentation
+will be added soon. At present there is no SDF reader for yorick but one
+may be developed if there is sufficient demand.&lt;/p></description></item><item><title>LLNL VisIt</title><link>/documentation/visualising_output/visualising_sdf_files_with_llnl_visit.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/visualising_sdf_files_with_llnl_visit.html</guid><description>&lt;h1 id="using_visit_to_visualise_data">Using VisIt to visualise data&lt;/h1>
+&lt;h1 id="llnl_visit">LLNL VisIt&lt;/h1>
+&lt;p>LLNL&amp;rsquo;s VisIt software is a parallel data visualisation package (
+&lt;a href="https://wci.llnl.gov/simulation/computer-codes/visit" target="_blank" rel="noopener">LLNL
+VisIt&lt;/a>). EPOCH
+comes with source code for the plug-in needed to allow VisIt to load the
+SDF output files which are generated by EPOCH. There are full manuals
+for VisIt which can be downloaded from the above link so no further
+details will be given here. To build the plug-in, first ensure that the
+visit binary is in the $PATH environment variable. Then simply type
+&amp;ldquo;make visit&amp;rdquo; in one of the &lt;strong>epoch{1,2,3}d&lt;/strong> directories. For more
+experienced users of VisIt, the xml file which is used to generate the
+plug-in is supplied in the VisIt subdirectory, called &lt;strong>SDF2.xml&lt;/strong>.&lt;/p>
+&lt;p>Whilst IDL is an excellent tool for visualising 1D and 2D datasets, it
+is extremely poor when it comes to dealing with 3D data. For this
+purpose, we recommend the use of the &lt;em>&lt;code>&amp;quot;VisIt&amp;quot;&lt;/code>&lt;/em>
+visualisation tool.&lt;/p>
+&lt;p>The other great advantage that VisIt has over IDL is the ability to
+render in parallel, enabling the visualisation of huge datasets which
+IDL would be incapable of dealing with.&lt;/p>
+&lt;ul>
+&lt;li>Initially developed by the Department of Energy (DOE) Advanced
+Simulation and Computing Initiative (ASCI)&lt;/li>
+&lt;li>Now developed and maintained by the Lawrence Livermore National
+Laboratory along with a group of external contributors&lt;/li>
+&lt;li>Written in C++ and supports python and Java interfaces&lt;/li>
+&lt;li>Available for UNIX (Irix, Tru64, AIX, Linux, Solaris), Mac OS X
+(10.3 - Current), and Windows platforms&lt;/li>
+&lt;li>Open source and freely available under the BSD license&lt;/li>
+&lt;li>Plots, operators and database readers are implemented as plugins
+allowing the VisIt to be dynamically extended at run-time&lt;/li>
+&lt;li>Powerful set of tools for manipulating, analysing and visualising 3D
+datasets&lt;/li>
+&lt;li>Parallel and distributed architecture for visualising huge data sets&lt;/li>
+&lt;/ul>
+&lt;h1 id="obtaining_and_installing_visit">Obtaining And Installing VisIt&lt;/h1>
+&lt;p>Both the source code and pre-compiled binaries are available for
+download from the projects web page which is found at the URL
+&lt;a href="https://wci.llnl.gov/simulation/computer-codes/visit">https://wci.llnl.gov/simulation/computer-codes/visit&lt;/a>&lt;/p>
+&lt;p>&lt;img src="Visit_web.png" alt="The LLNL VisIT website">&lt;/p>
+&lt;p>There are full instructions for compiling the project from source code
+along with build scripts written to help ease the process. However, this
+is not recommended as it is an extremely large tool and the compilation
+takes hours to complete. It is usually far easier to download a
+pre-compiled binary which matches your system architecture.&lt;/p>
+&lt;p>However, occasionally compilation may be a necessary step. Linux in
+particular is a moving target and it is not always possible to find a
+binary which matches the particular combination of libraries installed
+on your system.&lt;/p>
+&lt;p>The easiest way to install the VisIt tool is to ask the system
+administrator to do it for you. However, this may not always be the best
+option. The system in question may be run by someone who is not
+concerned with your particular software needs or has insufficient skills
+to deal with the task. In any case, VisIt has a fairly rapid release
+schedule and you may find that some functionality you need is not
+present in the version installed on the machine.&lt;/p>
+&lt;p>Fortunately, for all these scenarios it is usually quite easy to install
+a copy in your own home directory. Just find a binary on the web page
+&lt;a href="https://wci.llnl.gov/codes/visit/executables.html">https://wci.llnl.gov/codes/visit/executables.html&lt;/a> which
+closely matches your machine and download it. This can be unpacked into
+your home directory with the command
+&lt;code>tar xzf visit2_10_2.linux-x86_64-ubuntu14.tar.gz&lt;/code> . The actual name
+of the file will vary depending on which version you downloaded. This
+will unpack the VisIt binary into a subdirectory named &lt;code>visit/&lt;/code>. Now all
+that is necessary is to add this to your search path. e.g.
+&lt;code>export PATH=$HOME/visit/bin:$PATH&lt;/code>&lt;/p>
+&lt;p>These instructions illustrate the steps required for installing your own
+copy of VisIt when you have no other choice. VisIt is an extremely large
+program, so if a version is already available then it is usually better
+to use the installed version.&lt;/p>
+&lt;p>The CSC machines at Warwick have a recent version of VisIt installed
+which is available via the system. To make use of it you must first
+issue the command &lt;code>module load visit&lt;/code>.&lt;/p>
+&lt;h1 id="compiling_the_reader_plugin">Compiling The Reader Plugin&lt;/h1>
+&lt;p>One piece of compilation which is almost always necessary is that of the
+SDF reader plugin. This is shipped as source code in a subdirectory of
+the repository. It is located in the &lt;code>SDF/VisIt&lt;/code> subdirectory of the
+main &lt;code>epoch&lt;/code> directory. The reader will work for any SDF file generated
+by any code which uses the SDF I/O routines. You do not need a separate
+reader for each version of EPOCH.&lt;/p>
+&lt;p>To compile, first navigate to one of the &lt;code>epoch*d&lt;/code> directories in your
+repository. Just type &amp;ldquo;make visit&amp;rdquo; and the build scripts should take
+care of the rest. The SDF reader plugin will be installed into the
+&lt;code>$HOME/.visit/linux-intel/plugins/databases/&lt;/code> directory on your system.
+Note that the &lt;code>linux-intel&lt;/code> component will vary depending on your
+machine operating system and architecture.&lt;/p>
+&lt;p>Each time you install a new version of VisIt you must recompile the
+reader to match the new installation. It will also occasionally be
+necessary to recompile when changes occur to the SDF data format or the
+reader plugin itself. The developers will notify users if this is the
+case, although it does no harm to regularly recompile the reader as a
+matter of course.&lt;/p>
+&lt;p>We will see later that it is possible to do remote data visualisation
+with VisIt in which the GUI is launched and interacted with on one
+machine and the data files are located on a separate machine entirely.
+In this situation the reader must be installed on the remote machine and
+must match the setup there. The setup on the local machine is
+unimportant. In fact it is not even necessary to have the plugin
+installed on the local machine. This is particularly useful when using a
+Windows environment to analyse data located on a remote UNIX
+workstation.&lt;/p>
+&lt;h1 id="loading_data_into_visit">Loading Data Into VisIt&lt;/h1>
+&lt;p>&lt;img src="Visit_db_list.png" alt="The VisIt load databasedialog">&lt;/p>
+&lt;p>The most straightforward method for loading data into VisIt is to start
+the application and then browse the filesystem for the dataset you are
+interested in. This is done by selecting &amp;ldquo;File ⇒ Open file&amp;rdquo; from the
+VisIt menu bar. A file selection dialogue will appear allowing you to
+browse directories along with the options to filter the results
+according to a given regular expression and grouping options. By
+default, VisIt will attempt to group all files containing the same
+suffix and some kind of numbering system into a sort of virtual
+database.&lt;/p>
+&lt;p>The right-hand pane of this window shows a list of selected files which
+will appear in the main VisIt window when you are finished.&lt;/p>
+&lt;p>An alternative method of specifying the data file to open is to pass a
+command line option when the tool is launched. An example of this method
+is &lt;code>visit -o Data/0000.sdf&lt;/code>. When the file is specified in this manner
+the list of files shown in the VisIt window will also include the full
+list of files in the dataset&amp;rsquo;s subdirectory and all the files in the
+current working directory. The other SDF files will be grouped together
+in a virtual database.&lt;/p>
+&lt;p>Yet another method for selecting the dataset to use is by opening a
+previously saved session file. We will discuss this further in a later
+section.&lt;/p>
+&lt;p>&lt;img src="Visit_select_var.png" alt="The Visit select plot type and variabledropdown">&lt;/p>
+&lt;p>Once an SDF file has been successfully loaded the &amp;ldquo;Add&amp;rdquo; menu item will
+become un-greyed and the cycle numbers for each file in the virtual
+database will be displayed. If we navigate to one of the plot types we
+are able to select the variable to plot from a drop-down list.&lt;/p>
+&lt;h1 id="contour_plots_in_visit">Contour Plots in VisIt&lt;/h1>
+&lt;p>We will now replicate each of the plots which we generated using IDL in
+earlier sections. For reasons which will soon become clear we begin with
+the contour plot and move on to the 1D plot in the next section.&lt;/p>
+&lt;p>Having opened the same dataset we were using in the IDL discussion we
+now select the &amp;ldquo;Add&amp;rdquo; menu item. Notice that many of the plot types
+listed here are greyed out and cannot be selected. This is because many
+of the plots are dependent on the type or dimensionality of the variable
+to be plotted. If our dataset contains no variables which match the
+required properties for a plot, the plot menu will be disabled.&lt;/p>
+&lt;p>For the current dataset there is no &amp;ldquo;Boundary&amp;rdquo; plot available since this
+requires multi-material data and none of our variables meet that
+criteria.&lt;/p>
+&lt;p>The list contains a menu item for a &amp;ldquo;Contour&amp;rdquo; plot. We are not going to
+select this item since it only generates a contour plot with lines
+indicating each contour level and not a filled version. Instead we
+choose &amp;ldquo;Add ⇒ Pseudocolor ⇒ Derived ⇒ Number Density&amp;rdquo; and then hit the
+&amp;ldquo;Draw&amp;rdquo; button.&lt;/p>
+&lt;p>&lt;img src="Visit_contour.png" alt=" VisIT contour plotoutput">&lt;/p>
+&lt;p>There are many settings which can alter the visual appearance of plots
+generated by VisIt. The first point of call is usually to open up the
+&amp;ldquo;Plot Attributes&amp;rdquo; or &amp;ldquo;Operator Attributes&amp;rdquo; dialogue corresponding to the
+plot in question. A simpler method for accomplishing this task is to
+double-click on the plot in the main VisIt menu pane which will launch
+the corresponding &amp;ldquo;Plot Attributes&amp;rdquo; dialogue.&lt;/p>
+&lt;p>If it is the operator attributes you wish to change, click on the white
+arrow on the left hand side of the plot in the main VisIt menu pane.
+This will drop down to reveal a list containing the plot and all
+operators acting on it. Double-clicking on an operator will launch the
+corresponding &amp;ldquo;Operator Attributes&amp;rdquo; dialogue.&lt;/p>
+&lt;p>&lt;img src="Visit_attrib.png" alt="image">&lt;/p>
+&lt;p>Another important tool for controlling the appearance of plots can be
+found in &amp;ldquo;Controls ⇒ Annotation&amp;rdquo; from the VisIt menu bar. This allows
+all of the plot annotations to be modified such as the legend, title,
+axis labels, etc.&lt;/p>
+&lt;p>&lt;img src="Visit_annot.png" alt="The VisIT annotationsdialog">&lt;/p>
+&lt;h1 id="d_plotting_in_visit">1D Plotting in VisIt&lt;/h1>
+&lt;p>A 1D plot in VisIt is called a &amp;ldquo;Curve&amp;rdquo; plot. We already mentioned that
+this was greyed out because we have no one dimensional variables in our
+data file.&lt;/p>
+&lt;p>The solution to this dilemma is the lineout operator which extracts a
+one dimensional array from a 2D or 3D variable. This operator is
+selected by pressing the button with red and blue lines located at the
+top of the plot window.&lt;/p>
+&lt;p>&lt;img src="Visit_lineout.png" alt="image">&lt;/p>
+&lt;p>Once the button has been pressed, we can click and drag anywhere in the
+&amp;ldquo;Pseudocolor&amp;rdquo; plot window. When we release the mouse button a new plot
+window pops up containing a &amp;ldquo;Curve&amp;rdquo; plot of the data just selected.&lt;/p>
+&lt;p>&lt;img src="Visit_curve.png" alt="VisIt curve plot example">&lt;/p>
+&lt;p>In order to change the attributes for this plot, we must first select
+Active window&amp;quot; number 2 in the main VisIt pane.&lt;/p>
+&lt;h1 id="shaded_surface_plots_in_visit">Shaded Surface Plots in VisIt&lt;/h1>
+&lt;p>Again, we will confusingly refuse to pick the obvious plot type for this
+task. There is &amp;ldquo;Surface&amp;rdquo; plot listed in the menu. However, most of the
+time the &amp;ldquo;Elevator&amp;rdquo; operator does what we want and also gives us more
+flexibility.&lt;/p>
+&lt;p>The first step is to do a &amp;ldquo;Pseudocolor&amp;rdquo; plot of &amp;ldquo;Number Density&amp;rdquo; as we
+did before. Next select the &amp;ldquo;Operator Attributes ⇒ Transforms ⇒ Elevate&amp;rdquo;
+menu item. In the pop up dialogue click on the &amp;ldquo;Elevation height
+relative to XY limits?&amp;rdquo; and then &amp;ldquo;Apply&amp;rdquo;. Click &amp;ldquo;Yes&amp;rdquo; when the warning
+dialogue pops up.&lt;/p>
+&lt;p>&lt;img src="Visit_shade_surf.png" alt="VisIt shaded surfaceplots">&lt;/p>
+&lt;p>To make this plot look similar to the one generated by IDL, we have
+changed the colour table using &amp;ldquo;Controls ⇒ Color table&amp;rdquo;. We also changed
+the axis appearance with the annotations menu discussed earlier and
+changed the height of the elevation using the min and max operator
+attributes.&lt;/p>
+&lt;h1 id="creating_user_defined_expressions">Creating User-Defined Expressions&lt;/h1>
+&lt;p>VisIt comes with an extremely powerful method of manipulating data
+before visualising the results. The basic idea is that an array is
+transformed by applying a set of mathematical functions on all its
+elements and then the result is defined as a new variable. Once defined,
+this variable behaves in exactly the same way as any of the variables
+read from the data file.&lt;/p>
+&lt;p>As an example, we can combine the three components of electric field to
+generate a single electric field vector.&lt;/p>
+&lt;p>&lt;img src="Visit_expression_vector.png" alt=" VisIT expression dialog showing an example vectorexpression">&lt;/p>
+&lt;p>Now when we return to the &amp;ldquo;Add&amp;rdquo; menu we see that the &amp;ldquo;Vector&amp;rdquo; and
+&amp;ldquo;Streamline&amp;rdquo; and plot types now have an entry for our newly defined
+vector.&lt;/p>
+&lt;h1 id="creating_movies">Creating Movies&lt;/h1>
+&lt;p>A compelling visualisation of numerically generated data is often made
+by combining a series of images into a movie. This can be an invaluable
+method for illustrating the basic behaviour of a system as it changes
+over time. Alternatively rotating around a 3D scene can sometimes give a
+much better idea of the structure in the model being presented. There
+can also be much to gain by constructing visual fly-throughs of a scene,
+dynamically slicing through sets of data or combinations of all these
+techniques.&lt;/p>
+&lt;p>VisIt provides several facilities for generating movies from your data.
+The simplest of these is to select the &amp;ldquo;File ⇒ Save movie&amp;rdquo; menu item.
+This pops up a movie wizard which will walk you through the process of
+generating a simple linear movie based on the time-advancing snapshots
+represented by your virtual database of files. Alternatively you can
+select one of the pre-defined movie templates which manipulate the
+currently selected plot and create a movie from that.&lt;/p>
+&lt;p>Creating a simple time advancing movie is as simple as walking through
+the wizard dialogue and selecting from the self-explanatory options
+presented to you.&lt;/p>
+&lt;p>For many uses, the wizard will give exactly the desired results. However
+it is occasionally useful to have a little more control over how the
+movie is created. In such cases it can be useful to specify an image
+format such as &amp;ldquo;PNG&amp;rdquo; to save to rather than &amp;ldquo;MPEG&amp;rdquo;. VisIt will then
+generate one image per frame and number them consecutively. At the end
+of the process the images can be converted into a movie using whatever
+tool best accomplishes the task.&lt;/p>
+&lt;p>&lt;img src="Visit_movie.png" alt="VisIt create moviedialog">&lt;/p>
+&lt;p>Another useful tip is to select the &amp;ldquo;Later, tell me the command to run&amp;rdquo;
+radio button. This will output a long command which can run from a UNIX
+terminal screen. The advantage is that no X session is required so the
+command can be run in the background. It also becomes a simple task to
+interrupt the job at any point and resume it from where it left off at a
+later date. In a similar manner it is easy to resume a job which crashes
+half way through for any reason.&lt;/p>
+&lt;p>More complex movies can be created by using VisIt&amp;rsquo;s keyframing facility
+which allows you to change animation attributes such as view or plot
+attributes as the animation progresses. Further information about this
+somewhat complex task can be found in the on-line help.&lt;/p>
+&lt;p>Finally, you can use VisIt&amp;rsquo;s python scripting interface to
+programmatically describe the details of each frame as the movie
+progresses. This approach offers far more flexibility in what can be
+achieved but is also much more involved and time consuming than the
+previous two methods. Again, further information on this subject can be
+found in the on-line help system.&lt;/p>
+&lt;h1 id="remote_visualisation">Remote Visualisation&lt;/h1>
+&lt;p>It was mentioned earlier that it is possible to perform remote
+visualisation using VisIt. This is a process in which the data files
+being interrogated reside on a different machine to the one on which the
+VisIt GUI runs and where the results are plotted.&lt;/p>
+&lt;p>This method of working can be extremely useful when the data is
+generated on a powerful machine located in an external environment such
+as a large cluster. Another common use is when EPOCH is executed on a
+UNIX machine and the desktop used for visualisation is running Windows.&lt;/p>
+&lt;p>It is sometimes possible to run a graphical tool on the remote machine
+and tunnel the X-server session through to the local machine but this
+can be quite slow and unstable. When connecting to a remote VisIt
+instance the only data which needs to be sent between machines is the
+pre-rendered image and a few simple plotting commands. Naturally, this
+can be a &lt;em>&lt;code>much&lt;/code>&lt;/em> faster approach.&lt;/p>
+&lt;p>Also, as mentioned before, it is possible to use a machine on which the
+reader plugin is difficult or impossible to compile for and connect to a
+machine on which the reader is already installed.&lt;/p>
+&lt;p>In order to use the remote visualisation facility, you must first set up
+a &amp;ldquo;Host profile&amp;rdquo; for the remote machine using the &amp;ldquo;Options ⇒ Host
+profiles&amp;rdquo; menu item. The pre-compiled binaries are shipped with a long
+list of pre-defined host profiles. These are unnecessary for anyone not
+affiliated and can safely be removed by deleting the directory
+&lt;code>$HOME/visit/current/.visit&lt;/code> (assuming you have unpacked the VisIt
+tarball into your home directory).&lt;/p>
+&lt;p>&lt;img src="Visit_host_profile.png" alt="VisIT remote host configurationdialog">&lt;/p>
+&lt;p>Create a new profile by clicking on the &amp;ldquo;New Host&amp;rdquo; button and filling
+out some of the form fields. The important ones to change are &amp;ldquo;Host
+nickname&amp;rdquo;, &amp;ldquo;Remote host name&amp;rdquo;, &amp;ldquo;Host name aliases&amp;rdquo; and &amp;ldquo;Username&amp;rdquo;. If
+the visit binary is not in your default search path on the remote
+machine then you must specify its location by filling in the &amp;ldquo;Path to
+VisIt installation&amp;rdquo; field.&lt;/p>
+&lt;p>Now click &amp;ldquo;Apply&amp;rdquo; and &amp;ldquo;Dismiss&amp;rdquo; followed by the &amp;ldquo;Options ⇒ Save
+Settings&amp;rdquo; menu item to ensure that the profile is saved for future
+sessions.&lt;/p>
+&lt;p>Data on the remote machine can now be loaded by selecting and picking
+the desired host profile from the drop down list of &amp;ldquo;Hosts&amp;rdquo;. VisIt will
+wait for the remote process to launch and then continue with the file
+selection procedure but now displaying files located on the remote
+machine rather than the local one. From this point on everything should
+work as before except you should see the name of the remote machine in
+the &amp;ldquo;Selected files&amp;rdquo; dialogue.&lt;/p>
+&lt;p>&lt;img src="Visit_host_files.png" alt=" VisIT load file dialog showing files on remotehost">&lt;/p>
+&lt;h1 id="parallel_visualisation">Parallel Visualisation&lt;/h1>
+&lt;p>Parallel visualisation is performed in almost exactly the same manner as
+remote visualisation. Again, you must create a host profile for the
+purpose except this time you need to set up a parallel launch profile in
+the &amp;ldquo;Launch Profiles&amp;rdquo; tab pane. Click the &amp;ldquo;New Profile&amp;rdquo; button, give the
+profile a name and then set the required options in the &amp;ldquo;Parallel&amp;rdquo; tab
+on the bottom section of the page. Selecting the &amp;ldquo;Launch parallel
+engine&amp;rdquo; radio button will allow you to set the various launch options
+which relate to the cluster on which the job will run.&lt;/p>
+&lt;p>The major difference now is due to the fact that VisIt must be launched
+by an external job script which fits in with the queueing system used by
+the parallel machine. Usually you will need to consult with the system
+administrator of the cluster to confirm which launch method and
+arguments to use.&lt;/p>
+&lt;p>The details of job launch can be better understood by reading through
+the &amp;ldquo;User documentation&amp;rdquo; section provided at
+&lt;a href="http://www.visitusers.org" target="_blank" rel="noopener">1&lt;/a> . Of particular help here is the &amp;ldquo;Getting
+VisIt to run in parallel&amp;rdquo; section and the &amp;ldquo;How VisIt Launching works&amp;rdquo;
+entry in the &amp;ldquo;Developer documentation&amp;rdquo; section.&lt;/p></description></item><item><title>Python</title><link>/documentation/visualising_output/python.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python.html</guid><description>&lt;h1 id="installing_the_python_sdf_readers">Installing the python sdf readers&lt;/h1>
+&lt;p>To install the python sdf readers you need to have an installation of
+python (2 or 3) with the numpy library. The automated plotting library
+requires the matplotlib library. Both numpy and matplotlib are available
+through most system package managers or are installable through
+&lt;a href="https://pip.pypa.io/en/stable/" target="_blank" rel="noopener">pip&lt;/a>.&lt;/p>
+&lt;p>Once you have a working python install, just go into one of the epoch
+directories (epoch1d, epoch2d or epoch3d) and type&lt;/p>
+&lt;p>&lt;code>make sdfutils&lt;/code>&lt;/p>
+&lt;p>This will build the SDF python library and install the sdf_helper
+wrapper and utility layer.&lt;/p>
+&lt;h1 id="using_the_sdf_helper_wrapper_layer">Using the sdf_helper wrapper layer&lt;/h1>
+&lt;p>The low level python SDF library is not user friendly, so a wrapper
+layer called sdf_helper has been written. This wrapper layer simplifies
+loading SDF files and provides simple plotting routines using
+matplotlib.&lt;/p>
+&lt;h3 id="importing_sdf_helper">Importing sdf_helper&lt;/h3>
+&lt;p>Importing sdf_helper is as simple as&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper
+&lt;/code>&lt;/pre>
+&lt;p>In these examples, the numpy and matplotlib libraries are usually loaded
+too, and an alias is created for sdf_helper, so the boilerplate code
+looks like&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+import numpy as np
+import matplotlib.pyplot as plt
+&lt;/code>&lt;/pre>
+&lt;h3 id="loading_an_sdf_file_using_sdf_helper">Loading an sdf file using sdf_helper&lt;/h3>
+&lt;p>To load a file, use the &lt;code>getdata&lt;/code> function. This function takes either a
+string which it loads as a filename, so to load the file &lt;code>Data/0010.df&lt;/code>
+you would run&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data=sh.getdata('Data/0010.sdf')
+&lt;/code>&lt;/pre>
+&lt;p>or it takes a number which is the dump number, and optionally a second
+parameter which is the directory name as a string, so you would run&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data=sh.getdata(10, 'Data')
+&lt;/code>&lt;/pre>
+&lt;p>Because memory is only allocated when needed in the SDF python reader
+there is no way of specifying which variables to load using getdata. All
+variables are available when the file is first loaded, and memory is
+allocated when the variable is first used.&lt;/p>
+&lt;h3 id="listing_the_available_variables_in_an_sdf_file">Listing the available variables in an sdf file&lt;/h3>
+&lt;p>To see what variables are available use the list_variables method&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data=sh.getdata('Data/0010.sdf')
+sh.list_variables(data)
+&lt;/code>&lt;/pre>
+&lt;p>This produces an output that looks something like&lt;/p>
+&lt;pre>&lt;code class="language-text">CPUs_Current_rank &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [0]
+CPUs_Original_rank &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [2]
+Current_Jx &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Charge_Density &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Number_Density &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Number_Density_Left &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Number_Density_Right &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Electric_Field_Ex &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Grid_CPUs_Original_rank &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [3]
+Grid_CPUs_Original_rank_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [2]
+Grid_Grid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [401]
+Grid_Grid_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [400]
+Grid_x_px_Left &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [400, 200]
+Grid_x_px_Left_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [399, 199]
+Grid_x_px_Right &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [400, 200]
+Grid_x_px_Right_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [399, 199]
+Wall_time &amp;lt;class 'sdf.BlockConstant'&amp;gt; [1]
+dist_fn_x_px_Left &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400, 200]
+dist_fn_x_px_Right &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400, 200]
+&lt;/code>&lt;/pre>
+&lt;p>These are the names of the variables in the data structure. This example
+is taken from the supplied &lt;code>two_stream.deck&lt;/code> example in 1D.&lt;/p>
+&lt;h3 id="working_with_the_data_in_an_sdf_file">Working with the data in an SDF file&lt;/h3>
+&lt;p>You can access the underlying data using the names obtained from
+&lt;code>list_variables&lt;/code>&lt;/p>
+&lt;pre>&lt;code class="language-python">variable = data.Electric_Field_Ex
+&lt;/code>&lt;/pre>
+&lt;p>This returns an instance of either &lt;code>sdf.BlockPlainVariable&lt;/code> or
+&lt;code>sdf.BlockPointVariable&lt;/code> depending on whether you have requested a grid
+variable (such as Ex, Ey or a distribution function) or a particle
+variable (such as particle momentum or weight). The raw contents of the
+variable is a numpy array. It is then available using the &lt;code>data&lt;/code> element
+of these objects.&lt;/p>
+&lt;pre>&lt;code class="language-python">import numpy as np
+variable = data.Electric_Field_Ex
+raw = variable.data
+print(type(raw))
+print(np.mean(raw))
+&lt;/code>&lt;/pre>
+&lt;p>produces the output&lt;/p>
+&lt;pre>&lt;code class="language-text">&amp;lt;type 'numpy.ndarray'&amp;gt;
+-1.27980874427008e-06
+&lt;/code>&lt;/pre>
+&lt;h3 id="plotting_using_sdf_helper">Plotting using sdf_helper&lt;/h3>
+&lt;p>The sdf_helper wrapper script comes with some plotting routines. They
+are incomplete currently, but aim to provide as close as possible to
+press ready figures in a single command. You need the &lt;code>matplotlib&lt;/code>
+library to use these routines, and they are only available for 1D and 2D
+data at present. To plot data, simply provide an
+&lt;code>sdf.BlockPlainVariable&lt;/code> object to the routine &lt;code>plot_auto&lt;/code>. An example
+of plotting a 1D variable, using the &lt;code>two_stream.deck&lt;/code> example deck to
+generate the figures would be&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+import matplotlib.pyplot as plt
+plt.ion()
+data=sh.getdata('Data/0010.sdf')
+sh.plot_auto(data.Current_Jx)
+&lt;/code>&lt;/pre>
+&lt;p>This will produce a window similar to the image shown here, with slight
+difference depending on your version of matplotlib and your operating
+system. The code &lt;code>plt.ion()&lt;/code> sets matplotlib to interactive mode, so
+control will be returned to you as soon as the plot has finished
+drawing.&lt;/p>
+&lt;p>
+&lt;a href="Matplotlib1D_screenshot.png">Example 1D plot generated by sdf_helper.plot_auto&lt;/a>&lt;/p>
+&lt;p>Plotting a 2D function is the same basic idea, and the code&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+import matplotlib.pyplot as plt
+plt.ion()
+data=sh.getdata('Data/0010.sdf')
+sh.plot_auto(data.dist_fn_x_px_Right, iso=0)
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="Matplotlib2D.png" alt=" thumb \| 200px \| Example 2D plot generated bysdf_helper.plot_auto">&lt;/p>
+&lt;p>will produce the figure on the right. The procedure for variables from
+EPOCH2D data is exactly the same.&lt;/p>
+&lt;h3 id="changing_colour_tables">Changing colour tables&lt;/h3>
+&lt;p>The easiest solution to changing colour tables is to set the global
+colour table. This is done by&lt;/p>
+&lt;pre>&lt;code class="language-python">import matplotlib.pyplot as plt
+plt.set_cmap(tablename)
+&lt;/code>&lt;/pre>
+&lt;p>where &lt;code>tablename&lt;/code> is a string describing the colour table to be used.
+The available strings are given
+&lt;a href="http://matplotlib.org/users/colormaps.html" target="_blank" rel="noopener">here&lt;/a>&lt;/p>
+&lt;h3 id="some_bugs_in_matplotlib">Some bugs in matplotlib&lt;/h3>
+&lt;p>There are some bugs in matplotlib which can mean that sometimes the 2D
+images don&amp;rsquo;t render properly. If you get incorrect rendering, please
+try updating matplotlib to the latest version for your platform. If that
+doesn&amp;rsquo;t work then pass the parameter &lt;code>compatibility=True&lt;/code> to the
+&lt;code>plot_auto&lt;/code> routine. This may make the plot slightly less pretty, but
+tends to work on more platforms.&lt;/p>
+&lt;h1 id="core_python_library">Core Python library&lt;/h1>
+&lt;p>The SDF python reader allows you to read any SDF file and access any
+information within the file. It has very few user friendly features to
+assist working with the files. Some of the methods listed in the section
+on sdf_helper (notably list_variables) are not available when using
+the core library. Loading an sdf file with the core library has the
+following syntax&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf
+data=sdf.read(filename)
+&lt;/code>&lt;/pre>
+&lt;p>where filename is a string containing the name of the file to be loaded.
+This returns an sdf.BlockList object&lt;/p>
+&lt;h3 id="the_sdf" class="blocklist_object">The sdf.BlockList object&lt;/h3>
+&lt;p>The &lt;code>list_variables&lt;/code> routine is added by the sdf_helper wrapper, but
+you can check what elements are in the file by simply typing&lt;/p>
+&lt;pre>&lt;code class="language-python">data.__dict__
+&lt;/code>&lt;/pre>
+&lt;p>Which will produce an output like the following example from EPOCH2D&lt;/p>
+&lt;p>&lt;code>{'Header': {'filename': '/Users/phsiav/dev/epoch/epoch2d/Data/0005.sdf', 'file_version': 1, 'file_revision': 4, 'code_name': 'Epoch2d', 'step': 53, 'time': 2.5293132385759517e-14, 'jobid1': 1552896563, 'jobid2': 376, 'code_io_version': 1, 'restart_flag': False, 'other_domains': False, 'station_file': False}, 'Wall_time': &amp;lt;sdf.BlockConstant object at 0x11a012318&amp;gt;, 'Electric_Field_Ex': &amp;lt;sdf.BlockPlainVariable object at 0x11a012220&amp;gt;, 'Electric_Field_Ey': &amp;lt;sdf.BlockPlainVariable object at 0x11a012128&amp;gt;, 'Electric_Field_Ez': &amp;lt;sdf.BlockPlainVariable object at 0x11a012030&amp;gt;, 'Magnetic_Field_Bx': &amp;lt;sdf.BlockPlainVariable object at 0x117b2ceb8&amp;gt;, 'Magnetic_Field_By': &amp;lt;sdf.BlockPlainVariable object at 0x117b2cdc0&amp;gt;, 'Magnetic_Field_Bz': &amp;lt;sdf.BlockPlainVariable object at 0x117b2ccc8&amp;gt;, 'Grid_Grid': &amp;lt;sdf.BlockPlainMesh object at 0x117b2cbd0&amp;gt;, 'Grid_Grid_mid': &amp;lt;sdf.BlockPlainMesh object at 0x117b2cad8&amp;gt;, 'Grid_CPUs_Original_rank': &amp;lt;sdf.BlockPlainMesh object at 0x117b2c9e0&amp;gt;, 'Grid_CPUs_Original_rank_mid': &amp;lt;sdf.BlockPlainMesh object at 0x117b2c8e8&amp;gt;, 'CPUs_Original_rank': &amp;lt;sdf.BlockPlainVariable object at 0x117b2c7f0&amp;gt;, 'CPUs_Current_rank': &amp;lt;sdf.BlockPlainVariable object at 0x11a015128&amp;gt;}&lt;/code>&lt;/p>
+&lt;h3 id="the_sdf" class="blockplainvariable_object">The sdf.BlockPlainVariable object&lt;/h3>
+&lt;p>These objects represent the variables in the SDF file. It does not fully
+implement the &lt;strong>dict&lt;/strong> property, so to inspect it&amp;rsquo;s contents you
+must use&lt;/p>
+&lt;pre>&lt;code class="language-python">dir(data.Electric_Field_Ey)
+&lt;/code>&lt;/pre>
+&lt;p>which produces an output like&lt;/p>
+&lt;p>&lt;code>['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'blocklist', 'data', 'data_length', 'datatype', 'dims', 'grid', 'grid_id', 'grid_mid', 'id', 'mult', 'name', 'stagger', 'units']&lt;/code>&lt;/p>
+&lt;p>The key elements are &lt;code>data&lt;/code> which contains the raw data for the variable
+stored as a numpy array, &lt;code>dims&lt;/code> which is an array containing the number
+of elements in each dimension of the array and &lt;code>grid&lt;/code> and &lt;code>grid_mid&lt;/code>
+which refer to &lt;code>sdf.BlockPlainMesh &lt;code>objects that represent the
+grid axes that the variable is to be plotted against. Grid and grid_mid
+do similar but different things. Grid is an array of points
+corresponding to the edges of the computational cells, grid_mid to the
+midpoints. This means that all of the arrays in &lt;code>grid&lt;/code> are one element
+longer than the arrays in &lt;code>grid_mid&lt;/code>. To identify whether to use &lt;code>grid&lt;/code>
+or &lt;code>grid_mid&lt;/code> you must compare the sizes of the variable &lt;code>dims&lt;/code> array to
+the sizes of the &lt;code>grid&lt;/code> and &lt;code>grid_mid&lt;/code> sizes and &lt;em>for each axis&lt;/em> use
+the element of &lt;code>grid&lt;/code> or &lt;code>grid_mid&lt;/code> that has the same number of
+elements.&lt;/p>
+&lt;p>Important note! - 2D SDF data is loaded into Python rotated by 90
+degrees compared to the original Fortran code that generated it.&lt;/p>
+&lt;h3 id="the_sdf" class="blockplainmesh_object">The sdf.BlockPlainMesh object&lt;/h3>
+&lt;p>Once again you have to use the &lt;code>dir&lt;/code> command to output the information
+about an sdf.BlockPlainMesh object, for example in EPOCH&lt;/p>
+&lt;pre>&lt;code class="language-python">dir(data.Grid_Grid)
+&lt;/code>&lt;/pre>
+&lt;p>Which produces output like&lt;/p>
+&lt;p>&lt;code>['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'blocklist', 'data', 'data_length', 'datatype', 'dims', 'extents', 'geometry', 'id', 'labels', 'mult', 'name', 'units']&lt;/code>&lt;/p>
+&lt;p>The important element of this block is &lt;code>data&lt;/code> which is a tuple of 1D
+numpy arrays corresponding to each coordinate axis of the grid.&lt;/p>
+&lt;h3 id="plotting_a_variable_using_raw_sdf_and_raw_matplotlib">Plotting a variable using raw SDF and raw matplotlib&lt;/h3>
+&lt;ul>
+&lt;li>Warning - This is not our recommended suggestion for plotting. We
+recommend using our helper routines in sdf_helper*&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code class="language-python">import matplotlib.pyplot as plt
+import sdf
+data=sdf.read('Data/0005.sdf')
+ey = data.Electric_Field_Ey
+plt.pcolormesh(ey.grid_mid.data[0], ey.grid_mid.data[1], ey.data.T)
+plt.show()
+&lt;/code>&lt;/pre></description></item></channel></rss>

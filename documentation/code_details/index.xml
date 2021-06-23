@@ -1,0 +1,1342 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code details | EPOCH</title><link>/documentation/code_details.html</link><atom:link href="/documentation/code_details/index.xml" rel="self" type="application/rss+xml"/><description>Code details</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Code details</title><link>/documentation/code_details.html</link></image><item><title>Maths parser</title><link>/documentation/code_details/maths_parser.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/code_details/maths_parser.html</guid><description>&lt;p>A discussion of the input deck for EPOCH would not be complete without
+consideration of the maths parser. The maths parser is the code which
+reads the input decks. The parser makes it possible that any parameter
+taking a numerical value (integer or real) can be input as a
+mathematical expression rather than as a numerical constant. The maths
+parser is fairly extensive and includes a range of mathematical
+functions, physical and simulation constants and appropriately
+prioritised mathematical operators.&lt;/p>
+&lt;h3 id="constants">Constants&lt;/h3>
+&lt;p>The maths parser in EPOCH has the following constants&lt;/p>
+&lt;ul>
+&lt;li>pi - The ratio of the circumference of a circle to its diameter.&lt;/li>
+&lt;li>kb - Boltzmann&amp;rsquo;s constant.&lt;/li>
+&lt;li>me - Mass of an electron.&lt;/li>
+&lt;li>qe - Charge of an electron.&lt;/li>
+&lt;li>c - Speed of light.&lt;/li>
+&lt;li>epsilon0 - Permeability of free space.&lt;/li>
+&lt;li>mu0 - Permittivity of free space.&lt;/li>
+&lt;li>ev - Electronvolt.&lt;/li>
+&lt;li>kev - Kilo-Electronvolt.&lt;/li>
+&lt;li>mev - Mega-Electronvolt.&lt;/li>
+&lt;li>micron - A convenience symbol for specifying wavelength in microns
+rather than metres.&lt;/li>
+&lt;li>milli - $10^{-3}$&lt;/li>
+&lt;li>micro - $10^{-6}$&lt;/li>
+&lt;li>nano - $10^{-9}$&lt;/li>
+&lt;li>pico - $10^{-12}$&lt;/li>
+&lt;li>femto - $10^{-15}$&lt;/li>
+&lt;li>atto - $10^{-18}$&lt;/li>
+&lt;li>cc - A convenience symbol for converting from cubic metres to cubic
+centimetres (ie. $10^{-6}$)&lt;/li>
+&lt;li>time - Initial simulation time.&lt;/li>
+&lt;li>x,y,z - Grid coordinates in the x,y,z direction.&lt;/li>
+&lt;li>ix,iy,iz - Grid index in the x,y,z direction.&lt;/li>
+&lt;li>nx,ny,nz - Number of grid points in the x,y,z direction.&lt;/li>
+&lt;li>dx,dy,dz - Grid spacing in the x,y,z direction.&lt;/li>
+&lt;li>{x,y,z}_min - Grid coordinate of the minimum x,y,z boundary.&lt;/li>
+&lt;li>{x,y,z}_max - Grid coordinate of the maximum x,y,z boundary.&lt;/li>
+&lt;li>length_{x,y,z} - The length of the simulation box in the x,y,z
+direction.&lt;/li>
+&lt;li>nproc_{x,y,z} - The number of processes in the x,y,z directions.&lt;/li>
+&lt;li>nsteps - The number of timesteps requested.&lt;/li>
+&lt;li>t_end - The end time of the simulation.&lt;/li>
+&lt;li>p{x,y,z} - Momentum in the x, y, z directions. Used in specifying
+arbitrary distribution functions. EPOCH 4.15 or later required&lt;/li>
+&lt;/ul>
+&lt;p>It is also possible for an end user to specify custom constants both
+within the code and from the input deck. These topics are covered later
+in this subsection. An example of using a constant would be:
+&lt;strong>length_x = pi&lt;/strong>&lt;/p>
+&lt;h3 id="functions">Functions&lt;/h3>
+&lt;p>The maths parser in EPOCH has the following functions&lt;/p>
+&lt;ul>
+&lt;li>abs(a) - Absolute value.&lt;/li>
+&lt;li>floor(a) - Convert real to integer rounding down.&lt;/li>
+&lt;li>ceil(a) - Convert real to integer rounding up.&lt;/li>
+&lt;li>nint(a) - Convert real to integer rounding to nearest integer.&lt;/li>
+&lt;li>sqrt(a) - Square root.&lt;/li>
+&lt;li>sin(a) - Sine.&lt;/li>
+&lt;li>cos(a) - Cosine.&lt;/li>
+&lt;li>tan(a) - Tangent.&lt;/li>
+&lt;li>asin(a) - Arcsine.&lt;/li>
+&lt;li>acos(a) - Arccosine.&lt;/li>
+&lt;li>atan(a) - Arctangent.&lt;/li>
+&lt;li>atan2(Y,X) - Arctangent using the Fortran ATAN2 function. This computes the
+principal value of the argument function of the complex number
+$X + i Y$. This function can be used to transform from Cartesian into
+polar coordinates and allows to determine the angle in the correct
+quadrant.&lt;/li>
+&lt;li>sinh(a) - Hyperbolic sine.&lt;/li>
+&lt;li>cosh(a) - Hyperbolic cosine.&lt;/li>
+&lt;li>tanh(a) - Hyperbolic tangent.&lt;/li>
+&lt;li>exp(a) - Exponential.&lt;/li>
+&lt;li>loge(a) - Natural logarithm.&lt;/li>
+&lt;li>log10(a) - Base-10 logarithm.&lt;/li>
+&lt;li>log_base(a,b) - Base-b logarithm.&lt;/li>
+&lt;li>gauss($x,x_0,w$) - Calculate a Gaussian profile in variable
+&lt;em>&lt;code>x&lt;/code>&lt;/em> centred on &lt;em>&lt;code>$x_0$&lt;/code>&lt;/em> with a
+characteristic width &lt;em>&lt;code>w&lt;/code>&lt;/em>.
+$f(x) = \exp{(-((x-x_0)/w)^2)}$. In this expression the full width
+at half maximum is given by $fwhm = 2 w \sqrt{\ln{2}}$&lt;/li>
+&lt;li>supergauss($x,x_0,w,n$) - This is identical to &amp;ldquo;gauss&amp;rdquo; except it
+takes a fourth parameter, &lt;em>&lt;code>n&lt;/code>&lt;/em>, which is the power to
+raise the exponential argument to.&lt;/li>
+&lt;li>semigauss($t,A,A_0,w$) - Calculate a semi Gaussian profile in
+variable $t$ with maximum amplitude $A$, amplitude at $t=0$ $A_0$
+and width $w$. The parameter $A_0$ is used to calculate $t_0$, the
+point at which the Gaussian reaches its maximum value. For $t$ less
+than $t_0$ the profile is Gaussian and for $t$ greater than $t_0$ it
+is the constant $A$. $t_0 = w\sqrt{-\ln{(A_0/A)}}$&lt;math>f(t) =&lt;/li>
+&lt;/ul>
+&lt;p>\begin{cases} A \exp{(-((t-t_0)/w)^2)}, &amp;amp; t &amp;lt; t_0 \\ A, &amp;amp;
+\mbox{otherwise} \end{cases}&lt;/math>&lt;/p>
+&lt;ul>
+&lt;li>interpolate(interp_var,.&amp;hellip;,n_pairs) - Linear interpolation
+function, explained later.&lt;/li>
+&lt;li>if(a,b,c) - Conditional function. If a != 0 the function returns b,
+otherwise the function returns c.&lt;/li>
+&lt;li>number_density(a) - Returns the number density for species a.&lt;/li>
+&lt;li>temp_{x,y,z}(a) - Returns temperature in the x, y or z direction
+for species a.&lt;/li>
+&lt;li>temp(a) - Returns the isotropic temperature for species a.&lt;/li>
+&lt;li>e{x,y,z}(x,y,z) - Returns the x, y or z component of the electric
+field at the specified location.&lt;/li>
+&lt;li>b{x,y,z}(x,y,z) - Returns the x, y or z component of the magnetic
+field at the specified location.&lt;/li>
+&lt;li>critical($\omega$) - Returns the critical density for the given
+frequency $\omega$. ie.
+$n_{crit}(\omega) = \omega^2 m_0 \epsilon_0 / e^2$&lt;/li>
+&lt;/ul>
+&lt;p>It is also possible for an end user to specify custom functions within
+the code. An example of using a function would be:
+&lt;strong>length_x = exp(pi)&lt;/strong>
+The use of most of these functions is fairly simple, but &amp;ldquo;interpolate&amp;rdquo;
+requires some additional explanation. This function allows a user to
+specify a set of position,value pairs and have the code linearly
+interpolate the values between these control points. This function is
+mainly intended for ease of converting initial conditions from other
+existing PIC codes, and the same effect can usually be obtained more
+elegantly using the &amp;ldquo;if&amp;rdquo; command. The structure of the &amp;ldquo;interpolate&amp;rdquo;
+command is as follows: The first parameter is the variable which is to
+be used as the axis over which to interpolate the values. This can in
+general be any valid expression, but will normally just be a coordinate
+axis. The next 2n entries are the position,value pairs and the final
+parameter is the number of position,value pairs. The slightly clunky
+syntax of this command is unfortunately necessary to allow it to work
+with some fairly fundamental features of the maths parser used in EPOCH.&lt;/p>
+&lt;h3 id="operators">Operators&lt;/h3>
+&lt;p>The maths parser in EPOCH allows the following operators&lt;/p>
+&lt;ul>
+&lt;li>a + b - Addition operator.&lt;/li>
+&lt;li>a - b - Subtraction operator or unary negation operator
+(auto-detected).&lt;/li>
+&lt;li>a * b - Multiplication operator.&lt;/li>
+&lt;li>a / b - Division operator.&lt;/li>
+&lt;li>a ^ b - Power raise operator.&lt;/li>
+&lt;li>a e b - Power of ten operator (1.0e3 = 1000).&lt;/li>
+&lt;li>a lt b - Less than operator. Returns 1 if a $&amp;lt;$ b, otherwise
+returns 0. Intended for use with if.&lt;/li>
+&lt;li>a gt b - Greater than operator. Returns 1 if a $&amp;gt;$ b, otherwise
+returns 0.&lt;/li>
+&lt;li>a eq b - Equality operator. Returns 1 if a == b, otherwise
+returns 0.&lt;/li>
+&lt;li>a and b - Logical and operator. Returns 1 if a != 0 and b != 0,
+otherwise returns 0.&lt;/li>
+&lt;li>a or b - Logical or operator. Returns 1 if a != 0 or b != 0,
+otherwise returns 0.&lt;/li>
+&lt;/ul>
+&lt;p>These follow the usual rules for operator precedence, although it is
+best to surround more complex expressions in parenthesis if the
+precedence is important. It is not possible at this time to specify
+custom operators without major changes to the code. An example of using
+an operator would be:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> length_x = 10.0 + 12.0
+&lt;/code>&lt;/pre></description></item><item><title>Using EPOCH in practice</title><link>/documentation/code_details/using_epoch_in_practice.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/code_details/using_epoch_in_practice.html</guid><description>&lt;h1 id="specifying_initial_conditions_for_particles_using_the_input_deck">Specifying initial conditions for particles using the input deck&lt;/h1>
+&lt;p>If the initial conditions for the plasma you wish to model can be
+described by a number density and temperature profile on the underlying
+grid then EPOCH can create an appropriate particle distribution for you.
+The set of routines which accomplish this task are known as the
+autoloader. For many users, this functionality is sufficient to make use
+of the code and there is no need to deal with the internal
+representation of particles in EPOCH.&lt;/p>
+&lt;p>The autoloader randomly loads particles in space to reproduce the number
+density profile that was requested. It then sets the momentum components
+of the particles to approximate a Maxwell-Boltzmann distribution
+corresponding to the temperature profile. Sometimes this is not the
+desired behaviour, for example you may wish to model a bump-on-tail
+velocity distribution. It is currently not possible to specify these
+initial conditions from the input deck and the particles must be setup
+by modifying the source code.&lt;/p>
+&lt;p>There are two stages to the particle setup in EPOCH&lt;/p>
+&lt;ul>
+&lt;li>auto_load - This routine is called after reading and parsing the
+input deck. It takes care of allocating particles and setting up
+their initial positions and momenta using the initial conditions
+supplied in deck file. It is not necessary to recompile the code, or
+even have access to the source to change the initial conditions
+using this method.&lt;/li>
+&lt;li>manual_load - Once particles have been allocated they can have
+their properties altered in this routine. By default it is an empty
+routine which does nothing.&lt;/li>
+&lt;/ul>
+&lt;h3 id="setting_autoloader_properties_from_the_input_deck">Setting autoloader properties from the input deck&lt;/h3>
+&lt;p>To illustrate using the autoloader in practice, we present an example
+for setting up an isolated plasma block in 2D. This would look like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+name = s1
+# First set number_density in the range 0 &amp;gt; 1
+# Cut down number_density in x direction
+number_density = if ((x gt -1) and (x lt 1), 1.0, 0.2)
+# Cut down number_density in y direction
+number_density = if ((y gt -1) and (y lt 1), number_density(s1), 0.2)
+# Multiply number_density by real particle number_density
+number_density = number_density(s1) * 100.0
+# Set the temperature to be zero
+temp_x = 0.0
+temp_y = temp_x(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * 100.0
+end:species
+begin:species
+# Just copy the number_density for species s1
+number_density = number_density(s1)
+# Just copy the temperature from species s1
+temp_x = temp_x(s1)
+temp_y = temp_y(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * 100.0
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>An important point to notice is that the two parts of the logical
+expressions in the input deck are enclosed within their own brackets.
+This helps to remove some ambiguities in the functioning of the input
+deck parser. It is hoped that this will soon be fixed, but at present
+ALWAYS enclose logical expressions in brackets.&lt;/p>
+&lt;h1 id="manually_overriding_particle_parameters_set_by_the_autoloader">Manually overriding particle parameters set by the autoloader&lt;/h1>
+&lt;p>Since not all problems in plasma physics can be described in terms of an
+initial distribution of thermal plasma, it is also possible to manually
+control properties of each individual pseudoparticle for an initial
+condition. This takes place in the subroutine &lt;code>manual_load&lt;/code> in the file
+user_interaction/ic_module.f90. Manual loading takes place after all
+the autoloader phase, to allow manual tweaking of autoloader specified
+initial conditions.&lt;/p>
+&lt;h3 id="epoch_internal_representation_of_particles">EPOCH internal representation of particles&lt;/h3>
+&lt;p>Before we can go about manipulating particle properties in
+&lt;code>manual_load&lt;/code>, we first need an overview of how the particles are
+defined in EPOCH. Inside the code, particles are represented by a
+Fortran90 TYPE called &lt;strong>&lt;code>particle&lt;/code>&lt;/strong>. The current definition of this
+type (in 1D) is:&lt;/p>
+&lt;pre>&lt;code class="language-fortran"> TYPE particle
+REAL(num), DIMENSION(3) :: part_p
+REAL(num) :: part_pos
+#if !defined(PER_SPECIES_WEIGHT) || defined(PHOTONS)
+REAL(num) :: weight
+#endif
+#ifdef DELTAF_METHOD
+REAL(num) :: pvol
+#endif
+#ifdef PER_PARTICLE_CHARGE_MASS
+REAL(num) :: charge
+REAL(num) :: mass
+#endif
+TYPE(particle), POINTER :: next, prev
+#ifdef PARTICLE_DEBUG
+INTEGER :: processor
+INTEGER :: processor_at_t0
+#endif
+#ifdef PARTICLE_ID4
+INTEGER :: id
+#elif PARTICLE_ID
+INTEGER(i8) :: id
+#endif
+#ifdef COLLISIONS_TEST
+INTEGER :: coll_count
+#endif
+#ifdef WORK_DONE_INTEGRATED
+REAL(num) :: work_x
+REAL(num) :: work_y
+REAL(num) :: work_z
+REAL(num) :: work_x_total
+REAL(num) :: work_y_total
+REAL(num) :: work_z_total
+#endif
+#ifdef PHOTONS
+REAL(num) :: optical_depth
+REAL(num) :: particle_energy
+#ifdef TRIDENT_PHOTONS
+REAL(num) :: optical_depth_tri
+#endif
+#endif
+END TYPE particle
+&lt;/code>&lt;/pre>
+&lt;p>Here, most of the preprocessing directives have been stripped out for
+clarity. We have left &lt;code>#ifdef PARTICLE_DEBUG&lt;/code> as an example. Here, the
+&amp;ldquo;processor&amp;rdquo; and &amp;ldquo;processor_at_t0&amp;rdquo; variables only exist if the
+&lt;code>-DPARTICLE_DEBUG&lt;/code> define was put in the makefile. If you want to access
+a property that does not seem to be present, check the
+&lt;a href="/documentation/basic_usage/compiler_flags">preprocessor
+defines&lt;/a>.&lt;/p>
+&lt;p>The &amp;ldquo;particle&amp;rdquo; properties can be explained as follows:&lt;/p>
+&lt;ul>
+&lt;li>part_p - The momentum in 3 dimensions for the particle. This is
+always of size 3.&lt;/li>
+&lt;li>part_pos - The position of the particle in space. This is of the
+same size as the dimensionality of the code.&lt;/li>
+&lt;li>weight - The weight of this particle. The number of real particles
+represented by this pseudoparticle.&lt;/li>
+&lt;li>charge - The particle charge. If the code was compiled without per
+particle charge, then the code uses the charge property from
+TYPE(particle_species).&lt;/li>
+&lt;li>mass - The particle rest mass. If the code was compiled without per
+particle mass, then the code uses the mass property from
+TYPE(particle_species).&lt;/li>
+&lt;li>next, prev - The next and previous particle in the linked list which
+represents the particles in the current species. This will be
+explained in more detail later.&lt;/li>
+&lt;li>processor - The rank of the processor which currently holds the
+particle.&lt;/li>
+&lt;li>processor_at_t0 - The rank of the processor on which the particle
+started.&lt;/li>
+&lt;li>id - Unique particle ID.&lt;/li>
+&lt;li>coll_count - Used for debugging the collision routines.&lt;/li>
+&lt;li>optical_depth - Optical depth used in the QED routines.&lt;/li>
+&lt;li>particle_energy - Particle energy used in the QED routines.&lt;/li>
+&lt;li>optical_depth_tri - Optical depth for the trident process in the
+QED routines.&lt;/li>
+&lt;/ul>
+&lt;p>Collections of particles are represented by another Fortran TYPE, called
+&lt;strong>&lt;code>particle_list&lt;/code>&lt;/strong>. This type represents all the properties of a
+collection of particles and is used behind the scenes to deal with
+inter-processor communication of particles. The definition of the type
+is:&lt;/p>
+&lt;pre>&lt;code class="language-fortran"> TYPE particle_list
+TYPE(particle), POINTER :: head
+TYPE(particle), POINTER :: tail
+INTEGER(i8) :: count
+INTEGER :: id_update
+! Pointer is safe if the particles in it are all unambiguously linked
+LOGICAL :: safe
+! Does this partlist hold copies of particles rather than originals
+LOGICAL :: holds_copies
+TYPE(particle_list), POINTER :: next, prev
+END TYPE particle_list
+&lt;/code>&lt;/pre>
+&lt;ul>
+&lt;li>head - The first particle in the linked list.&lt;/li>
+&lt;li>tail - The last particle in the linked list.&lt;/li>
+&lt;li>count - The number of particles in the list. Note that this is NOT
+MPI aware, so reading count only gives you the number of particles
+on the local processor.&lt;/li>
+&lt;li>safe - Any particle_list which a user should come across will be a
+safe particle_list. Don&amp;rsquo;t change this property.&lt;/li>
+&lt;li>next, prev - For future expansion it is possible to attach
+particle_lists together in another linked list. This is not
+currently used anywhere in the code.&lt;/li>
+&lt;/ul>
+&lt;p>An entire species of particles is represented by another Fortran TYPE,
+this time called &lt;strong>&lt;code>particle_species&lt;/code>&lt;/strong>. This represents all the
+properties which are common to all particles in a species. The current
+definition is:&lt;/p>
+&lt;pre>&lt;code class="language-fortran"> TYPE particle_species
+! Core properties
+CHARACTER(string_length) :: name
+TYPE(particle_species), POINTER :: next, prev
+INTEGER :: id
+INTEGER :: dumpmask
+INTEGER :: count_update_step
+REAL(num) :: charge
+REAL(num) :: mass
+REAL(num) :: weight
+INTEGER(i8) :: count
+TYPE(particle_list) :: attached_list
+LOGICAL :: immobile
+LOGICAL :: fill_ghosts
+! Parameters for relativistic and arbitrary particle loader
+INTEGER :: ic_df_type
+REAL(num) :: fractional_tail_cutoff
+TYPE(primitive_stack) :: dist_fn
+TYPE(primitive_stack) :: dist_fn_range(3)
+#ifndef NO_TRACER_PARTICLES
+LOGICAL :: zero_current
+#endif
+! ID code which identifies if a species is of a special type
+INTEGER :: species_type
+! particle cell division
+INTEGER(i8) :: global_count
+LOGICAL :: split
+INTEGER(i8) :: npart_max
+! Secondary list
+TYPE(particle_list), DIMENSION(:), POINTER :: secondary_list
+! Injection of particles
+REAL(num) :: npart_per_cell
+TYPE(primitive_stack) :: density_function, temperature_function(3)
+TYPE(primitive_stack) :: drift_function(3)
+! Thermal boundaries
+REAL(num), DIMENSION(:), POINTER :: ext_temp_x_min, ext_temp_x_max
+! Species_ionisation
+LOGICAL :: electron
+LOGICAL :: ionise
+INTEGER :: ionise_to_species
+INTEGER :: release_species
+INTEGER :: n
+INTEGER :: l
+REAL(num) :: ionisation_energy
+! Attached probes for this species
+#ifndef NO_PARTICLE_PROBES
+TYPE(particle_probe), POINTER :: attached_probes
+#endif
+! Particle migration
+TYPE(particle_species_migration) :: migrate
+! Initial conditions
+TYPE(initial_condition_block) :: initial_conditions
+! Per-species boundary conditions
+INTEGER, DIMENSION(2*c_ndims) :: bc_particle
+END TYPE particle_species
+&lt;/code>&lt;/pre>
+&lt;p>This definition is for the 1D version of the code. The only difference
+for the other two versions is the number of dimensions in the arrays
+&amp;ldquo;secondary_list&amp;rdquo; and &amp;ldquo;ext_temp_*&amp;rdquo;. There are quite a lot of
+fields here, so we will just document some of the most important ones.&lt;/p>
+&lt;ul>
+&lt;li>name - The name of the particle species, used in the output dumps
+etc.&lt;/li>
+&lt;li>next, prev - Particle species are also linked together in a linked
+list. This is used internally by the output dump routines, but
+should not be used by end users.&lt;/li>
+&lt;li>id - The species number for this species. This is the same number as
+is used in the input deck to designate the species.&lt;/li>
+&lt;li>dumpmask - Determine when to include this species in output dumps.
+Note that the flag is ignored for restart dumps.&lt;/li>
+&lt;li>charge - The charge in Coulombs. Even if PER_PARTICLE_CHARGE_MASS
+is specified, this is still populated from the input deck, and now
+refers to the reference charge for the species.&lt;/li>
+&lt;li>mass - The mass in kg.&lt;/li>
+&lt;li>weight - The per-species particle weight.&lt;/li>
+&lt;li>count - The global number of particles of this species (NOTE may not
+be accurate). This will only ever be the number of particles on this
+processor when running on a single processor. While this property
+will be accurate when setting up initial conditions, it is only
+guaranteed to be accurate for the rest of the code if the code is
+compiled with the correct preprocessor options.&lt;/li>
+&lt;li>attached_list - The list of particles which belong to this species.&lt;/li>
+&lt;li>immobile - If set to &lt;code>.TRUE.&lt;/code> then the species is ignored during the
+particle push.&lt;/li>
+&lt;li>zero_current - If set to &lt;code>.TRUE.&lt;/code> then the current is not updated
+for this particle species.&lt;/li>
+&lt;/ul>
+&lt;h3 id="setting_the_particle_properties">Setting the particle properties&lt;/h3>
+&lt;p>The details of exactly what a linked list means in EPOCH requires a more
+in-depth study of the source code. For now, all we really need to know
+is that each species has a list of particles. A pointer to the first
+particle in the list is contained in
+&lt;code>species_list(ispecies)%attached_list%head&lt;/code>. Once you have a pointer to
+a particle (eg. current), you advance to the next pointer in the list
+with &lt;code>current =&amp;gt; current%next&lt;/code>. After all the descriptions of the types,
+actually setting the properties of the particles is fairly simple. The
+following is an example which positions the particles uniformly in 1D
+space, but doesn&amp;rsquo;t set any momentum.&lt;/p>
+&lt;pre>&lt;code class="language-fortran"> SUBROUTINE manual_load
+TYPE(particle), POINTER :: current
+INTEGER :: ispecies
+REAL(num) :: rpos, dx
+DO ispecies = 1, n_species
+current =&amp;gt; species_list(ispecies)%attached_list%head
+dx = length_x / species_list(ispecies)%attached_list%count
+rpos = x_min
+DO WHILE(ASSOCIATED(current))
+current%part_pos = rpos
+current%weight = 1.0_num
+rpos = rpos + dx
+current =&amp;gt; current%next
+ENDDO
+ENDDO
+END SUBROUTINE manual_load
+&lt;/code>&lt;/pre>
+&lt;p>This will take the particles which have been placed at random positions
+by the autoloader and repositions them in a uniform manner. In order to
+adjust the particle positions, you need to know about the grid used in
+EPOCH. In this example we only required the length of the domain,
+&amp;ldquo;length_x&amp;rdquo; and the minimum value of x, &amp;ldquo;x_min&amp;rdquo;. A more exhaustive list
+is given in the following section. Note that I completely ignored the
+question of domain decomposition when setting up the particles. The code
+automatically moves the particles onto the correct processor without
+user interaction.&lt;/p>
+&lt;p>In the above example, note that particle momentum was not specified and
+particle weight was set to be a simple constant. Setting particle weight
+can be very simple if you can get the pseudoparticle distribution to
+match the real particle distribution, or quite tricky if this isn&amp;rsquo;t
+possible. The weight of a pseudoparticle is calculated such that the
+number of pseudoparticles in a cell multiplied by their weights equals
+the number of physical particles in that cell. This can be quite tricky
+to get right, so in more complicated cases it is probably better to use
+the autoloader than to manually set up the number density distribution.&lt;/p>
+&lt;h3 id="grid_coordinates_used_in_epoch" class="">Grid coordinates used in EPOCH.&lt;/h3>
+&lt;p>When setting up initial conditions within the EPOCH source (rather than
+using the input deck) there are several constants that you may need to
+use. These constants are:&lt;/p>
+&lt;ul>
+&lt;li>nx - Number of gridpoints on the local processor in the x direction.&lt;/li>
+&lt;li>ny - Number of gridpoints on the local processor in the y direction
+(2D and 3D).&lt;/li>
+&lt;li>nz - Number of gridpoints on the local processor in the z direction
+(3D).&lt;/li>
+&lt;li>length_{x,y,z} - Length of domain in the x, y, z directions.&lt;/li>
+&lt;li>{x,y,z}_min - Minimum value of x, y, z for the whole domain.&lt;/li>
+&lt;li>{x,y,z}_max - Maximum value of x, y, z for the whole domain.&lt;/li>
+&lt;li>n_species - The number of species in the code.&lt;/li>
+&lt;/ul>
+&lt;p>There are also up to three arrays which are available for use.&lt;/p>
+&lt;ul>
+&lt;li>x(-2:nx+3) - Position of a given gridpoint in real units in the x
+direction.&lt;/li>
+&lt;li>y(-2:ny+3) - Position of a given gridpoint in real units in the y
+direction (2D and 3D).&lt;/li>
+&lt;li>z(-2:nz+3) - Position of a given gridpoint in read units in the z
+direction (3D).&lt;/li>
+&lt;/ul>
+&lt;h3 id="loading_a_separable_non_thermal_particle_distribution" class="">Loading a separable non-thermal particle distribution.&lt;/h3>
+&lt;p>While the autoloader is capable of dealing with most required initial
+thermal distributions, you may want to set up non-thermal initial
+conditions. The code includes a helper function to select a point from
+an arbitrary distribution function which can be used to deal with most
+non-thermal distributions. To use the helper function, you need to
+define two 1D arrays which are the x and y axes for the distribution
+function. This approach is only possible if the distribution function
+can be represented as a set of 1D distribution functions in px, py and
+pz separately. If this is possible then this method is preferred since
+it is significantly faster than the arbitrary method detailed in the
+next section. An example of using the helper function is given below.&lt;/p>
+&lt;pre>&lt;code class="language-fortran"> SUBROUTINE manual_load
+TYPE(particle), POINTER :: current
+INTEGER, PARAMETER :: np_local = 1000
+INTEGER :: ispecies, ip
+REAL(num) :: temperature, stdev2, tail_width, tail_height, tail_drift
+REAL(num) :: frac, tail_frac, min_p, max_p, dp_local, p2, tail_p2
+REAL(num), DIMENSION(np_local) :: p_axis, distfn_axis
+temperature = 1e4_num
+tail_width = 0.05_num
+tail_height = 0.2_num
+tail_drift = 0.5_num
+DO ispecies = 1, n_species
+stdev2 = kb * temperature * species_list(ispecies)%mass
+frac = 1.0_num / (2.0_num * stdev2)
+tail_frac = 1.0_num / (2.0_num * stdev2 * tail_width)
+max_p = 5.0_num * SQRT(stdev2)
+min_p = -max_p
+dp_local = (max_p - min_p) / REAL(np_local-1, num)
+DO ip = 1, np_local
+p_axis(ip) = min_p + (ip - 1) * dp_local
+p2 = p_axis(ip)**2
+tail_p2 = (p_axis(ip) - tail_drift * max_p)**2
+distfn_axis(ip) = EXP(-p2 * frac) &amp;amp;amp;
++ tail_height * EXP(-tail_p2 * tail_frac)
+ENDDO
+current=&amp;gt;species_list(ispecies)%attached_list%head
+DO WHILE(ASSOCIATED(current))
+current%part_p(1) = sample_dist_function(p_axis, distfn_axis)
+current=&amp;gt;current%next
+ENDDO
+ENDDO
+END SUBROUTINE manual_load
+&lt;/code>&lt;/pre>
+&lt;p>This example will set the particles to have a bump-on-tail velocity
+distribution, a setup which is not possible to do using only the input
+deck. It is not necessary to normalise the distribution function, as
+this is done automatically by the
+&lt;em>&lt;code>*sample_dist_function*&lt;/code>&lt;/em> function.&lt;/p>
+&lt;h1 id="lasers">Lasers&lt;/h1>
+&lt;p>EPOCH has the ability to add EM wave sources such as lasers at
+boundaries. To use lasers, set the boundary that you wish to have a
+laser on to be of type &lt;code>simple_laser&lt;/code> and then specify one or more
+lasers attached to that boundary. Lasers may be specified anywhere
+initial conditions are specified.&lt;/p>
+&lt;h1 id="laser_blocks_in_multiple_dimensions" class="">Laser blocks in multiple dimensions.&lt;/h1>
+&lt;p>When running EPOCH in 2D or 3D, the laser can be modified spatially via
+the &lt;code>profile&lt;/code> and &lt;code>phase&lt;/code> parameters. These are briefly outlined
+&lt;a href="/documentation/input_deck/input_deck_laser">here&lt;/a> but in this section we will
+describe them in a little more depth.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>profile&lt;/code> - The spatial profile for the laser. This is
+essentially an array defined along the edge (or surface) that the laser
+is attached to. It is clear that the spatial profile is only meaningful
+perpendicular to the laser&amp;rsquo;s direction of travel and so it is just a
+single constant in 1D. The laser profile is evaluated as an initial
+condition and so cannot include any temporal information which must be
+encoded in &lt;code>t_profile&lt;/code>. The spatial profile is evaluated at the boundary
+where the laser is attached and so only spatial information in the plane
+of the boundary is significant. This is most clearly explained through a
+couple of examples. In these examples the spatial profile of the laser
+is set to vary between a flat uniform profile (&lt;code>profile = 1&lt;/code>) and a
+Gaussian profile in y (&lt;code>profile = gauss(y,0,2.5e-6)&lt;/code>). The difference
+between these profiles is obvious but the important point is that a
+laser travelling parallel to the x-direction has a profile in the y
+direction. Similarly a laser propagating in the y-direction has a
+profile in the x direction. In 3D this is extended so that a laser
+propagating in a specified direction has a profile in both orthogonal
+directions. So a laser travelling parallel to the x axis in 3D would
+have a profile in y and z. Since 3D lasers are very similar to 2D
+lasers, they will not be considered here in greater detail, but in 3D,
+it is possible to freely specify the laser profile across the entire
+face where a laser is attached.
+&lt;img src="Profile_flat.png" alt="Uniform laser profile inEPOCH2D">
+&lt;img src="Profile_gauss.png" alt="Gaussian laser profile inEPOCH2D">&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>phase&lt;/code> - Phase shift for the laser in radians. This is a
+spatial variable which is also defined across the whole of the
+boundary on which the laser is attached. This allows a user to add a
+laser travelling at an angle to a boundary as shown in
+Figure [angle]. The setup for this is not entirely straightforward
+and requires a little bit of explanation. Figure [wave]
+illustrates a laser being driven at an angle on the x_min boundary.
+Different wave fronts cross the $y$-axis at different places and
+this forms a sinusoidal profile along $y$ that represents the phase.
+The wavelength of this profile is given by
+$\lambda_\phi = \lambda / \sin\theta$, where $\lambda$ is the
+wavelength of the laser and $\theta$ is the angle of the propagation
+direction with respect to the $x$-axis. The actual phase to use will
+be $\phi(y) = -k_\phi y = -2\pi y / \lambda_\phi$. It is negative
+because the phase of the wave is propagating in the positive $y$
+direction. It is also necessary to alter the wavelength of the
+driver since this is given in the direction perpendicular to the
+boundary. The new wavelength to use will be $\lambda\cos\theta$.
+Figure [angle] shows the resulting $E_y$ field for a laser driven
+at an angle of $\pi / 8$. Note that since the boundary conditions in
+the code are derived for propagation perpendicular to the boundary,
+there will be artefacts on the scale of the grid for lasers driven
+at an angle.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="Profile_angle.png" alt="Laser propagating at an angle inEPOCH2D">
+&lt;img src="Wave_angle.png" alt="Schematic diagram of a laser propagating at an angle in2D">&lt;/p>
+&lt;p>Using this technique it is also possible to focus a laser. This is done
+by using the same technique as above but making the angle of
+propagation, $\theta$, a function of $y$ such that the laser is focused
+to a point along the $x$-axis. A simple example is given
+&lt;a href="/documentation/examples/basic_examples/#focussing_a_gaussian_beam">here&lt;/a>.&lt;/p>
+&lt;h1 id="restarting_epoch_from_previous_output_dumps">Restarting EPOCH from previous output dumps&lt;/h1>
+&lt;p>Another possible way of setting up initial conditions in EPOCH is to
+load in a previous output dump and use it to specify initial conditions
+for the code. The effect of this is to restart the code from the state
+that it was in when the dump was made. To do this, you just set the
+field &amp;ldquo;restart_snapshot&amp;rdquo; in the
+&lt;a href="/documentation/input_deck/input_deck_control"> control
+block&lt;/a> to the number of the output
+dump from which you want the code to restart. Because of the way in
+which the code is written you cannot guarantee that the code will
+successfully restart from any output dump. To restart properly, the
+following &lt;em>&lt;code>must&lt;/code>&lt;/em> have been dumped&lt;/p>
+&lt;ul>
+&lt;li>Particle positions.&lt;/li>
+&lt;li>Particle momenta.&lt;/li>
+&lt;li>Particle species.&lt;/li>
+&lt;li>Particle weights.&lt;/li>
+&lt;li>Relevant parts of the electric field (If for example it is known
+that ez == 0 then it is not needed).&lt;/li>
+&lt;li>Relevant parts of the magnetic field.&lt;/li>
+&lt;/ul>
+&lt;p>It is possible to use the manual particle control part of the initial
+conditions to make changes to a restarted initial condition after the
+restart dump is loaded. The output files don&amp;rsquo;t include all of the
+information needed to restart the code fully since some of this
+information is contained in the input deck. However, a restart dump also
+contains a full copy of the input deck used and this can be unpacked
+before running the code.
+If specific &amp;ldquo;restart&amp;rdquo; dumps are specified in the input deck, or the
+&amp;ldquo;force_final_to_be_restartable&amp;rdquo; flag is set then in some cases the
+output is forced to contain enough information to output all the data.
+These restart dumps can be very large, and also override the &amp;ldquo;dumpmask&amp;rdquo;
+parameter specified for a species and output the data for that species
+anyway.&lt;/p>
+&lt;h1 id="parameterising_input_decks">Parameterising input decks&lt;/h1>
+&lt;p>The simplest way to allow someone to use EPOCH as a black box is to give
+them the input.deck files that control the setup and initial conditions
+of the code. The input deck is simple enough that a quick read through
+of the relevant section of the manual should make it fairly easy for a
+new user to control those features of the code, but the initial
+conditions can be complex enough to be require significant work on the
+part of an unfamiliar user to understand. In this case, it can be
+helpful to use the ability to specify constants in an input deck to
+parameterise the file. So, to go back to a slight variation on an
+earlier example:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+name = s1
+# First set number_density in the range 0-&amp;amp;gt;1
+# Cut down number_density in x direction
+number_density = if ((x gt -1) and (x lt 1), 1.0, 0.2)
+# Cut down number_density in y direction
+number_density = if ((y gt -1) and (y lt 1), number_density(s1), 0.2)
+# Multiply number_density by real particle number density
+number_density = number_density(s1) * 100.0
+# Set the temperature to be zero
+temp_x = 0.0
+temp_y = temp_x(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * 100.0
+end:species
+begin:species
+name = s2
+# Just copy the number_density for species s1
+number_density = number_density(s1)
+# Just copy the temperature from species s1
+temp_x = temp_x(s1)
+temp_y = temp_y(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * 100.0
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>The particle number density (100.0) is hard coded into the deck file in
+several places. It would be easier if this was given to a new user as:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:constant
+particle_number_density = 100.0 # Particle number density
+end:constant
+begin:species
+name = s1
+# First set number_density in the range 0-&amp;amp;gt;1
+# Cut down number_density in x direction
+number_density = if ((x gt -1) and (x lt 1), 1.0, 0.2)
+# Cut down number_density in y direction
+number_density = if ((y gt -1) and (y lt 1), number_density(s1), 0.2)
+# Multiply number_density by real particle number density
+number_density = number_density(s1) * particle_number_density
+# Set the temperature to be zero
+temp_x = 0.0
+temp_y = temp_x(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * particle_number_density
+end:species
+begin:species
+name = s2
+# Just copy the number density for species s1
+number_density = number_density(s1)
+# Just copy the temperature from species s1
+temp_x = temp_x(s1)
+temp_y = temp_y(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * particle_number_density
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>It is also possible to parameterise other elements of initial conditions
+in a similar fashion. This is generally a good idea, since it makes the
+initial conditions easier to read an maintain.&lt;/p>
+&lt;h1 id="using_spatially_varying_functions_to_further_parameterise_initial_conditions">Using spatially varying functions to further parameterise initial conditions&lt;/h1>
+&lt;p>Again, this is just a readability change to the normal input.deck file,
+but it also makes changing and understanding the initial conditions
+rather simpler. In this case, entire parts of the initial conditions are
+moved into a spatially varying constant in order to make changing them
+at a later date easier. For example:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:constant
+particle_number_density = 100.0 # Particle number density
+profile_x = if((x gt -1) and (x lt 1), 1.0, 0.2)
+profile_y = if((y gt -1) and (y lt 1), 1.0, 0.2)
+end:constant
+begin:species
+name = s1
+# Multiply number_density by real particle number density
+number_density = particle_number_density * profile_x * profile_y
+# Set the temperature to be zero
+temp_x = 0.0
+temp_y = temp_x(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * particle_number_density
+end:species
+begin:species
+name = s2
+# Just copy the number_density for species s1
+number_density = number_density(s1)
+# Just copy the temperature from species s1
+temp_x = temp_x(s1)
+temp_y = temp_y(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * particle_number_density
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>This creates the same output as before. It is now trivial to modify the
+profiles later. For example:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:constant
+particle_number_density = 100.0 # Particle number density
+profile_x = gauss(x, 0.0, 1.0)
+profile_y = gauss(y, 0.0, 1.0)
+end:constant
+begin:species
+name = s1
+# Multiply number_density by real particle number density
+number_density = particle_number_density * profile_x * profile_y
+# Set the temperature to be zero
+temp_x = 0.0
+temp_y = temp_x(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * particle_number_density
+end:species
+begin:species
+name = s2
+# Just copy the number density for species s1
+number_density = number_density(s1)
+# Just copy the temperature from species s1
+temp_x = temp_x(s1)
+temp_y = temp_y(s1)
+# Set the minimum number_density for this species
+number_density_min = 0.3 * particle_number_density
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>This changes the code to run with a Gaussian density profile rather then
+a step function. Again, this can be extended as far as required.&lt;/p>
+&lt;!-- ######################## Cross references ######################## --></description></item><item><title>Using delta f</title><link>/documentation/code_details/using_delta_f.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/code_details/using_delta_f.html</guid><description>&lt;p>To help reduce the impact of numerical noise in certain simulations, the
+delta-f method may be used in for specified particle species. The
+delta-f method effectively subtracts a background distribution $f_0$
+when calculating currents due to the motion of markers; when the
+particle distribution function $f$ is close to $f_0$, this substantially
+reduces the statistical noise in the currents. Only current deposition
+is implemented differently, and the equations of motion of the markers
+are not modified in this delta-f approach.&lt;/p>
+&lt;p>The component of the currents associated with the background $f_0$ may
+be in principle be calculated analytically, but the delta-f
+implementation in EPOCH assumes (but does not check) that the total
+background current is zero.&lt;/p>
+&lt;p>In order to use the delta-f method EPOCH must be compiled with the
+#DELTAF_METHOD precompiler flag enabled. Standard input simulations
+are not affected by switching on this flag, but the user may then choose
+to treat certain species in the plasma using the delta-f method. To
+enable delta-f calculation for a species the background distribution
+function $f_0$ must be defined in the input block. $f_0$ is specified
+using variables similar to those used to specify $f$. The current
+implementation of delta-f allows only a spatially uniform drifting
+Maxwellian $f_0$, with temperatures $T_x$, $T_y$ and $T_z$ allowed to
+differ from each other. In 3D, for the case where the temperature in
+each direction is equal, we have
+$f_0 = n_0 (2 \pi T)^{-3/2} \exp\left(\frac{m (\mathbf{v} - \mathbf{v_d})^2}{2 k_B T } \right).$&lt;/p>
+&lt;p>The parameters number_density_back, temp(x,y,z)_back and
+drift(x,y,z)_back in each species specification in the input deck set
+$f_0$. number_density_back=0 is the default and is equivalent to not
+using the delta-f method.&lt;/p>
+&lt;p>For example, the electron species component of an input deck solved
+using delta-f might be written:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+name = electron
+charge = -1.0
+mass = 1.0
+frac = 0.3
+temp = 1e8
+temp_back = 1e8
+number_density = 1e20
+number_density_back = 1e20
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>Additional distribution function diagnostic options are supplied for the
+Delta-f version. Standard diagnostics work as usual based on the total
+distribution function $f$ but is is also possible to output the Delta-f
+component of the distribution functions by adding output_deltaf = T in
+dist_fn components of the input deck.&lt;/p>
+&lt;p>An example input deck is supplied in the 1D version as
+twostream_deltaf.deck. This uses the delta-f method to solve the
+weak-beam two stream instability. The bulk plasma species is solved
+using the delta-f method, since this evolve very little, and mostly
+supports the Lagnmuir waves that the weak beam interacts with. The
+relative change to the beam species is large, and the standard PIC
+method, rather than delta-f is used to model this species. A comparison
+of the electric field diagnostics between standard and delta-f
+simulations shows a substantial decrease in noise.&lt;/p>
+&lt;p>Further details of the method are provided
+&lt;a href="Media:talk_deltaf.pdf" title="wikilink"> in this
+pdf&lt;/a>.&lt;/p></description></item><item><title>Previous versions</title><link>/documentation/code_details/previous_versions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/code_details/previous_versions.html</guid><description>&lt;h1 id="changes_between_version_3" class="1_and_4 0">Changes between version 3.1 and 4.0&lt;/h1>
+&lt;h1 id="changes_to_the_makefile">Changes to the Makefile&lt;/h1>
+&lt;p>Some changes have been made to the Makefile. These are documented
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.
+The following compile-time defines have been added to the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>NO_IO&lt;/li>
+&lt;li>PARTICLE_ID&lt;/li>
+&lt;li>PARTICLE_ID4&lt;/li>
+&lt;li>COLLISIONS_TEST&lt;/li>
+&lt;li>PHOTONS&lt;/li>
+&lt;li>TRIDENT_PHOTONS&lt;/li>
+&lt;li>PREFETCH&lt;/li>
+&lt;/ul>
+&lt;p>The following compile-time defines have been removed from the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>COLLISIONS&lt;/li>
+&lt;li>SPLIT_PARTICLES_AFTER_PUSH&lt;/li>
+&lt;li>PARTICLE_IONISE&lt;/li>
+&lt;/ul>
+&lt;h1 id="major_features_and_new_blocks_added_to_the_input_deck">Major features and new blocks added to the input deck&lt;/h1>
+&lt;ul>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_boundaries/#cpml_boundary_conditions">CPML boundary
+conditions&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_boundaries/#thermal_boundary_conditions">Thermal boundary
+conditions&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_collisions">Collisions&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_qed">QED&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_subset">Subsets&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">Ionisation&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_output_block/#single-precision_output">Single-precision
+output&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">Multiple output
+blocks&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_species/#particle_migration_between_species">Particle
+migration&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="additional_output_block_parameters">Additional output block parameters&lt;/h1>
+&lt;p>The following parameters have also been added to the &amp;ldquo;output&amp;rdquo; block (see
+&lt;a href="/documentation/input_deck/input_deck_output/#directives">here&lt;/a>):&lt;/p>
+&lt;ul>
+&lt;li>dump_first&lt;/li>
+&lt;li>dump_last&lt;/li>
+&lt;li>force_first_to_be_restartable&lt;/li>
+&lt;li>ejected_particles&lt;/li>
+&lt;li>absorption&lt;/li>
+&lt;li>id&lt;/li>
+&lt;li>name&lt;/li>
+&lt;li>restartable&lt;/li>
+&lt;/ul>
+&lt;h1 id="other_additions_to_the_input_deck">Other additions to the input deck&lt;/h1>
+&lt;ul>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_species">npart_per_cell&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_dist_fn">dir_{xy,yz,zx}_angle&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_control">particle_tstart&lt;/a>&lt;/li>
+&lt;li>
+&lt;a href="/documentation/input_deck/input_deck_species">identify&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Finally, the input deck now has a method for writing continuation lines.
+If the deck contains a &amp;ldquo;&amp;quot; character then the rest of the line is
+ignored and the next line becomes a continuation of the current one.&lt;/p>
+&lt;h1 id="changes_between_version_4" class="0_and_4 3">Changes between version 4.0 and 4.3&lt;/h1>
+&lt;h1 id="changes_to_the_makefile_1">Changes to the Makefile&lt;/h1>
+&lt;p>Some changes have been made to the Makefile. These are documented
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a> .
+The following compile-time define has been added to the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>MPI_DEBUG&lt;/li>
+&lt;/ul>
+&lt;p>The following compile-time define has been removed from the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>FIELD_DEBUG&lt;/li>
+&lt;/ul>
+&lt;h1 id="additions_to_the_input_deck">Additions to the input deck&lt;/h1>
+&lt;p>The following parameters have been added to the
+&lt;a href="/documentation/input_deck/input_deck_control">&amp;ldquo;control&amp;rdquo;&lt;/a> block of the input
+deck:&lt;/p>
+&lt;ul>
+&lt;li>nproc{x,y,z}&lt;/li>
+&lt;li>smooth_currents&lt;/li>
+&lt;li>field_ionisation&lt;/li>
+&lt;li>use_exact_restart&lt;/li>
+&lt;li>allow_cpu_reduce&lt;/li>
+&lt;li>check_stop_file_frequency&lt;/li>
+&lt;li>stop_at_walltime&lt;/li>
+&lt;li>stop_at_walltime_file&lt;/li>
+&lt;li>simplify_deck&lt;/li>
+&lt;li>print_constants&lt;/li>
+&lt;li>The &amp;ldquo;restart_snapshot&amp;rdquo; parameter now accepts filenames&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the
+&lt;a href="/documentation/input_deck/input_deck_output_block">&amp;ldquo;output&amp;rdquo;&lt;/a> block of the input
+deck:&lt;/p>
+&lt;ul>
+&lt;li>disabled&lt;/li>
+&lt;li>time_start&lt;/li>
+&lt;li>time_stop&lt;/li>
+&lt;li>nstep_start&lt;/li>
+&lt;li>nstep_stop&lt;/li>
+&lt;li>dump_at_times&lt;/li>
+&lt;li>dump_at_nsteps&lt;/li>
+&lt;li>dump_cycle&lt;/li>
+&lt;li>dump_cycle_first_index&lt;/li>
+&lt;li>filesystem&lt;/li>
+&lt;li>file_prefix&lt;/li>
+&lt;li>rolling_restart&lt;/li>
+&lt;li>particle_energy&lt;/li>
+&lt;li>relativistic_mass&lt;/li>
+&lt;li>gamma&lt;/li>
+&lt;li>total_energy_sum&lt;/li>
+&lt;li>optical_depth&lt;/li>
+&lt;li>qed_energy&lt;/li>
+&lt;li>trident_optical_depth&lt;/li>
+&lt;li>The default value of &amp;ldquo;dump_first&amp;rdquo; is now &amp;ldquo;T&amp;rdquo;&lt;/li>
+&lt;/ul>
+&lt;p>The following parameter has been added to the
+&lt;a href="/documentation/input_deck/input_deck_collisions">&amp;ldquo;collisions&amp;rdquo;&lt;/a> block of the
+input deck:&lt;/p>
+&lt;ul>
+&lt;li>collisional_ionisation&lt;/li>
+&lt;/ul>
+&lt;p>The following parameter has been added to the
+&lt;a href="/documentation/input_deck/input_deck_qed">&amp;ldquo;qed&amp;rdquo;&lt;/a> block of the input deck:&lt;/p>
+&lt;ul>
+&lt;li>use_radiation_reaction&lt;/li>
+&lt;/ul>
+&lt;p>The following parameter has been added to the
+&lt;a href="/documentation/input_deck/input_deck_species">&amp;ldquo;species&amp;rdquo;&lt;/a> block of the input
+deck:&lt;/p>
+&lt;ul>
+&lt;li>immobile&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters were changed in the
+&lt;a href="/documentation/input_deck/input_deck_laser">&amp;ldquo;laser&amp;rdquo;&lt;/a> block of the input deck:&lt;/p>
+&lt;ul>
+&lt;li>The &amp;ldquo;phase&amp;rdquo; parameter can now be time varying&lt;/li>
+&lt;li>The &amp;ldquo;profile&amp;rdquo; parameter can now be time varying&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the list of pre-defined
+&lt;a href="/documentation/code_details/maths_parser/#constants">constants&lt;/a>.&lt;/p>
+&lt;ul>
+&lt;li>nproc_{x,y,z}&lt;/li>
+&lt;li>nsteps&lt;/li>
+&lt;li>t_end&lt;/li>
+&lt;li>cc&lt;/li>
+&lt;/ul>
+&lt;p>There has also been a new
+&lt;a href="/documentation/input_deck/input_deck_output_global">&amp;ldquo;output_global&amp;rdquo;&lt;/a> block
+added to the input deck.&lt;/p>
+&lt;h1 id="changes_in_behaviour_which_are_not_due_to_changes_in_the_input_deck">Changes in behaviour which are not due to changes in the input deck&lt;/h1>
+&lt;ul>
+&lt;li>The species &amp;ldquo;drift&amp;rdquo; property is now applied to particles whilst the
+moving window model is active. In previous versions of the code,
+this property was ignored once the moving window began.&lt;/li>
+&lt;li>Ionisation species now inherit their &amp;ldquo;dumpmask&amp;rdquo;. See
+&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a> for details.&lt;/li>
+&lt;li>Default values for ignorable directions were added. This change
+allows submitting 3D or 2D input decks to a 1D version of and 3D
+input decks to a 2D version of . Any references to y/z will be set
+equal to zero unless overridden by a deck constant. Other y/z values
+also assume sensible defaults, eg. 1 grid cell, 1 metre thick, etc.&lt;/li>
+&lt;li>Automatic byte swapping is carried out by the SDF library. The
+library now checks the endianness of the SDF file and byte-swaps the
+data if required.&lt;/li>
+&lt;li>&amp;ldquo;qed&amp;rdquo; blocks may now be present even if the code was not compiled
+using the &amp;ldquo;-DPHOTONS&amp;rdquo; flag. The code will only halt if &amp;ldquo;use_qed=T&amp;rdquo;
+inside the &amp;ldquo;qed&amp;rdquo; block.&lt;/li>
+&lt;li>The code now checks for the Data directory in a file named
+&amp;ldquo;USE_DATA_DIRECTORY&amp;rdquo; before prompting at the command-line. This
+allows the code to be run without waiting for input at the
+command-line.&lt;/li>
+&lt;li>The field and particle grids are now automatically written to SDF
+output files if they are needed.&lt;/li>
+&lt;li>The Data directory may now contain a &amp;lsquo;&lt;code>/&lt;/code>&amp;rsquo; character.&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="3_and_4 8">Changes between version 4.3 and 4.8&lt;/h1>
+&lt;h1 id="changes_to_the_makefile_2">Changes to the Makefile&lt;/h1>
+&lt;p>Some changes have been made to the Makefile. These are documented
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.
+The following compile-time define has been added to the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>PER_SPECIES_WEIGHT&lt;/li>
+&lt;li>NO_TRACER_PARTICLES&lt;/li>
+&lt;li>NO_PARTICLE_PROBES&lt;/li>
+&lt;li>PARSER_CHECKING&lt;/li>
+&lt;/ul>
+&lt;p>The following compile-time define has been removed from the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>PER_PARTICLE_WEIGHT&lt;/li>
+&lt;li>TRACER_PARTICLES&lt;/li>
+&lt;li>PARTICLE_PROBES&lt;/li>
+&lt;/ul>
+&lt;h1 id="additions_to_the_input_deck_1">Additions to the input deck&lt;/h1>
+&lt;p>The following parameters have been added to the
+&lt;a href="/documentation/input_deck/input_deck_control">&amp;ldquo;control&amp;rdquo;&lt;/a> block of the input
+deck:&lt;/p>
+&lt;ul>
+&lt;li>allow_missing_restart&lt;/li>
+&lt;li>print_eta_string&lt;/li>
+&lt;li>n_zeros&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the
+&lt;a href="/documentation/input_deck/input_deck_output_block">&amp;ldquo;output&amp;rdquo;&lt;/a> block of the input
+deck):&lt;/p>
+&lt;ul>
+&lt;li>weight (synonym for particle_weight)&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the
+&lt;a href="/documentation/input_deck/input_deck_output_global">&amp;ldquo;output_global&amp;rdquo;&lt;/a> block of
+the input deck:&lt;/p>
+&lt;ul>
+&lt;li>dump_first_after_restart&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the
+&lt;a href="/documentation/input_deck/input_deck_subset">&amp;ldquo;subset&amp;rdquo;&lt;/a> block of the input deck:&lt;/p>
+&lt;ul>
+&lt;li>skip, skip_&lt;code>x,y,z&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="8_and_4 9">Changes between version 4.8 and 4.9&lt;/h1>
+&lt;h1 id="new_capabilities">New capabilities&lt;/h1>
+&lt;p>Version 4.9 adds significant new capabilities as follows:&lt;/p>
+&lt;ul>
+&lt;li>delta-f version: particle distributions can be expressed as
+$f_0 + f_1$ where $f_0$ is a specified background plasma and all
+simulation particles are used to describe the $f_1$ component,
+documented in .&lt;/li>
+&lt;li>selectable field solvers: 3 new solvers have been added for fields,
+fully documented in .&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_to_the_makefile_3">Changes to the Makefile&lt;/h1>
+&lt;p>Some changes have been made to the Makefile. These are documented in .
+The following compile-time define has been added to the Makefile:&lt;/p>
+&lt;ul>
+&lt;li>DELTAF_METHOD&lt;/li>
+&lt;li>DELTAF_DEBUG&lt;/li>
+&lt;li>USE_ISATTY&lt;/li>
+&lt;/ul>
+&lt;h1 id="additions_to_the_input_deck_2">Additions to the input deck&lt;/h1>
+&lt;p>The following alterations were made to the input deck:&lt;/p>
+&lt;ul>
+&lt;li>ioniz* (with a &amp;ldquo;z&amp;rdquo;) aliases have been added for ionis* keywords.&lt;/li>
+&lt;li>y and z parameters can now appear in the input deck in EPOCH 1D and
+2D.&lt;/li>
+&lt;/ul>
+&lt;p>A new deck block has been added. The particles_from_file block allows
+loading of custom particle data from raw binary data files. See for
+details. This block accepts the following parameters:&lt;/p>
+&lt;ul>
+&lt;li>species&lt;/li>
+&lt;li>{xyz}_data&lt;/li>
+&lt;li>w_data&lt;/li>
+&lt;li>{xyz}_data&lt;/li>
+&lt;li>id{4,8}_data&lt;/li>
+&lt;li>offset&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the &amp;ldquo;control&amp;rdquo; block of the
+input deck (see ):&lt;/p>
+&lt;ul>
+&lt;li>maxwell_solver&lt;/li>
+&lt;li>use_current_correction&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the &amp;ldquo;species&amp;rdquo; block of the
+input deck (see ):&lt;/p>
+&lt;ul>
+&lt;li>maxwell_solver&lt;/li>
+&lt;li>number_density_back&lt;/li>
+&lt;li>drift_{x,y,z}_back&lt;/li>
+&lt;li>temp_{x,y,z}_back&lt;/li>
+&lt;li>temp_{x,y,z}_back_ev&lt;/li>
+&lt;li>temp_back&lt;/li>
+&lt;li>temp_back_ev&lt;/li>
+&lt;/ul>
+&lt;p>The following parameters have been added to the &amp;ldquo;dist_fn' block of the
+input deck (see ):&lt;/p>
+&lt;ul>
+&lt;li>dir may now take the value mod_p&lt;/li>
+&lt;li>restrict_mod_p&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_not_resulting_from_changes_to_the_deck">Changes not resulting from changes to the deck&lt;/h1>
+&lt;ul>
+&lt;li>Lasers can be specified with time-varying frequency profile.&lt;/li>
+&lt;li>The existing subset blocks can now be applied to field and derived
+grid variables. If spatial restrictions are used, subsections will
+be output, along with a corresponding grid. Note that these are not
+compatible with the &amp;ldquo;skip&amp;rdquo; parameter to subset blocks.&lt;/li>
+&lt;li>The dist_fn block &amp;ldquo;range&amp;rdquo; keyword is now respected for spatial
+directions, allowing a spatial subset of the distribution function
+to be output directly.&lt;/li>
+&lt;li>Some corrections were applied to calculation of thermal boundary
+conditions for particles.&lt;/li>
+&lt;li>The load balancer may now be disabled by setting a 0 or negative
+threshold.&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="9_and_4 10">Changes between version 4.9 and 4.10&lt;/h1>
+&lt;h1 id="new_capabilities_1">New capabilities&lt;/h1>
+&lt;p>Version 4.10 adds the following new capabilities:&lt;/p>
+&lt;ul>
+&lt;li>Time varying particle injectors. See
+&lt;a href="/documentation/input_deck/input_deck_injector">
+here&lt;/a>&lt;/li>
+&lt;li>Per-species particle boundaries. You can now specify bc_x_min and
+bc_x_max to a species block. This overrides the global boundaries
+for that species. See
+&lt;a href="/documentation/input_deck/input_deck_species/#species_boundary_conditions">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;particles_per_cell&amp;rdquo; output diagnostic. See
+&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="10_and_4 11">Changes between version 4.10 and 4.11&lt;/h1>
+&lt;h1 id="new_capabilities_2">New capabilities&lt;/h1>
+&lt;p>Version 4.11 adds the following new capabilities:&lt;/p>
+&lt;ul>
+&lt;li>Added time dependent moving window. No new input deck parameters
+have been added, but it is now possible to specify &amp;ldquo;window_v_x&amp;rdquo; to
+be a function that varies in time. See
+&lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
+&lt;li>If &amp;ldquo;print_constants=T&amp;rdquo; in the control block (see
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>) deck constants are now
+output to a separate file named &amp;ldquo;const.status&amp;rdquo;. This allows for
+easier post-processing.&lt;/li>
+&lt;li>Added COMPILER=auto option to automatically detect compiler. See
+&lt;a href="/documentation/basic_usage/compiling">here&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>The following correction has been made:&lt;/p>
+&lt;ul>
+&lt;li>Fractional numbers of particles-per-cell now function as expected
+when used in conjunction with the moving window.&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="11_and_4 12">Changes between version 4.11 and 4.12&lt;/h1>
+&lt;h1 id="new_capabilities_3">New capabilities&lt;/h1>
+&lt;p>Version 4.12 adds the following new capabilities:&lt;/p>
+&lt;ul>
+&lt;li>Added &amp;ldquo;average_weight&amp;rdquo; output diagnostic. See
+&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;li>Removed the &amp;ldquo;PARTICLE_COUNT_UPDATE&amp;rdquo; Makefile flag and replaced it
+with a &amp;ldquo;use_particle_count_update&amp;rdquo; parameter in the control
+block. See
+&lt;a href="/documentation/input_deck/input_deck_control/#basics">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;use_flux_maxwellian&amp;rdquo; option to the &amp;ldquo;injector&amp;rdquo; block. See
+&lt;a href="/documentation/input_deck/input_deck_injector/#keys">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;lehe_{x,y,z}&amp;rdquo; flags to the &amp;ldquo;maxwell_solver&amp;rdquo; option in the
+control block. See
+&lt;a href="/documentation/input_deck/input_deck_control/#maxwell_solvers">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;use_accurate_n_zeros&amp;rdquo; control block parameter. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;custom&amp;rdquo; flag to the &amp;ldquo;maxwell_solver&amp;rdquo; option in the control
+block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a> and
+&lt;a href="/documentation/input_deck/input_deck_control/#stencil_block">here&lt;/a>&lt;/li>
+&lt;li>Added the &amp;ldquo;WORK_DONE_INTEGRATED&amp;rdquo; Makefile flag and corresponding
+dumpmask directives &amp;ldquo;work_{x,y,z}&amp;rdquo; and &amp;ldquo;work_{x,y,z}_total&amp;rdquo;.
+These add a diagnostic for the work done on a particle by the
+electric field. See
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a> and
+&lt;a href="/documentation/input_deck/input_deck_output_block/#particle_variables">here&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="12_and_4 14">Changes between version 4.12 and 4.14&lt;/h1>
+&lt;h1 id="new_capabilities_4">New capabilities&lt;/h1>
+&lt;p>Version 4.14 adds the following new capabilities:&lt;/p>
+&lt;ul>
+&lt;li>Added the &amp;ldquo;reset_walltime&amp;rdquo; flag to the control block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;li>Changed the default value of &amp;ldquo;print_eta_string&amp;rdquo; to &amp;ldquo;T&amp;rdquo; in the
+control block.&lt;/li>
+&lt;li>Added the ability to request an output dump at run time. See
+&lt;a href="/documentation/input_deck/input_deck_control/#requesting_output_dumps_at_run_time">here&lt;/a>&lt;/li>
+&lt;li>Added the &amp;ldquo;window_stop_time&amp;rdquo; parameter to the window block. See
+&lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
+&lt;li>Added the &amp;ldquo;atan2&amp;rdquo; function to the maths parser. See
+&lt;a href="/documentation/code_details/maths_parser/#functions">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;dlb_maximum_interval&amp;rdquo; parameter to the control block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;dlb_force_interval&amp;rdquo; parameter to the control block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;balance_first&amp;rdquo; parameter to the control block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;li>Added y and z versions of the &amp;ldquo;bc_x_min_after_move&amp;rdquo; and
+&amp;ldquo;bc_x_max_after_move&amp;rdquo; parameters to the window block. See
+&lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
+&lt;li>Added a &amp;ldquo;dump_at_walltimes&amp;rdquo; parameter to the output block. See
+&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;walltime_start&amp;rdquo; and &amp;ldquo;walltime_stop&amp;rdquo; parameters to the
+output block and output_global block. See
+&lt;a href="/documentation/input_deck/input_deck_output_block/#directives">here&lt;/a> and
+&lt;a href="/documentation/input_deck/input_deck_output_global">here&lt;/a>&lt;/li>
+&lt;li>Added &amp;ldquo;walltime_interval&amp;rdquo; parameter to the output block. See
+&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">here&lt;/a>&lt;/li>
+&lt;li>Added the Higuera-Cary particle push. This can be enabled using the
+&amp;ldquo;HC_PUSH&amp;rdquo; Makefile flag. See
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="14_and_4 15">Changes between version 4.14 and 4.15&lt;/h1>
+&lt;ul>
+&lt;li>Added averaging of &amp;ldquo;poynt_flux&amp;rdquo; and &amp;ldquo;ekflux&amp;rdquo; variables.&lt;/li>
+&lt;li>The initial problem setup can now be load-balanced before any
+particles are loaded. This enables some heavily imbalanced setups to
+be run that were not previously possible.
+&lt;ul>
+&lt;li>Added the &amp;ldquo;use_pre_balance&amp;rdquo; flag to the control block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Allow the load balancer to adjust the processor topology
+&lt;ul>
+&lt;li>Added the &amp;ldquo;use_optimal_layout&amp;rdquo; flag to the control block. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Added control block option &amp;ldquo;use_more_setup_memory&amp;rdquo; for
+controlling the way that species are setup. See
+&lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
+&lt;li>Added strided multipass digital current filtering (See
+&lt;a href="/documentation/input_deck/input_deck_control/#strided_current_filtering">here&lt;/a>).
+This adds the following flags to the control block.
+&lt;ul>
+&lt;li>smooth_iterations&lt;/li>
+&lt;li>smooth_compensation&lt;/li>
+&lt;li>smooth_strides&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Added persistent subsets. See
+&lt;a href="/documentation/input_deck/input_deck_subset">here&lt;/a>. This adds the following
+flags to the subset block
+&lt;ul>
+&lt;li>persist_start_time&lt;/li>
+&lt;li>persist_start_step&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Added loading of relativistic particle species using the
+Maxwell-Jüttner distribution. See
+&lt;a href="/documentation/input_deck/input_deck_species/#maxwell_juttner_distributions">here&lt;/a>.
+This adds the following flags to the species block
+&lt;ul>
+&lt;li>use_maxwell_juttner&lt;/li>
+&lt;li>fractional_tail_cutoff&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Added loading of particle species using an arbitrary distribution
+function for sampling the momentum components. See
+&lt;a href="/documentation/input_deck/input_deck_species/#arbitrary_distribution_functions">here&lt;/a>.
+This adds the following flags to the species block
+&lt;ul>
+&lt;li>dist_fn&lt;/li>
+&lt;li>dist_fn_p{x,y,z}_range&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Added &amp;ldquo;temperature_{x,y,z}&amp;rdquo; derived output variables to the output
+block. See
+&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="changes_between_version_4" class="15_and_4 16">Changes between version 4.15 and 4.16&lt;/h1>
+&lt;ul>
+&lt;li>
+&lt;dl>
+&lt;dt>Added &amp;ldquo;number_density&amp;rdquo; aliases for &amp;ldquo;density&amp;rdquo; in the species and&lt;/dt>
+&lt;dt>injector blocks (see
+&lt;a href="/documentation/input_deck/input_deck_species">here&lt;/a> and&lt;/dt>
+&lt;dt>
+&lt;a href="/documentation/input_deck/input_deck_injector">here&lt;/a>).&lt;/dt>
+&lt;dd>
+&lt;p>These aliases include:&lt;/p>
+&lt;/dd>
+&lt;/dl>
+&lt;ul>
+&lt;li>number_density for density&lt;/li>
+&lt;li>promote_number_density for promote_density&lt;/li>
+&lt;li>demote_number_density for demote_density&lt;/li>
+&lt;li>number_density_min for density_min&lt;/li>
+&lt;li>number_density_max for density_max&lt;/li>
+&lt;li>number_density_back for density_back&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Replaced &amp;ldquo;USE_ISATTY&amp;rdquo; Makefile flag with &amp;ldquo;NO_USE_ISATTY&amp;rdquo;. See
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Added &amp;ldquo;NO_MPI3&amp;rdquo; Makefile flag. See
+&lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Added a &amp;ldquo;zero_current&amp;rdquo; alias for &amp;ldquo;tracer&amp;rdquo; in the species blocks.
+See
+&lt;a href="/documentation/input_deck/input_deck_species">here&lt;/a>. The use of &amp;ldquo;tracer&amp;rdquo;
+has now been deprecated and will be removed in version 5.0. At that
+time, the compiler flag will also be renamed.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;!-- ######################## Cross references ######################## --></description></item></channel></rss>

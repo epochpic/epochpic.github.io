@@ -1,0 +1,1687 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Examples | EPOCH</title><link>/documentation/examples.html</link><atom:link href="/documentation/examples/index.xml" rel="self" type="application/rss+xml"/><description>Examples</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Examples</title><link>/documentation/examples.html</link></image><item><title>Basic examples</title><link>/documentation/examples/basic_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/basic_examples.html</guid><description>&lt;p>In this section we outline a few worked examples of setting up problems
+using the EPOCH input deck.&lt;/p>
+&lt;h1 id="electron_two_stream_instability">Electron two stream instability&lt;/h1>
+&lt;p>An obvious simple test problem to do with EPOCH is the electron two
+stream instability. An example of a nice dramatic two stream instability
+can be obtained using EPOCH1D by setting the code with the following
+input deck file:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 400
+# Size of domain
+x_min = 0
+x_max = 5.0e5
+# Final time of simulation
+t_end = 1.5e-1
+stdout_frequency = 400
+end:control
+begin:boundaries
+bc_x_min = periodic
+bc_x_max = periodic
+end:boundaries
+begin:constant
+drift_p = 2.5e-24
+temp = 273
+dens = 10
+end:constant
+begin:species
+# Rightwards travelling electrons
+name = Right
+charge = -1
+mass = 1.0
+temp = temp
+drift_x = drift_p
+number_density = dens
+npart = 4 * nx
+end:species
+begin:species
+# Leftwards travelling electrons
+name = Left
+charge = -1
+mass = 1.0
+temp = temp
+drift_x = -drift_p
+number_density = dens
+npart = 4 * nx
+end:species
+begin:output
+# Number of timesteps between output dumps
+dt_snapshot = 1.5e-3
+# Properties at particle positions
+particles = always
+px = always
+# Properties on grid
+grid = always
+ex = always
+ey = always
+ez = always
+bx = always
+by = always
+bz = always
+jx = always
+ekbar = always
+mass_density = never + species
+charge_density = always
+number_density = always + species
+temperature = always + species
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="Two_Stream_Late.png" alt="The final state of the electron phase space for the two streaminstabilityexample">
+In this example, the constant block sets up constants for the momentum
+space drift, the temperature and the electron number density. The two
+species blocks set up the two drifting Maxwellian distributions and the
+constant density profile. The final output from this simulation is shown
+in the figure.&lt;/p>
+&lt;h1 id="structured_density_profile_in_epoch2d">Structured density profile in EPOCH2D&lt;/h1>
+&lt;p>&lt;img src="EPOCH_density_example.png" alt="Complex 2D densitystructure">&lt;/p>
+&lt;p>A simple but useful example for EPOCH2D is to have a highly structured
+initial condition to show that this is still easy to implement in EPOCH.
+A good example initial condition would be:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 500
+ny = nx
+x_min = -10 * micron
+x_max = -x_min
+y_min = x_min
+y_max = x_max
+nsteps = 0
+end:control
+begin:boundaries
+bc_x_min = periodic
+bc_x_max = periodic
+bc_y_min = periodic
+bc_y_max = periodic
+end:boundaries
+begin:constant
+den_peak = 1.0e19
+end:constant
+begin:species
+name = Electron
+number_density = den_peak * (sin(4.0 * pi * x / length_x + pi / 4)) \
+* (sin(8.0 * pi * y / length_y) + 1)
+number_density_min = 0.1 * den_peak
+charge = -1.0
+mass = 1.0
+npart = 20 * nx * ny
+end:species
+begin:species
+name = Proton
+number_density = number_density(Electron)
+charge = 1.0
+mass = 1836.2
+npart = 20 * nx * ny
+end:species
+begin:output
+number_density = always + species
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>The species block for &lt;strong>Electron&lt;/strong> is specified first, setting up the
+electron density to be a structured 2D sinusoidal profile. The species
+block for &lt;strong>Proton&lt;/strong> is then set to match the density of &lt;strong>Electron&lt;/strong>,
+enforcing charge neutrality. On its own this initial condition does
+nothing and so only needs to run for 0 timesteps (&lt;strong>nsteps = 0&lt;/strong> in
+input.deck). The resulting electron number density should look like the
+figure.&lt;/p>
+&lt;h1 id="a_hollow_cone_in_3d">A hollow cone in 3D&lt;/h1>
+&lt;p>A more useful example of an initial condition is to create a hollow
+cone. This is easy to do in both 2D and 3D, but is presented here in 3D
+form.&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 250
+ny = nx
+nz = nx
+x_min = -10 * micron
+x_max = -x_min
+y_min = x_min
+y_max = x_max
+z_min = x_min
+z_max = x_max
+nsteps = 0
+end:control
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = simple_outflow
+bc_y_min = periodic
+bc_y_max = periodic
+bc_z_min = periodic
+bc_z_max = periodic
+end:boundaries
+begin:output
+number_density = always + species
+end:output
+begin:constant
+den_cone = 1.0e22
+ri = abs(x - 5.0e-6) - 0.5e-6
+ro = abs(x - 5.0e-6) + 0.5e-6
+xi = 3.0e-6 - 0.5e-6
+xo = 3.0e-6 + 0.5e-6
+r = sqrt(y^2 + z^2)
+end:constant
+begin:species
+name = proton
+charge = 1.0
+mass = 1836.2
+number_density = if((r gt ri) and (r lt ro), den_cone, 0.0)
+number_density = if((x gt xi) and (x lt xo) and (r lt ri), \
+den_cone, number_density(proton))
+number_density = if(x gt xo, 0.0, number_density(proton))
+npart = nx * ny * nz
+end:species
+begin:species
+name = electron
+charge = -1.0
+mass = 1.0
+number_density = number_density(proton)
+npart = nx * ny * nz
+end:species
+&lt;/code>&lt;/pre>
+&lt;h4 id="3d_cone">Cone initial conditions in 3D&lt;/h4>
+&lt;p>&lt;img src="3dcone.png" alt="Cone initial conditions in 3D">&lt;/p>
+&lt;h4 id="2d_cone">Cone initial conditions in 2D&lt;/h4>
+&lt;p>&lt;img src="2dcone.png" alt="Cone initial conditions in 2D">&lt;/p>
+&lt;p>To convert this to 2D, simply replace the line &lt;code>r = sqrt(y^2+z^2)&lt;/code> with
+the line &lt;code>r = abs(y)&lt;/code>. The actual work in these initial conditions is
+done by the three lines inside the block for the &lt;strong>Proton&lt;/strong> species.
+Each of these lines performs a very specific function:&lt;/p>
+&lt;ol>
+&lt;li>Creates the outer cone. Simply tests whether &lt;strong>r&lt;/strong> is within the
+range of radii which corresponds to the thickness of the cone and if
+so fills it with the given density. Since the inner radius is x
+dependent this produces a cone rather than a cylinder. On its own,
+this line produces a pair of cones joined at the tip.&lt;/li>
+&lt;li>Creates the solid tip of the cone. This line just tests whether the
+point in space is within the outer radius of the cone and within a
+given range in &lt;strong>x&lt;/strong>, and fills it with the given density if true.&lt;/li>
+&lt;li>Cuts off all of the cone beyond the solid tip. Simply tests if &lt;strong>x&lt;/strong>
+is greater than the end of the cone tip and sets the density to zero
+if so.&lt;/li>
+&lt;/ol>
+&lt;p>This deck produces an initial condition as in the Figures in
+&lt;a href="#3d_cone">3D&lt;/a> and
+&lt;a href="#2d_cone">2D&lt;/a>
+respectively.&lt;/p>
+&lt;h1 id="focussing_a_gaussian_beam">Focussing a Gaussian Beam&lt;/h1>
+&lt;p>A laser can be driven on the boundary so that it focusses on a given
+spot. Basic details of how to do this are
+&lt;a href="https://en.wikipedia.org/wiki/Gaussian_beam" target="_blank" rel="noopener">here&lt;/a>. The following deck
+gives an example for a laser attached to x_min. The important
+parameters are the waist size (the size of the spot at the focus point)
+and the distance from the attached boundary to the focus. In this case
+the waist size is 0.9 micron, and the distance is 15 micron, meaning the
+focus is at x = + 5 micron.&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 500
+ny = nx
+# Final time of simulation
+t_end = 100 * femto
+# Size of domain
+x_min = -10 * micron
+x_max = -x_min
+y_min = x_min
+y_max = x_max
+stdout_frequency = 10
+end:control
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = open
+bc_y_min = periodic
+bc_y_max = periodic
+end:boundaries
+begin:constant
+lambda0 = 1.0 * micron
+# These two set the beam focus
+w_0 = 0.9 * micron # Beam waist size
+x_spot = 15 * micron # Distance from x_min to spot
+# These are the parameters calculated for driving the laser
+# These should not need to be modified
+x_R = pi * w_0^2 / lambda0 # Rayleigh range
+RC = x_spot * (1.0 + (x_R/x_spot)^2) # Radius of curvature on x_min
+w_bnd = w_0 * sqrt( 1.0 + (x_spot/x_R)^2) # Spot size at x_min
+gouy = atan(x_spot/x_R) # Gouy phase shift at x_min
+end:constant
+begin:laser
+boundary = x_min
+intensity_w_cm2 = 1.0e15
+lambda = lambda0
+phase = 2.0 * pi/ lambda0 * y^2 / (2.0 * RC) - gouy
+profile = gauss(y,0,w_bnd)
+end:laser
+begin:output
+name = normal
+# Number of timesteps between output dumps
+dt_snapshot = 25 * femto
+# Properties on grid
+grid = always
+ey = always
+bz = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="FocussedBeam.png" alt="The focussed beam">&lt;/p>
+&lt;p>The deck is based on the laser test deck supplied with Epoch, with a
+modified laser and longer runtime. Other classes of beam (Bessel etc)
+can be created similarly.&lt;/p></description></item><item><title>Workshop examples</title><link>/documentation/examples/workshop_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples.html</guid><description>&lt;h1 id="epoch_workshop_overview">EPOCH workshop overview&lt;/h1>
+&lt;p>The aims of the Workshop are:
+*After the workshop you should be able to setup and run EPOCH on a
+problem of real importance to your research.&lt;/p>
+&lt;ul>
+&lt;li>You should also be in a position to use and understand the manual.&lt;/li>
+&lt;li>You should learn about PIC codes in general.&lt;/li>
+&lt;li>You should understand more about the pitfalls of trying to do LPI
+studies with PIC.&lt;/li>
+&lt;li>Advice on how to run EPOCH and setup software on your home
+computers.&lt;/li>
+&lt;li>Give advice to the EPOCH team on new features for the code.&lt;/li>
+&lt;/ul>
+&lt;p>Warwick EPOCH Personnel:
+*Tony Arber &amp;ndash; PI on EPOCH project at Warwick.&lt;/p>
+&lt;ul>
+&lt;li>Keith Bennett &amp;ndash; PDRA and senior EPOCH developer.&lt;/li>
+&lt;li>Chris Brady &amp;ndash; Original EPOCH developer and head of RSE at Warwick&lt;/li>
+&lt;li>Heather Ratcliffe - EPOCH user and developer&lt;/li>
+&lt;li>Tom Goffrey &amp;ndash; PDRA and developer on other non-EPOCH codes&lt;/li>
+&lt;li>Alexander Seaton - Final year PhD student with extensive experience
+of using EPOCH&lt;/li>
+&lt;/ul>
+&lt;p>Resources:
+*All machines, and exercises, are linux based.&lt;/p>
+&lt;ul>
+&lt;li>EPOCH is a Fortran90 program which uses MPI for parallelization.&lt;/li>
+&lt;li>You will always need both F90 and MPI to compile and run the code
+even on one processor.&lt;/li>
+&lt;li>MPI on a Windows computer is not easy. Use linux or a Mac.&lt;/li>
+&lt;/ul>
+&lt;h1 id="workstation_usage">Workstation usage&lt;/h1>
+&lt;p>You can use the workstations for simple 1D tests and looking at the
+code.&lt;/p>
+&lt;h3 id="ultra_simple_getting_epoch_guide">Ultra-simple getting EPOCH guide!&lt;/h3>
+&lt;p>These instructions should work in your host institute if you have git.&lt;/p>
+&lt;ol>
+&lt;li>Login to workstation using guest account.&lt;/li>
+&lt;li>Open a terminal.&lt;/li>
+&lt;li>Type the following command at the prompt:
+&lt;code>git clone --recursive https://github.com/Warwick-Plasma/epoch.git&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;p>You will now have a directory called &amp;lsquo;epoch&amp;rsquo;. Inside this directory will
+be three EPOCH sub-directories epoch1d, epoch2d and epoch3d, an SDF
+directory and a few other files. Change directory into the epoch1d
+directory and start working through the
+&lt;a href="#getting_started_with_epoch">&amp;lsquo;Getting Started with
+EPOCH&amp;rsquo;&lt;/a> guide.&lt;/p>
+&lt;h3 id="running_the_codes">Running the codes&lt;/h3>
+&lt;p>Single core job: &lt;code>&amp;gt; echo Data | mpiexec -n 1 bin/epoch1d&lt;/code> Four core
+parallel job: &lt;code>&amp;gt; echo Data | mpiexec -n 4 bin/epoch2d&lt;/code>&lt;/p>
+&lt;p>&lt;strong>Note:&lt;/strong> If you don&amp;rsquo;t have git on your home computer you can always
+download a tar file of epoch when you return to your lab. This you get
+from the [&amp;lsquo;Releases&amp;rsquo;][https://github.com/Warwick-Plasma/epoch/releases]
+section on the EPOCH GitHub webpage. However I recommend
+you get, and learn, git and join the 21st century.&lt;/p>
+&lt;h1 id="getting_started_with_epoch">Getting Started with EPOCH&lt;/h1>
+&lt;h3 id="compiling_the_code">Compiling the code&lt;/h3>
+&lt;p>The first thing you must do is to compile the code. This is done using
+the UNIX &amp;ldquo;make&amp;rdquo; command. This command reads a file called &lt;em>Makefile&lt;/em> and
+uses the instructions in this file to generate all the steps required
+for compiling the code. Most of this is done automatically and the only
+part which typically needs changing are the instructions for which
+compiler to use and what compiler flags it accepts. The Makefiles
+supplied as part of the EPOCH source code contain sections for most
+commonly used compilers so it is usually unnecessary to actually edit
+these files. Usually you can compile just by passing the name of the
+compiler on the command line.&lt;/p>
+&lt;p>To compile the 1D version of the code, first change to the correct
+directory by typing &lt;code>cd epoch/epoch1d&lt;/code>. The compiler used on most
+desktop machines is &lt;code>gfortran&lt;/code>, so you can compile the code by typing
+&lt;code>make COMPILER=gfortran&lt;/code>. Alternatively, if you type
+&lt;code>make COMPILER=gfortran -j4&lt;/code> then the code will be compiled in parallel
+using 4 processors. If you wish, you can save yourself a bit of typing
+by editing your ~/.bashrc file and adding the line
+&lt;code>export COMPILER=gfortran&lt;/code> at the top of the file. Then the command
+would just be &lt;code>make -j4&lt;/code>.&lt;/p>
+&lt;p>The most commonly used compiler on clusters these days is the Intel
+FORTRAN compiler. You can compile by typing &lt;code>make COMPILER=intel&lt;/code> or
+edit your ~/.bashrc file to add the line &lt;code>export COMPILER=intel&lt;/code> at the
+top.&lt;/p>
+&lt;p>You should rarely need to edit the Makefile more than this.
+Occasionally, you may need to change fundamental behavior of the code by
+changing the list of flags in the &amp;ldquo;DEFINES&amp;rdquo; entry. This is documented in
+the User manual.&lt;/p>
+&lt;h3 id="running_the_code">Running the code&lt;/h3>
+&lt;p>Once you have built the version of EPOCH that you want (1D, 2D or 3D)
+you simply run it by typing &lt;code>./bin/epoch1d&lt;/code>, &lt;code>./bin/epoch2d&lt;/code>, or
+&lt;code>./bin/epoch3d&lt;/code>. That will then show you the EPOCH splash page, which
+prints the logo, lists any compile time options that you specified and
+then asks you to specify the output directory. It will look in this
+directory for a file with the name &amp;ldquo;input.deck&amp;rdquo; containing the problem
+setup. Any output performed by the code will also be written into this
+directory. To work through the examples, you must download an input deck
+from the section below to the directory you want EPOCH to use and rename
+the file &amp;ldquo;input.deck&amp;rdquo;. Throughout this guide we will assume that you use
+the directory named &amp;ldquo;Data&amp;rdquo;.&lt;/p>
+&lt;p>&lt;img src="EPOCH_Splash.png" alt="The EPOCH1D splash page">&lt;/p>
+&lt;h3 id="getting_the_example_decks_for_this_workshop">Getting the example decks for this workshop&lt;/h3>
+&lt;p>The example input decks used in this workshop can be downloaded using
+the following links. Create a directory &amp;ldquo;~/EXAMPLES&amp;rdquo; to put them in:&lt;/p>
+&lt;pre>&lt;code>cd .
+mkdir EXAMPLES
+&lt;/code>&lt;/pre>
+&lt;p>then download the .zip to this folder (either click the link and then
+copy the file, or right-click and select the save-as option).
+&lt;a href="media:Workshop_EXAMPLES.zip" title="wikilink">All decks as a .zip&lt;/a>&lt;/p>
+&lt;p>
+&lt;a href="media:01-1d_laser.deck" title="wikilink">01-1d_laser.deck - A simple laser&lt;/a>
+&lt;a href="media:02-2d_laser_amended.deck" title="wikilink">02-2d_laser.deck - A simple 2d
+laser&lt;/a>
+&lt;a href="media:03-1d_two_stream.deck" title="wikilink">03-1d_two_stream.deck - A simple two-stream
+instability&lt;/a>
+&lt;a href="media:04-1d_two_stream_io.deck" title="wikilink">04-1d_two_stream_io.deck - The same two-stream instability with
+extended output &lt;/a>
+&lt;a href="media:05-2d_moving_window.deck" title="wikilink">05-2d_moving_window.deck - Simple moving-window problem with density
+jump and laser &lt;/a>
+&lt;a href="media:06-2d_ramp.deck" title="wikilink">06-2d_ramp.deck - Gaussian laser into a density ramp
+&lt;/a>
+&lt;a href="media:07-1d_heating.deck" title="wikilink">07-1d_heating.deck - Demonstration of numerical heating
+&lt;/a>&lt;/p>
+&lt;h1 id="a_basic_em_field_simulation">A Basic EM-Field Simulation&lt;/h1>
+&lt;p>Our first example problem will be a simple 1D domain with a laser. This
+should give you a simple introduction to the input deck and
+visualization of 1D datasets.&lt;/p>
+&lt;p>Begin by copying the &amp;ldquo;01-1d_laser.deck&amp;rdquo; file from the EXAMPLES
+directory into the &amp;ldquo;Data&amp;rdquo; directory using the command: cp
+~/EXAMPLES/01-1d_laser.deck Data/input.deck&lt;/p>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Or click &amp;ldquo;Expand&amp;rdquo; and copy this text into a file &amp;ldquo;input.deck&amp;rdquo; in
+your Data directory:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 200
+# Size of domain
+x_min = -4 * micron
+x_max = -x_min
+# Final time of simulation
+t_end = 50 * femto
+#stdout_frequency = 10
+end:control
+begin:boundaries
+bc_x_min = open
+#bc_x_min = simple_laser
+bc_x_max = open
+end:boundaries
+#begin:laser
+# boundary = x_min
+# intensity_w_cm2 = 1.0e15
+# lambda = 1 * micron
+# phase = pi / 2
+# t_profile = gauss(time, 2*micron/c, 1*micron/c)
+# t_end = 4 * micron / c
+#end:laser
+#
+#
+#begin:output
+# dt_snapshot = 1 * micron / c
+#
+# # Properties on grid
+# grid = always
+# ey = always
+#end:output
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;p>Open the input deck with an editor to view its contents. Eg. &amp;ldquo;gedit
+Data/input.deck&amp;rdquo;&lt;/p>
+&lt;p>This is the simplest possible input deck. The file is divided into
+blocks which are surrounded by &amp;ldquo;begin:blocktype&amp;rdquo; and &amp;ldquo;end:blocktype&amp;rdquo;
+lines. There are currently ten different blocktypes. The most basic
+input deck requires only two.&lt;/p>
+&lt;p>The first block is the &amp;ldquo;control&amp;rdquo; block. This is used for specifying the
+domain size and resolution and the length of time to run the simulation.
+There are also some global simulation parameters that can be specified
+in this block which will be introduced later. Within the block, each
+parameter is specified as a &amp;ldquo;name = value&amp;rdquo; pair.&lt;/p>
+&lt;p>The parameters are as follows. &amp;ldquo;nx&amp;rdquo; specifies the number of grid points
+in the x-direction (since this is a 1D code, the grid is only defined in
+the x-direction). &amp;ldquo;x_min&amp;rdquo; and &amp;ldquo;x_max&amp;rdquo; give the minimum and maximum
+grid locations measured in meters. Since most plasma simulations are
+measured in microns, there is a &amp;ldquo;micron&amp;rdquo; multiplication factor for
+convenience. There are also multiplication factors for &amp;ldquo;milli&amp;rdquo; through
+to &amp;ldquo;atto&amp;rdquo;. Finally, the simulation time is specified using &amp;ldquo;t_end&amp;rdquo;
+measured in seconds.&lt;/p>
+&lt;p>There are also commented lines in the deck. Any text following the &amp;ldquo;#&amp;rdquo;
+character is ignored. The character may appear anywhere on a line, so in
+the following example: t_end = 50 #* femto The value of &amp;ldquo;t_end&amp;rdquo; will
+be set to 50 seconds, since &amp;ldquo;#* femto&amp;rdquo; is ignored.&lt;/p>
+&lt;p>The other required block is the &amp;ldquo;boundaries&amp;rdquo; block. This contains one
+entry for each boundary, specifying what boundary condition to apply.
+For the 1D code there are two boundaries: &amp;ldquo;bc_x_min&amp;rdquo; and &amp;ldquo;bc_x_max&amp;rdquo;.
+The deck currently has both of these set to use open boundary
+conditions.&lt;/p>
+&lt;p>To run the code type: &lt;code>echo Data | mpiexec -n 4 ./bin/epoch1d&lt;/code>&lt;/p>
+&lt;p>This will run epoch1d in parallel using 4 processors. It will use the
+directory named &amp;ldquo;Data&amp;rdquo; for all its output and will read the file
+&amp;ldquo;Data/input.deck&amp;rdquo; to obtain the simulation setup.&lt;/p>
+&lt;p>This simulation is rather dull. It is just a grid with zero
+electromagnetic field and it generates no data files. After running the
+program, two files are generated in the &amp;ldquo;Data&amp;rdquo; directory. The
+&amp;ldquo;deck.status&amp;rdquo; file contains the results from the deck parsing routines
+and is only useful for debugging. The &amp;ldquo;epoch1d.dat&amp;rdquo; file contains a
+terse one line header with the code name, version information and time
+the job started followed by a list of output dumps generated during the
+run.&lt;/p>
+&lt;p>Status information about the running job can be requested by
+uncommenting the &amp;ldquo;stdout_frequency&amp;rdquo; line in the &amp;ldquo;control&amp;rdquo; block. This
+is achieved by using a text editor to remove the &amp;ldquo;#&amp;rdquo; character and
+saving the file.&lt;/p>
+&lt;h1 id="adding_a_laser">Adding a laser&lt;/h1>
+&lt;p>We will now edit this input deck to add a laser source to the left hand
+boundary and dump some output files.&lt;/p>
+&lt;ol>
+&lt;li>Open the &amp;ldquo;Data/input.deck&amp;rdquo; file with an editor.&lt;/li>
+&lt;li>Add a &amp;ldquo;#&amp;rdquo; comment character to the beginning of the first
+&amp;ldquo;bc_x_min&amp;rdquo; line in the &amp;ldquo;boundaries&amp;rdquo; block.&lt;/li>
+&lt;li>Uncomment the line &amp;ldquo;bc_x_min = simple_laser&amp;rdquo;&lt;/li>
+&lt;li>Uncomment the remaining lines in the file.&lt;/li>
+&lt;/ol>
+&lt;p>The change to the &amp;ldquo;boundaries&amp;rdquo; block instructs the code to add a laser
+source to the left-hand boundary.&lt;/p>
+&lt;h3 id="the_laser_block">The Laser Block&lt;/h3>
+&lt;p>We then require a new block, named &amp;ldquo;laser&amp;rdquo;, to set up the laser source.
+The parameters in this block do the following:&lt;/p>
+&lt;ul>
+&lt;li>boundary &amp;ndash; Specifies the boundary on which to attach this laser
+source&lt;/li>
+&lt;li>intensity_w_cm2 &amp;ndash; Specifies the intensity of the laser in Watts /
+cm^2&lt;/li>
+&lt;li>lambda &amp;ndash; Gives the wavelength of the laser in meters. We have used
+the multiplication factor &amp;ldquo;micron&amp;rdquo; for readability&lt;/li>
+&lt;li>phase &amp;ndash; Specifies the phase shift of the laser.&lt;/li>
+&lt;li>t_profile &amp;ndash; This parameter is used to modify the amplitude of the
+laser over time. It is usually used to ramp a laser up or down
+gradually. The left-hand side will be a function of time, usually
+ranging between zero and one.&lt;/li>
+&lt;li>t_end &amp;ndash; The time at which to switch off the laser.&lt;/li>
+&lt;/ul>
+&lt;p>These parameters are mostly self-explanatory. The &amp;ldquo;t_profile&amp;rdquo; parameter
+is best explained using an example. The figure above shows the result of
+using a gaussian time profile. The red line shows the value of
+&amp;ldquo;t_profile&amp;rdquo; over time. This starts at a value close to zero, ramps up
+to one and then ramps back down to zero. The green line shows the
+amplitude of the laser when &amp;ldquo;t_profile&amp;rdquo; has not been specified. Note
+that the function would normally be a sine wave, but this has been
+shifted by pi/2 because the &amp;ldquo;phase&amp;rdquo; parameter was used. The blue line
+shows the laser amplitude generated when the &amp;ldquo;t_profile&amp;rdquo; gaussian
+profile is applied.&lt;/p>
+&lt;p>&lt;img src="WorkshopLaser.png" alt="The laser profile">&lt;/p>
+&lt;h3 id="the_output_block">The Output Block&lt;/h3>
+&lt;p>The final addition is the &amp;ldquo;output&amp;rdquo; block. We will cover this in more
+detail later. For now, it is sufficient to know that this is the block
+which controls the generation of data output. The parameters used in
+this case are:&lt;/p>
+&lt;ul>
+&lt;li>dt_snapshot &amp;ndash; This specifies the simulation time between each
+output dump&lt;/li>
+&lt;li>grid &amp;ndash; This controls when to dump the simulation grid. The value of
+&amp;ldquo;always&amp;rdquo; means that the grid will be output whenever there is a new
+output dump generated.&lt;/li>
+&lt;li>ey &amp;ndash; The controls when to dump the y-component of the electric
+field.&lt;/li>
+&lt;/ul>
+&lt;h1 id="visualising_the_data">Visualising the data&lt;/h1>
+&lt;p>Now that we have generated some data we need to plot it. The data is
+written to a self-describing file format called SDF. This has been
+developed for use by several codes maintained at the University of
+Warwick. There are routines for reading the data from within IDL, VisIt,
+MatLab and Python.&lt;/p>
+&lt;p>More complete documentation on visualisation routines is available
+&lt;a href="/documentation/visualising_output">here&lt;/a>&lt;/p>
+&lt;h3 id="loading_the_data_into_idlgdl">Loading the data into IDL/GDL&lt;/h3>
+&lt;p>First, we will load the data into IDL/GDL. The desktop machines have GDL
+installed &amp;ndash; the GNU Data Language, which is a free implementation of
+IDL. It doesn&amp;rsquo;t have all the feature of IDL but the core routines and
+syntax are identical. Type &lt;code>gdl Start.pro&lt;/code> and GDL will start up and
+load the SDF reading library. To view the data contained in a file, type
+&lt;code>list_variables,7,'Data'&lt;/code> Here, &amp;ldquo;7&amp;rdquo; is the snapshot number. It can be
+any number between 0 and 9999. The second parameter specifies the
+directory which holds the data files. If it is omitted then the
+directory named &amp;ldquo;Data&amp;rdquo; is used by default.&lt;/p>
+&lt;p>To load the data and assign the result to a structure named &amp;ldquo;data&amp;rdquo;, just
+issue the following command: &lt;code>data = getstruct(7,/varname)&lt;/code> Here,
+&amp;ldquo;/varname&amp;rdquo; is any of the variables listed by the previous command. This
+will just read the &amp;ldquo;varname&amp;rdquo; variable into the data structure. However,
+it is usually easiest just to omit the &amp;ldquo;/varname&amp;rdquo; flag. If it is omitted
+then the entire contents of the file is read.&lt;/p>
+&lt;p>The &amp;ldquo;getstruct&amp;rdquo; command returns a hierarchical data structure. The
+contents of this structure can be viewed with the following command:
+&lt;code>help,data,/struct&lt;/code>   For the current example the result of this command
+is the following:&lt;/p>
+&lt;pre>&lt;code> GDL&amp;gt; help,data,/struct
+** Structure &amp;lt;Anonymous&amp;gt;, 8 tags, data length=5552:
+FILENAME STRING 'Data/0007.sdf'
+TIMESTEP LONG 185
+TIME DOUBLE 2.3449556e-14
+HEADER STRUCT -&amp;gt; &amp;lt;Anonymous&amp;gt; Array[1]
+ELAPSED_TIME STRUCT -&amp;gt; &amp;lt;Anonymous&amp;gt; Array[1]
+EY STRUCT -&amp;gt; &amp;lt;Anonymous&amp;gt; Array[1]
+GRID STRUCT -&amp;gt; &amp;lt;Anonymous&amp;gt; Array[1]
+X DOUBLE Array[200]
+&lt;/code>&lt;/pre>
+&lt;p>The first few entries are fairly self-explanatory. The seventh item is a
+1D array containing the cell-centred grid positions. The fiftth item is
+a structure containing a 1D array of Ey at these positions. This
+structure can be queried in the same way as &amp;ldquo;data&amp;rdquo; :&lt;/p>
+&lt;pre>&lt;code> GDL&amp;gt; help,data.ey,/struct
+** Structure &amp;lt;Anonymous&amp;gt;, 2 tags, data length=1728:
+METADATA STRUCT -&amp;gt; &amp;lt;Anonymous&amp;gt; Array[1]
+DATA DOUBLE Array[200]
+&lt;/code>&lt;/pre>
+&lt;p>The raw data is contained in the &amp;ldquo;data&amp;rdquo; entry. The sixth entry, &amp;ldquo;GRID&amp;rdquo;
+is a structure which contains :&lt;/p>
+&lt;pre>&lt;code>GDL&amp;gt; help,data.grid,/struct
+** Structure &amp;lt;Anonymous&amp;gt;, 5 tags, data length=1824:
+METADATA STRUCT -&amp;gt; &amp;lt;Anonymous&amp;gt; Array[1]
+X DOUBLE Array[201]
+LABELS STRING Array[1]
+UNITS STRING Array[1]
+NPTS LONG Array[1]
+&lt;/code>&lt;/pre>
+&lt;p>This is the node-centred grid along with its metadata. The cell-centred
+array shown previously is derived from this. Finally, the HEADER entry
+contains metadata about the code and runtime information.&lt;/p>
+&lt;p>&lt;img src="WorkshopLaserGDL.png" alt="An example GDLplot">&lt;/p>
+&lt;p>The above plot can be generated by issuing the following command:
+&lt;code>plot,data.x,data.ey.data&lt;/code> There are more examples on using idl/gdl in
+the
+&lt;a href="/documentation">manual&lt;/a>.&lt;/p>
+&lt;h3 id="loading_the_data_into_python">Loading the data into Python&lt;/h3>
+&lt;p>EPOCH also ships with a module for reading SDF data into python. To
+build this module, change directory to epoch/epoch1d (or 2d,3d) and type
+&amp;ldquo;make sdfutils&amp;rdquo;. This will build the python reader and install it
+locally. It also installs a helper module which adds a few user-friendly
+routines. To simplify discussion, we will just focus on using this
+helper routine.&lt;/p>
+&lt;p>Open a python interpreter by typing &amp;ldquo;python&amp;rdquo;, or preferably &amp;ldquo;ipython&amp;rdquo; if
+you have it installed.&lt;/p>
+&lt;p>On the desktops, the sdf and sdf_helper modules will be imported for
+you, as sdf and sdf_helper respectively. On other machines, to load the
+SDF module, type the command:&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+&lt;/code>&lt;/pre>
+&lt;p>You can now load a data file by typing:&lt;/p>
+&lt;pre>&lt;code class="language-python">data = sh.getdata(7)
+&lt;/code>&lt;/pre>
+&lt;p>or&lt;/p>
+&lt;pre>&lt;code class="language-python">data = sdf_helper.getdata(7)
+&lt;/code>&lt;/pre>
+&lt;p>This returns a data structure which can be inspected using&lt;/p>
+&lt;pre>&lt;code class="language-python"> data.__dict__
+&lt;/code>&lt;/pre>
+&lt;p>. It also imports the contents of data arrays and prints a summary of
+what has been imported.&lt;/p>
+&lt;p>For example:&lt;/p>
+&lt;pre>&lt;code class="language-python">from sdf_helper import *
+data = getdata(7)
+#&amp;gt;&amp;gt;Reading file Data/0007.sdf
+t() = time
+ey(200,) = ey
+x(201,) = grid
+xc(200,) = grid_mid
+&lt;/code>&lt;/pre>
+&lt;p>If you have matplotlib installed then you can load the module using&lt;/p>
+&lt;pre>&lt;code class="language-python"> from matplotlib.pyplot import *
+&lt;/code>&lt;/pre>
+&lt;p>. Turn on interactive plotting with&lt;/p>
+&lt;pre>&lt;code class="language-python">ion()
+&lt;/code>&lt;/pre>
+&lt;p>. You can now plot the data with the command:&lt;/p>
+&lt;pre>&lt;code class="language-python">plot(xc,ey)
+&lt;/code>&lt;/pre>
+&lt;p>The helper module has a &amp;ldquo;plot_auto&amp;rdquo; command which automatically adds
+axis labels. To use this type:&lt;/p>
+&lt;pre>&lt;code class="language-python">plot_auto(data.Electric_Field_Ey)
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="WorkshopLaserPython.png" alt="An example Pythonplot">&lt;/p>
+&lt;h3 id="loading_the_data_into_visit">Loading the data into VisIt&lt;/h3>
+&lt;p>EPOCH comes with an SDF reader plugin for the VisIt parallel
+visualization tool. In order to use it, you must first compile the
+reader to match the version of VisIt installed on your system. To do
+this, first ensure that the &amp;ldquo;visit&amp;rdquo; command is in your path. This is the
+case if typing &amp;ldquo;visit&amp;rdquo; on the command line launches the VisIt
+application. Once you have this setup, you should be able to type &amp;ldquo;make
+visit&amp;rdquo; from one of the epoch{1,2,3}d directories. You will need to re-do
+this each time a new version of VisIt is installed on your system.&lt;/p>
+&lt;p>Launch the VisIt application by typing &amp;ldquo;visit&amp;rdquo; on the command line. A
+useful shortcut is to type &lt;code>visit -o Data/0000.sdf&lt;/code>. This will launch
+VisIt and open the specified data file on startup. Alternatively, you
+can browse for the file to open using the &amp;ldquo;Open&amp;rdquo; button. All the SDF
+files in a directory will be grouped together with a green &amp;ldquo;DB&amp;rdquo; icon and
+the name &amp;ldquo;*.sdf database&amp;rdquo;.&lt;/p>
+&lt;p>&lt;img src="WorkshopLaserVisit.png" alt="An example VisItplot">&lt;/p>
+&lt;p>You can then plot a quantity by pressing the &amp;ldquo;Add&amp;rdquo; button, selecting the
+type of plot and the variable to use for the plot. When the plot has
+been selected, press the &amp;ldquo;Draw&amp;rdquo; button to render it to screen. The plot
+above was generated by selecting &amp;ldquo;Add-&amp;gt;Curve-&amp;gt;Electric Field-&amp;gt;Ey&amp;rdquo;.
+Some of the plot properties were adjusted to make it look nicer.&lt;/p>
+&lt;p>More details on using VisIt are
+&lt;a href="/documentation/visualising_output/visualising_sdf_files_with_llnl_visit">
+here&lt;/a>. We
+recommend that you learn VisIt &amp;ndash; it&amp;rsquo;s free and powerful.&lt;/p>
+&lt;h3 id="loading_data_into_matlab">Loading data into MatLab&lt;/h3>
+&lt;p>The EPOCH distribution also comes with a set of reader routines for the
+MatLab plotting utility. The routines themselves are contained in the
+&amp;ldquo;Epoch/Matlab&amp;rdquo; directory. It is first necessary to add this directory to
+your search path. One simple way of doing this is to use the menu item
+&amp;ldquo;File-&amp;gt;Set Path&amp;rdquo; and then &amp;ldquo;Add Folder&amp;rdquo; to select the location of the
+&amp;ldquo;Matlab&amp;rdquo; folder. To make this change permanent you have to use the
+&amp;ldquo;Save&amp;rdquo; button. Unfortunately, on many systems this will not work as it
+tries to change global settings which will not be permitted on a
+multi-user setup. On Unix systems (including OS X), the change can be
+made permanent by using the &amp;ldquo;$MATLABPATH&amp;rdquo; environment variable. For
+example in bash this would be &amp;lsquo;export MATLABPATH=&amp;ldquo;Epoch/Matlab&amp;rdquo; ' which
+you can add to your .bashrc file.&lt;/p>
+&lt;p>To load the data from an SDF file, type the following at the MatLab
+prompt:&lt;/p>
+&lt;pre>&lt;code class="language-matlab">data=GetDataSDF('Data/0007.sdf');
+&lt;/code>&lt;/pre>
+&lt;p>The &amp;ldquo;data&amp;rdquo; variable will now contain a data structure similar to that
+obtained with the IDL reader. You can explore the contents of the
+structure using MatLab&amp;rsquo;s built-in variable editor. To plot Ey, you can
+browse to &amp;ldquo;data.Electric_Field.Ey&amp;rdquo;. The structure member
+&amp;ldquo;data.Electric_Field.Ey.data&amp;rdquo; contains the 1D array with Ey values.
+Right-clicking on it gives a range of options, including &amp;ldquo;plot&amp;rdquo;.  
+Alternatively, from the command prompt you can type&lt;/p>
+&lt;pre>&lt;code class="language-matlab"> x=data.Electric_Field.Ey.grid.x;
+xc=(x(1:end-1) + x(2:end))/2;
+plot(xc,data.Electric_Field.Ey.data);
+&lt;/code>&lt;/pre>
+&lt;p>The first two lines set up a cell-centred grid using the node-centred
+grid data. In the future, this work will be automatically done by the
+reader.&lt;/p>
+&lt;h1 id="a_2d_laser">A 2D laser&lt;/h1>
+&lt;p>Next, we will take a look at the 2-dimensional version of the code.&lt;/p>
+&lt;ul>
+&lt;li>Change to the epoch2d directory: &lt;code>cd ~/Epoch/epoch2d&lt;/code>&lt;/li>
+&lt;li>Type &lt;code>make -j4&lt;/code> to compile the code.&lt;/li>
+&lt;li>Copy the next example input deck into the Data directory:
+&lt;code>cp ~/EXAMPLES/02-2d_laser.deck Data/input.deck&lt;/code> or save the text
+below into Data/input.deck&lt;/li>
+&lt;li>Run with &lt;code>echo Data | mpirun -np 4 ./bin/epoch2d&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 500
+ny = nx
+# Size of domain
+x_min = -10 * micron
+x_max = -x_min
+y_min = x_min
+y_max = x_max
+# Final time of simulation
+t_end = 50 * femto
+stdout_frequency = 10
+end:control
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = open
+bc_y_min = periodic
+bc_y_max = periodic
+end:boundaries
+begin:constant
+lambda0 = 1 * micron
+theta = pi / 8.0
+end:constant
+begin:laser
+boundary = x_min
+intensity_w_cm2 = 1.0e15
+lambda = lambda0 * cos(theta)
+profile = gauss(y, 0, 4*micron)
+#phase = -2.0 * pi * y * tan(theta) / lambda0
+#t_profile = gauss(time, 2*micron/c, 1*micron/c)
+end:laser
+begin:output
+dt_snapshot = 1 * micron / c
+# Properties on grid
+grid = always
+ex = always
+ey = always
+ez = always
+bx = always
+by = always
+bz = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;p>This deck is very similar to the 1D version that we have just looked at.
+It contains the necessary modifications for adding a new dimension and
+some additions to the laser block for driving a laser at an angle.&lt;/p>
+&lt;p>The &amp;ldquo;control&amp;rdquo; block now contains &amp;ldquo;ny&amp;rdquo; which specifies the number of grid
+points in the y-direction. Notice that we are using the value &amp;ldquo;nx&amp;rdquo; to
+set &amp;ldquo;ny&amp;rdquo;. As soon as &amp;ldquo;nx&amp;rdquo; has been assigned it becomes available as a
+constant for use as part of a value. We must also provide the minimum
+and maximum grid positions in the y-direction using &amp;ldquo;y_min&amp;rdquo;, &amp;ldquo;y_max&amp;rdquo;.
+Like &amp;ldquo;nx&amp;rdquo;, the values &amp;ldquo;x_min&amp;rdquo; and &amp;ldquo;x_max&amp;rdquo; are available for use once
+they have been assigned.&lt;/p>
+&lt;p>In the &amp;ldquo;boundaries&amp;rdquo; block we must include boundary conditions for the
+lower and upper boundaries in the y-direction, &amp;ldquo;bc_y_min&amp;rdquo;,
+&amp;ldquo;bc_y_max&amp;rdquo;. These have both been set to &amp;ldquo;periodic&amp;rdquo; so that the field
+at the top of the domain wraps around to the bottom of the domain.&lt;/p>
+&lt;p>&lt;img src="Workshop2DLaserVisIt.png" alt="2D laser plot withVisIt">&lt;/p>
+&lt;p>Next, we introduce a new block type, &amp;ldquo;constant&amp;rdquo;. This block defines
+named variables which can be arbitrary mathematical expressions. Once
+defined, these can be used on the left-hand side of name-value pairs in
+the same way we used &amp;ldquo;nx&amp;rdquo;, &amp;ldquo;x_min&amp;rdquo;, etc. in the &amp;ldquo;control&amp;rdquo; block. This
+facility can greatly aid the construction and maintenance of complex
+input decks.&lt;/p>
+&lt;p>The &amp;ldquo;laser&amp;rdquo; block is similar to that given in the 1D version except that
+there is now a &amp;ldquo;profile&amp;rdquo; parameter. In a similar manner to &amp;ldquo;t_profile&amp;rdquo;
+this is a function ranging between 0 and 1 which is multiplied by the
+wave amplitude to give a modified laser profile. The only difference is
+that this is a function of space rather than time. When applied to a
+laser attached to &amp;ldquo;x_min&amp;rdquo; or &amp;ldquo;x_max&amp;rdquo; it is a function of Y, defined at
+all points along the boundary. When the laser is attached to &amp;ldquo;y_min&amp;rdquo; or
+&amp;ldquo;y_max&amp;rdquo;, it is a function of X.&lt;/p>
+&lt;p>Finally, the output block has been modified so that it outputs all
+electromagnetic field components.&lt;/p>
+&lt;p>The result of plotting &amp;ldquo;Add-&amp;gt;Pseudocolor-&amp;gt;Electric Field-&amp;gt;Ey&amp;rdquo; in
+VisIt is shown above. &lt;img src="Workshop2DLaserMatplot.png" alt="2D laser plot withMatplotlib">&lt;/p>
+&lt;p>The laser block also contains a commented-out &amp;ldquo;phase&amp;rdquo; entry. Unlike in
+the 1D version seen previously, this is a function of Y, like the
+&amp;ldquo;profile&amp;rdquo; parameter. Uncommenting this line and re-running the deck will
+generate a laser driven at an angle to the boundary. The mathematical
+details explaining why this works are explained in more detail in the
+User Manual. By making the value of &amp;ldquo;theta&amp;rdquo; a function of Y, it is also
+possible to produce a focused laser. This is left as an exercise for the
+reader!&lt;/p>
+&lt;p>The above plot can also be generated using matplotlib using the command
+&lt;code>plot2d(data.Electric_Field_Ey)&lt;/code>&lt;/p>
+&lt;h1 id="specifying_particle_species">Specifying particle species&lt;/h1>
+&lt;p>In this example we will finally introduce some particles into the PIC
+code! The deck is for the 1D version of the code, so change back to the
+epoch1d directory and copy ~/EXAMPLES/03-1d_two_stream.deck to
+Data/input.deck (or copy the deck below) and run the code.&lt;/p>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 400
+# Size of domain
+x_min = 0
+x_max = 5.0e5
+# Final time of simulation
+t_end = 1.5e-1
+stdout_frequency = 400
+end:control
+begin:boundaries
+bc_x_min = periodic
+bc_x_max = periodic
+end:boundaries
+begin:constant
+drift_p = 2.5e-24
+temp = 273
+dens = 10
+end:constant
+begin:species
+# Rightwards travelling electrons
+name = Right
+charge = -1
+mass = 1.0
+temp = temp
+drift_x = drift_p
+number_density = dens
+npart = 4 * nx
+end:species
+begin:species
+# Leftwards travelling electrons
+name = Left
+charge = -1
+mass = 1.0
+temp = temp
+drift_x = -drift_p
+number_density = dens
+npart = 4 * nx
+end:species
+begin:output
+# Number of timesteps between output dumps
+dt_snapshot = 1.5e-3
+# Properties at particle positions
+particles = always
+px = always
+# Properties on grid
+grid = always
+ey = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;p>The control block has one new parameter. &amp;ldquo;npart&amp;rdquo; gives the total number
+of PIC particles to use in the simulation.&lt;/p>
+&lt;p>The input deck contains a new block type, &amp;ldquo;species&amp;rdquo;, which is used for
+populating the domain with particles. Every species block must contain a
+&amp;ldquo;name&amp;rdquo; parameter. This is used to identify the particle species in other
+sections of the input deck and is also used for naming variables in the
+output dumps. The next parameter is &amp;ldquo;charge&amp;rdquo; which gives the charge on
+each particle in terms of elementary charge units. &amp;ldquo;mass&amp;rdquo; is specified
+in units of electron mass. &amp;ldquo;frac&amp;rdquo; is the fraction of the total number of
+PIC particles (npart) to assign to this species. Both of the blocks in
+this deck use &amp;ldquo;frac = 0.5&amp;rdquo;, so there will be 1600 particles of each
+species. The next parameter, &amp;ldquo;temp&amp;rdquo;, sets the average temperature of the
+particle species in Kelvin. Alternatively, you can use &amp;ldquo;temp_ev&amp;rdquo; to
+specify the temperature in electronvolts. Particles are assigned an
+initial momentum corresponding to a Maxwell-Boltzmann distribution for
+this temperature. It is defined across the entire problem domain, so in
+1D it is a function of X, in 2D a function of X and Y, and in 3D a
+function of X, Y and Z. &amp;ldquo;number_density&amp;rdquo; sets the number density across
+the problem domain. The code is set to use per-particle weights in the
+default Makefile. With this option, the pseudoparticles are distributed
+evenly across the domain. Then the weight of each pseudoparticle is
+adjusted so that it matches the number density specified in the
+&amp;ldquo;number_density&amp;rdquo; parameter. The alternative option is to disable
+per-particle weighting. In this case, the weight of each pseudoparticle
+is the same and the particles are placed on the grid so that they match
+the number density at the start of the simulation. Finally, we have a
+&amp;ldquo;drift_x&amp;rdquo; parameter. This is also defined across the entire problem
+domain and is used to give the particles an average momentum drift in
+the x-direction. There are similar &amp;ldquo;drift_y&amp;rdquo; and &amp;ldquo;drift_z&amp;rdquo; parameters.&lt;/p>
+&lt;p>This deck has been designed to simulate a two-stream instability, so it
+has two groups of particles which are identical in every respect except
+that one set is drifting in the opposite direction to the other. &lt;img src="WorkshopTwoStreamPython.png" alt="Thetwo-stream instability inMatplotlib">
+&lt;img src="WorkshopTwoStreamGDL.png" alt="The two-stream instability in GDL">&lt;/p>
+&lt;p>In the output block we have added a couple of parameters for outputting
+particle data. The first parameter, &amp;ldquo;particles&amp;rdquo;, outputs the grid on
+which the particles are defined. There are two different types of
+variable in EPOCH: particle variables and grid-based variables. The
+grid-based variables are like the electromagnetic field components we
+have seen previously. The domain is divided into a regular Cartesian
+mesh and the grid-based variables are defined at either a node or
+cell-centre of each point in this mesh. Particle variables, on the other
+hand, are associated with each of the pseudoparticles. These PIC
+particles move independently of the Cartesian mesh and can be located
+anywhere in the problem domain. The &amp;ldquo;particles&amp;rdquo; parameter requests that
+the coordinates of each particle are written to file. This information
+is required in order to plot any of the particle variables. The next
+parameter is &amp;ldquo;px&amp;rdquo; which writes the momentum of each particle.&lt;/p>
+&lt;p>To plot this using python and matplotlib, type the following:&lt;/p>
+&lt;pre>&lt;code class="language-python">data = getdata(30)
+plot1d(data.Particles_Px_Left,'r.',ms=2,yscale=1)
+oplot1d(data.Particles_Px_Right,'b.',ms=2,yscale=1)
+ylim([-6e-24,6e-24])
+&lt;/code>&lt;/pre>
+&lt;p>To plot with GDL, type the following:&lt;/p>
+&lt;pre>&lt;code>gdl Start.pro
+data=getstruct(30)
+plot,data.grid_right.x,data.px_right.data,psym=3,$
+yrange=[-6e-24,6e-24],ystyle=1
+oplot,data.grid_left.x,data.px_left.data,psym=3,color=150
+&lt;/code>&lt;/pre>
+&lt;p>Above we have plotted the x-component of particle momentum as a function
+of x-position at a time when the instability is just starting to form.
+The &amp;ldquo;psym=3&amp;rdquo; option to the plot routine tells GDL to plot each data
+point as a dot and not to join the dots up.&lt;/p>
+&lt;h1 id="the_output_block_1">The Output Block&lt;/h1>
+&lt;p>The contents of the output block can be much more complicated than the
+examples shown so far. Here, we will cover the options in a little more
+depth.&lt;/p>
+&lt;p>EPOCH currently has three different types of output dump. So far, we
+have only been using the &amp;ldquo;normal&amp;rdquo; dump type. The next type of dump is
+the &amp;ldquo;full&amp;rdquo; dump. To request this type of dump, you add the parameter
+&amp;ldquo;full_dump_every&amp;rdquo; which is set to an integer. If this was set equal to
+&amp;ldquo;10&amp;rdquo; then after every 9 dump files written, the 10th dump would be a
+&amp;ldquo;full&amp;rdquo; dump. This hierarchy exists so that some variables can be written
+at frequent intervals whilst large variables such as particle data are
+written only occasionally. The third dump type is the &amp;ldquo;restart&amp;rdquo; dump.
+This contains all the variables required in order to restart a
+simulation, which includes all the field variables along with particle
+positions, weights and momentum components. In a similar manner to full
+dumps, the output frequency is specified using the
+&amp;ldquo;restart_dump_every&amp;rdquo; parameter.&lt;/p>
+&lt;p>So far, we have given all the variable parameters a value of &amp;ldquo;always&amp;rdquo; so
+that they will always be dumped to file. There are three other values
+which can be used to specify when a dump will occur. &amp;ldquo;never&amp;rdquo; indicates
+that a variable should never be dumped to file. This is the default used
+for all output variables which are not specified in the output block.
+The value of &amp;ldquo;full&amp;rdquo; indicates that a variable should be written at full
+dumps. &amp;ldquo;restart&amp;rdquo; means it is written into restart dumps.&lt;/p>
+&lt;p>There are a few output variables which are grid-based quantities derived
+by summing over properties for all the particles contained within each
+cell on the mesh. These are &amp;ldquo;ekbar&amp;rdquo;, &amp;ldquo;mass_density&amp;rdquo;, &amp;ldquo;charge_density&amp;rdquo;,
+&amp;ldquo;number_density&amp;rdquo; and &amp;ldquo;temperature&amp;rdquo;. To find more details about these
+variables, consult the
+&lt;a href="/documentation/input_deck/input_deck_output_block">output
+block&lt;/a> section of the
+&lt;a href="/documentation">user
+manual&lt;/a>.&lt;/p>
+&lt;h1 id="other_laser_plasma_example_decks">Other Laser-Plasma example decks&lt;/h1>
+&lt;p>
+&lt;a href="/documentation/examples/workshop_examples_continued">Continue the examples&lt;/a>&lt;/p>
+&lt;!-- ######################## Cross references ######################## --></description></item><item><title>Workshop examples continued</title><link>/documentation/examples/workshop_examples_continued.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples_continued.html</guid><description>&lt;h1 id="other_laser_plasma_example_decks">Other Laser-Plasma example decks&lt;/h1>
+&lt;p>Now that you have a basic understanding of how the input decks work, you
+should be able to work through the remaining example decks by referring
+to the
+&lt;a href="/documentation">User manual&lt;/a> for a description of
+any new parameters used. Several experienced users of the code will be
+available throughout the duration of the workshop, so if you want help
+with anything please don&amp;rsquo;t hesitate to ask. The decks are:&lt;/p>
+&lt;ul>
+&lt;li>01-1d_laser.deck Described in notes above
+&lt;a href="/documentation/examples/workshop_examples/#a_basic_em-field_simulation">(here)&lt;/a>&lt;/li>
+&lt;li>02-2d_laser.deck Described in notes above
+&lt;a href="/documentation/examples/workshop_examples/#a_2d_laser">(here)&lt;/a>&lt;/li>
+&lt;li>03-1d_two_stream.deck Described in notes above
+&lt;a href="/documentation/examples/workshop_examples/#specifying_particle_species">(here)&lt;/a>&lt;/li>
+&lt;li>04-1d_two_stream_io.deck This is the same as the previous deck
+but with the addition of more sophisticated output diagnostics&lt;/li>
+&lt;li>05-2d_moving_window.deck This deck contains an example of firing a
+laser into a plasma and then using the moving window facility to
+track the wave front as it moves beyond the edge of the original
+domain.&lt;/li>
+&lt;li>06-2d_ramp.deck This deck contains an example of firing a laser at
+a plasma with a ramped density profile.&lt;/li>
+&lt;li>07-1d_heating.deck This deck contains a setup for investigating the
+anomalous heating of a plasma that occurs for purely resolved
+systems.&lt;/li>
+&lt;/ul>
+&lt;h3 id="other_things_to_try">Other things to try&lt;/h3>
+&lt;ol>
+&lt;li>Landau damping predicts collisionless damping of electrostatic
+waves. Setup a 1D problem with an electrostatic wave and check for a
+range of wavelengths. Points to note:
+&lt;ol>
+&lt;li>Does the answer depend on whether the initial condition is a
+travelling wave or standing wave? How are these setup?&lt;/li>
+&lt;li>Look for trapping in the Langmuir wave&lt;/li>
+&lt;li>Check the damping rate against published formulae. Try for a
+range of $k\lambda_D$ as the most commonly reported formulae
+assume $kλ_D≪1$&lt;/li>
+&lt;li>The answer is more accurate, assuming you have enough
+grid-points and particles to get a good answer, if you ignore
+the first maxima or two &amp;ndash; why?&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>A more realistic instability than the two cold beams tested above is
+the bump-on-tail instability. Setup a 1D bump-on-tail distribution
+and check that the simple formula for the growth-rates is correctly
+reproduced. The main problem with the initial conditions is how to
+setup a suitable initial distribution.&lt;/li>
+&lt;li>Try setting up the initial conditions for a problem of direct
+relevance to your research. This may be too computationally
+demanding to run on the workshop computers but it is a good exercise
+as you can get some help on trickier input decks and diagnostic
+planning than the simple exercises so far.&lt;/li>
+&lt;li>Check that EPOCH works as expected on your host institution
+computer. If not we may be able to help before you leave.&lt;/li>
+&lt;/ol>
+&lt;h1 id="copies_of_the_decks">Copies of the decks&lt;/h1>
+&lt;p>The decks can be downloaded
+&lt;a href="/documentation/examples/workshop_examples/#getting_the_example_decks_for_this_workshop">
+here&lt;/a>
+and viewed or copied from here:
+&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:control
+nx = 400
+# Size of domain
+x_min = 0
+x_max = 5.0e5
+# Final time of simulation
+t_end = 1.5e-1
+stdout_frequency = 400
+end:control
+begin:boundaries
+bc_x_min = periodic
+bc_x_max = periodic
+end:boundaries
+begin:constant
+drift_p = 2.5e-24
+temp = 273
+dens = 10
+end:constant
+begin:species
+# Rightwards travelling electrons
+name = Right
+charge = -1
+mass = 1.0
+temp = temp
+drift_x = drift_p
+number_density = dens
+npart = 4 * nx
+end:species
+begin:species
+# Leftwards travelling electrons
+name = Left
+charge = -1
+mass = 1.0
+temp = temp
+drift_x = -drift_p
+number_density = dens
+npart = 4 * nx
+end:species
+begin:output
+name = normal
+# Number of timesteps between output dumps
+dt_snapshot = 1.5e-3
+# Properties at particle positions
+particles = always
+px = always
+# Properties on grid
+grid = always
+ex = always
+ey = always
+ez = always
+bx = always
+by = always
+bz = always
+jx = always
+ekbar = always
+mass_density = never + species
+charge_density = always
+number_density = always + species
+temperature = always + species
+distribution_functions = always
+end:output
+begin:output
+name = restart
+# Number of timesteps between output dumps
+dt_snapshot = 0.15
+restartable = T
+end:output
+begin:dist_fn
+name = x_px
+ndims = 2
+direction1 = dir_x
+direction2 = dir_px
+# Range is ignored for spatial coordinates
+range1 = (1, 1)
+range2 = (-5e-24, 5e-24)
+# Resolution is ignored for spatial coordinates
+resolution1 = 1
+resolution2 = 200
+include_species:Left
+include_species:Right
+end:dist_fn
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;p>&lt;strong>05-2d_moving_window.deck&lt;/strong>&lt;/p>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:constant
+x0 = 20 * micron
+lambda = 10 * micron
+t_laser = 120 * femto
+sigma_t = t_laser / 2 / sqrt(loge(2))
+w0_laser = 30 * micron
+sigma_w0 = w0_laser / 2 / sqrt(loge(2))
+den_peak = 5.0e19 * 1.0e6
+win_start = 340 * femto
+end:constant
+begin:control
+nx = 1550 / 8
+ny = 600 / 8
+npart = (60e6) / 8
+# Size of domain
+x_min = 0
+x_max = 155 * micron
+y_min = -30 * micron
+y_max = -y_min
+# Final time of simulation
+t_end = 1600 * femto
+stdout_frequency = 1
+print_eta_string = T
+end:control
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = simple_outflow
+bc_y_min = simple_outflow
+bc_y_max = simple_outflow
+end:boundaries
+begin:species
+name = electron
+charge = -1.0
+mass = 1.0
+number_density = if((x lt x0), 0.0, den_peak)
+frac = 0.5
+end:species
+begin:species
+name = proton
+charge = 1.0
+mass = 1836.2
+number_density = number_density(electron)
+frac = 0.5
+end:species
+begin:output
+name = normal
+dt_snapshot = 50 * femto
+grid = always
+ex = always
+ey = always
+ez = always
+bx = always
+by = always
+bz = always
+jx = always
+jy = always
+ekbar = always
+mass_density = never + species
+charge_density = always
+number_density = always + species
+temperature = always + species
+end:output
+begin:output
+name = large
+dt_snapshot = 500 * femto
+particles = always
+particle_weight = always
+end:output
+begin:laser
+boundary = x_min
+intensity_w_cm2 = 1.9e18
+lambda = lambda
+t_profile = gauss(time, 2*sigma_t, sigma_t)
+profile = gauss(y, 0, sigma_w0)
+end:laser
+begin:window
+move_window = T
+window_v_x = c * 0.87
+window_start_time = win_start
+bc_x_min_after_move = simple_outflow
+bc_x_max_after_move = simple_outflow
+end:window
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;p>&lt;strong>06-2d_ramp.deck&lt;/strong>&lt;/p>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:constant
+# Particles per cell
+part = 32
+las_lambda = 1 * micron
+las_omega = 2.0 * pi * c / las_lambda
+las_time = 2.0 * pi / las_omega
+n_crit = critical(las_omega)
+max_dens = 0.8 * n_crit
+scale_x = 20 * micron
+las_scale_y = 8 * micron
+xmin = -4 * micron
+# Gaussian Beam stuff
+w0 = las_scale_y
+rayleigh_range = pi * w0^2 / las_lambda
+wz = w0 * sqrt(1 + (x_start / rayleigh_range)^2)
+radius_of_curvature = x_start * (1.0 + (rayleigh_range / x_start)^2)
+end:constant
+begin:control
+nx = 1024 / 4
+ny = 512 / 4
+# Final time of simulation
+t_end = 0.4 * pico
+# Size of domain
+x_min = xmin
+x_end = scale_x + 20 * micron
+y_min = -20 * micron
+y_max = -y_min
+stdout_frequency = 10
+end:control
+begin:laser
+boundary = x_min
+intensity_w_cm2 = 1.0e16
+omega = las_omega
+t_profile = if (time lt 2*las_time, gauss(time, 2*las_time, 2*las_time), 1)
+profile = (1.0 + 0.05 * sin(32.0*pi*y/lengthy)) * gauss(y, 0, las_scale_y)
+end:laser
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = simple_outflow
+bc_y_min = periodic
+bc_y_max = periodic
+end:boundaries
+begin:species
+# Electron
+name = electron
+charge = -1.0
+mass = 1.0
+npart = nx * ny * part
+number_density = max_dens * (exp(x/scale_x) - 1) / (exp(1) - 1)
+number_density = if(x lt 0, 0.0, number_density(electron))
+number_density = if(number_density(electron) gt max_dens, max_dens, \
+number_density(electron))
+number_density = if(x gt 75*micron, 0.0, number_density(electron))
+#number_density = number_density(electron) \
+* (0.8 + 0.2 * gauss(y, 0, 0.5*las_scale_y))
+number_density_min = 0.0001 * n_crit
+number_density_max = n_crit
+temp_ev = 10^3
+end:species
+begin:species
+# Protons
+name = proton
+charge = 1.0
+mass = 1836.2
+npart = nx * ny * part
+number_density = number_density(electron)
+number_density_min = 0.0001 * n_crit
+number_density_max = 1.2 * n_crit
+temp_ev = 40
+end:species
+begin:output
+name = normal
+# Number of timesteps between output dumps
+dt_snapshot = 5 * femto
+# Properties at particle positions
+particles = always
+px = always
+particle_weight = always
+# Properties on grid
+grid = always
+ex = always
+ey = always
+ez = always
+bx = always
+by = always
+bz = always
+jx = always
+jy = always
+jz = always
+ekbar = always + species
+mass_density = never + species
+charge_density = always # + average + snapshot
+number_density = always + species
+temperature = never + species
+# Extended io
+distribution_functions = always
+end:output
+begin:dist_fn
+name = en
+ndims = 1
+direction1 = dir_en
+range1 = (0, 15*kev)
+resolution1 = 5000
+include_species:electron
+end:dist_fn
+begin:dist_fn
+name = x_en
+ndims = 2
+direction1 = dir_x
+direction2 = dir_en
+# Range is ignored for spatial coordinates
+#range1 = (1, 1)
+range2 = (0, 15*kev)
+# Resolution is ignored for spatial coordinates
+#resolution1 = 1
+resolution2 = 1500
+include_species:electron
+end:dist_fn
+begin:dist_fn
+name = x_px
+ndims = 2
+direction1 = dir_x
+direction2 = dir_px
+# Range is ignored for spatial coordinates
+#range1 = (1, 1)
+range2 = (-5e-23, 5e-23)
+# Resolution is ignored for spatial coordinates
+#resolution1 = 1
+resolution2 = 1500
+include_species:electron
+end:dist_fn
+begin:probe
+name = electron_probe
+point = (0.5 * (x_max + x_min), y_min)
+normal = (1, 0)
+include_species:electron
+include_species:proton
+end:probe
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;p>&lt;strong>07-1d_heating.deck&lt;/strong>&lt;/p>
+&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
+&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
+&lt;div class="mw-collapsible-content">
+&lt;pre>&lt;code class="language-perl">begin:constant
+dl = 74.33942 * micron
+end:constant
+begin:control
+nx = 10
+# Size of domain
+x_min = 0
+x_max = 14000 * dl
+# Final time of simulation
+t_end = 1.5e-2
+stdout_frequency = 10000
+print_eta_string = T
+end:control
+begin:boundaries
+bc_x_min = periodic
+bc_x_max = periodic
+end:boundaries
+begin:species
+name = electron
+charge = -1
+mass = 1.0
+temp_x_ev = 1
+number_density = 1e16
+npart = nx * 5
+end:species
+begin:output
+name = normal
+# Number of timesteps between output dumps
+dt_snapshot = 1.5e-3
+# Properties on grid
+grid = always
+ekbar = always
+temperature = always
+end:output
+begin:output
+name = large
+# Number of timesteps between output dumps
+dt_snapshot = 75e-3
+# Properties at particle positions
+particles = always
+px = always
+py = always
+pz = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;h1 id="remote_visualisation_with_visit">Remote Visualisation with VisIt&lt;/h1>
+&lt;p>If the local workstation you are using isn&amp;rsquo;t big enough for your test
+problems you may also use a your host institutes HPC cluster.&lt;/p>
+&lt;h3 id="remote_visualisation_with_visit_1">Remote Visualisation with VisIt&lt;/h3>
+&lt;p>Most large simulations are carried out on a remotely located machine.
+Often this machine is located many miles away, perhaps even in a
+different country. Viewing data on remote systems can be awkward and
+poor network speeds can often make it nearly impossible. The VisIt
+visualisation tool solves this problem by using a client-server model.
+The program which reads, processes and renders the data is completely
+separated from the program which displays the results on the screen. It
+is therefore possible to run VisIt on your local machine and look at
+data located on a different machine. The method of setting this up
+varies depending on the configuration of the remote machine so we will
+not go into details here. However, the desktop machines have been setup
+to be able to view data located on remote clusters so you can try it
+out.&lt;/p>
+&lt;p>In the VisIt control window, click the &amp;ldquo;Open&amp;rdquo; button which launches a
+file browser window. The first entry is called &amp;ldquo;Host&amp;rdquo; and contains a
+drop-down list of all configure remote machines.&lt;/p>
+&lt;p>If you want to know more about how to set up remote visualisation in
+VisIt, you can ask one of the Warwick staff members.&lt;/p>
+&lt;p>When viewing data across a slow network connection, there is one more
+useful thing to know. VisIt has two methods of drawing plots generated
+on a remote machine. The first method is to construct the polygons used
+in drawing the plot on the remote machine and send them across the
+network. The local machine then turns these into a plot image. This
+makes manipulating the figure very fast (zooming, rotating, etc), since
+all the polygons that generate the image are on the local machine.
+However, if there are a lot of polygons then they can be slow to
+transfer across the network. They can also use up a lot of memory. For
+these cases, the alternative is to render the image on the remote
+machine and just transfer the image across the network. The downside of
+this approach is that whenever you manipulate the plot, it must be
+re-drawn on the remote machine and then transferred across the network
+again. The options controlling this behaviour are to be found under
+&amp;ldquo;Options-&amp;gt;Rendering&amp;rdquo; in the &amp;ldquo;Advanced&amp;rdquo; tab. The feature is called
+&amp;ldquo;scalable rendering&amp;rdquo;.&lt;/p>
+&lt;h1 id="collisions_in_epoch">Collisions in EPOCH&lt;/h1>
+&lt;p>EPOCH now contains a collision routine based on the technique outlined
+in Sentoku &amp;amp; Kemp&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/p>
+&lt;p>Collisions are enabled using the output block named
+&lt;a href="/documentation/input_deck/input_deck_collisions">collisions&lt;/a> which accepts the
+following three parameters.&lt;/p>
+&lt;ul>
+&lt;li>use_collisions &amp;ndash; This is a logical flag which determines whether
+or not to call the collision routine. If omitted, the default is
+&amp;ldquo;true&amp;rdquo; if any of the frequency factors are non-zero (see below)
+and &amp;ldquo;false&amp;rdquo; otherwise.&lt;/li>
+&lt;/ul>
+&lt;!-- -->
+&lt;ul>
+&lt;li>coulomb_log &amp;ndash; This may either be set to a real value, specifying
+the Coulomb logarithm to use when scattering the particles or to the
+special value &amp;ldquo;auto&amp;rdquo;. If &amp;ldquo;auto&amp;rdquo; is used then the routine will
+calculate a value based on the properties of the two species being
+scattered. If omitted, the default value is &amp;ldquo;auto&amp;rdquo;.&lt;/li>
+&lt;/ul>
+&lt;!-- -->
+&lt;ul>
+&lt;li>collide &amp;ndash; This sets up a symmetric square matrix of size
+nspecies*nspecies containing the collision frequency factors to use
+between particle species. The element (s1,s2) gives the frequency
+factor used when colliding species s1 with species s2. If the factor
+is less than zero, no collisions are performed. If it is equal to
+one, collisions are performed normally. For any value between zero
+and one, the collisions are performed using a frequency multiplied
+by the given factor. If &amp;ldquo;collide&amp;rdquo; has a value of &amp;ldquo;all&amp;rdquo; then all
+elements of the matrix are set to one. If it has a value of &amp;ldquo;none&amp;rdquo;
+then all elements are set to minus one. If the syntax &amp;ldquo;species1
+species2 &lt;value>&amp;rdquo; is used, then the (species1,species2) element of
+the matrix is set to the factor &amp;ldquo;&lt;value>&amp;rdquo;. This may either be a
+real number, or the special value &amp;ldquo;on&amp;rdquo; or &amp;ldquo;off&amp;rdquo;. The &amp;ldquo;collide&amp;rdquo;
+parameter may be used multiple times. The default value is &amp;ldquo;all&amp;rdquo;
+(ie. all elements of the matrix are set to one).&lt;/li>
+&lt;/ul>
+&lt;p>For example:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:collisions
+use_collisions = T
+coulomb_log = auto
+collide = all
+collide = spec1 spec2 off
+collide = spec2 spec3 0.1
+end:collisions
+&lt;/code>&lt;/pre>
+&lt;p>With this block, collisions are turned on and the Coulomb logarithm is
+automatically calculated. All values of the frequency array are set to
+one except (spec1,spec2) is set to minus one (and also (spec2,spec1))
+and (spec2,spec3) is set to 0.1&lt;/p>
+&lt;h1 id="ionisation_in_epoch">Ionisation in EPOCH&lt;/h1>
+&lt;p>EPOCH includes field ionization which can be activated by defining
+&amp;ldquo;field_ionisation = T&amp;rdquo; in the
+&lt;a href="/documentation/input_deck/input_deck_control">control&lt;/a> block along with
+ionisation energies and an electron for the ionising species in one of
+the
+&lt;a href="/documentation/input_deck/input_deck_species">species&lt;/a> blocks. This is done
+via the species block in the &amp;ldquo;ionisation_energies&amp;rdquo; and
+&amp;ldquo;electron_species&amp;rdquo; parameter respectively. &amp;ldquo;ionisation_energies&amp;rdquo;
+should be given as a list in joules, and &amp;ldquo;electron_species&amp;rdquo; should be
+the name of the species to be used as the electron species. For example,
+ionising carbon species might appear in the input deck as:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+charge = 0.0
+mass = 1837.2
+name = carbon
+ionisation_energies = \
+(11.26*ev, 24.38*ev, 47.89*ev, 64.49*ev, 392.1*ev, 490.0*ev)
+electron_species = electron
+number_density = den_gas
+end:species
+begin:species
+charge = -1.0
+mass = 1.0
+name = electron
+number_density = 0.0
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>It is possible to define different electron species for each ionisation
+level, which is particularly useful in monitoring specific ionisation
+levels. If we wished to monitor the fourth ionisation level of carbon in
+the above example, the above example might appear:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+charge = 0.0
+mass = 1837.2
+name = carbon
+ionisation_energies = \
+(11.26*ev, 24.38*ev, 47.89*ev, 64.49*ev, 392.1*ev, 490.0*ev)
+electron_species = (electron, electron, electron, fourth, electron, electron)
+number_density = den_gas
+end:species
+begin:species
+charge = -1.0
+mass = 1.0
+name = electron
+number_density = 0.0
+end:species
+begin:species
+charge = -1.0
+mass = 1.0
+name = fourth
+number_density = 0.0
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>Field ionisation consists of three distinct regimes; multiphoton in
+which ionisation is best described as absorption of multiple photons,
+tunneling in which deformation of the atomic coulomb potential is the
+dominant factor, and barrier suppression ionisation in which the
+electric field is strong enough for an electron to escape classically.
+It is possible to turn off multiphoton or barrier suppression ionisation
+through the input deck by adding &amp;ldquo;use_multiphoton=F&amp;rdquo; and/or
+&amp;ldquo;use_bsi=F&amp;rdquo; to the control block.&lt;/p>
+&lt;h1 id="qed_effects_in_epoch">QED Effects in EPOCH&lt;/h1>
+&lt;p>EPOCH has recently been extended to include some quantum electrodynamic
+effects that are important for high intensity (&amp;gt;) lasers. The two
+processes that are included are&lt;/p>
+&lt;ul>
+&lt;li>Gamma ray production by QED corrected synchrotron emission (Also
+called magnetic bremsstrahlung or nonlinear Compton scattering).&lt;/li>
+&lt;li>Electron positron pair production by the Breit-Wheeler process from
+these gamma ray photons.&lt;/li>
+&lt;/ul>
+&lt;p>For more information on the theory see Duclous et al. &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>&lt;/p>
+&lt;p>Simulating the QED effects increases EPOCH&amp;rsquo;s memory requirements and so
+the code has to be compiled with the correct compilation options to turn
+the module on. To turn the module on, open &amp;ldquo;Makefile&amp;rdquo; in an editor and
+find the commented out line &lt;code>#DEFINES += $(D)PHOTONS&lt;/code>. Uncomment this
+line, then type &amp;ldquo;make clean&amp;rdquo; and then &amp;ldquo;make&amp;rdquo; (remember to include the
+&lt;code>COMPILER=&lt;/code> if you haven&amp;rsquo;t specified the environment variable) to
+rebuild the code with QED support.&lt;/p>
+&lt;p>Once the code is built with QED support, actually turning on QED for a
+specific simulation requires the addition of a new block into the input
+deck. This block is simply called
+&lt;a href="/documentation/input_deck/input_deck_qed">qed&lt;/a>
+and starts with the usual &amp;ldquo;begin:qed&amp;rdquo; and &amp;ldquo;end:qed&amp;rdquo; markers of the other
+blocks. The parameters which can go into the block are:&lt;/p>
+&lt;ul>
+&lt;li>use_qed - Turns QED on or off. If you don&amp;rsquo;t want QED effects at all
+then compile the code without the &amp;ldquo;-DPHOTONS&amp;rdquo; lines in the makefile.&lt;/li>
+&lt;li>qed_start_time - Specifies the time after which QED effects should
+be turned on. For example you can turn off the routines until a
+laser has crossed the vacuum region in front of the target.&lt;/li>
+&lt;li>produce_photons - Specifies whether you&amp;rsquo;re interested in the
+photons generated by synchrotron emission. If this is F then the
+radiation reaction force is calculated but the properties of the
+emitted photons are not tracked.&lt;/li>
+&lt;li>photon_energy_min - Minimum energy of produced photons. Radiation
+reaction is calculated for photons of all energies, but photons with
+energy below this cutoff are not tracked.&lt;/li>
+&lt;li>photon_dynamics - If F then photons are generated, but their motion
+through the domain is not simulated and they stay where they were
+generated. Photon motion is often less interesting than photon
+generation unless you want to simulate pair production. In these
+cases set this to F.&lt;/li>
+&lt;li>produce_pairs - Whether or not to simulate the process of pair
+generation from gamma ray photons. Both produce_photons and
+photon_dynamics must be T for this to work.&lt;/li>
+&lt;li>qed_table_location - EPOCH&amp;rsquo;s QED routines use lookup tables to
+calculate gamma ray emission and pair production. If you want to use
+tables in a different location from the default put the location in
+this parameter.&lt;/li>
+&lt;/ul>
+&lt;p>QED also requires that the code now know which species are electrons,
+positrons and photons. Rather than try to do this automatically the user
+has to specify the type of a species. This is done by using a single
+&amp;ldquo;identify&amp;rdquo; tag in a species block. To specify an electron the block in
+the deck would look like&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+name = electron
+frac = 0.5
+number_density = 7.7e29
+identify:electron
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>Once the identity of a species is set then the code automatically
+assigns mass and charge states for the species. At present, the user
+cannot override these. Possible identities are&lt;/p>
+&lt;ul>
+&lt;li>electron : A normal electron species. All species of electrons in
+the simulation must be identified in this way or they will not
+generate photons.&lt;/li>
+&lt;li>positron : A normal positron species. All species of positron in the
+simulation must be identified in this way or they will not generate
+photons.&lt;/li>
+&lt;li>photon : A normal photon species. One species of this type is needed
+for photon production to work. If multiple species are present then
+generated photons will appear in the first species of this type.&lt;/li>
+&lt;li>bw_electron : The electron species for pair production. If a
+species of this type exists then electrons from the pair production
+module will be created in this species. If no species of this type
+is specified then pair electrons will be generated in the first
+electron species.&lt;/li>
+&lt;li>bw_positron : The positron species for pair production. If a
+species of this type exists then positrons from the pair production
+module will be created in this species. If no species of this type
+is specified then pair positrons will be generated in the first
+positron species.&lt;/li>
+&lt;/ul>
+&lt;p>A species should be identified only once, so a &amp;ldquo;bw_electron&amp;rdquo; species
+does not need to also be identified as an &amp;ldquo;electron&amp;rdquo; species. If the
+code is running with &amp;ldquo;produce_photons=T&amp;rdquo; then a photon species must be
+created by user and identified. If the code is running with
+&amp;ldquo;produce_pairs=T&amp;rdquo; then the code must specify at least one electron (or
+bw_electron) species and one positron (or bw_positron) species. The
+code will fail to run if the needed species are not specified.&lt;/p>
+&lt;h1 id="other_useful_info">Other Useful Info&lt;/h1>
+&lt;h3 id="bug_reports_feature_requests_and_questions">Bug reports, feature requests and questions&lt;/h3>
+&lt;p>All questions and requests after the workshop should be posted on the
+GitHub EPOCH project
+&lt;a href="https://github.com/Warwick-Plasma/epoch" target="_blank" rel="noopener">web page&lt;/a>&lt;/p>
+&lt;h3 id="the_visit_programme">The VisIt programme&lt;/h3>
+&lt;p>The VisIt programme is free. It can be downloaded from
+&lt;a href="https://wci.llnl.gov/simulation/computer-codes/visit/">https://wci.llnl.gov/simulation/computer-codes/visit/&lt;/a> There are many
+pre-compiled binaries so this ought to be easy. If you have any problems
+post a question on the GitHub EPOCH project.&lt;/p>
+&lt;h3 id="gdl_not_idl">GDL not IDL&lt;/h3>
+&lt;p>If you don&amp;rsquo;t have IDL, or don&amp;rsquo;t want to pay for it!, then the free GDL
+is available from &lt;a href="http://gnudatalanguage.sourceforge.net/">http://gnudatalanguage.sourceforge.net/&lt;/a>&lt;/p>
+&lt;h3 id="updating_epoch">Updating EPOCH&lt;/h3>
+&lt;p>To update to the latest version of EPOCH simple cd into your Epoch
+directory and enter &amp;lsquo;git pull&amp;rsquo;. This will work fine provided you haven&amp;rsquo;t
+edited any of the Fortran source code. If you have edited the source
+code then you need to learn git.&lt;/p>
+&lt;h3 id="getting_old_copies_of_epoch">Getting Old Copies of EPOCH&lt;/h3>
+&lt;p>You can also checkout an old version of EPOCH, you may want to get the
+version used 18 months ago to reproduce some previous simulations
+exactly for example. In this case it is best to checkout a new branch in
+the EPOCH repository. If you wanted the version from 10 February 2010
+for example you would first enter
+&lt;code>git log --before=2010-02-11&lt;/code>
+This will give you the log of commits in reverse order, starting on the
+11th of February. Identify the commit you want and copy the commit hash
+(the long string of numbers and letters following the word &amp;ldquo;commit&amp;rdquo;). To
+checkout a copy of this version of the code, type
+&lt;code>git checkout -b old-code &lt;/code>&lt;hash>
+After this your repository will reflect the state of the code at that
+point in time. To get back to the current version, just type
+&lt;code>git checkout master&lt;/code>&lt;/p>
+&lt;h1 id="references">References&lt;/h1>
+&lt;p>&lt;references />&lt;/p>
+&lt;!-- ######################## Cross references ######################## -->
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>Y. Sentoku and A. J. Kemp, &amp;ldquo;Numerical methods for particle
+simulations at extreme densities and temperatures: Weighted
+particles, relativistic collisions and reduced currents,&amp;rdquo; J. Comput.
+Phys., 2008.
+&lt;a href="http://www.sciencedirect.com/science/article/pii/S0021999108001988" target="_blank" rel="noopener">link&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2" role="doc-endnote">
+&lt;p>R. Duclous, J. G. Kirk, and A. R. Bell, &amp;ldquo;Monte carlo calculations
+of pair production in high-intensity laser plasma interactions,&amp;rdquo;
+Plasma Phys. Contr. F., vol. 53, no. 1, p. 015009,
+2011
+&lt;a href="http://iopscience.iop.org/article/10.1088/0741-3335/53/1/015009" target="_blank" rel="noopener">1&lt;/a>.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item></channel></rss>

@@ -1,0 +1,591 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="Specifying initial conditions for particles using the input deck If the initial conditions for the plasma you wish to model can be described by a number density and temperature profile on the underlying grid then EPOCH can create an appropriate particle distribution for you."><link rel=alternate hreflang=en-us href=/documentation/code_details/using_epoch_in_practice.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/documentation/code_details/using_epoch_in_practice.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/documentation/code_details/using_epoch_in_practice.html"><meta property="og:title" content="Using EPOCH in practice | EPOCH"><meta property="og:description" content="Specifying initial conditions for particles using the input deck If the initial conditions for the plasma you wish to model can be described by a number density and temperature profile on the underlying grid then EPOCH can create an appropriate particle distribution for you."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2021-06-22T23:35:45+01:00"><title>Using EPOCH in practice | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>Documentation</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/documentation.html>Overview</a></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/basic_usage.html>Basic usage</a><ul class="nav docs-sidenav"><li><a href=/documentation/basic_usage/faq.html>FAQs</a></li><li><a href=/documentation/basic_usage/structure.html>Structure</a></li><li><a href=/documentation/basic_usage/compiling.html>Compiling</a></li><li><a href=/documentation/basic_usage/compiler_flags.html>Compiler Flags</a></li><li><a href=/documentation/basic_usage/running.html>Running</a></li><li><a href=/documentation/basic_usage/acknowledging_epoch.html>Acknowledging EPOCH</a></li><li><a href=/documentation/basic_usage/libraries.html>Libraries</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/input_deck/input_deck.html>Input deck</a><ul class="nav docs-sidenav"><li><a href=/documentation/input_deck/input_deck_control.html>control block</a></li><li><a href=/documentation/input_deck/input_deck_boundaries.html>boundaries block</a></li><li><a href=/documentation/input_deck/input_deck_species.html>species block</a></li><li><a href=/documentation/input_deck/input_deck_laser.html>laser block</a></li><li><a href=/documentation/input_deck/input_deck_fields.html>fields block</a></li><li><a href=/documentation/input_deck/input_deck_window.html>window block</a></li><li><a href=/documentation/input_deck/input_deck_output_block.html>output block</a></li><li><a href=/documentation/input_deck/input_deck_output_global.html>output_global block</a></li><li><a href=/documentation/input_deck/input_deck_dist_fn.html>dist_fn block</a></li><li><a href=/documentation/input_deck/input_deck_probe.html>probe block</a></li><li><a href=/documentation/input_deck/input_deck_collisions.html>collisions block</a></li><li><a href=/documentation/input_deck/input_deck_qed.html>qed block</a></li><li><a href=/documentation/input_deck/input_deck_subset.html>subset block</a></li><li><a href=/documentation/input_deck/input_deck_constant.html>constant block</a></li><li><a href=/documentation/input_deck/input_deck_injector.html>injector block</a></li><li><a href=/documentation/input_deck/input_deck_antenna.html>Input deck antenna</a></li><li><a href=/documentation/input_deck/input_deck_particle_file.html>Input deck particle file</a></li><li><a href=/documentation/input_deck/binary_files.html>Binary files</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/code_details.html>Code details</a><ul class="nav docs-sidenav"><li><a href=/documentation/code_details/maths_parser.html>Maths parser</a></li><li class=active><a href=/documentation/code_details/using_epoch_in_practice.html>Using EPOCH in practice</a></li><li><a href=/documentation/code_details/using_delta_f.html>Using delta f</a></li><li><a href=/documentation/code_details/previous_versions.html>Previous versions</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/visualising_output.html>Visualising output</a><ul class="nav docs-sidenav"><li><a href=/documentation/visualising_output/visualising_sdf_files_with_idl_or_gdl.html>IDL or GDL</a></li><li><a href=/documentation/visualising_output/visualising_sdf_files_with_llnl_visit.html>LLNL VisIt</a></li><li><a href=/documentation/visualising_output/python.html>Python</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/examples.html>Examples</a><ul class="nav docs-sidenav"><li><a href=/documentation/examples/basic_examples.html>Basic examples</a></li><li><a href=/documentation/examples/workshop_examples.html>Workshop examples</a></li><li><a href=/documentation/examples/workshop_examples_continued.html>Workshop examples continued</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><ul><li><a href=#setting_autoloader_properties_from_the_input_deck>Setting autoloader properties from the input deck</a></li></ul></li></ul><ul><li><ul><li><a href=#epoch_internal_representation_of_particles>EPOCH internal representation of particles</a></li><li><a href=#setting_the_particle_properties>Setting the particle properties</a></li><li><a href=#grid_coordinates_used_in_epoch>Grid coordinates used in EPOCH.</a></li><li><a href=#loading_a_separable_non_thermal_particle_distribution>Loading a separable non-thermal particle distribution.</a></li></ul></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Using EPOCH in practice</h1><div class=article-style><h1 id=specifying_initial_conditions_for_particles_using_the_input_deck>Specifying initial conditions for particles using the input deck</h1><p>If the initial conditions for the plasma you wish to model can be
+described by a number density and temperature profile on the underlying
+grid then EPOCH can create an appropriate particle distribution for you.
+The set of routines which accomplish this task are known as the
+autoloader. For many users, this functionality is sufficient to make use
+of the code and there is no need to deal with the internal
+representation of particles in EPOCH.</p><p>The autoloader randomly loads particles in space to reproduce the number
+density profile that was requested. It then sets the momentum components
+of the particles to approximate a Maxwell-Boltzmann distribution
+corresponding to the temperature profile. Sometimes this is not the
+desired behaviour, for example you may wish to model a bump-on-tail
+velocity distribution. It is currently not possible to specify these
+initial conditions from the input deck and the particles must be setup
+by modifying the source code.</p><p>There are two stages to the particle setup in EPOCH</p><ul><li>auto_load - This routine is called after reading and parsing the
+input deck. It takes care of allocating particles and setting up
+their initial positions and momenta using the initial conditions
+supplied in deck file. It is not necessary to recompile the code, or
+even have access to the source to change the initial conditions
+using this method.</li><li>manual_load - Once particles have been allocated they can have
+their properties altered in this routine. By default it is an empty
+routine which does nothing.</li></ul><h3 id=setting_autoloader_properties_from_the_input_deck>Setting autoloader properties from the input deck</h3><p>To illustrate using the autoloader in practice, we present an example
+for setting up an isolated plasma block in 2D. This would look like:</p><pre><code class=language-perl>begin:species
+   name = s1
+   # First set number_density in the range 0 &gt; 1
+   # Cut down number_density in x direction
+   number_density = if ((x gt -1) and (x lt 1), 1.0, 0.2)
+   # Cut down number_density in y direction
+   number_density = if ((y gt -1) and (y lt 1), number_density(s1), 0.2)
+
+   # Multiply number_density by real particle number_density
+   number_density = number_density(s1) * 100.0
+
+   # Set the temperature to be zero
+   temp_x = 0.0
+   temp_y = temp_x(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * 100.0
+end:species
+
+begin:species
+   # Just copy the number_density for species s1
+   number_density = number_density(s1)
+
+   # Just copy the temperature from species s1
+   temp_x = temp_x(s1)
+   temp_y = temp_y(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * 100.0
+end:species
+</code></pre><p>An important point to notice is that the two parts of the logical
+expressions in the input deck are enclosed within their own brackets.
+This helps to remove some ambiguities in the functioning of the input
+deck parser. It is hoped that this will soon be fixed, but at present
+ALWAYS enclose logical expressions in brackets.</p><h1 id=manually_overriding_particle_parameters_set_by_the_autoloader>Manually overriding particle parameters set by the autoloader</h1><p>Since not all problems in plasma physics can be described in terms of an
+initial distribution of thermal plasma, it is also possible to manually
+control properties of each individual pseudoparticle for an initial
+condition. This takes place in the subroutine <code>manual_load</code> in the file
+user_interaction/ic_module.f90. Manual loading takes place after all
+the autoloader phase, to allow manual tweaking of autoloader specified
+initial conditions.</p><h3 id=epoch_internal_representation_of_particles>EPOCH internal representation of particles</h3><p>Before we can go about manipulating particle properties in
+<code>manual_load</code>, we first need an overview of how the particles are
+defined in EPOCH. Inside the code, particles are represented by a
+Fortran90 TYPE called <strong><code>particle</code></strong>. The current definition of this
+type (in 1D) is:</p><pre><code class=language-fortran>  TYPE particle
+    REAL(num), DIMENSION(3) :: part_p
+    REAL(num) :: part_pos
+#if !defined(PER_SPECIES_WEIGHT) || defined(PHOTONS)
+    REAL(num) :: weight
+#endif
+#ifdef DELTAF_METHOD
+    REAL(num) :: pvol
+#endif
+#ifdef PER_PARTICLE_CHARGE_MASS
+    REAL(num) :: charge
+    REAL(num) :: mass
+#endif
+    TYPE(particle), POINTER :: next, prev
+#ifdef PARTICLE_DEBUG
+    INTEGER :: processor
+    INTEGER :: processor_at_t0
+#endif
+#ifdef PARTICLE_ID4
+    INTEGER :: id
+#elif PARTICLE_ID
+    INTEGER(i8) :: id
+#endif
+#ifdef COLLISIONS_TEST
+    INTEGER :: coll_count
+#endif
+#ifdef WORK_DONE_INTEGRATED
+    REAL(num) :: work_x
+    REAL(num) :: work_y
+    REAL(num) :: work_z
+    REAL(num) :: work_x_total
+    REAL(num) :: work_y_total
+    REAL(num) :: work_z_total
+#endif
+#ifdef PHOTONS
+    REAL(num) :: optical_depth
+    REAL(num) :: particle_energy
+#ifdef TRIDENT_PHOTONS
+    REAL(num) :: optical_depth_tri
+#endif
+#endif
+  END TYPE particle
+</code></pre><p>Here, most of the preprocessing directives have been stripped out for
+clarity. We have left <code>#ifdef PARTICLE_DEBUG</code> as an example. Here, the
+&ldquo;processor&rdquo; and &ldquo;processor_at_t0&rdquo; variables only exist if the
+<code>-DPARTICLE_DEBUG</code> define was put in the makefile. If you want to access
+a property that does not seem to be present, check the
+<a href=/documentation/basic_usage/compiler_flags>preprocessor
+defines</a>.</p><p>The &ldquo;particle&rdquo; properties can be explained as follows:</p><ul><li>part_p - The momentum in 3 dimensions for the particle. This is
+always of size 3.</li><li>part_pos - The position of the particle in space. This is of the
+same size as the dimensionality of the code.</li><li>weight - The weight of this particle. The number of real particles
+represented by this pseudoparticle.</li><li>charge - The particle charge. If the code was compiled without per
+particle charge, then the code uses the charge property from
+TYPE(particle_species).</li><li>mass - The particle rest mass. If the code was compiled without per
+particle mass, then the code uses the mass property from
+TYPE(particle_species).</li><li>next, prev - The next and previous particle in the linked list which
+represents the particles in the current species. This will be
+explained in more detail later.</li><li>processor - The rank of the processor which currently holds the
+particle.</li><li>processor_at_t0 - The rank of the processor on which the particle
+started.</li><li>id - Unique particle ID.</li><li>coll_count - Used for debugging the collision routines.</li><li>optical_depth - Optical depth used in the QED routines.</li><li>particle_energy - Particle energy used in the QED routines.</li><li>optical_depth_tri - Optical depth for the trident process in the
+QED routines.</li></ul><p>Collections of particles are represented by another Fortran TYPE, called
+<strong><code>particle_list</code></strong>. This type represents all the properties of a
+collection of particles and is used behind the scenes to deal with
+inter-processor communication of particles. The definition of the type
+is:</p><pre><code class=language-fortran>  TYPE particle_list
+    TYPE(particle), POINTER :: head
+    TYPE(particle), POINTER :: tail
+    INTEGER(i8) :: count
+    INTEGER :: id_update
+    ! Pointer is safe if the particles in it are all unambiguously linked
+    LOGICAL :: safe
+
+    ! Does this partlist hold copies of particles rather than originals
+    LOGICAL :: holds_copies
+
+    TYPE(particle_list), POINTER :: next, prev
+  END TYPE particle_list
+</code></pre><ul><li>head - The first particle in the linked list.</li><li>tail - The last particle in the linked list.</li><li>count - The number of particles in the list. Note that this is NOT
+MPI aware, so reading count only gives you the number of particles
+on the local processor.</li><li>safe - Any particle_list which a user should come across will be a
+safe particle_list. Don&rsquo;t change this property.</li><li>next, prev - For future expansion it is possible to attach
+particle_lists together in another linked list. This is not
+currently used anywhere in the code.</li></ul><p>An entire species of particles is represented by another Fortran TYPE,
+this time called <strong><code>particle_species</code></strong>. This represents all the
+properties which are common to all particles in a species. The current
+definition is:</p><pre><code class=language-fortran>  TYPE particle_species
+    ! Core properties
+    CHARACTER(string_length) :: name
+    TYPE(particle_species), POINTER :: next, prev
+    INTEGER :: id
+    INTEGER :: dumpmask
+    INTEGER :: count_update_step
+
+    REAL(num) :: charge
+    REAL(num) :: mass
+    REAL(num) :: weight
+    INTEGER(i8) :: count
+    TYPE(particle_list) :: attached_list
+    LOGICAL :: immobile
+    LOGICAL :: fill_ghosts
+
+    ! Parameters for relativistic and arbitrary particle loader
+    INTEGER :: ic_df_type
+    REAL(num) :: fractional_tail_cutoff
+
+    TYPE(primitive_stack) :: dist_fn
+    TYPE(primitive_stack) :: dist_fn_range(3)
+
+#ifndef NO_TRACER_PARTICLES
+    LOGICAL :: zero_current
+#endif
+
+    ! ID code which identifies if a species is of a special type
+    INTEGER :: species_type
+
+    ! particle cell division
+    INTEGER(i8) :: global_count
+    LOGICAL :: split
+    INTEGER(i8) :: npart_max
+    ! Secondary list
+    TYPE(particle_list), DIMENSION(:), POINTER :: secondary_list
+
+    ! Injection of particles
+    REAL(num) :: npart_per_cell
+    TYPE(primitive_stack) :: density_function, temperature_function(3)
+    TYPE(primitive_stack) :: drift_function(3)
+
+    ! Thermal boundaries
+    REAL(num), DIMENSION(:), POINTER :: ext_temp_x_min, ext_temp_x_max
+
+    ! Species_ionisation
+    LOGICAL :: electron
+    LOGICAL :: ionise
+    INTEGER :: ionise_to_species
+    INTEGER :: release_species
+    INTEGER :: n
+    INTEGER :: l
+    REAL(num) :: ionisation_energy
+
+    ! Attached probes for this species
+#ifndef NO_PARTICLE_PROBES
+    TYPE(particle_probe), POINTER :: attached_probes
+#endif
+
+    ! Particle migration
+    TYPE(particle_species_migration) :: migrate
+
+    ! Initial conditions
+    TYPE(initial_condition_block) :: initial_conditions
+
+    ! Per-species boundary conditions
+    INTEGER, DIMENSION(2*c_ndims) :: bc_particle
+  END TYPE particle_species
+</code></pre><p>This definition is for the 1D version of the code. The only difference
+for the other two versions is the number of dimensions in the arrays
+&ldquo;secondary_list&rdquo; and &ldquo;ext_temp_*&rdquo;. There are quite a lot of
+fields here, so we will just document some of the most important ones.</p><ul><li>name - The name of the particle species, used in the output dumps
+etc.</li><li>next, prev - Particle species are also linked together in a linked
+list. This is used internally by the output dump routines, but
+should not be used by end users.</li><li>id - The species number for this species. This is the same number as
+is used in the input deck to designate the species.</li><li>dumpmask - Determine when to include this species in output dumps.
+Note that the flag is ignored for restart dumps.</li><li>charge - The charge in Coulombs. Even if PER_PARTICLE_CHARGE_MASS
+is specified, this is still populated from the input deck, and now
+refers to the reference charge for the species.</li><li>mass - The mass in kg.</li><li>weight - The per-species particle weight.</li><li>count - The global number of particles of this species (NOTE may not
+be accurate). This will only ever be the number of particles on this
+processor when running on a single processor. While this property
+will be accurate when setting up initial conditions, it is only
+guaranteed to be accurate for the rest of the code if the code is
+compiled with the correct preprocessor options.</li><li>attached_list - The list of particles which belong to this species.</li><li>immobile - If set to <code>.TRUE.</code> then the species is ignored during the
+particle push.</li><li>zero_current - If set to <code>.TRUE.</code> then the current is not updated
+for this particle species.</li></ul><h3 id=setting_the_particle_properties>Setting the particle properties</h3><p>The details of exactly what a linked list means in EPOCH requires a more
+in-depth study of the source code. For now, all we really need to know
+is that each species has a list of particles. A pointer to the first
+particle in the list is contained in
+<code>species_list(ispecies)%attached_list%head</code>. Once you have a pointer to
+a particle (eg. current), you advance to the next pointer in the list
+with <code>current => current%next</code>. After all the descriptions of the types,
+actually setting the properties of the particles is fairly simple. The
+following is an example which positions the particles uniformly in 1D
+space, but doesn&rsquo;t set any momentum.</p><pre><code class=language-fortran>  SUBROUTINE manual_load
+
+    TYPE(particle), POINTER :: current
+    INTEGER :: ispecies
+    REAL(num) :: rpos, dx
+
+    DO ispecies = 1, n_species
+      current =&gt; species_list(ispecies)%attached_list%head
+      dx = length_x / species_list(ispecies)%attached_list%count
+      rpos = x_min
+      DO WHILE(ASSOCIATED(current))
+        current%part_pos = rpos
+        current%weight = 1.0_num
+        rpos = rpos + dx
+        current =&gt; current%next
+      ENDDO
+    ENDDO
+
+  END SUBROUTINE manual_load
+</code></pre><p>This will take the particles which have been placed at random positions
+by the autoloader and repositions them in a uniform manner. In order to
+adjust the particle positions, you need to know about the grid used in
+EPOCH. In this example we only required the length of the domain,
+&ldquo;length_x&rdquo; and the minimum value of x, &ldquo;x_min&rdquo;. A more exhaustive list
+is given in the following section. Note that I completely ignored the
+question of domain decomposition when setting up the particles. The code
+automatically moves the particles onto the correct processor without
+user interaction.</p><p>In the above example, note that particle momentum was not specified and
+particle weight was set to be a simple constant. Setting particle weight
+can be very simple if you can get the pseudoparticle distribution to
+match the real particle distribution, or quite tricky if this isn&rsquo;t
+possible. The weight of a pseudoparticle is calculated such that the
+number of pseudoparticles in a cell multiplied by their weights equals
+the number of physical particles in that cell. This can be quite tricky
+to get right, so in more complicated cases it is probably better to use
+the autoloader than to manually set up the number density distribution.</p><h3 id=grid_coordinates_used_in_epoch>Grid coordinates used in EPOCH.</h3><p>When setting up initial conditions within the EPOCH source (rather than
+using the input deck) there are several constants that you may need to
+use. These constants are:</p><ul><li>nx - Number of gridpoints on the local processor in the x direction.</li><li>ny - Number of gridpoints on the local processor in the y direction
+(2D and 3D).</li><li>nz - Number of gridpoints on the local processor in the z direction
+(3D).</li><li>length_{x,y,z} - Length of domain in the x, y, z directions.</li><li>{x,y,z}_min - Minimum value of x, y, z for the whole domain.</li><li>{x,y,z}_max - Maximum value of x, y, z for the whole domain.</li><li>n_species - The number of species in the code.</li></ul><p>There are also up to three arrays which are available for use.</p><ul><li>x(-2:nx+3) - Position of a given gridpoint in real units in the x
+direction.</li><li>y(-2:ny+3) - Position of a given gridpoint in real units in the y
+direction (2D and 3D).</li><li>z(-2:nz+3) - Position of a given gridpoint in read units in the z
+direction (3D).</li></ul><h3 id=loading_a_separable_non_thermal_particle_distribution>Loading a separable non-thermal particle distribution.</h3><p>While the autoloader is capable of dealing with most required initial
+thermal distributions, you may want to set up non-thermal initial
+conditions. The code includes a helper function to select a point from
+an arbitrary distribution function which can be used to deal with most
+non-thermal distributions. To use the helper function, you need to
+define two 1D arrays which are the x and y axes for the distribution
+function. This approach is only possible if the distribution function
+can be represented as a set of 1D distribution functions in px, py and
+pz separately. If this is possible then this method is preferred since
+it is significantly faster than the arbitrary method detailed in the
+next section. An example of using the helper function is given below.</p><pre><code class=language-fortran>  SUBROUTINE manual_load
+
+    TYPE(particle), POINTER :: current
+    INTEGER, PARAMETER :: np_local = 1000
+    INTEGER :: ispecies, ip
+    REAL(num) :: temperature, stdev2, tail_width, tail_height, tail_drift
+    REAL(num) :: frac, tail_frac, min_p, max_p, dp_local, p2, tail_p2
+    REAL(num), DIMENSION(np_local) :: p_axis, distfn_axis
+
+    temperature = 1e4_num
+    tail_width = 0.05_num
+    tail_height = 0.2_num
+    tail_drift = 0.5_num
+
+    DO ispecies = 1, n_species
+      stdev2 = kb * temperature * species_list(ispecies)%mass
+      frac = 1.0_num / (2.0_num * stdev2)
+      tail_frac = 1.0_num / (2.0_num * stdev2 * tail_width)
+
+      max_p = 5.0_num * SQRT(stdev2)
+      min_p = -max_p
+
+      dp_local = (max_p - min_p) / REAL(np_local-1, num)
+      DO ip = 1, np_local
+        p_axis(ip) = min_p + (ip - 1) * dp_local
+        p2 = p_axis(ip)**2
+        tail_p2 = (p_axis(ip) - tail_drift * max_p)**2
+        distfn_axis(ip) = EXP(-p2 * frac) &amp;amp;
+            + tail_height * EXP(-tail_p2 * tail_frac)
+      ENDDO
+
+      current=&gt;species_list(ispecies)%attached_list%head
+      DO WHILE(ASSOCIATED(current))
+        current%part_p(1) = sample_dist_function(p_axis, distfn_axis)
+        current=&gt;current%next
+      ENDDO
+    ENDDO
+
+  END SUBROUTINE manual_load
+</code></pre><p>This example will set the particles to have a bump-on-tail velocity
+distribution, a setup which is not possible to do using only the input
+deck. It is not necessary to normalise the distribution function, as
+this is done automatically by the
+<em><code>*sample_dist_function*</code></em> function.</p><h1 id=lasers>Lasers</h1><p>EPOCH has the ability to add EM wave sources such as lasers at
+boundaries. To use lasers, set the boundary that you wish to have a
+laser on to be of type <code>simple_laser</code> and then specify one or more
+lasers attached to that boundary. Lasers may be specified anywhere
+initial conditions are specified.</p><h1 id=laser_blocks_in_multiple_dimensions>Laser blocks in multiple dimensions.</h1><p>When running EPOCH in 2D or 3D, the laser can be modified spatially via
+the <code>profile</code> and <code>phase</code> parameters. These are briefly outlined
+<a href=/documentation/input_deck/input_deck_laser>here</a> but in this section we will
+describe them in a little more depth.</p><ul><li><p><code>profile</code> - The spatial profile for the laser. This is
+essentially an array defined along the edge (or surface) that the laser
+is attached to. It is clear that the spatial profile is only meaningful
+perpendicular to the laser&rsquo;s direction of travel and so it is just a
+single constant in 1D. The laser profile is evaluated as an initial
+condition and so cannot include any temporal information which must be
+encoded in <code>t_profile</code>. The spatial profile is evaluated at the boundary
+where the laser is attached and so only spatial information in the plane
+of the boundary is significant. This is most clearly explained through a
+couple of examples. In these examples the spatial profile of the laser
+is set to vary between a flat uniform profile (<code>profile = 1</code>) and a
+Gaussian profile in y (<code>profile = gauss(y,0,2.5e-6)</code>). The difference
+between these profiles is obvious but the important point is that a
+laser travelling parallel to the x-direction has a profile in the y
+direction. Similarly a laser propagating in the y-direction has a
+profile in the x direction. In 3D this is extended so that a laser
+propagating in a specified direction has a profile in both orthogonal
+directions. So a laser travelling parallel to the x axis in 3D would
+have a profile in y and z. Since 3D lasers are very similar to 2D
+lasers, they will not be considered here in greater detail, but in 3D,
+it is possible to freely specify the laser profile across the entire
+face where a laser is attached.
+<img src=Profile_flat.png alt="Uniform laser profile inEPOCH2D">
+<img src=Profile_gauss.png alt="Gaussian laser profile inEPOCH2D"></p></li><li><p><code>phase</code> - Phase shift for the laser in radians. This is a
+spatial variable which is also defined across the whole of the
+boundary on which the laser is attached. This allows a user to add a
+laser travelling at an angle to a boundary as shown in
+Figure [angle]. The setup for this is not entirely straightforward
+and requires a little bit of explanation. Figure [wave]
+illustrates a laser being driven at an angle on the x_min boundary.
+Different wave fronts cross the $y$-axis at different places and
+this forms a sinusoidal profile along $y$ that represents the phase.
+The wavelength of this profile is given by
+$\lambda_\phi = \lambda / \sin\theta$, where $\lambda$ is the
+wavelength of the laser and $\theta$ is the angle of the propagation
+direction with respect to the $x$-axis. The actual phase to use will
+be $\phi(y) = -k_\phi y = -2\pi y / \lambda_\phi$. It is negative
+because the phase of the wave is propagating in the positive $y$
+direction. It is also necessary to alter the wavelength of the
+driver since this is given in the direction perpendicular to the
+boundary. The new wavelength to use will be $\lambda\cos\theta$.
+Figure [angle] shows the resulting $E_y$ field for a laser driven
+at an angle of $\pi / 8$. Note that since the boundary conditions in
+the code are derived for propagation perpendicular to the boundary,
+there will be artefacts on the scale of the grid for lasers driven
+at an angle.</p></li></ul><p><img src=Profile_angle.png alt="Laser propagating at an angle inEPOCH2D">
+<img src=Wave_angle.png alt="Schematic diagram of a laser propagating at an angle in2D"></p><p>Using this technique it is also possible to focus a laser. This is done
+by using the same technique as above but making the angle of
+propagation, $\theta$, a function of $y$ such that the laser is focused
+to a point along the $x$-axis. A simple example is given
+<a href=/documentation/examples/basic_examples/#focussing_a_gaussian_beam>here</a>.</p><h1 id=restarting_epoch_from_previous_output_dumps>Restarting EPOCH from previous output dumps</h1><p>Another possible way of setting up initial conditions in EPOCH is to
+load in a previous output dump and use it to specify initial conditions
+for the code. The effect of this is to restart the code from the state
+that it was in when the dump was made. To do this, you just set the
+field &ldquo;restart_snapshot&rdquo; in the
+<a href=/documentation/input_deck/input_deck_control>control
+block</a> to the number of the output
+dump from which you want the code to restart. Because of the way in
+which the code is written you cannot guarantee that the code will
+successfully restart from any output dump. To restart properly, the
+following <em><code>must</code></em> have been dumped</p><ul><li>Particle positions.</li><li>Particle momenta.</li><li>Particle species.</li><li>Particle weights.</li><li>Relevant parts of the electric field (If for example it is known
+that ez == 0 then it is not needed).</li><li>Relevant parts of the magnetic field.</li></ul><p>It is possible to use the manual particle control part of the initial
+conditions to make changes to a restarted initial condition after the
+restart dump is loaded. The output files don&rsquo;t include all of the
+information needed to restart the code fully since some of this
+information is contained in the input deck. However, a restart dump also
+contains a full copy of the input deck used and this can be unpacked
+before running the code.
+If specific &ldquo;restart&rdquo; dumps are specified in the input deck, or the
+&ldquo;force_final_to_be_restartable&rdquo; flag is set then in some cases the
+output is forced to contain enough information to output all the data.
+These restart dumps can be very large, and also override the &ldquo;dumpmask&rdquo;
+parameter specified for a species and output the data for that species
+anyway.</p><h1 id=parameterising_input_decks>Parameterising input decks</h1><p>The simplest way to allow someone to use EPOCH as a black box is to give
+them the input.deck files that control the setup and initial conditions
+of the code. The input deck is simple enough that a quick read through
+of the relevant section of the manual should make it fairly easy for a
+new user to control those features of the code, but the initial
+conditions can be complex enough to be require significant work on the
+part of an unfamiliar user to understand. In this case, it can be
+helpful to use the ability to specify constants in an input deck to
+parameterise the file. So, to go back to a slight variation on an
+earlier example:</p><pre><code class=language-perl>begin:species
+   name = s1
+
+   # First set number_density in the range 0-&amp;gt;1
+   # Cut down number_density in x direction
+   number_density = if ((x gt -1) and (x lt 1), 1.0, 0.2)
+   # Cut down number_density in y direction
+   number_density = if ((y gt -1) and (y lt 1), number_density(s1), 0.2)
+
+   # Multiply number_density by real particle number density
+   number_density = number_density(s1) * 100.0
+
+   # Set the temperature to be zero
+   temp_x = 0.0
+   temp_y = temp_x(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * 100.0
+end:species
+
+begin:species
+   name = s2
+
+   # Just copy the number_density for species s1
+   number_density = number_density(s1)
+
+   # Just copy the temperature from species s1
+   temp_x = temp_x(s1)
+   temp_y = temp_y(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * 100.0
+end:species
+</code></pre><p>The particle number density (100.0) is hard coded into the deck file in
+several places. It would be easier if this was given to a new user as:</p><pre><code class=language-perl>begin:constant
+   particle_number_density = 100.0 # Particle number density
+end:constant
+
+begin:species
+   name = s1
+
+   # First set number_density in the range 0-&amp;gt;1
+   # Cut down number_density in x direction
+   number_density = if ((x gt -1) and (x lt 1), 1.0, 0.2)
+   # Cut down number_density in y direction
+   number_density = if ((y gt -1) and (y lt 1), number_density(s1), 0.2)
+
+   # Multiply number_density by real particle number density
+   number_density = number_density(s1) * particle_number_density
+
+   # Set the temperature to be zero
+   temp_x = 0.0
+   temp_y = temp_x(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * particle_number_density
+end:species
+
+begin:species
+   name = s2
+
+   # Just copy the number density for species s1
+   number_density = number_density(s1)
+
+   # Just copy the temperature from species s1
+   temp_x = temp_x(s1)
+   temp_y = temp_y(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * particle_number_density
+end:species
+</code></pre><p>It is also possible to parameterise other elements of initial conditions
+in a similar fashion. This is generally a good idea, since it makes the
+initial conditions easier to read an maintain.</p><h1 id=using_spatially_varying_functions_to_further_parameterise_initial_conditions>Using spatially varying functions to further parameterise initial conditions</h1><p>Again, this is just a readability change to the normal input.deck file,
+but it also makes changing and understanding the initial conditions
+rather simpler. In this case, entire parts of the initial conditions are
+moved into a spatially varying constant in order to make changing them
+at a later date easier. For example:</p><pre><code class=language-perl>begin:constant
+   particle_number_density = 100.0 # Particle number density
+   profile_x = if((x gt -1) and (x lt 1), 1.0, 0.2)
+   profile_y = if((y gt -1) and (y lt 1), 1.0, 0.2)
+end:constant
+
+begin:species
+   name = s1
+
+   # Multiply number_density by real particle number density
+   number_density = particle_number_density * profile_x * profile_y
+
+   # Set the temperature to be zero
+   temp_x = 0.0
+   temp_y = temp_x(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * particle_number_density
+end:species
+
+begin:species
+   name = s2
+
+   # Just copy the number_density for species s1
+   number_density = number_density(s1)
+
+   # Just copy the temperature from species s1
+   temp_x = temp_x(s1)
+   temp_y = temp_y(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * particle_number_density
+end:species
+</code></pre><p>This creates the same output as before. It is now trivial to modify the
+profiles later. For example:</p><pre><code class=language-perl>begin:constant
+   particle_number_density = 100.0 # Particle number density
+   profile_x = gauss(x, 0.0, 1.0)
+   profile_y = gauss(y, 0.0, 1.0)
+end:constant
+
+begin:species
+   name = s1
+
+   # Multiply number_density by real particle number density
+   number_density = particle_number_density * profile_x * profile_y
+
+   # Set the temperature to be zero
+   temp_x = 0.0
+   temp_y = temp_x(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * particle_number_density
+end:species
+
+begin:species
+   name = s2
+
+   # Just copy the number density for species s1
+   number_density = number_density(s1)
+
+   # Just copy the temperature from species s1
+   temp_x = temp_x(s1)
+   temp_y = temp_y(s1)
+
+   # Set the minimum number_density for this species
+   number_density_min = 0.3 * particle_number_density
+end:species
+</code></pre><p>This changes the code to run with a Gaussian density profile rather then
+a step function. Again, this can be extended as far as required.</p></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/documentation/code_details/maths_parser.html rel=next>Maths parser</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/documentation/code_details/using_delta_f.html rel=prev>Using delta f</a></div></div></div></div><div class=body-footer><p>Last updated on Jun 22, 2021</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>
