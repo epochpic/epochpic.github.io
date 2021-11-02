@@ -364,21 +364,21 @@ mkdir EXAMPLES
 &lt;/code>&lt;/pre>
 &lt;p>then download the .zip to this folder (either click the link and then
 copy the file, or right-click and select the save-as option).
-&lt;a href="media:Workshop_EXAMPLES.zip">All decks as a .zip&lt;/a>&lt;/p>
+&lt;a href="Workshop_EXAMPLES.zip">All decks as a .zip&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:01-1d_laser.deck">01-1d_laser.deck - A simple laser&lt;/a>&lt;/p>
+&lt;a href="01-1d_laser.deck">01-1d_laser.deck - A simple laser&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:02-2d_laser_amended.deck">02-2d_laser.deck - A simple 2d laser&lt;/a>&lt;/p>
+&lt;a href="02-2d_laser_amended.deck">02-2d_laser.deck - A simple 2d laser&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:03-1d_two_stream.deck">03-1d_two_stream.deck - A simple two-stream instability&lt;/a>&lt;/p>
+&lt;a href="03-1d_two_stream.deck">03-1d_two_stream.deck - A simple two-stream instability&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:04-1d_two_stream_io.deck">04-1d_two_stream_io.deck - The same two-stream instability with extended output&lt;/a>&lt;/p>
+&lt;a href="04-1d_two_stream_io.deck">04-1d_two_stream_io.deck - The same two-stream instability with extended output&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:05-2d_moving_window.deck">05-2d_moving_window.deck - Simple moving-window problem with density jump and laser&lt;/a>&lt;/p>
+&lt;a href="05-2d_moving_window.deck">05-2d_moving_window.deck - Simple moving-window problem with density jump and laser&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:06-2d_ramp.deck">06-2d_ramp.deck - Gaussian laser into a density ramp&lt;/a>&lt;/p>
+&lt;a href="06-2d_ramp.deck">06-2d_ramp.deck - Gaussian laser into a density ramp&lt;/a>&lt;/p>
 &lt;p>
-&lt;a href="media:07-1d_heating.deck">07-1d_heating.deck - Demonstration of numerical heating&lt;/a>&lt;/p>
+&lt;a href="07-1d_heating.deck">07-1d_heating.deck - Demonstration of numerical heating&lt;/a>&lt;/p>
 &lt;h1 id="a_basic_em_field_simulation">A Basic EM-Field Simulation&lt;/h1>
 &lt;p>Our first example problem will be a simple 1D domain with a laser. This
 should give you a simple introduction to the input deck and
