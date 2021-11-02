@@ -6806,9 +6806,8 @@ computer. If not we may be able to help before you leave.&lt;/li>
 &lt;a href="/documentation/examples/Workshop_examples/#getting_the_example_decks_for_this_workshop">
 here&lt;/a>
 and viewed or copied from here:&lt;/p>
-&lt;p>&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>
 &lt;details>
-&lt;summary>Click to expand&lt;/summary>
+&lt;summary>**04-1d_two_stream_io.deck** (click to expand)&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:control
 nx = 400
 # Size of domain
@@ -6892,10 +6891,8 @@ include_species:Right
 end:dist_fn
 &lt;/code>&lt;/pre>
 &lt;/details>
-&lt;p>&lt;strong>05-2d_moving_window.deck&lt;/strong>&lt;/p>
-&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
-&lt;div class="mw-collapsible-content">
+&lt;details>
+&lt;summary>**05-2d_moving_window.deck** (click to expand)&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:constant
 x0 = 20 * micron
 lambda = 10 * micron
@@ -6979,12 +6976,9 @@ bc_x_min_after_move = simple_outflow
 bc_x_max_after_move = simple_outflow
 end:window
 &lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
-&lt;p>&lt;strong>06-2d_ramp.deck&lt;/strong>&lt;/p>
-&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
-&lt;div class="mw-collapsible-content">
+&lt;/details>
+&lt;details>
+&lt;summary>**06-2d_ramp.deck** (click to expand)&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:constant
 # Particles per cell
 part = 32
@@ -7175,8 +7169,7 @@ py = always
 pz = always
 end:output
 &lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
+&lt;/details>
 &lt;h1 id="remote_visualisation_with_visit">Remote Visualisation with VisIt&lt;/h1>
 &lt;p>If the local workstation you are using isn&amp;rsquo;t big enough for your test
 problems you may also use a your host institutes HPC cluster.&lt;/p>
