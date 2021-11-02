@@ -138,21 +138,21 @@ the following links. Create a directory "\~/EXAMPLES" to put them in:
 
 then download the .zip to this folder (either click the link and then
 copy the file, or right-click and select the save-as option).
-[All decks as a .zip](media:Workshop_EXAMPLES.zip "wikilink")
+[All decks as a .zip](Workshop_EXAMPLES.zip)
 
-[01-1d_laser.deck - A simple laser](media:01-1d_laser.deck "wikilink")
-[02-2d_laser.deck - A simple 2d
-laser](media:02-2d_laser_amended.deck "wikilink")
-[03-1d_two_stream.deck - A simple two-stream
-instability](media:03-1d_two_stream.deck "wikilink")
-[04-1d_two_stream_io.deck - The same two-stream instability with
-extended output ](media:04-1d_two_stream_io.deck "wikilink")
-[05-2d_moving_window.deck - Simple moving-window problem with density
-jump and laser ](media:05-2d_moving_window.deck "wikilink")
-[06-2d_ramp.deck - Gaussian laser into a density ramp
-](media:06-2d_ramp.deck "wikilink")
-[07-1d_heating.deck - Demonstration of numerical heating
-](media:07-1d_heating.deck "wikilink")
+[01-1d_laser.deck - A simple laser](01-1d_laser.deck)
+
+[02-2d_laser.deck - A simple 2d laser](02-2d_laser_amended.deck)
+
+[03-1d_two_stream.deck - A simple two-stream instability](03-1d_two_stream.deck)
+
+[04-1d_two_stream_io.deck - The same two-stream instability with extended output](04-1d_two_stream_io.deck)
+
+[05-2d_moving_window.deck - Simple moving-window problem with density jump and laser](05-2d_moving_window.deck)
+
+[06-2d_ramp.deck - Gaussian laser into a density ramp](06-2d_ramp.deck)
+
+[07-1d_heating.deck - Demonstration of numerical heating](07-1d_heating.deck)
 
 # A Basic EM-Field Simulation {#a_basic_em_field_simulation}
 

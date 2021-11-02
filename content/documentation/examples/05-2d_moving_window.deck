@@ -1,0 +1,106 @@
+begin:constant
+  x0 = 20 * micron
+  lambda = 10 * micron
+
+  t_laser = 120 * femto
+  sigma_t = t_laser / 2 / sqrt(loge(2))
+
+  w0_laser = 30 * micron
+  sigma_w0 = w0_laser / 2 / sqrt(loge(2))
+
+  den_peak = 5.0e19 * 1.0e6
+  win_start = 340 * femto
+end:constant
+
+
+begin:control
+  nx = 1550 / 8
+  ny = 600 / 8
+  npart = (60e6) / 8
+
+  # Size of domain
+  x_min = 0
+  x_max = 155 * micron
+  y_min = -30 * micron
+  y_max = -y_min
+
+  # Final time of simulation
+  t_end = 1600 * femto
+
+  stdout_frequency = 1
+  print_eta_string = T
+end:control
+
+
+begin:boundaries
+  bc_x_min = simple_laser
+  bc_x_max = simple_outflow
+  bc_y_min = simple_outflow
+  bc_y_max = simple_outflow
+end:boundaries
+
+
+begin:species
+  name = electron
+  charge = -1.0
+  mass = 1.0
+  number_density = if((x lt x0), 0.0, den_peak)
+  frac = 0.5
+end:species
+
+
+begin:species
+  name = proton
+  charge = 1.0
+  mass = 1836.2
+  number_density = number_density(electron)
+  frac = 0.5
+end:species
+
+
+begin:output
+  name = normal
+  dt_snapshot = 50 * femto
+
+  grid = always
+  ex = always
+  ey = always
+  ez = always
+  bx = always
+  by = always
+  bz = always
+  jx = always
+  jy = always
+  ekbar = always
+  mass_density = never + species
+  charge_density = always
+  number_density = always + species
+  temperature = always + species
+end:output
+
+
+begin:output
+  name = large
+  dt_snapshot = 500 * femto
+
+  particles = always
+  particle_weight = always
+end:output
+
+
+begin:laser
+  boundary = x_min
+  intensity_w_cm2 = 1.9e18
+  lambda = lambda
+  t_profile = gauss(time, 2*sigma_t, sigma_t)
+  profile = gauss(y, 0, sigma_w0)
+end:laser
+
+
+begin:window
+  move_window = T
+  window_v_x = c * 0.87
+  window_start_time = win_start
+  bc_x_min_after_move = simple_outflow
+  bc_x_max_after_move = simple_outflow
+end:window
