@@ -6806,9 +6806,9 @@ computer. If not we may be able to help before you leave.&lt;/li>
 &lt;a href="/documentation/examples/Workshop_examples/#getting_the_example_decks_for_this_workshop">
 here&lt;/a>
 and viewed or copied from here:&lt;/p>
+&lt;p>&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>
 &lt;details>
-**04-1d_two_stream_io.deck**
-&lt;summary>(click to expand)&lt;/summary>
+&lt;summary>Click to expand&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:control
 nx = 400
 # Size of domain
@@ -6892,9 +6892,9 @@ include_species:Right
 end:dist_fn
 &lt;/code>&lt;/pre>
 &lt;/details>
+&lt;p>&lt;strong>05-2d_moving_window.deck&lt;/strong>&lt;/p>
 &lt;details>
-**05-2d_moving_window.deck**
-&lt;summary>(click to expand)&lt;/summary>
+&lt;summary>Click to expand&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:constant
 x0 = 20 * micron
 lambda = 10 * micron
@@ -6979,9 +6979,9 @@ bc_x_max_after_move = simple_outflow
 end:window
 &lt;/code>&lt;/pre>
 &lt;/details>
+&lt;p>&lt;strong>06-2d_ramp.deck&lt;/strong>&lt;/p>
 &lt;details>
-**06-2d_ramp.deck**
-&lt;summary>(click to expand)&lt;/summary>
+&lt;summary>Click to expand&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:constant
 # Particles per cell
 part = 32
@@ -7122,9 +7122,9 @@ include_species:proton
 end:probe
 &lt;/code>&lt;/pre>
 &lt;/details>
+&lt;p>&lt;strong>07-1d_heating.deck&lt;/strong>&lt;/p>
 &lt;details>
-**07-1d_heating.deck**
-&lt;summary>(click to expand)&lt;/summary>
+&lt;summary>Click to expand&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:constant
 dl = 74.33942 * micron
 end:constant
