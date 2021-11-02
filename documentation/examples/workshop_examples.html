@@ -64,7 +64,7 @@ should give you a simple introduction to the input deck and
 visualization of 1D datasets.</p><p>Begin by copying the &ldquo;01-1d_laser.deck&rdquo; file from the EXAMPLES
 directory into the &ldquo;Data&rdquo; directory using the command: cp
 ~/EXAMPLES/01-1d_laser.deck Data/input.deck</p><details><summary>Or click to expand and copy this text into a file "input.deck" in
-your Data directory:</summary><pre><code class=language-perl>begin:control
+your Data directory.</summary><pre><code class=language-perl>begin:control
   nx = 200
 
   # Size of domain
@@ -371,7 +371,7 @@ reader!</p><p>The above plot can also be generated using matplotlib using the co
 <code>plot2d(data.Electric_Field_Ey)</code></p><h1 id=specifying_particle_species>Specifying particle species</h1><p>In this example we will finally introduce some particles into the PIC
 code! The deck is for the 1D version of the code, so change back to the
 epoch1d directory and copy ~/EXAMPLES/03-1d_two_stream.deck to
-Data/input.deck (or copy the deck below) and run the code.</p><div class="mw-collapsible mw-collapsed" style=border-style:solid;border-width:2px;border-color:#0059a1><p>Click &ldquo;Expand&rdquo; to view or copy the deck code:</p><div class=mw-collapsible-content><pre><code class=language-perl>begin:control
+Data/input.deck (or copy the deck below) and run the code.</p><details><summary>Click to expand</summary><pre><code class=language-perl>begin:control
   nx = 400
 
   # Size of domain
@@ -434,7 +434,7 @@ begin:output
   grid = always
   ey = always
 end:output
-</code></pre></div></div><p>The control block has one new parameter. &ldquo;npart&rdquo; gives the total number
+</code></pre></details><p>The control block has one new parameter. &ldquo;npart&rdquo; gives the total number
 of PIC particles to use in the simulation.</p><p>The input deck contains a new block type, &ldquo;species&rdquo;, which is used for
 populating the domain with particles. Every species block must contain a
 &ldquo;name&rdquo; parameter. This is used to identify the particle species in other

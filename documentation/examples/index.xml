@@ -389,7 +389,7 @@ directory into the &amp;ldquo;Data&amp;rdquo; directory using the command: cp
 ~/EXAMPLES/01-1d_laser.deck Data/input.deck&lt;/p>
 &lt;details>
 &lt;summary>Or click to expand and copy this text into a file "input.deck" in
-your Data directory:&lt;/summary>
+your Data directory.&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:control
 nx = 200
 # Size of domain
@@ -794,9 +794,8 @@ reader!&lt;/p>
 code! The deck is for the 1D version of the code, so change back to the
 epoch1d directory and copy ~/EXAMPLES/03-1d_two_stream.deck to
 Data/input.deck (or copy the deck below) and run the code.&lt;/p>
-&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
-&lt;div class="mw-collapsible-content">
+&lt;details>
+&lt;summary>Click to expand&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:control
 nx = 400
 # Size of domain
@@ -846,8 +845,7 @@ grid = always
 ey = always
 end:output
 &lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
+&lt;/details>
 &lt;p>The control block has one new parameter. &amp;ldquo;npart&amp;rdquo; gives the total number
 of PIC particles to use in the simulation.&lt;/p>
 &lt;p>The input deck contains a new block type, &amp;ldquo;species&amp;rdquo;, which is used for
