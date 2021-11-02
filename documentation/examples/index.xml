@@ -962,11 +962,11 @@ available throughout the duration of the workshop, so if you want help
 with anything please don&amp;rsquo;t hesitate to ask. The decks are:&lt;/p>
 &lt;ul>
 &lt;li>01-1d_laser.deck Described in notes above
-&lt;a href="/documentation/examples/Workshop_examples/#a_basic_em_field_simulation">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples#a_basic_em_field_simulation">(here)&lt;/a>&lt;/li>
 &lt;li>02-2d_laser.deck Described in notes above
-&lt;a href="/documentation/examples/Workshop_examples/#a_2d_laser">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples#a_2d_laser">(here)&lt;/a>&lt;/li>
 &lt;li>03-1d_two_stream.deck Described in notes above
-&lt;a href="/documentation/examples/Workshop_examples/#specifying_particle_species">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples#specifying_particle_species">(here)&lt;/a>&lt;/li>
 &lt;li>04-1d_two_stream_io.deck This is the same as the previous deck
 but with the addition of more sophisticated output diagnostics&lt;/li>
 &lt;li>05-2d_moving_window.deck This deck contains an example of firing a
@@ -1011,7 +1011,7 @@ computer. If not we may be able to help before you leave.&lt;/li>
 &lt;/ol>
 &lt;h1 id="copies_of_the_decks">Copies of the decks&lt;/h1>
 &lt;p>The decks can be downloaded
-&lt;a href="/documentation/examples/Workshop_examples/#getting_the_example_decks_for_this_workshop">
+&lt;a href="/documentation/examples/Workshop_examples#getting_the_example_decks_for_this_workshop">
 here&lt;/a>
 and viewed or copied from here:&lt;/p>
 &lt;p>&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>

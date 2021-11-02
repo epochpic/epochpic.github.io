@@ -615,7 +615,7 @@ at an angle.&lt;/p>
 by using the same technique as above but making the angle of
 propagation, $\theta$, a function of $y$ such that the laser is focused
 to a point along the $x$-axis. A simple example is given
-&lt;a href="/documentation/examples/basic_examples/#focussing_a_gaussian_beam">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/examples/basic_examples#focussing_a_gaussian_beam">here&lt;/a>.&lt;/p>
 &lt;h1 id="restarting_epoch_from_previous_output_dumps">Restarting EPOCH from previous output dumps&lt;/h1>
 &lt;p>Another possible way of setting up initial conditions in EPOCH is to
 load in a previous output dump and use it to specify initial conditions
@@ -863,10 +863,10 @@ The following compile-time defines have been added to the Makefile:&lt;/p>
 &lt;h1 id="major_features_and_new_blocks_added_to_the_input_deck">Major features and new blocks added to the input deck&lt;/h1>
 &lt;ul>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_boundaries/#cpml_boundary_conditions">CPML boundary
+&lt;a href="/documentation/input_deck/input_deck_boundaries#cpml_boundary_conditions">CPML boundary
 conditions&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_boundaries/#thermal_boundary_conditions">Thermal boundary
+&lt;a href="/documentation/input_deck/input_deck_boundaries#thermal_boundary_conditions">Thermal boundary
 conditions&lt;/a>&lt;/li>
 &lt;li>
 &lt;a href="/documentation/input_deck/input_deck_collisions">Collisions&lt;/a>&lt;/li>
@@ -875,20 +875,20 @@ conditions&lt;/a>&lt;/li>
 &lt;li>
 &lt;a href="/documentation/input_deck/input_deck_subset">Subsets&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">Ionisation&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">Ionisation&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_output_block/#single-precision_output">Single-precision
+&lt;a href="/documentation/input_deck/input_deck_output_block#single-precision_output">Single-precision
 output&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">Multiple output
+&lt;a href="/documentation/input_deck/input_deck_output_block#multiple_output_blocks">Multiple output
 blocks&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_species/#particle_migration_between_species">Particle
+&lt;a href="/documentation/input_deck/input_deck_species#particle_migration_between_species">Particle
 migration&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h1 id="additional_output_block_parameters">Additional output block parameters&lt;/h1>
 &lt;p>The following parameters have also been added to the &amp;ldquo;output&amp;rdquo; block (see
-&lt;a href="/documentation/input_deck/input_deck_output/#directives">here&lt;/a>):&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_output#directives">here&lt;/a>):&lt;/p>
 &lt;ul>
 &lt;li>dump_first&lt;/li>
 &lt;li>dump_last&lt;/li>
@@ -991,7 +991,7 @@ deck:&lt;/p>
 &lt;li>The &amp;ldquo;profile&amp;rdquo; parameter can now be time varying&lt;/li>
 &lt;/ul>
 &lt;p>The following parameters have been added to the list of pre-defined
-&lt;a href="/documentation/code_details/maths_parser/#constants">constants&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/maths_parser#constants">constants&lt;/a>.&lt;/p>
 &lt;ul>
 &lt;li>nproc_{x,y,z}&lt;/li>
 &lt;li>nsteps&lt;/li>
@@ -1007,7 +1007,7 @@ added to the input deck.&lt;/p>
 moving window model is active. In previous versions of the code,
 this property was ignored once the moving window began.&lt;/li>
 &lt;li>Ionisation species now inherit their &amp;ldquo;dumpmask&amp;rdquo;. See
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a> for details.&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a> for details.&lt;/li>
 &lt;li>Default values for ignorable directions were added. This change
 allows submitting 3D or 2D input decks to a 1D version of and 3D
 input decks to a 2D version of . Any references to y/z will be set
@@ -1155,9 +1155,9 @@ here&lt;/a>&lt;/li>
 &lt;li>Per-species particle boundaries. You can now specify bc_x_min and
 bc_x_max to a species block. This overrides the global boundaries
 for that species. See
-&lt;a href="/documentation/input_deck/input_deck_species/#species_boundary_conditions">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_species#species_boundary_conditions">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;particles_per_cell&amp;rdquo; output diagnostic. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#derived_variables">here&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h1 id="changes_between_version_4" class="10_and_4 11">Changes between version 4.10 and 4.11&lt;/h1>
 &lt;h1 id="new_capabilities_2">New capabilities&lt;/h1>
@@ -1184,28 +1184,28 @@ when used in conjunction with the moving window.&lt;/li>
 &lt;p>Version 4.12 adds the following new capabilities:&lt;/p>
 &lt;ul>
 &lt;li>Added &amp;ldquo;average_weight&amp;rdquo; output diagnostic. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#derived_variables">here&lt;/a>&lt;/li>
 &lt;li>Removed the &amp;ldquo;PARTICLE_COUNT_UPDATE&amp;rdquo; Makefile flag and replaced it
 with a &amp;ldquo;use_particle_count_update&amp;rdquo; parameter in the control
 block. See
-&lt;a href="/documentation/input_deck/input_deck_control/#basics">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#basics">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;use_flux_maxwellian&amp;rdquo; option to the &amp;ldquo;injector&amp;rdquo; block. See
-&lt;a href="/documentation/input_deck/input_deck_injector/#keys">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_injector#keys">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;lehe_{x,y,z}&amp;rdquo; flags to the &amp;ldquo;maxwell_solver&amp;rdquo; option in the
 control block. See
-&lt;a href="/documentation/input_deck/input_deck_control/#maxwell_solvers">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#maxwell_solvers">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;use_accurate_n_zeros&amp;rdquo; control block parameter. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;custom&amp;rdquo; flag to the &amp;ldquo;maxwell_solver&amp;rdquo; option in the control
 block. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a> and
-&lt;a href="/documentation/input_deck/input_deck_control/#stencil_block">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#stencil_block">here&lt;/a>&lt;/li>
 &lt;li>Added the &amp;ldquo;WORK_DONE_INTEGRATED&amp;rdquo; Makefile flag and corresponding
 dumpmask directives &amp;ldquo;work_{x,y,z}&amp;rdquo; and &amp;ldquo;work_{x,y,z}_total&amp;rdquo;.
 These add a diagnostic for the work done on a particle by the
 electric field. See
 &lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a> and
-&lt;a href="/documentation/input_deck/input_deck_output_block/#particle_variables">here&lt;/a>.&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#particle_variables">here&lt;/a>.&lt;/li>
 &lt;/ul>
 &lt;h1 id="changes_between_version_4" class="12_and_4 14">Changes between version 4.12 and 4.14&lt;/h1>
 &lt;h1 id="new_capabilities_4">New capabilities&lt;/h1>
@@ -1216,11 +1216,11 @@ electric field. See
 &lt;li>Changed the default value of &amp;ldquo;print_eta_string&amp;rdquo; to &amp;ldquo;T&amp;rdquo; in the
 control block.&lt;/li>
 &lt;li>Added the ability to request an output dump at run time. See
-&lt;a href="/documentation/input_deck/input_deck_control/#requesting_output_dumps_at_run_time">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#requesting_output_dumps_at_run_time">here&lt;/a>&lt;/li>
 &lt;li>Added the &amp;ldquo;window_stop_time&amp;rdquo; parameter to the window block. See
 &lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
 &lt;li>Added the &amp;ldquo;atan2&amp;rdquo; function to the maths parser. See
-&lt;a href="/documentation/code_details/maths_parser/#functions">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/code_details/maths_parser#functions">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;dlb_maximum_interval&amp;rdquo; parameter to the control block. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;dlb_force_interval&amp;rdquo; parameter to the control block. See
@@ -1231,13 +1231,13 @@ control block.&lt;/li>
 &amp;ldquo;bc_x_max_after_move&amp;rdquo; parameters to the window block. See
 &lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
 &lt;li>Added a &amp;ldquo;dump_at_walltimes&amp;rdquo; parameter to the output block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#multiple_output_blocks">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;walltime_start&amp;rdquo; and &amp;ldquo;walltime_stop&amp;rdquo; parameters to the
 output block and output_global block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#directives">here&lt;/a> and
+&lt;a href="/documentation/input_deck/input_deck_output_block#directives">here&lt;/a> and
 &lt;a href="/documentation/input_deck/input_deck_output_global">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;walltime_interval&amp;rdquo; parameter to the output block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#multiple_output_blocks">here&lt;/a>&lt;/li>
 &lt;li>Added the Higuera-Cary particle push. This can be enabled using the
 &amp;ldquo;HC_PUSH&amp;rdquo; Makefile flag. See
 &lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.&lt;/li>
@@ -1263,7 +1263,7 @@ be run that were not previously possible.
 controlling the way that species are setup. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
 &lt;li>Added strided multipass digital current filtering (See
-&lt;a href="/documentation/input_deck/input_deck_control/#strided_current_filtering">here&lt;/a>).
+&lt;a href="/documentation/input_deck/input_deck_control#strided_current_filtering">here&lt;/a>).
 This adds the following flags to the control block.
 &lt;ul>
 &lt;li>smooth_iterations&lt;/li>
@@ -1281,7 +1281,7 @@ flags to the subset block
 &lt;/li>
 &lt;li>Added loading of relativistic particle species using the
 Maxwell-Jüttner distribution. See
-&lt;a href="/documentation/input_deck/input_deck_species/#maxwell_juttner_distributions">here&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#maxwell_juttner_distributions">here&lt;/a>.
 This adds the following flags to the species block
 &lt;ul>
 &lt;li>use_maxwell_juttner&lt;/li>
@@ -1290,7 +1290,7 @@ This adds the following flags to the species block
 &lt;/li>
 &lt;li>Added loading of particle species using an arbitrary distribution
 function for sampling the momentum components. See
-&lt;a href="/documentation/input_deck/input_deck_species/#arbitrary_distribution_functions">here&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#arbitrary_distribution_functions">here&lt;/a>.
 This adds the following flags to the species block
 &lt;ul>
 &lt;li>dist_fn&lt;/li>
@@ -1299,7 +1299,7 @@ This adds the following flags to the species block
 &lt;/li>
 &lt;li>Added &amp;ldquo;temperature_{x,y,z}&amp;rdquo; derived output variables to the output
 block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#derived_variables">here&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h1 id="changes_between_version_4" class="15_and_4 16">Changes between version 4.15 and 4.16&lt;/h1>
 &lt;ul>

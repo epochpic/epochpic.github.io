@@ -113,7 +113,7 @@ distribution from within the input deck. In such cases, it is necessary
 to edit and recompile the &lt;strong>EPOCH&lt;/strong> source code. The recommended method
 for setting the initial particle properties is to use the
 &amp;ldquo;&lt;code>manual_load&lt;/code>&amp;rdquo; function as described
-&lt;a href="/documentation/code_details/using_epoch_in_practice/#manually_overriding_particle_parameters_set_by_the_autoloader">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/using_epoch_in_practice#manually_overriding_particle_parameters_set_by_the_autoloader">here&lt;/a>.&lt;/p>
 &lt;h2 id="what-is-a-maths-parser">What is a maths parser?&lt;/h2>
 &lt;p>As previously mentioned, the behaviour of &lt;strong>EPOCH&lt;/strong> is controlled using
 an input deck which contains a list of key/value pairs. The value part
@@ -126,7 +126,7 @@ this facility can be found
 &lt;a href="/documentation/code_details/maths_parser">here&lt;/a>.&lt;/p>
 &lt;h2 id="i-am-an-advanced-user-but-i-want-to-set-up-the-code-so-that-less-experienced-users-can-use-it" class="-how-do-i-do-that">I am an advanced user, but I want to set up the code so that less experienced users can use it. How do I do that?&lt;/h2>
 &lt;p>See
-&lt;a href="/documentation/code_details/using_epoch_in_practice/#parameterising_input_decks">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/using_epoch_in_practice#parameterising_input_decks">here&lt;/a>.&lt;/p>
 &lt;h2 id="i-want-to-develop-an-addition-to-epoch" class="-how-do-i-do-that">I want to develop an addition to &lt;strong>EPOCH&lt;/strong>. How do I do that?&lt;/h2>
 &lt;p>A slightly outdated developers manual exists which should be sufficient
 to cover most aspects of the code functionality. However, the code is
@@ -398,7 +398,7 @@ done on each particle by the electric field. Note that this
 increases the size of each particle by 48 bytes. The information
 gathered can be output to file using the &amp;ldquo;work_{x,y,z}&amp;rdquo; and
 &amp;ldquo;work_{x,y,z}_total&amp;rdquo; dumpmasks. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#particle_variables">here&lt;/a>&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_output_block#particle_variables">here&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>DELTAF_METHOD - Compile the code to use the delta-f method to

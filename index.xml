@@ -113,7 +113,7 @@ distribution from within the input deck. In such cases, it is necessary
 to edit and recompile the &lt;strong>EPOCH&lt;/strong> source code. The recommended method
 for setting the initial particle properties is to use the
 &amp;ldquo;&lt;code>manual_load&lt;/code>&amp;rdquo; function as described
-&lt;a href="/documentation/code_details/using_epoch_in_practice/#manually_overriding_particle_parameters_set_by_the_autoloader">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/using_epoch_in_practice#manually_overriding_particle_parameters_set_by_the_autoloader">here&lt;/a>.&lt;/p>
 &lt;h2 id="what-is-a-maths-parser">What is a maths parser?&lt;/h2>
 &lt;p>As previously mentioned, the behaviour of &lt;strong>EPOCH&lt;/strong> is controlled using
 an input deck which contains a list of key/value pairs. The value part
@@ -126,7 +126,7 @@ this facility can be found
 &lt;a href="/documentation/code_details/maths_parser">here&lt;/a>.&lt;/p>
 &lt;h2 id="i-am-an-advanced-user-but-i-want-to-set-up-the-code-so-that-less-experienced-users-can-use-it" class="-how-do-i-do-that">I am an advanced user, but I want to set up the code so that less experienced users can use it. How do I do that?&lt;/h2>
 &lt;p>See
-&lt;a href="/documentation/code_details/using_epoch_in_practice/#parameterising_input_decks">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/using_epoch_in_practice#parameterising_input_decks">here&lt;/a>.&lt;/p>
 &lt;h2 id="i-want-to-develop-an-addition-to-epoch" class="-how-do-i-do-that">I want to develop an addition to &lt;strong>EPOCH&lt;/strong>. How do I do that?&lt;/h2>
 &lt;p>A slightly outdated developers manual exists which should be sufficient
 to cover most aspects of the code functionality. However, the code is
@@ -398,7 +398,7 @@ done on each particle by the electric field. Note that this
 increases the size of each particle by 48 bytes. The information
 gathered can be output to file using the &amp;ldquo;work_{x,y,z}&amp;rdquo; and
 &amp;ldquo;work_{x,y,z}_total&amp;rdquo; dumpmasks. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#particle_variables">here&lt;/a>&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_output_block#particle_variables">here&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>DELTAF_METHOD - Compile the code to use the delta-f method to
@@ -665,7 +665,7 @@ useful to specify the time in picoseconds or femtoseconds. To accomplish
 this, just append the appropriate multiplication factor. For example,
 &amp;ldquo;t_end = 3 * femto&amp;rdquo; specifies 3 femtoseconds. A list of multiplication
 factors is supplied
-&lt;a href="/documentation/code_details/maths_parser/#constants">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/maths_parser#constants">here&lt;/a>.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>{x,y,z}_min&lt;/code> - Minimum grid position of the domain in
@@ -746,14 +746,14 @@ Buneman &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-n
 &lt;li>
 &lt;p>&lt;code>field_ionisation&lt;/code> - Logical flag which turns on field
 ionisation. See
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a>
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a>
 .&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>use_bsi&lt;/code> - Logical flag which turns on barrier
 suppression ionisation correction to the tunnelling ionisation model for
 high intensity lasers. See
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a> . This flag
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a> . This flag
 should always be enabled when using field ionisation and is only
 supplied for testing purposes. The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
 &lt;/li>
@@ -762,7 +762,7 @@ supplied for testing purposes. The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
 ionisation by multiple photon absorption. This should be set to &amp;ldquo;F&amp;rdquo; if
 there is no laser attached to a boundary as it relies on laser
 frequency. See
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a>.
 This flag should always be enabled when using field ionisation and is
 only supplied for testing purposes. The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
 &lt;/li>
@@ -832,13 +832,13 @@ value is &amp;ldquo;F&amp;rdquo;.&lt;/p>
 &lt;li>
 &lt;p>&lt;code>use_migration&lt;/code> - Logical flag which determines whether
 or not to use
-&lt;a href="/documentation/input_deck/input_deck_species/#particle_migration_between_species">particle migration&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#particle_migration_between_species">particle migration&lt;/a>.
 The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>migration_interval&lt;/code> - The number of timesteps between
 each
-&lt;a href="/documentation/input_deck/input_deck_species/#particle_migration_between_species">migration event&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#particle_migration_between_species">migration event&lt;/a>.
 The default is 1 (migrate at every timestep).&lt;/p>
 &lt;/li>
 &lt;li>
@@ -1033,7 +1033,7 @@ is best along the axis with the smallest grid spacing.&lt;/p>
 over the extended stencil coefficients. This allows for the specification
 of optimised coefficients as outlined in &lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>. This option must be
 accompanied by a &amp;ldquo;stencil&amp;rdquo; block. See
-&lt;a href="/documentation/input_deck/input_deck_control/#stencil_block">below.&lt;/a>&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_control#stencil_block">below.&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h1 id="stencil_block">Stencil Block&lt;/h1>
@@ -1507,7 +1507,7 @@ of an expression. This is seen in the above example in the first two
 lines for the Electron species, where the number density is first set
 and then corrected. If you wish to specify the number density in parts
 per cubic metre then you can divide by the &amp;ldquo;cc&amp;rdquo; constant (see
-&lt;a href="/documentation/code_details/maths_parser/#constants">here&lt;/a>). This parameter is
+&lt;a href="/documentation/code_details/maths_parser#constants">here&lt;/a>). This parameter is
 mandatory. &amp;ldquo;density&amp;rdquo; is accepted as an alias.&lt;/li>
 &lt;li>&lt;code>number_density_min&lt;/code> - Minimum particle number density in
 $m^{-3}$. When the number density in a cell falls below
@@ -1636,7 +1636,7 @@ the outermost electron ionises first always, and that the orbitals are
 filled assuming ground state. When this parameter is specified it turns
 on ionisation modelling. If you wish to specify the values in
 Electron-Volts, add the &amp;ldquo;ev&amp;rdquo;
-&lt;a href="/documentation/code_details/maths_parser/#constants">multiplication
+&lt;a href="/documentation/code_details/maths_parser#constants">multiplication
 factor&lt;/a>.&lt;/li>
 &lt;li>&lt;code>ionisation_electron_species&lt;/code> - Name of the electron
 species. This can be specified as an array in the event that the user
@@ -1972,7 +1972,7 @@ end:fields
 &lt;p>Once again, this is a very simple block needing only limited
 explanation. All field variables are accessible by name and can be read
 back using the appropriate commands from the maths parser (see
-&lt;a href="/documentation/code_details/maths_parser/#constants">here&lt;/a>). The possible
+&lt;a href="/documentation/code_details/maths_parser#constants">here&lt;/a>). The possible
 parameters are as follows:&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>ex,ey,ez&lt;/code> - The electric field vectors pointing in all
@@ -2213,7 +2213,7 @@ guaranteed is that the next output will be after the first iteration
 which takes the simulation to a time $\ge$ &lt;em>dt_snapshot&lt;/em> from the last
 output. As with other variables which specify a unit of time, it can be
 specified in more convenient unit by using a multiplication factor (see
-&lt;a href="/documentation/code_details/maths_parser/#constants">here&lt;/a>). For example,
+&lt;a href="/documentation/code_details/maths_parser#constants">here&lt;/a>). For example,
 &amp;ldquo;dt_snapshot = 5 * femto&amp;rdquo; will set it to be 5 femtoseconds. The
 default value is a large number which will never trigger an output.&lt;/li>
 &lt;li>&lt;code>nstep_snapshot&lt;/code> - Sets the number of timesteps between
@@ -2966,10 +2966,10 @@ one).&lt;/p>
 &lt;li>&lt;code>collisional_ionisation&lt;/code> - If this logical flag is set to
 &amp;ldquo;T&amp;rdquo; then the collisional ionisation model is enabled. This process is
 independent of &lt;em>field_ionisation&lt;/em> (see
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a>). However, in
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a>). However, in
 order to set up &lt;em>collisional_ionisation&lt;/em> you must also specify
 ionisation energies and electrons in a &lt;em>species&lt;/em> block (see
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a>). The default
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a>). The default
 value is &amp;ldquo;F&amp;rdquo;.
 For example:&lt;/li>
 &lt;/ul>
@@ -3182,7 +3182,7 @@ averages. The default value is &amp;ldquo;0&amp;rdquo;.&lt;/li>
 &lt;/ul>
 &lt;p>Once a subset has been defined, the subset name can then be used in
 place of (or in addition to) the dumpmask in an &amp;ldquo;output&amp;rdquo; block (see also
-&lt;a href="/documentation/input_deck/input_deck_output_block/#dumpmask">here&lt;/a>). For example:&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_output_block#dumpmask">here&lt;/a>). For example:&lt;/p>
 &lt;pre>&lt;code class="language-perl">begin:subset
 name = background
 random_fraction = 0.1
@@ -3319,8 +3319,8 @@ parts of the code where needed.
 In the above example, several pre-defined constants have been used (&lt;em>pi&lt;/em>
 and &lt;em>c&lt;/em>) and also several functions (&lt;em>critical&lt;/em>, &lt;em>exp&lt;/em>, &lt;em>gauss&lt;/em> and
 &lt;em>sqrt&lt;/em>). These are described
-&lt;a href="/documentation/code_details/maths_parser/#constants">here&lt;/a> and
-&lt;a href="/documentation/code_details/maths_parser/#functions">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/maths_parser#constants">here&lt;/a> and
+&lt;a href="/documentation/code_details/maths_parser#functions">here&lt;/a>.&lt;/p>
 &lt;!-- ######################## Cross references ######################## --></description></item><item><title>injector block</title><link>/documentation/input_deck/input_deck_injector.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_injector.html</guid><description>&lt;p>The &lt;em>injector&lt;/em> block specifies a particle source to be introduced
 through a simulation boundary. Each injector block specifies a source of
 a single species of particle defined by a density, centre of mass drift
@@ -4229,7 +4229,7 @@ at an angle.&lt;/p>
 by using the same technique as above but making the angle of
 propagation, $\theta$, a function of $y$ such that the laser is focused
 to a point along the $x$-axis. A simple example is given
-&lt;a href="/documentation/examples/basic_examples/#focussing_a_gaussian_beam">here&lt;/a>.&lt;/p>
+&lt;a href="/documentation/examples/basic_examples#focussing_a_gaussian_beam">here&lt;/a>.&lt;/p>
 &lt;h1 id="restarting_epoch_from_previous_output_dumps">Restarting EPOCH from previous output dumps&lt;/h1>
 &lt;p>Another possible way of setting up initial conditions in EPOCH is to
 load in a previous output dump and use it to specify initial conditions
@@ -4477,10 +4477,10 @@ The following compile-time defines have been added to the Makefile:&lt;/p>
 &lt;h1 id="major_features_and_new_blocks_added_to_the_input_deck">Major features and new blocks added to the input deck&lt;/h1>
 &lt;ul>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_boundaries/#cpml_boundary_conditions">CPML boundary
+&lt;a href="/documentation/input_deck/input_deck_boundaries#cpml_boundary_conditions">CPML boundary
 conditions&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_boundaries/#thermal_boundary_conditions">Thermal boundary
+&lt;a href="/documentation/input_deck/input_deck_boundaries#thermal_boundary_conditions">Thermal boundary
 conditions&lt;/a>&lt;/li>
 &lt;li>
 &lt;a href="/documentation/input_deck/input_deck_collisions">Collisions&lt;/a>&lt;/li>
@@ -4489,20 +4489,20 @@ conditions&lt;/a>&lt;/li>
 &lt;li>
 &lt;a href="/documentation/input_deck/input_deck_subset">Subsets&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">Ionisation&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">Ionisation&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_output_block/#single-precision_output">Single-precision
+&lt;a href="/documentation/input_deck/input_deck_output_block#single-precision_output">Single-precision
 output&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">Multiple output
+&lt;a href="/documentation/input_deck/input_deck_output_block#multiple_output_blocks">Multiple output
 blocks&lt;/a>&lt;/li>
 &lt;li>
-&lt;a href="/documentation/input_deck/input_deck_species/#particle_migration_between_species">Particle
+&lt;a href="/documentation/input_deck/input_deck_species#particle_migration_between_species">Particle
 migration&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h1 id="additional_output_block_parameters">Additional output block parameters&lt;/h1>
 &lt;p>The following parameters have also been added to the &amp;ldquo;output&amp;rdquo; block (see
-&lt;a href="/documentation/input_deck/input_deck_output/#directives">here&lt;/a>):&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_output#directives">here&lt;/a>):&lt;/p>
 &lt;ul>
 &lt;li>dump_first&lt;/li>
 &lt;li>dump_last&lt;/li>
@@ -4605,7 +4605,7 @@ deck:&lt;/p>
 &lt;li>The &amp;ldquo;profile&amp;rdquo; parameter can now be time varying&lt;/li>
 &lt;/ul>
 &lt;p>The following parameters have been added to the list of pre-defined
-&lt;a href="/documentation/code_details/maths_parser/#constants">constants&lt;/a>.&lt;/p>
+&lt;a href="/documentation/code_details/maths_parser#constants">constants&lt;/a>.&lt;/p>
 &lt;ul>
 &lt;li>nproc_{x,y,z}&lt;/li>
 &lt;li>nsteps&lt;/li>
@@ -4621,7 +4621,7 @@ added to the input deck.&lt;/p>
 moving window model is active. In previous versions of the code,
 this property was ignored once the moving window began.&lt;/li>
 &lt;li>Ionisation species now inherit their &amp;ldquo;dumpmask&amp;rdquo;. See
-&lt;a href="/documentation/input_deck/input_deck_species/#ionisation">here&lt;/a> for details.&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a> for details.&lt;/li>
 &lt;li>Default values for ignorable directions were added. This change
 allows submitting 3D or 2D input decks to a 1D version of and 3D
 input decks to a 2D version of . Any references to y/z will be set
@@ -4769,9 +4769,9 @@ here&lt;/a>&lt;/li>
 &lt;li>Per-species particle boundaries. You can now specify bc_x_min and
 bc_x_max to a species block. This overrides the global boundaries
 for that species. See
-&lt;a href="/documentation/input_deck/input_deck_species/#species_boundary_conditions">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_species#species_boundary_conditions">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;particles_per_cell&amp;rdquo; output diagnostic. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#derived_variables">here&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h1 id="changes_between_version_4" class="10_and_4 11">Changes between version 4.10 and 4.11&lt;/h1>
 &lt;h1 id="new_capabilities_2">New capabilities&lt;/h1>
@@ -4798,28 +4798,28 @@ when used in conjunction with the moving window.&lt;/li>
 &lt;p>Version 4.12 adds the following new capabilities:&lt;/p>
 &lt;ul>
 &lt;li>Added &amp;ldquo;average_weight&amp;rdquo; output diagnostic. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#derived_variables">here&lt;/a>&lt;/li>
 &lt;li>Removed the &amp;ldquo;PARTICLE_COUNT_UPDATE&amp;rdquo; Makefile flag and replaced it
 with a &amp;ldquo;use_particle_count_update&amp;rdquo; parameter in the control
 block. See
-&lt;a href="/documentation/input_deck/input_deck_control/#basics">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#basics">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;use_flux_maxwellian&amp;rdquo; option to the &amp;ldquo;injector&amp;rdquo; block. See
-&lt;a href="/documentation/input_deck/input_deck_injector/#keys">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_injector#keys">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;lehe_{x,y,z}&amp;rdquo; flags to the &amp;ldquo;maxwell_solver&amp;rdquo; option in the
 control block. See
-&lt;a href="/documentation/input_deck/input_deck_control/#maxwell_solvers">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#maxwell_solvers">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;use_accurate_n_zeros&amp;rdquo; control block parameter. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;custom&amp;rdquo; flag to the &amp;ldquo;maxwell_solver&amp;rdquo; option in the control
 block. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a> and
-&lt;a href="/documentation/input_deck/input_deck_control/#stencil_block">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#stencil_block">here&lt;/a>&lt;/li>
 &lt;li>Added the &amp;ldquo;WORK_DONE_INTEGRATED&amp;rdquo; Makefile flag and corresponding
 dumpmask directives &amp;ldquo;work_{x,y,z}&amp;rdquo; and &amp;ldquo;work_{x,y,z}_total&amp;rdquo;.
 These add a diagnostic for the work done on a particle by the
 electric field. See
 &lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a> and
-&lt;a href="/documentation/input_deck/input_deck_output_block/#particle_variables">here&lt;/a>.&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#particle_variables">here&lt;/a>.&lt;/li>
 &lt;/ul>
 &lt;h1 id="changes_between_version_4" class="12_and_4 14">Changes between version 4.12 and 4.14&lt;/h1>
 &lt;h1 id="new_capabilities_4">New capabilities&lt;/h1>
@@ -4830,11 +4830,11 @@ electric field. See
 &lt;li>Changed the default value of &amp;ldquo;print_eta_string&amp;rdquo; to &amp;ldquo;T&amp;rdquo; in the
 control block.&lt;/li>
 &lt;li>Added the ability to request an output dump at run time. See
-&lt;a href="/documentation/input_deck/input_deck_control/#requesting_output_dumps_at_run_time">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_control#requesting_output_dumps_at_run_time">here&lt;/a>&lt;/li>
 &lt;li>Added the &amp;ldquo;window_stop_time&amp;rdquo; parameter to the window block. See
 &lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
 &lt;li>Added the &amp;ldquo;atan2&amp;rdquo; function to the maths parser. See
-&lt;a href="/documentation/code_details/maths_parser/#functions">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/code_details/maths_parser#functions">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;dlb_maximum_interval&amp;rdquo; parameter to the control block. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;dlb_force_interval&amp;rdquo; parameter to the control block. See
@@ -4845,13 +4845,13 @@ control block.&lt;/li>
 &amp;ldquo;bc_x_max_after_move&amp;rdquo; parameters to the window block. See
 &lt;a href="/documentation/input_deck/input_deck_window">here&lt;/a>&lt;/li>
 &lt;li>Added a &amp;ldquo;dump_at_walltimes&amp;rdquo; parameter to the output block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#multiple_output_blocks">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;walltime_start&amp;rdquo; and &amp;ldquo;walltime_stop&amp;rdquo; parameters to the
 output block and output_global block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#directives">here&lt;/a> and
+&lt;a href="/documentation/input_deck/input_deck_output_block#directives">here&lt;/a> and
 &lt;a href="/documentation/input_deck/input_deck_output_global">here&lt;/a>&lt;/li>
 &lt;li>Added &amp;ldquo;walltime_interval&amp;rdquo; parameter to the output block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#multiple_output_blocks">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#multiple_output_blocks">here&lt;/a>&lt;/li>
 &lt;li>Added the Higuera-Cary particle push. This can be enabled using the
 &amp;ldquo;HC_PUSH&amp;rdquo; Makefile flag. See
 &lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.&lt;/li>
@@ -4877,7 +4877,7 @@ be run that were not previously possible.
 controlling the way that species are setup. See
 &lt;a href="/documentation/input_deck/input_deck_control">here&lt;/a>&lt;/li>
 &lt;li>Added strided multipass digital current filtering (See
-&lt;a href="/documentation/input_deck/input_deck_control/#strided_current_filtering">here&lt;/a>).
+&lt;a href="/documentation/input_deck/input_deck_control#strided_current_filtering">here&lt;/a>).
 This adds the following flags to the control block.
 &lt;ul>
 &lt;li>smooth_iterations&lt;/li>
@@ -4895,7 +4895,7 @@ flags to the subset block
 &lt;/li>
 &lt;li>Added loading of relativistic particle species using the
 Maxwell-Jüttner distribution. See
-&lt;a href="/documentation/input_deck/input_deck_species/#maxwell_juttner_distributions">here&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#maxwell_juttner_distributions">here&lt;/a>.
 This adds the following flags to the species block
 &lt;ul>
 &lt;li>use_maxwell_juttner&lt;/li>
@@ -4904,7 +4904,7 @@ This adds the following flags to the species block
 &lt;/li>
 &lt;li>Added loading of particle species using an arbitrary distribution
 function for sampling the momentum components. See
-&lt;a href="/documentation/input_deck/input_deck_species/#arbitrary_distribution_functions">here&lt;/a>.
+&lt;a href="/documentation/input_deck/input_deck_species#arbitrary_distribution_functions">here&lt;/a>.
 This adds the following flags to the species block
 &lt;ul>
 &lt;li>dist_fn&lt;/li>
@@ -4913,7 +4913,7 @@ This adds the following flags to the species block
 &lt;/li>
 &lt;li>Added &amp;ldquo;temperature_{x,y,z}&amp;rdquo; derived output variables to the output
 block. See
-&lt;a href="/documentation/input_deck/input_deck_output_block/#derived_variables">here&lt;/a>&lt;/li>
+&lt;a href="/documentation/input_deck/input_deck_output_block#derived_variables">here&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h1 id="changes_between_version_4" class="15_and_4 16">Changes between version 4.15 and 4.16&lt;/h1>
 &lt;ul>
@@ -6754,11 +6754,11 @@ available throughout the duration of the workshop, so if you want help
 with anything please don&amp;rsquo;t hesitate to ask. The decks are:&lt;/p>
 &lt;ul>
 &lt;li>01-1d_laser.deck Described in notes above
-&lt;a href="/documentation/examples/Workshop_examples/#a_basic_em_field_simulation">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples#a_basic_em_field_simulation">(here)&lt;/a>&lt;/li>
 &lt;li>02-2d_laser.deck Described in notes above
-&lt;a href="/documentation/examples/Workshop_examples/#a_2d_laser">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples#a_2d_laser">(here)&lt;/a>&lt;/li>
 &lt;li>03-1d_two_stream.deck Described in notes above
-&lt;a href="/documentation/examples/Workshop_examples/#specifying_particle_species">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples#specifying_particle_species">(here)&lt;/a>&lt;/li>
 &lt;li>04-1d_two_stream_io.deck This is the same as the previous deck
 but with the addition of more sophisticated output diagnostics&lt;/li>
 &lt;li>05-2d_moving_window.deck This deck contains an example of firing a
@@ -6803,7 +6803,7 @@ computer. If not we may be able to help before you leave.&lt;/li>
 &lt;/ol>
 &lt;h1 id="copies_of_the_decks">Copies of the decks&lt;/h1>
 &lt;p>The decks can be downloaded
-&lt;a href="/documentation/examples/Workshop_examples/#getting_the_example_decks_for_this_workshop">
+&lt;a href="/documentation/examples/Workshop_examples#getting_the_example_decks_for_this_workshop">
 here&lt;/a>
 and viewed or copied from here:&lt;/p>
 &lt;p>&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>
