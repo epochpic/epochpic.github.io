@@ -766,7 +766,7 @@ a step function. Again, this can be extended as far as required.
 <!-- ########################  Cross references  ######################## -->
 
 
-[Basic_examples__focussing_a_gaussian_beam]: /documentation/examples/basic_examples/#focussing_a_gaussian_beam
+[Basic_examples__focussing_a_gaussian_beam]: /documentation/examples/basic_examples#focussing_a_gaussian_beam
 [Compiler_Flags]: /documentation/basic_usage/compiler_flags
 [Input_deck_control]: /documentation/input_deck/input_deck_control
 [Input_deck_laser]: /documentation/input_deck/input_deck_laser

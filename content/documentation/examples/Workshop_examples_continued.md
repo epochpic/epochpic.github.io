@@ -22,7 +22,7 @@ available throughout the duration of the workshop, so if you want help
 with anything please don't hesitate to ask. The decks are:
 
 -   01-1d_laser.deck Described in notes above
-    [(here)][Workshop_examples__a_basic_em-field_simulation]
+    [(here)][Workshop_examples__a_basic_em_field_simulation]
 -   02-2d_laser.deck Described in notes above
     [(here)][Workshop_examples__a_2d_laser]
 -   03-1d_two_stream.deck Described in notes above
@@ -71,13 +71,9 @@ with anything please don't hesitate to ask. The decks are:
 The decks can be downloaded [
 here][Workshop_examples__getting_the_example_decks_for_this_workshop]
 and viewed or copied from here:
-**04-1d_two_stream_io.deck**
 
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Click "Expand" to view or copy the deck code:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>04-1d_two_stream_io.deck (click to expand)</summary>
 
 ```perl
 begin:control
@@ -189,17 +185,10 @@ begin:dist_fn
   include_species:Right
 end:dist_fn
 ```
+</details>
 
-</div>
-</div>
-
-**05-2d_moving_window.deck**
-
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Click "Expand" to view or copy the deck code:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>05-2d_moving_window.deck (click to expand)</summary>
 
 ```perl
 begin:constant
@@ -309,17 +298,10 @@ begin:window
   bc_x_max_after_move = simple_outflow
 end:window
 ```
+</details>
 
-</div>
-</div>
-
-**06-2d_ramp.deck**
-
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Click "Expand" to view or copy the deck code:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>06-2d_ramp.deck (click to expand)</summary>
 
 ```perl
 begin:constant
@@ -514,17 +496,10 @@ begin:probe
   include_species:proton
 end:probe
 ```
+</details>
 
-</div>
-</div>
-
-**07-1d_heating.deck**
-
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Click "Expand" to view or copy the deck code:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>07-1d_heating.deck (click to expand)</summary>
 
 ```perl
 begin:constant
@@ -589,9 +564,7 @@ begin:output
   pz = always
 end:output
 ```
-
-</div>
-</div>
+</details>
 
 # Remote Visualisation with VisIt {#remote_visualisation_with_visit}
 
@@ -934,7 +907,7 @@ point in time. To get back to the current version, just type
 [Input_deck_qed]: /documentation/input_deck/input_deck_qed
 [Input_deck_species]: /documentation/input_deck/input_deck_species
 [Landing_Page]: /documentation
-[Workshop_examples__a_2d_laser]: /documentation/examples/workshop_examples/#a_2d_laser
-[Workshop_examples__a_basic_em-field_simulation]: /documentation/examples/workshop_examples/#a_basic_em-field_simulation
-[Workshop_examples__getting_the_example_decks_for_this_workshop]: /documentation/examples/workshop_examples/#getting_the_example_decks_for_this_workshop
-[Workshop_examples__specifying_particle_species]: /documentation/examples/workshop_examples/#specifying_particle_species
+[Workshop_examples__a_2d_laser]: /documentation/examples/workshop_examples#a_2d_laser
+[Workshop_examples__a_basic_em_field_simulation]: /documentation/examples/workshop_examples#a_basic_em_field_simulation
+[Workshop_examples__getting_the_example_decks_for_this_workshop]: /documentation/examples/workshop_examples#getting_the_example_decks_for_this_workshop
+[Workshop_examples__specifying_particle_species]: /documentation/examples/workshop_examples#specifying_particle_species

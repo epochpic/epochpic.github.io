@@ -175,7 +175,7 @@ permanently disabled.
 <!-- ########################  Cross references  ######################## -->
 
 
-[Input_deck_output_block__particle_variables]: /documentation/input_deck/input_deck_output_block/#particle_variables
+[Input_deck_output_block__particle_variables]: /documentation/input_deck/input_deck_output_block#particle_variables
 [Input_deck_qed]: /documentation/input_deck/input_deck_qed
 [Input_deck_subset]: /documentation/input_deck/input_deck_subset
 [Using_delta_f]: /documentation/code_details/using_delta_f

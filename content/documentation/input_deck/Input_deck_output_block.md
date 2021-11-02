@@ -688,4 +688,4 @@ contains ey, step 4 a0002.sdf contains ex, ey and b0000.sdf contains ez.
 [Compiler_Flags]: /documentation/basic_usage/compiler_flags
 [Input_deck]: /documentation/input_deck/input_deck
 [Input_deck_dist_fn]: /documentation/input_deck/input_deck_dist_fn
-[Maths_parser__constants]: /documentation/code_details/maths_parser/#constants
+[Maths_parser__constants]: /documentation/code_details/maths_parser#constants

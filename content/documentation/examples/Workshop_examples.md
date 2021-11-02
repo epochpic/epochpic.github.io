@@ -15,9 +15,9 @@ menu:
 # EPOCH workshop overview {#epoch_workshop_overview}
 
 The aims of the Workshop are:
-\*After the workshop you should be able to setup and run EPOCH on a
-problem of real importance to your research.
 
+-   After the workshop you should be able to setup and run EPOCH on a
+    problem of real importance to your research.
 -   You should also be in a position to use and understand the manual.
 -   You should learn about PIC codes in general.
 -   You should understand more about the pitfalls of trying to do LPI
@@ -28,8 +28,8 @@ problem of real importance to your research.
 
 
 Warwick EPOCH Personnel:
-\*Tony Arber -- PI on EPOCH project at Warwick.
 
+-   Tony Arber -- PI on EPOCH project at Warwick.
 -   Keith Bennett -- PDRA and senior EPOCH developer.
 -   Chris Brady -- Original EPOCH developer and head of RSE at Warwick
 -   Heather Ratcliffe - EPOCH user and developer
@@ -39,8 +39,8 @@ Warwick EPOCH Personnel:
 
 
 Resources:
-\*All machines, and exercises, are linux based.
 
+-   All machines, and exercises, are linux based.
 -   EPOCH is a Fortran90 program which uses MPI for parallelization.
 -   You will always need both F90 and MPI to compile and run the code
     even on one processor.
@@ -73,7 +73,7 @@ parallel job: `> echo Data | mpiexec -n 4 bin/epoch2d`
 
 **Note:** If you don't have git on your home computer you can always
 download a tar file of epoch when you return to your lab. This you get
-from the ['Releases'][https://github.com/Warwick-Plasma/epoch/releases]
+from the ['Releases'](https://github.com/Warwick-Plasma/epoch/releases)
 section on the EPOCH GitHub webpage. However I recommend
 you get, and learn, git and join the 21st century.
 
@@ -164,12 +164,9 @@ Begin by copying the "01-1d_laser.deck" file from the EXAMPLES
 directory into the "Data" directory using the command: cp
 \~/EXAMPLES/01-1d_laser.deck Data/input.deck
 
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Or click "Expand" and copy this text into a file "input.deck" in
-your Data directory:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>Or click to expand and copy this text into a file "input.deck" in
+your Data directory.</summary>
 
 ```perl
 begin:control
@@ -211,9 +208,8 @@ end:boundaries
 #  ey = always
 #end:output
 ```
+</details>
 
-</div>
-</div>
 
 Open the input deck with an editor to view its contents. Eg. "gedit
 Data/input.deck"
@@ -445,7 +441,7 @@ This returns a data structure which can be inspected using
  data.__dict__ 
 ```
 
-. It also imports the contents of data arrays and prints a summary of
+It also imports the contents of data arrays and prints a summary of
 what has been imported.
 
 For example:
@@ -466,13 +462,13 @@ If you have matplotlib installed then you can load the module using
  from matplotlib.pyplot import * 
 ```
 
-. Turn on interactive plotting with
+Turn on interactive plotting with
 
 ```python
 ion()
 ```
 
-. You can now plot the data with the command:
+You can now plot the data with the command:
 
 ```python
 plot(xc,ey)
@@ -570,11 +566,8 @@ Next, we will take a look at the 2-dimensional version of the code.
     below into Data/input.deck
 -   Run with `echo Data | mpirun -np 4 ./bin/epoch2d`
 
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Click "Expand" to view or copy the deck code:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>Click to expand</summary>
 
 ```perl
 begin:control
@@ -631,9 +624,7 @@ begin:output
   bz = always
 end:output
 ```
-
-</div>
-</div>
+</details>
 
 This deck is very similar to the 1D version that we have just looked at.
 It contains the necessary modifications for adding a new dimension and
@@ -697,11 +688,8 @@ code! The deck is for the 1D version of the code, so change back to the
 epoch1d directory and copy \~/EXAMPLES/03-1d_two_stream.deck to
 Data/input.deck (or copy the deck below) and run the code.
 
-<div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-
-Click "Expand" to view or copy the deck code:
-
-<div class="mw-collapsible-content">
+<details>
+<summary>Click to expand</summary>
 
 ```perl
 begin:control
@@ -768,9 +756,7 @@ begin:output
   ey = always
 end:output
 ```
-
-</div>
-</div>
+</details>
 
 The control block has one new parameter. "npart" gives the total number
 of PIC particles to use in the simulation.

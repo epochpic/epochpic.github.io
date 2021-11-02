@@ -54,4 +54,4 @@ no check is made to ensure that the $\nabla.B = 0$ is satisfied.
 
 [Input_deck]: /documentation/input_deck/input_deck
 [Input_deck_species]: /documentation/input_deck/input_deck_species
-[Maths_parser__constants]: /documentation/code_details/maths_parser/#constants
+[Maths_parser__constants]: /documentation/code_details/maths_parser#constants

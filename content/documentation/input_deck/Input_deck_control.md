@@ -530,9 +530,9 @@ Comptes Rendus Mcanique, 2014
 
 
 [Input_deck]: /documentation/input_deck/input_deck
-[Input_deck_control__stencil_block]: /documentation/input_deck/input_deck_control/#stencil_block
+[Input_deck_control__stencil_block]: /documentation/input_deck/input_deck_control#stencil_block
 [Input_deck_output_block]: /documentation/input_deck/input_deck_output_block
 [Input_deck_species]: /documentation/input_deck/input_deck_species
-[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species/#ionisation
-[Input_deck_species__particle_migration_between_species]: /documentation/input_deck/input_deck_species/#particle_migration_between_species
-[Maths_parser__constants]: /documentation/code_details/maths_parser/#constants
+[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species#ionisation
+[Input_deck_species__particle_migration_between_species]: /documentation/input_deck/input_deck_species#particle_migration_between_species
+[Maths_parser__constants]: /documentation/code_details/maths_parser#constants

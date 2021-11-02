@@ -78,5 +78,5 @@ and *c*) and also several functions (*critical*, *exp*, *gauss* and
 
 [Input_deck]: /documentation/input_deck/input_deck
 [Maths_parser]: /documentation/code_details/maths_parser
-[Maths_parser__constants]: /documentation/code_details/maths_parser/#constants
-[Maths_parser__functions]: /documentation/code_details/maths_parser/#functions
+[Maths_parser__constants]: /documentation/code_details/maths_parser#constants
+[Maths_parser__functions]: /documentation/code_details/maths_parser#functions

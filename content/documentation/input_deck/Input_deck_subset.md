@@ -172,4 +172,4 @@ may occur on restart.
 
 [Input_deck]: /documentation/input_deck/input_deck
 [Input_deck_output_block]: /documentation/input_deck/input_deck_output_block
-[Input_deck_output_block__dumpmask]: /documentation/input_deck/input_deck_output_block/#dumpmask
+[Input_deck_output_block__dumpmask]: /documentation/input_deck/input_deck_output_block#dumpmask

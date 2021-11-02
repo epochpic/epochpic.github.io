@@ -103,4 +103,4 @@ set to minus one (and also (spec2,spec1)) and (spec2,spec3) is set to
 
 
 [Input_deck]: /documentation/input_deck/input_deck
-[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species/#ionisation
+[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species#ionisation

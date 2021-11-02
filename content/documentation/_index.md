@@ -94,10 +94,9 @@ The examples from the EPOCH workshop are in two parts: [(part
 
 # Helpful information {#helpful_information}
 
-[Links and references][Links]
 [Acknowledging EPOCH][Acknowledging_EPOCH]
 The EPOCH [Developer
-Manual](https://cfsa-pmw.warwick.ac.uk/EPOCH/epoch/wikis/Downloads) is
+Manual](https://github.com/Warwick-Plasma/EPOCH_manuals/releases) is
 quite out of date at this point, so it contains some information which
 is no longer correct. However, the fundamental algorithms have not
 changed so it still contains plenty of useful and relevant information.
@@ -112,7 +111,7 @@ changed so it still contains plenty of useful and relevant information.
 [Compiler_Flags]: /documentation/basic_usage/compiler_flags
 [Compiling]: /documentation/basic_usage/compiling
 [FAQ]: /documentation/basic_usage/faq
-[FAQ__how_do_i_obtain_the_code]: /documentation/basic_usage/faq/#how_do_i_obtain_the_code
+[FAQ__how_do_i_obtain_the_code]: /documentation/basic_usage/faq#how_do_i_obtain_the_code
 [Input_deck]: /documentation/input_deck/input_deck
 [Input_deck_boundaries]: /documentation/input_deck/input_deck_boundaries
 [Input_deck_collisions]: /documentation/input_deck/input_deck_collisions
