@@ -1,0 +1,61 @@
+begin:constant
+  dl = 74.33942 * micron
+end:constant
+
+
+begin:control
+  nx = 10
+
+  # Size of domain
+  x_min = 0
+  x_max = 14000 * dl
+
+  # Final time of simulation
+  t_end = 1.5e-2
+
+  stdout_frequency = 10000
+  print_eta_string = T
+end:control
+
+
+begin:boundaries
+  bc_x_min = periodic
+  bc_x_max = periodic
+end:boundaries
+
+
+begin:species
+  name = electron
+  charge = -1
+  mass = 1.0
+  temp_x_ev = 1
+  number_density = 1e16
+  npart = nx * 5
+end:species
+
+
+begin:output
+  name = normal
+
+  # Number of timesteps between output dumps
+  dt_snapshot = 1.5e-3
+
+  # Properties on grid
+  grid = always
+  ekbar = always
+  temperature = always
+end:output
+
+
+begin:output
+  name = large
+
+  # Number of timesteps between output dumps
+  dt_snapshot = 75e-3
+
+  # Properties at particle positions
+  particles = always
+  px = always
+  py = always
+  pz = always
+end:output
