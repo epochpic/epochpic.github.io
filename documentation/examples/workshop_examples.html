@@ -63,8 +63,8 @@ copy the file, or right-click and select the save-as option).
 should give you a simple introduction to the input deck and
 visualization of 1D datasets.</p><p>Begin by copying the &ldquo;01-1d_laser.deck&rdquo; file from the EXAMPLES
 directory into the &ldquo;Data&rdquo; directory using the command: cp
-~/EXAMPLES/01-1d_laser.deck Data/input.deck</p><div class="mw-collapsible mw-collapsed" style=border-style:solid;border-width:2px;border-color:#0059a1><p>Or click &ldquo;Expand&rdquo; and copy this text into a file &ldquo;input.deck&rdquo; in
-your Data directory:</p><div class=mw-collapsible-content><pre><code class=language-perl>begin:control
+~/EXAMPLES/01-1d_laser.deck Data/input.deck</p><details><summary>Or click to expand and copy this text into a file "input.deck" in
+your Data directory:</summary><pre><code class=language-perl>begin:control
   nx = 200
 
   # Size of domain
@@ -102,7 +102,7 @@ end:boundaries
 #  grid = always
 #  ey = always
 #end:output
-</code></pre></div></div><p>Open the input deck with an editor to view its contents. Eg. &ldquo;gedit
+</code></pre></details><p>Open the input deck with an editor to view its contents. Eg. &ldquo;gedit
 Data/input.deck&rdquo;</p><p>This is the simplest possible input deck. The file is divided into
 blocks which are surrounded by &ldquo;begin:blocktype&rdquo; and &ldquo;end:blocktype&rdquo;
 lines. There are currently ten different blocktypes. The most basic
@@ -282,7 +282,7 @@ Alternatively, from the command prompt you can type</p><pre><code class=language
 grid data. In the future, this work will be automatically done by the
 reader.</p><h1 id=a_2d_laser>A 2D laser</h1><p>Next, we will take a look at the 2-dimensional version of the code.</p><ul><li>Change to the epoch2d directory: <code>cd ~/Epoch/epoch2d</code></li><li>Type <code>make -j4</code> to compile the code.</li><li>Copy the next example input deck into the Data directory:
 <code>cp ~/EXAMPLES/02-2d_laser.deck Data/input.deck</code> or save the text
-below into Data/input.deck</li><li>Run with <code>echo Data | mpirun -np 4 ./bin/epoch2d</code></li></ul><div class="mw-collapsible mw-collapsed" style=border-style:solid;border-width:2px;border-color:#0059a1><p>Click &ldquo;Expand&rdquo; to view or copy the deck code:</p><div class=mw-collapsible-content><pre><code class=language-perl>begin:control
+below into Data/input.deck</li><li>Run with <code>echo Data | mpirun -np 4 ./bin/epoch2d</code></li></ul><details><summary>Click to expand</summary><pre><code class=language-perl>begin:control
   nx = 500
   ny = nx
 
@@ -335,7 +335,7 @@ begin:output
   by = always
   bz = always
 end:output
-</code></pre></div></div><p>This deck is very similar to the 1D version that we have just looked at.
+</code></pre></details><p>This deck is very similar to the 1D version that we have just looked at.
 It contains the necessary modifications for adding a new dimension and
 some additions to the laser block for driving a laser at an angle.</p><p>The &ldquo;control&rdquo; block now contains &ldquo;ny&rdquo; which specifies the number of grid
 points in the y-direction. Notice that we are using the value &ldquo;nx&rdquo; to
