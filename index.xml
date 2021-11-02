@@ -6051,10 +6051,10 @@ end:output
 &lt;p>The deck is based on the laser test deck supplied with Epoch, with a
 modified laser and longer runtime. Other classes of beam (Bessel etc)
 can be created similarly.&lt;/p></description></item><item><title>Workshop examples</title><link>/documentation/examples/workshop_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples.html</guid><description>&lt;h1 id="epoch_workshop_overview">EPOCH workshop overview&lt;/h1>
-&lt;p>The aims of the Workshop are:
-*After the workshop you should be able to setup and run EPOCH on a
-problem of real importance to your research.&lt;/p>
+&lt;p>The aims of the Workshop are:&lt;/p>
 &lt;ul>
+&lt;li>After the workshop you should be able to setup and run EPOCH on a
+problem of real importance to your research.&lt;/li>
 &lt;li>You should also be in a position to use and understand the manual.&lt;/li>
 &lt;li>You should learn about PIC codes in general.&lt;/li>
 &lt;li>You should understand more about the pitfalls of trying to do LPI
@@ -6063,9 +6063,9 @@ studies with PIC.&lt;/li>
 computers.&lt;/li>
 &lt;li>Give advice to the EPOCH team on new features for the code.&lt;/li>
 &lt;/ul>
-&lt;p>Warwick EPOCH Personnel:
-*Tony Arber &amp;ndash; PI on EPOCH project at Warwick.&lt;/p>
+&lt;p>Warwick EPOCH Personnel:&lt;/p>
 &lt;ul>
+&lt;li>Tony Arber &amp;ndash; PI on EPOCH project at Warwick.&lt;/li>
 &lt;li>Keith Bennett &amp;ndash; PDRA and senior EPOCH developer.&lt;/li>
 &lt;li>Chris Brady &amp;ndash; Original EPOCH developer and head of RSE at Warwick&lt;/li>
 &lt;li>Heather Ratcliffe - EPOCH user and developer&lt;/li>
@@ -6073,9 +6073,9 @@ computers.&lt;/li>
 &lt;li>Alexander Seaton - Final year PhD student with extensive experience
 of using EPOCH&lt;/li>
 &lt;/ul>
-&lt;p>Resources:
-*All machines, and exercises, are linux based.&lt;/p>
+&lt;p>Resources:&lt;/p>
 &lt;ul>
+&lt;li>All machines, and exercises, are linux based.&lt;/li>
 &lt;li>EPOCH is a Fortran90 program which uses MPI for parallelization.&lt;/li>
 &lt;li>You will always need both F90 and MPI to compile and run the code
 even on one processor.&lt;/li>
@@ -6103,7 +6103,8 @@ EPOCH&amp;rsquo;&lt;/a> guide.&lt;/p>
 parallel job: &lt;code>&amp;gt; echo Data | mpiexec -n 4 bin/epoch2d&lt;/code>&lt;/p>
 &lt;p>&lt;strong>Note:&lt;/strong> If you don&amp;rsquo;t have git on your home computer you can always
 download a tar file of epoch when you return to your lab. This you get
-from the [&amp;lsquo;Releases&amp;rsquo;][https://github.com/Warwick-Plasma/epoch/releases]
+from the
+&lt;a href="https://github.com/Warwick-Plasma/epoch/releases" target="_blank" rel="noopener">&amp;lsquo;Releases&amp;rsquo;&lt;/a>
 section on the EPOCH GitHub webpage. However I recommend
 you get, and learn, git and join the 21st century.&lt;/p>
 &lt;h1 id="getting_started_with_epoch">Getting Started with EPOCH&lt;/h1>
@@ -6403,7 +6404,7 @@ SDF module, type the command:&lt;/p>
 &lt;p>This returns a data structure which can be inspected using&lt;/p>
 &lt;pre>&lt;code class="language-python"> data.__dict__
 &lt;/code>&lt;/pre>
-&lt;p>. It also imports the contents of data arrays and prints a summary of
+&lt;p>It also imports the contents of data arrays and prints a summary of
 what has been imported.&lt;/p>
 &lt;p>For example:&lt;/p>
 &lt;pre>&lt;code class="language-python">from sdf_helper import *
@@ -6417,10 +6418,10 @@ xc(200,) = grid_mid
 &lt;p>If you have matplotlib installed then you can load the module using&lt;/p>
 &lt;pre>&lt;code class="language-python"> from matplotlib.pyplot import *
 &lt;/code>&lt;/pre>
-&lt;p>. Turn on interactive plotting with&lt;/p>
+&lt;p>Turn on interactive plotting with&lt;/p>
 &lt;pre>&lt;code class="language-python">ion()
 &lt;/code>&lt;/pre>
-&lt;p>. You can now plot the data with the command:&lt;/p>
+&lt;p>You can now plot the data with the command:&lt;/p>
 &lt;pre>&lt;code class="language-python">plot(xc,ey)
 &lt;/code>&lt;/pre>
 &lt;p>The helper module has a &amp;ldquo;plot_auto&amp;rdquo; command which automatically adds
@@ -6753,11 +6754,11 @@ available throughout the duration of the workshop, so if you want help
 with anything please don&amp;rsquo;t hesitate to ask. The decks are:&lt;/p>
 &lt;ul>
 &lt;li>01-1d_laser.deck Described in notes above
-&lt;a href="/documentation/examples/workshop_examples/#a_basic_em-field_simulation">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples/#a_basic_em_field_simulation">(here)&lt;/a>&lt;/li>
 &lt;li>02-2d_laser.deck Described in notes above
-&lt;a href="/documentation/examples/workshop_examples/#a_2d_laser">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples/#a_2d_laser">(here)&lt;/a>&lt;/li>
 &lt;li>03-1d_two_stream.deck Described in notes above
-&lt;a href="/documentation/examples/workshop_examples/#specifying_particle_species">(here)&lt;/a>&lt;/li>
+&lt;a href="/documentation/examples/Workshop_examples/#specifying_particle_species">(here)&lt;/a>&lt;/li>
 &lt;li>04-1d_two_stream_io.deck This is the same as the previous deck
 but with the addition of more sophisticated output diagnostics&lt;/li>
 &lt;li>05-2d_moving_window.deck This deck contains an example of firing a
@@ -6802,13 +6803,12 @@ computer. If not we may be able to help before you leave.&lt;/li>
 &lt;/ol>
 &lt;h1 id="copies_of_the_decks">Copies of the decks&lt;/h1>
 &lt;p>The decks can be downloaded
-&lt;a href="/documentation/examples/workshop_examples/#getting_the_example_decks_for_this_workshop">
+&lt;a href="/documentation/examples/Workshop_examples/#getting_the_example_decks_for_this_workshop">
 here&lt;/a>
-and viewed or copied from here:
-&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>
-&lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
-&lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
-&lt;div class="mw-collapsible-content">
+and viewed or copied from here:&lt;/p>
+&lt;p>&lt;strong>04-1d_two_stream_io.deck&lt;/strong>&lt;/p>
+&lt;details>
+&lt;summary>Click to expand&lt;/summary>
 &lt;pre>&lt;code class="language-perl">begin:control
 nx = 400
 # Size of domain
@@ -6891,8 +6891,7 @@ include_species:Left
 include_species:Right
 end:dist_fn
 &lt;/code>&lt;/pre>
-&lt;/div>
-&lt;/div>
+&lt;/details>
 &lt;p>&lt;strong>05-2d_moving_window.deck&lt;/strong>&lt;/p>
 &lt;div class="mw-collapsible mw-collapsed" style="border-style: solid; border-width: 2px; border-color:#0059A1">
 &lt;p>Click &amp;ldquo;Expand&amp;rdquo; to view or copy the deck code:&lt;/p>
