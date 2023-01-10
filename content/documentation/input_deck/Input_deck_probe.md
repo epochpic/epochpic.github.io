@@ -22,13 +22,19 @@ simulation. To allow this, it is possible to specify one or more
 *`Particle Probe`* blocks in the input deck. These record 
 copies of all particles which cross a point/line/plane in a given
 direction which meet minimum and maximum kinetic energy criteria and
-output the particle properties into the normal output files. Particle
+output the particle properties into the normal output files. Each output
+file only contains properties for particles which have passed the probe
+since the previous output, and not all particles which have passed the 
+probe since the start of the simulation. 
+
+Particle
 probes record the positions, momenta and weight of all particles passing
 through the plane.
 If the code is compiled with **`-DPARTICLE_ID`** or **`-DPARTICLE_ID4`**, 
 the code also outputs the ID of passing particles. 
 If the code is compiled with **`-DPROBE_TIME`**, the time at which the
-particle touches the probe surface is also output. 
+particle touches the probe surface is also output.
+
 To use particle probes, the code must not have been
 compiled with the **`-DNO_PARTICLE_PROBES`** compiler option. This is
 a fairly heavyweight diagnostic since each particle position must be tested
