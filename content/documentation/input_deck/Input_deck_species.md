@@ -136,6 +136,13 @@ Currently this is used primarily by the QED routines. See
 - `immobile` - Logical flag. If this parameter is set to "T"
 then the species will be ignored during the particle push. The default
 value is "F".
+- `background_species` - Logical flag. If set to "T" the species will
+be treated as a non evolving continuum background. No particles are loaded. Any
+particle-like specifications will be ignored. Background species are currently
+only used by the bremsstrahlung radiation model. 
+See [here][Input_deck_bremsstrahlung]
+for details. Default value is "F". "background" is accepted as an alias.
+
 The species blocks are also used for specifying initial conditions for
 the particle species. The initial conditions in EPOCH can be specified
 in various ways, but the easiest way is to specify the initial
@@ -283,91 +290,109 @@ for demotion when the local number density is greater than
 
 # Ionisation
 
-EPOCH now includes field ionisation which can be activated by defining
-ionisation energies and an electron for the ionising species. This is
-done via the species block using the following parameters:
-- `ionisation_energies` - This is an array of ionisation
-energies (in Joules) starting from the outermost shell. It expects to be
-given all energies down to the fully ionised ion; if the user wishes to
-exclude some inner shell ionisation for some reason they need to give
-this a very large number. Note that the ionisation model assumes that
-the outermost electron ionises first always, and that the orbitals are
-filled assuming ground state. When this parameter is specified it turns
-on ionisation modelling. If you wish to specify the values in
-Electron-Volts, add the "ev" [multiplication
-factor][Maths_parser__constants].
-- `ionisation_electron_species` - Name of the electron
-species. This can be specified as an array in the event that the user
-wishes some levels to have a different electron species which can be
-handy for monitoring ionisation at specific levels. "electron" and
-"electron_species" are accepted as synonyms. Either one species for
-*all* levels, or one species for *each* species should be specified.
-For example, ionising carbon species might appear in the input deck as:
+EPOCH now includes both field and collisional ionisation, which can be 
+activated by switching on keys in different blocks. Previous versions of
+EPOCH forced the user to specify ionisation energies for each ion charge
+state, but since EPOCH 4.19, these are set automatically using look-up tables.
+
+Field and collisional ionisation must be switched on in the control block and 
+collision block respectively, and species which are to be ionised must be 
+specified in their species block. A basic example of using both ionisation 
+mechanisms is given below, where non-relevant lines have been omitted.
 
 ```perl
-begin:species
-   charge = 0.0
-   mass = 1837.2
-   name = carbon
-   ionisation_energies = (11.26*ev,24.38*ev,47.89*ev,64.49*ev,392.1*ev,490.0*ev)
-   ionisation_electron_species = \
-       (electron,electron,electron,fourth,electron,electron)
-   number_density= den_gas
-end:species
+begin:control
+   use_multi_photon = T
+   use_bsi = F
+   field_ionisation = T
+end:control
+
+begin:collisions
+   use_collisional_ionisation = T 
+   ci_n_step = 3
+end:collisions
 
 begin:species
-   charge = -1.0
-   mass = 1.0
-   name = electron
-   number_density = 0.0
-end:species
+  name = Carbon
+  charge = 0
+  atomic_no = 6
+  ionise = T
+  ionise_limit = 3
+  unique_electron_species = T
+end:species   
 
 begin:species
-   charge = -1.0
-   mass = 1.0
-   name = fourth
-   number_density = 0.0
+  name = Carbon4
+  charge = 4
+  atomic_no = 6
+  ionise = T
+  ionisation_electron_species = (Electron4, Electron)
 end:species
 ```
+A full summary of the keys used in ionisation has been provided below:
+
+-   `field_ionisation` - Switches on field ionisation.
+  
+-   `use_collisional_ionisation` - Switches on ionisation by collisional
+    electron impact.
+  
+-   `ci_n_step` - Only performs the collisional ionisation calculation
+    once every _n_ steps, where _n_ is set by this parameter. This is done 
+    to speed up the code, and the default is 1 (every step). When
+    this is greater than 1, the assumed time-step for the collisional ionisation
+    calculation is _n*dt_. Note that an ion may only be ionised once per calculation,
+    so if _n_ is too high, the number of ions will be underestimated.
+
+-   `atomic_no` - Atomic number of the element. When combined with the
+    charge, the code can deduce the element and charge-state of the ion, and 
+    may use the appropriate ionisation energy and shell binding energies.
+  
+-   `ionise` - Allows ionisation of this species, and generates additional
+    particle species for each ion charge state.
+
+-  `ionise_limit` - This limits the number of additional particle species to
+    be generated. In this example, ion macro-particles in the Carbon species can only
+    be ionised 3 times - ionisation of Carbon3 will not be considered.
+
+-   `ionisation_electron_species` - Name of the electron species to 
+    populate with ejected electrons. This
+    can be specified as an array in the event that the user wishes some levels
+    to have a different electron species which can be handy for monitoring
+    ionisation at specific levels. `electron` and `electron_species` are
+    accepted as synonyms. Either one species for **all** ionisation levels, or one species
+    for **each** level should be specified. In the Carbon4 example, the user may have
+    written `ionisation_electron_species = Electron` to use the Electron species 
+    for all ejected electrons.
+  
+-  `unique_electron_species` - If "T", this generates a
+    unique electron species to populate with ejected electrons from each
+    ion charge state. The user must use this, or **ionisation_electron_species**.
 
 Ionised states are created automatically and are named according to the
-ionising species name with a number appended. For example
+ionising species name with a number appended. For example, with the Carbon
+species block, the species named "Carbon1", "Carbon2" and "Carbon3"
+are automatically created. Note that for pre-ionised species like the Carbon4 block,
+species would be named "Carbon41", "Carbon42". These species will also 
+inherit the ``dump''
+parameter from their parent species. This behaviour can be overridden by explicitly
+adding a species block of the same name with a differing dumpmask.
 
-```perl
-begin:species
-   name = Helium
-   ionisation_energies = (24.6*ev,54.4*ev)
-   dump = F
-end:species
-```
+Field ionisation consists of three distinct regimes; multiphoton in which
+ionisation is best described as absorption of multiple photons, tunnelling
+in which deformation of the atomic Coulomb potential is the dominant factor,
+and barrier suppression ionisation in which the electric field is strong
+enough for an electron to escape classically. It is possible to turn off
+multiphoton or barrier suppression ionisation through the input deck
+using the following control block parameters:
 
-With this species block, the species named "Helium1" and "Helium2" are
-automatically created. These species will also inherit the "dump"
-parameter from their parent species, so in this example they will both
-have "dump = F" set. This behaviour can be overridden by explicitly
-adding a species block of the same name with a differing dumpmask. eg.
+-   `use_multiphoton` - Logical flag which turns on modelling
+    ionisation by multiple photon absorption. This should be set to "F" if
+    there is no laser attached to a boundary as it relies on laser frequency.
+    The default is "T".
 
-```perl
-begin:species
-   name = Helium1
-   dump = T
-end:species
-```
-
-Field ionisation consists of three distinct regimes; multiphoton in
-which ionisation is best described as absorption of multiple photons,
-tunnelling in which deformation of the atomic Coulomb potential is the
-dominant factor, and barrier suppression ionisation in which the
-electric field is strong enough for an electron to escape classically.
-It is possible to turn off multiphoton or barrier suppression ionisation
-through the input deck using the following control block parameters:
-- `use_multiphoton` - Logical flag which turns on modelling
-ionisation by multiple photon absorption. This should be set to "F" if
-there is no laser attached to a boundary as it relies on laser
-frequency. The default is "T".
-- `use_bsi` - Logical flag which turns on barrier
-suppression ionisation correction to the tunnelling ionisation model for
-high intensity lasers. The default is "T".
+-   `use_bsi` - Logical flag which turns on barrier suppression
+    ionisation correction to the tunnelling ionisation model for high intensity
+    lasers. The default is "T".
 
 # Species Boundary Conditions {#species_boundary_conditions}
 
@@ -497,6 +522,7 @@ end:species
 
 [Binary_files]: /documentation/input_deck/binary_files
 [Input_deck]: /documentation/input_deck/input_deck
+[Input_deck_bremsstrahlung]: /documentation/input_deck/input_deck_bremsstrahlung
 [Input_deck_collisions]: /documentation/input_deck/input_deck_collisions
 [Input_deck_constant]: /documentation/input_deck/input_deck_constant
 [Input_deck_control]: /documentation/input_deck/input_deck_control

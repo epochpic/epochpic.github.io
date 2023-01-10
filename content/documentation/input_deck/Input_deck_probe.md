@@ -16,19 +16,25 @@ This block contains information about particle probes used for output.
 See [EPOCH input deck][Input_deck] for more information
 on the input deck.
 
-Sometimes it is useful to consider all the properties of particle which
-pass through a point/line/plane (depending on dimension) in the
-simulation. To allow this, it is possible to specify one or more
-*`Particle Probe`* blocks in the input deck. These record
+Sometimes it is useful to consider all the properties of particle which 
+pass through a point/line/plane (depending on dimension) in the 
+simulation. To allow this, it is possible to specify one or more 
+*`Particle Probe`* blocks in the input deck. These record 
 copies of all particles which cross a point/line/plane in a given
 direction which meet minimum and maximum kinetic energy criteria and
 output the particle properties into the normal output files. Particle
 probes record the positions, momenta and weight of all particles passing
-through the plane. To use particle probes, the code must not have been
-compiled with the **`-DNO_PARTICLE_PROBES`** compiler option. This is a
-fairly heavyweight diagnostic since each particle position must be
-tested from within the particle push. The code will run faster if it is
-not compiled in.
+through the plane.
+If the code is compiled with **`-DPARTICLE_ID`** or **`-DPARTICLE_ID4`**, 
+the code also outputs the ID of passing particles. 
+If the code is compiled with **`-DPROBE_TIME`**, the time at which the
+particle touches the probe surface is also output. 
+To use particle probes, the code must not have been
+compiled with the **`-DNO_PARTICLE_PROBES`** compiler option. This is
+a fairly heavyweight diagnostic since each particle position must be tested
+from within the particle push. The code will run faster if it is not compiled
+in.
+
 The probe is specified in terms of a point in the plane and the normal
 vector to the plane which is to be monitored. Particles are only
 recorded if they cross the plane in the direction given by the normal

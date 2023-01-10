@@ -12,95 +12,149 @@ menu:
     weight: 120
 ---
 
-This block contains information about particle collisions. See [EPOCH
+This block contains information about bremsstrahlung radiation. See [EPOCH
 input deck][Input_deck] for more information on the
 input deck.
 
-EPOCH has a particle collision routine with scattering algorithms based
-on the model presented by Sentoku and Kemp[^1] or the model presented by
-Pérez et al [^2], which in turn was based on the work of Nanbu and
-Yonemura[^3]. This adds a new output block named "collisions" which
-accepts the following four parameters.
-- `use_collisions` - This is a logical flag which determines
-whether or not to call the collision routine. If omitted, the default is
-"T" if any of the frequency factors are non-zero (see below) and "F"
-otherwise.
-- `use_nanbu` - This logical flag determines whether the scattering angle of
-Pérez/Nanbu will be used. The default is "T". If "F", the
-Sentoku-Kemp algorithm will be used.
--   `coulomb_log` - This may either be set to a real value,
-    specifying the Coulomb logarithm to use when scattering the
-    particles or to the special value "auto". If "auto" is used then the
-    routine will calculate a value based on the local temperature and
-    density of the particle species being scattered, along with the two
-    particle charges. If omitted, the default value is "auto".
--   `collide` - This sets up a symmetric square matrix of
-    size $nspecies\,\times\,nspecies$ containing the collision frequency
-    factors to use between particle species. The element (s1,s2) gives
-    the frequency factor used when colliding species s1 with species s2.
-    If the factor is less than zero, no collisions are performed. If it
-    is equal to one, collisions are performed normally. For any value
-    between zero and one, the collisions are performed using a frequency
-    multiplied by the given factor.
+EPOCH is capable of simulating bremsstrahlung radiation using the teqhniques described by Morris _et al_[^1] and Vyskočil _et al_[^2]. 
+In order to run this module, the compiler flag **`-DBREMSSTRAHLUNG`** must be
+switched on in the Makefile. There should also be a corresponding
+"bremsstrahlung" block for the input deck which uses a similar
+format to the "qed" block. Bremsstrahlung cross sections may be calculated
+for both electrons and positrons. Photons may also undergo pair production
+according to the Bethe-Heitler model.
 
-If "collide" has a value of "all" then all elements of the matrix are
-set to one. If it has a value of "none" then all elements are set to
-minus one.
-If the syntax "species1 species2 <value>" is used, then the
-(species1,species2) element of the matrix is set to the factor
-"<value>". This may either be a real number, or the special value "on"
-or "off". The "collide" parameter may be used multiple times.
-The default value is "all" (ie. all elements of the matrix are set to
-one).
-- `collisional_ionisation` - If this logical flag is set to
-"T" then the collisional ionisation model is enabled. This process is
-independent of *field_ionisation* (see
-[here][Input_deck_species__ionisation]). However, in
-order to set up *collisional_ionisation* you must also specify
-ionisation energies and electrons in a *species* block (see
-[here][Input_deck_species__ionisation]). The default
-value is "F".
-For example:
+An example bremsstrahlung block is shown below:
 
 ```perl
-begin:collisions
-   use_collisions = T
-   use_nanbu = T
-   coulomb_log = auto
-   collide = all
-   collide = spec1 spec2 off
-   collide = spec2 spec3 0.1
-end:collisions
+begin:bremsstrahlung
+   enable = T
+   start_time = 0
+   produce_photons = T
+   photon_energy_min = 1 * kev
+   photon_weight = 1.0
+   photon_dynamics = F
+   use_plasma_screening = F
+   use_brem_scatter = T
+   use_bethe_heitler = F
+   use_positron_brem = F
+end:bremsstrahlung
 ```
 
-With this block, collisions are turned on, the Nanbu-Pérez scattering
-algorithm is used and the Coulomb logarithm is automatically calculated.
-All values of the frequency array are set to one except (spec1,spec2) is
-set to minus one (and also (spec2,spec1)) and (spec2,spec3) is set to
-0.1
+- `enable` - Logical flag to turn bremsstrahlung on or off.
+  "use_bremsstrahlung" is accepted as an alias. The default is "F".
+
+- `start_time` - Floating point value specifying the time after
+  which bremsstrahlung radiation is modelled. The default is 0.
+
+- `produce_photons` - Logical flag to allow population of a photon
+  species. If "F", then only the energy loss of the electrons will be
+  simulated. The photon species can be specified by including the line
+  `identify:brem_photon` in the corresponding species block. If the
+  compiler flag **`-DPHOTONS`** is active, QED and bremsstrahlung will both
+  populate the first species with `identify:photon` if no
+  _brem\_photon_ species is specified. The default is "F".
+
+- `photon_energy_min` - Floating point value specifying the minimum
+  energy of produced photons. Electron energy loss is still calculated for
+  lower energy photon emissions, but these photons are not added to the photon
+  species. The default is 0.
+
+- `photon_weight` - Floating point value which applies a multiplier to
+  the weight of produced macro-photons, in order to increase the number
+  of overall emissions and obtain better spectra. Must be less than or equal
+  to 1 and greater than 0. For example, 0.1 would make emission 10 times more
+  likely, but for macro-photons only 10% the weight of the generating
+  macro-electrons. Electron recoil would be reduced accordingly. The default is 1. Note that only one emission is possible
+  per macro-electron per timestep, so setting this too low will saturate
+  emissions.
+
+- `photon_dynamics` - Logical flag to specify whether or not to push
+  photons. If "F", then the generated photons are immobilised at the point of
+  emission. The default is "F".
+
+- `use_plasma_screening` - Logical flag to specify whether a cross
+  section enhancement due to heated ionised targets is considered, based on
+  theory described by Wu _et al_[^3]. It is expected that for high energy
+  electrons passing through low density, ionised plasmas with electron
+  temperatures over $\sim$100 eV ($\sim8\times 10^{5}$ K), the bremsstrahlung
+  emission rate could increase by a factor of 2-3. This has not been tested
+  experimentally, and so the default value is set to "F".
+
+- `use_radiation_reaction` - Logical flag to specify whether the
+  electrons experience energy loss when emitting photons or not.
+  "use_bremsstrahlung_recoil" is accepted as an alias. Debugging
+  flag, default "T".
+
+- `table_location` - String specifying the
+  location of the emission look-up tables for bremsstrahlung.
+  The default path is set to
+  `src/physics_packages/TABLES/br`.
+  
+- `use_brem_scatter` - Samples photon ejection angle from a 
+  differential cross section. Default is "F", where photons are emitted in the
+  direction of the incident particle (ultra-relativistic approximation).
+  
+- `use_bethe_heitler` - Allows photons to undergo Bethe-Heitler pair
+  production. Default is "F". This requires both electron and positron species
+  to be defined.
+  
+- `use_positron_brem` - Samples bremsstrahlung radiation from positrons. 
+  Default is "F". If "T", electrons and positrons share the same 
+  parameter values set in the bremsstrahlung block.
+
+Bremsstrahlung, like QED, requires the code to know which species are electrons
+and which are photons, so uses the same identify system (with
+`identify:brem_photon` for a bremsstrahlung-only photon species).
+Additionally, the atomic numbers of the atom/ion species are required in
+the species block. For example, atomic aluminium (charge = 0) could be
+specified as:
+
+```perl
+begin:species
+   name = Aluminium
+   atomic_number = 13
+   charge = 0
+
+   mass = 49218
+   number_density = 6.022e28
+   fraction = 0.5
+   dump = T
+end:species
+```
+
+If the atomic number is not specified then it will be assumed that the ion is
+fully ionised and the atomic number would be set to the charge (the nearest
+integer to the ion charge when expressed in units of elementary charge). If
+ionisation is considered, the atomic number must be specified once, and all child species will retain the same atomic number.
+
+If Bethe-Heitler pair production is considered, the user may identify specific
+species to populate with Bethe-Heitler electrons and positrons using the identity
+aliases:
+
+- `identify:bethe_heitler_electron` - bh\_electron is also accepted.
+
+- `identify:bethe_heitler_positron` - bh\_positron is also accepted.
+
+If these species are unspecified, EPOCH will populate the first electron and 
+positron species present read in from the input deck. Additional identity aliases are provided in the [QED][input_deck_qed] section.
 
 # References
 
 <references />
 
-[^1]: Y. Sentoku and A. J. Kemp, "Numerical methods for particle
-    simulations at extreme densities and temperatures: Weighted
-    particles, relativistic collisions and reduced currents," J. Comput.
-    Phys., 2008.
-    [1](http://www.sciencedirect.com/science/article/pii/S0021999108001988)
+[^1] Morris, S., Robinson, A., & Ridgers, C. (2021). Highly efficient conversion of laser energy to hard x-rays in high-intensity laser–solid simulations. Physics of Plasmas, 28(10), 103304.
+[1](https://aip.scitation.org/doi/full/10.1063/5.0055398)
 
-[^2]: F. Pérez et al, "Improved modeling of relativistic collisions and
-    collisional ionization in particle-in-cell codes ," Physics of
-    Plasmas, 2012. [2](https://doi.org/10.1063/1.4742167)
+[^2] J. Vyskočil, O. Klimo, and S. Weber, “Simulations of bremsstrahlung emission in ultra-intense laser
+interactions with foil targets,” Plasma Physics and Controlled Fusion, vol. 60, no. 5, p. 054013, 2018.
+[2](https://iopscience.iop.org/article/10.1088/1361-6587/aab4c3/meta)
 
-[^3]: K. Nanbu and S. Yonemura, "Weighted Particles in Coulomb Collision
-    Simulations Based on the Theory of a Cumulative Scattering Angle,"
-    J. Comput. Phys., 1998. [3](https://doi.org/10.1006/jcph.1998.6049)
-
-
+[^3] Wu, D., He, X. T., Yu, W., & Fritzsche, S. (2018). Particle-in-cell simulations of laser–plasma interactions at solid densities and relativistic intensities: the role of atomic processes. High Power Laser Science and Engineering, 6.
+[3](https://www.cambridge.org/core/journals/high-power-laser-science-and-engineering/article/particleincell-simulations-of-laserplasma-interactions-at-solid-densities-and-relativistic-intensities-the-role-of-atomic-processes/82560EBD1E5A4869CC5EC059C47A017A)
 
 <!-- ########################  Cross references  ######################## -->
 
 
 [Input_deck]: /documentation/input_deck/input_deck
-[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species#ionisation
+[Input_deck_qed]: /documentation/input_deck/input_deck_qed
