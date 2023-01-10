@@ -16,7 +16,7 @@ This block contains information about bremsstrahlung radiation. See [EPOCH
 input deck][Input_deck] for more information on the
 input deck.
 
-EPOCH is capable of simulating bremsstrahlung radiation using the teqhniques described by Morris _et al_[^1] and Vyskočil _et al_[^2]. 
+EPOCH is capable of simulating bremsstrahlung radiation using the teqhniques described by Morris _et al_ [^1] and Vyskočil _et al_ [^2]. 
 In order to run this module, the compiler flag **`-DBREMSSTRAHLUNG`** must be
 switched on in the Makefile. There should also be a corresponding
 "bremsstrahlung" block for the input deck which uses a similar
@@ -143,15 +143,22 @@ positron species present read in from the input deck. Additional identity aliase
 
 <references />
 
-[^1] Morris, S., Robinson, A., & Ridgers, C. (2021). Highly efficient conversion of laser energy to hard x-rays in high-intensity laser–solid simulations. Physics of Plasmas, 28(10), 103304.
-[1](https://aip.scitation.org/doi/full/10.1063/5.0055398)
+[^1]: Morris, S., Robinson, A., & Ridgers, C. (2021). 
+  Highly efficient conversion of laser energy to hard x-rays 
+  in high-intensity laser–solid simulations. Physics of Plasmas, 28(10), 103304.
+  [1](https://aip.scitation.org/doi/full/10.1063/5.0055398)
 
-[^2] J. Vyskočil, O. Klimo, and S. Weber, “Simulations of bremsstrahlung emission in ultra-intense laser
-interactions with foil targets,” Plasma Physics and Controlled Fusion, vol. 60, no. 5, p. 054013, 2018.
-[2](https://iopscience.iop.org/article/10.1088/1361-6587/aab4c3/meta)
+[^2]: J. Vyskočil, O. Klimo, and S. Weber, “Simulations of 
+  bremsstrahlung emission in ultra-intense laser
+  interactions with foil targets,” Plasma Physics and Controlled Fusion, 
+  vol. 60, no. 5, p. 054013, 2018.
+  [2](https://iopscience.iop.org/article/10.1088/1361-6587/aab4c3/meta)
 
-[^3] Wu, D., He, X. T., Yu, W., & Fritzsche, S. (2018). Particle-in-cell simulations of laser–plasma interactions at solid densities and relativistic intensities: the role of atomic processes. High Power Laser Science and Engineering, 6.
-[3](https://www.cambridge.org/core/journals/high-power-laser-science-and-engineering/article/particleincell-simulations-of-laserplasma-interactions-at-solid-densities-and-relativistic-intensities-the-role-of-atomic-processes/82560EBD1E5A4869CC5EC059C47A017A)
+[^3]: Wu, D., He, X. T., Yu, W., & Fritzsche, S. (2018). 
+  Particle-in-cell simulations of laser–plasma interactions at solid 
+  densities and relativistic intensities: the role of atomic processes. High
+  Power Laser Science and Engineering, 6.
+  [3](https://www.cambridge.org/core/journals/high-power-laser-science-and-engineering/article/particleincell-simulations-of-laserplasma-interactions-at-solid-densities-and-relativistic-intensities-the-role-of-atomic-processes/82560EBD1E5A4869CC5EC059C47A017A)
 
 <!-- ########################  Cross references  ######################## -->
 
