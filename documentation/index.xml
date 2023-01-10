@@ -2553,14 +2553,18 @@ simulation. To allow this, it is possible to specify one or more
 &lt;em>&lt;code>Particle Probe&lt;/code>&lt;/em> blocks in the input deck. These record
 copies of all particles which cross a point/line/plane in a given
 direction which meet minimum and maximum kinetic energy criteria and
-output the particle properties into the normal output files. Particle
+output the particle properties into the normal output files. Each output
+file only contains properties for particles which have passed the probe
+since the previous output, and not all particles which have passed the
+probe since the start of the simulation.&lt;/p>
+&lt;p>Particle
 probes record the positions, momenta and weight of all particles passing
 through the plane.
 If the code is compiled with &lt;strong>&lt;code>-DPARTICLE_ID&lt;/code>&lt;/strong> or &lt;strong>&lt;code>-DPARTICLE_ID4&lt;/code>&lt;/strong>,
 the code also outputs the ID of passing particles.
 If the code is compiled with &lt;strong>&lt;code>-DPROBE_TIME&lt;/code>&lt;/strong>, the time at which the
-particle touches the probe surface is also output.
-To use particle probes, the code must not have been
+particle touches the probe surface is also output.&lt;/p>
+&lt;p>To use particle probes, the code must not have been
 compiled with the &lt;strong>&lt;code>-DNO_PARTICLE_PROBES&lt;/code>&lt;/strong> compiler option. This is
 a fairly heavyweight diagnostic since each particle position must be tested
 from within the particle push. The code will run faster if it is not compiled
