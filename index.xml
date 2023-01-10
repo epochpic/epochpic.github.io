@@ -605,7 +605,7 @@ setup. See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH
 input deck&lt;/a> for more information on the
 input deck.&lt;/p>
-&lt;p>EPOCH is capable of simulating bremsstrahlung radiation using the teqhniques described by Morris &lt;em>et al&lt;/em>[^1] and Vyskočil &lt;em>et al&lt;/em>[^2].
+&lt;p>EPOCH is capable of simulating bremsstrahlung radiation using the teqhniques described by Morris &lt;em>et al&lt;/em> &lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> and Vyskočil &lt;em>et al&lt;/em> &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>.
 In order to run this module, the compiler flag &lt;strong>&lt;code>-DBREMSSTRAHLUNG&lt;/code>&lt;/strong> must be
 switched on in the Makefile. There should also be a corresponding
 &amp;ldquo;bremsstrahlung&amp;rdquo; block for the input deck which uses a similar
@@ -668,7 +668,7 @@ emission. The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
 &lt;li>
 &lt;p>&lt;code>use_plasma_screening&lt;/code> - Logical flag to specify whether a cross
 section enhancement due to heated ionised targets is considered, based on
-theory described by Wu &lt;em>et al&lt;/em>[^3]. It is expected that for high energy
+theory described by Wu &lt;em>et al&lt;/em>&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>. It is expected that for high energy
 electrons passing through low density, ionised plasmas with electron
 temperatures over $\sim$100 eV ($\sim8\times 10^{5}$ K), the bremsstrahlung
 emission rate could increase by a factor of 2-3. This has not been tested
@@ -738,14 +738,32 @@ positron species present read in from the input deck. Additional identity aliase
 &lt;a href="/documentation/input_deck/input_deck_qed">QED&lt;/a> section.&lt;/p>
 &lt;h1 id="references">References&lt;/h1>
 &lt;p>&lt;references />&lt;/p>
-&lt;p>[^1] Morris, S., Robinson, A., &amp;amp; Ridgers, C. (2021). Highly efficient conversion of laser energy to hard x-rays in high-intensity laser–solid simulations. Physics of Plasmas, 28(10), 103304.
-&lt;a href="https://aip.scitation.org/doi/full/10.1063/5.0055398" target="_blank" rel="noopener">1&lt;/a>&lt;/p>
-&lt;p>[^2] J. Vyskočil, O. Klimo, and S. Weber, “Simulations of bremsstrahlung emission in ultra-intense laser
-interactions with foil targets,” Plasma Physics and Controlled Fusion, vol. 60, no. 5, p. 054013, 2018.
-&lt;a href="https://iopscience.iop.org/article/10.1088/1361-6587/aab4c3/meta" target="_blank" rel="noopener">2&lt;/a>&lt;/p>
-&lt;p>[^3] Wu, D., He, X. T., Yu, W., &amp;amp; Fritzsche, S. (2018). Particle-in-cell simulations of laser–plasma interactions at solid densities and relativistic intensities: the role of atomic processes. High Power Laser Science and Engineering, 6.
-&lt;a href="https://www.cambridge.org/core/journals/high-power-laser-science-and-engineering/article/particleincell-simulations-of-laserplasma-interactions-at-solid-densities-and-relativistic-intensities-the-role-of-atomic-processes/82560EBD1E5A4869CC5EC059C47A017A" target="_blank" rel="noopener">3&lt;/a>&lt;/p>
-&lt;!-- ######################## Cross references ######################## --></description></item><item><title>control block</title><link>/documentation/input_deck/input_deck_control.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_control.html</guid><description>&lt;p>The &lt;em>control&lt;/em> block contains information about the general code setup.
+&lt;!-- ######################## Cross references ######################## -->
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>Morris, S., Robinson, A., &amp;amp; Ridgers, C. (2021).
+Highly efficient conversion of laser energy to hard x-rays
+in high-intensity laser–solid simulations. Physics of Plasmas, 28(10), 103304.
+&lt;a href="https://aip.scitation.org/doi/full/10.1063/5.0055398" target="_blank" rel="noopener">1&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2" role="doc-endnote">
+&lt;p>J. Vyskočil, O. Klimo, and S. Weber, “Simulations of
+bremsstrahlung emission in ultra-intense laser
+interactions with foil targets,” Plasma Physics and Controlled Fusion,
+vol. 60, no. 5, p. 054013, 2018.
+&lt;a href="https://iopscience.iop.org/article/10.1088/1361-6587/aab4c3/meta" target="_blank" rel="noopener">2&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3" role="doc-endnote">
+&lt;p>Wu, D., He, X. T., Yu, W., &amp;amp; Fritzsche, S. (2018).
+Particle-in-cell simulations of laser–plasma interactions at solid
+densities and relativistic intensities: the role of atomic processes. High
+Power Laser Science and Engineering, 6.
+&lt;a href="https://www.cambridge.org/core/journals/high-power-laser-science-and-engineering/article/particleincell-simulations-of-laserplasma-interactions-at-solid-densities-and-relativistic-intensities-the-role-of-atomic-processes/82560EBD1E5A4869CC5EC059C47A017A" target="_blank" rel="noopener">3&lt;/a>&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item><item><title>control block</title><link>/documentation/input_deck/input_deck_control.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_control.html</guid><description>&lt;p>The &lt;em>control&lt;/em> block contains information about the general code setup.
 See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH input deck&lt;/a> for more information
 on the input deck.&lt;/p>
