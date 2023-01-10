@@ -601,6 +601,7 @@ expressions. These are designed to simplify the initial condition
 setup. See
 &lt;a href="/documentation/input_deck/input_deck_constant">here&lt;/a>.&lt;/li>
 &lt;/ul>
+&lt;!-- ######################## Cross references ######################## --></description></item><item><title>bremsstrahlung block</title><link>/documentation/input_deck/input_deck_bremsstrahlung.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_bremsstrahlung.html</guid><description>&lt;h1 id="references">References&lt;/h1>
 &lt;!-- ######################## Cross references ######################## --></description></item><item><title>control block</title><link>/documentation/input_deck/input_deck_control.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_control.html</guid><description>&lt;p>The &lt;em>control&lt;/em> block contains information about the general code setup.
 See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH input deck&lt;/a> for more information
@@ -1198,116 +1199,7 @@ Comptes Rendus Mcanique, 2014
 &lt;a href="http://www.sciencedirect.com/science/article/pii/S163107211400148X" target="_blank" rel="noopener">6&lt;/a>&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>ionisation</title><link>/documentation/input_deck/input_deck_ionisation.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_ionisation.html</guid><description>&lt;p>EPOCH now includes both field and collisional ionisation, which can be
-activated by switching on keys in different blocks. Previous versions of
-EPOCH forced the user to specify ionisation energies for each ion charge
-state, but since EPOCH 4.19, these are set automatically using look-up tables.&lt;/p>
-&lt;p>Field and collisional ionisation must be switched on in the control block and
-collision block respectively, and species which are to be ionised must be
-specified in their species block. A basic example of using both ionisation
-mechanisms is given below, where non-relevant lines have been omitted.&lt;/p>
-&lt;pre>&lt;code class="language-perl">begin:control
-use_multi_photon = T
-use_bsi = F
-field_ionisation = T
-end:control
-begin:collisions
-use_collisional_ionisation = T
-ci_n_step = 3
-end:collisions
-begin:species
-name = Carbon
-charge = 0
-atomic_no = 6
-ionise = T
-ionise_limit = 3
-unique_electron_species = T
-end:species
-begin:species
-name = Carbon4
-charge = 4
-atomic_no = 6
-ionise = T
-ionisation_electron_species = (Electron4, Electron)
-end:species
-&lt;/code>&lt;/pre>
-&lt;p>Descriptions of these flags can be found in the documentation for each block,
-but a summary has been provided here for clarity:&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>field_ionisation&lt;/code> - Switches on field ionisation.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>use_collisional_ionisation&lt;/code> - Switches on ionisation by collisional
-electron impact.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>ci_n_step&lt;/code> - Only performs the collisional ionisation calculation
-once every &lt;em>n&lt;/em> steps, where &lt;em>n&lt;/em> is set by this parameter. This is done
-to speed up the code, and the default is 1 (every step). When
-this is greater than 1, the assumed time-step for the collisional ionisation
-calculation is &lt;em>n*dt&lt;/em>. Note that an ion may only be ionised once per calculation,
-so if &lt;em>n&lt;/em> is too high, the number of ions will be underestimated.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>atomic_no&lt;/code> - Atomic number of the element. When combined with the
-charge, the code can deduce the element and charge-state of the ion, and
-may use the appropriate ionisation energy and shell binding energies.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>ionise&lt;/code> - Allows ionisation of this species, and generates additional
-particle species for each ion charge state.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>ionise_limit&lt;/code> - This limits the number of additional particle species to
-be generated. In this example, ion macro-particles in the Carbon species can only
-be ionised 3 times - ionisation of Carbon3 will not be considered.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>ionisation_electron_species&lt;/code> - Name of the electron species to
-populate with ejected electrons. This
-can be specified as an array in the event that the user wishes some levels
-to have a different electron species which can be handy for monitoring
-ionisation at specific levels. &lt;code>electron&lt;/code> and &lt;code>electron_species&lt;/code> are
-accepted as synonyms. Either one species for &lt;strong>all&lt;/strong> ionisation levels, or one species
-for &lt;strong>each&lt;/strong> level should be specified. In the Carbon4 example, the user may have
-written &lt;code>ionisation_electron_species = Electron&lt;/code> to use the Electron species
-for all ejected electrons.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>unique_electron_species&lt;/code> - If &amp;ldquo;T&amp;rdquo;, this generates a
-unique electron species to populate with ejected electrons from each
-ion charge state. The user must use this, or &lt;strong>ionisation_electron_species&lt;/strong>.&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>Ionised states are created automatically and are named according to the
-ionising species name with a number appended. For example, with the Carbon
-species block, the species named &amp;ldquo;Carbon1&amp;rdquo;, &amp;ldquo;Carbon2&amp;rdquo; and &amp;ldquo;Carbon3&amp;rdquo;
-are automatically created. Note that for pre-ionised species like the Carbon4 block,
-species would be named &amp;ldquo;Carbon41&amp;rdquo;, &amp;ldquo;Carbon42&amp;rdquo;. These species will also
-inherit the ``dump''
-parameter from their parent species. This behaviour can be overridden by explicitly
-adding a species block of the same name with a differing dumpmask.&lt;/p>
-&lt;p>Field ionisation consists of three distinct regimes; multiphoton in which
-ionisation is best described as absorption of multiple photons, tunnelling
-in which deformation of the atomic Coulomb potential is the dominant factor,
-and barrier suppression ionisation in which the electric field is strong
-enough for an electron to escape classically. It is possible to turn off
-multiphoton or barrier suppression ionisation through the input deck
-using the following control block parameters:&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>use_multiphoton&lt;/code> - Logical flag which turns on modelling
-ionisation by multiple photon absorption. This should be set to &amp;ldquo;F&amp;rdquo; if
-there is no laser attached to a boundary as it relies on laser frequency.
-The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>use_bsi&lt;/code> - Logical flag which turns on barrier suppression
-ionisation correction to the tunnelling ionisation model for high intensity
-lasers. The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
-&lt;/li>
-&lt;/ul></description></item><item><title>boundaries block</title><link>/documentation/input_deck/input_deck_boundaries.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_boundaries.html</guid><description>&lt;p>This block contains information about the boundary conditions for this
+&lt;/section></description></item><item><title>boundaries block</title><link>/documentation/input_deck/input_deck_boundaries.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_boundaries.html</guid><description>&lt;p>This block contains information about the boundary conditions for this
 run. See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH input deck&lt;/a> for more
 information on the input deck.&lt;/p>
@@ -1595,8 +1487,16 @@ Currently this is used primarily by the QED routines. See
 &lt;a href="/documentation/input_deck/input_deck_qed">here&lt;/a> for details.&lt;/li>
 &lt;li>&lt;code>immobile&lt;/code> - Logical flag. If this parameter is set to &amp;ldquo;T&amp;rdquo;
 then the species will be ignored during the particle push. The default
-value is &amp;ldquo;F&amp;rdquo;.
-The species blocks are also used for specifying initial conditions for
+value is &amp;ldquo;F&amp;rdquo;.&lt;/li>
+&lt;li>&lt;code>background_species&lt;/code> - Logical flag. If set to &amp;ldquo;T&amp;rdquo; the species will
+be treated as a non evolving continuum background. No particles are loaded. Any
+particle-like specifications will be ignored. Background species are currently
+only used by the bremsstrahlung radiation model.
+See
+&lt;a href="/documentation/input_deck/input_deck_bremsstrahlung">here&lt;/a>
+for details. Default value is &amp;ldquo;F&amp;rdquo;. &amp;ldquo;background&amp;rdquo; is accepted as an alias.&lt;/li>
+&lt;/ul>
+&lt;p>The species blocks are also used for specifying initial conditions for
 the particle species. The initial conditions in EPOCH can be specified
 in various ways, but the easiest way is to specify the initial
 conditions in the input deck file. This allows any initial condition
@@ -1604,8 +1504,7 @@ which can be specified everywhere in space by a number density and a
 drifting Maxwellian distribution function. These are built up using the
 normal maths expressions, by setting the density and temperature for
 each species which is then used by the autoloader to actually position
-the particles.&lt;/li>
-&lt;/ul>
+the particles.&lt;/p>
 &lt;p>The elements of the species block used for setting initial conditions
 are:&lt;/p>
 &lt;ul>
@@ -1732,84 +1631,114 @@ for demotion when the local number density is greater than
 &amp;ldquo;demote_number_density&amp;rdquo;. The default value is 0.&lt;/li>
 &lt;/ul>
 &lt;h1 id="ionisation">Ionisation&lt;/h1>
-&lt;p>EPOCH now includes field ionisation which can be activated by defining
-ionisation energies and an electron for the ionising species. This is
-done via the species block using the following parameters:&lt;/p>
+&lt;p>EPOCH now includes both field and collisional ionisation, which can be
+activated by switching on keys in different blocks. Previous versions of
+EPOCH forced the user to specify ionisation energies for each ion charge
+state, but since EPOCH 4.19, these are set automatically using look-up tables.&lt;/p>
+&lt;p>Field and collisional ionisation must be switched on in the control block and
+collision block respectively, and species which are to be ionised must be
+specified in their species block. A basic example of using both ionisation
+mechanisms is given below, where non-relevant lines have been omitted.&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:control
+use_multi_photon = T
+use_bsi = F
+field_ionisation = T
+end:control
+begin:collisions
+use_collisional_ionisation = T
+ci_n_step = 3
+end:collisions
+begin:species
+name = Carbon
+charge = 0
+atomic_no = 6
+ionise = T
+ionise_limit = 3
+unique_electron_species = T
+end:species
+begin:species
+name = Carbon4
+charge = 4
+atomic_no = 6
+ionise = T
+ionisation_electron_species = (Electron4, Electron)
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>A full summary of the keys used in ionisation has been provided below:&lt;/p>
 &lt;ul>
-&lt;li>&lt;code>ionisation_energies&lt;/code> - This is an array of ionisation
-energies (in Joules) starting from the outermost shell. It expects to be
-given all energies down to the fully ionised ion; if the user wishes to
-exclude some inner shell ionisation for some reason they need to give
-this a very large number. Note that the ionisation model assumes that
-the outermost electron ionises first always, and that the orbitals are
-filled assuming ground state. When this parameter is specified it turns
-on ionisation modelling. If you wish to specify the values in
-Electron-Volts, add the &amp;ldquo;ev&amp;rdquo;
-&lt;a href="/documentation/code_details/maths_parser#constants">multiplication
-factor&lt;/a>.&lt;/li>
-&lt;li>&lt;code>ionisation_electron_species&lt;/code> - Name of the electron
-species. This can be specified as an array in the event that the user
-wishes some levels to have a different electron species which can be
-handy for monitoring ionisation at specific levels. &amp;ldquo;electron&amp;rdquo; and
-&amp;ldquo;electron_species&amp;rdquo; are accepted as synonyms. Either one species for
-&lt;em>all&lt;/em> levels, or one species for &lt;em>each&lt;/em> species should be specified.
-For example, ionising carbon species might appear in the input deck as:&lt;/li>
+&lt;li>
+&lt;p>&lt;code>field_ionisation&lt;/code> - Switches on field ionisation.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_collisional_ionisation&lt;/code> - Switches on ionisation by collisional
+electron impact.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ci_n_step&lt;/code> - Only performs the collisional ionisation calculation
+once every &lt;em>n&lt;/em> steps, where &lt;em>n&lt;/em> is set by this parameter. This is done
+to speed up the code, and the default is 1 (every step). When
+this is greater than 1, the assumed time-step for the collisional ionisation
+calculation is &lt;em>n*dt&lt;/em>. Note that an ion may only be ionised once per calculation,
+so if &lt;em>n&lt;/em> is too high, the number of ions will be underestimated.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>atomic_no&lt;/code> - Atomic number of the element. When combined with the
+charge, the code can deduce the element and charge-state of the ion, and
+may use the appropriate ionisation energy and shell binding energies.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ionise&lt;/code> - Allows ionisation of this species, and generates additional
+particle species for each ion charge state.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ionise_limit&lt;/code> - This limits the number of additional particle species to
+be generated. In this example, ion macro-particles in the Carbon species can only
+be ionised 3 times - ionisation of Carbon3 will not be considered.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ionisation_electron_species&lt;/code> - Name of the electron species to
+populate with ejected electrons. This
+can be specified as an array in the event that the user wishes some levels
+to have a different electron species which can be handy for monitoring
+ionisation at specific levels. &lt;code>electron&lt;/code> and &lt;code>electron_species&lt;/code> are
+accepted as synonyms. Either one species for &lt;strong>all&lt;/strong> ionisation levels, or one species
+for &lt;strong>each&lt;/strong> level should be specified. In the Carbon4 example, the user may have
+written &lt;code>ionisation_electron_species = Electron&lt;/code> to use the Electron species
+for all ejected electrons.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>unique_electron_species&lt;/code> - If &amp;ldquo;T&amp;rdquo;, this generates a
+unique electron species to populate with ejected electrons from each
+ion charge state. The user must use this, or &lt;strong>ionisation_electron_species&lt;/strong>.&lt;/p>
+&lt;/li>
 &lt;/ul>
-&lt;pre>&lt;code class="language-perl">begin:species
-charge = 0.0
-mass = 1837.2
-name = carbon
-ionisation_energies = (11.26*ev,24.38*ev,47.89*ev,64.49*ev,392.1*ev,490.0*ev)
-ionisation_electron_species = \
-(electron,electron,electron,fourth,electron,electron)
-number_density= den_gas
-end:species
-begin:species
-charge = -1.0
-mass = 1.0
-name = electron
-number_density = 0.0
-end:species
-begin:species
-charge = -1.0
-mass = 1.0
-name = fourth
-number_density = 0.0
-end:species
-&lt;/code>&lt;/pre>
 &lt;p>Ionised states are created automatically and are named according to the
-ionising species name with a number appended. For example&lt;/p>
-&lt;pre>&lt;code class="language-perl">begin:species
-name = Helium
-ionisation_energies = (24.6*ev,54.4*ev)
-dump = F
-end:species
-&lt;/code>&lt;/pre>
-&lt;p>With this species block, the species named &amp;ldquo;Helium1&amp;rdquo; and &amp;ldquo;Helium2&amp;rdquo; are
-automatically created. These species will also inherit the &amp;ldquo;dump&amp;rdquo;
-parameter from their parent species, so in this example they will both
-have &amp;ldquo;dump = F&amp;rdquo; set. This behaviour can be overridden by explicitly
-adding a species block of the same name with a differing dumpmask. eg.&lt;/p>
-&lt;pre>&lt;code class="language-perl">begin:species
-name = Helium1
-dump = T
-end:species
-&lt;/code>&lt;/pre>
-&lt;p>Field ionisation consists of three distinct regimes; multiphoton in
-which ionisation is best described as absorption of multiple photons,
-tunnelling in which deformation of the atomic Coulomb potential is the
-dominant factor, and barrier suppression ionisation in which the
-electric field is strong enough for an electron to escape classically.
-It is possible to turn off multiphoton or barrier suppression ionisation
-through the input deck using the following control block parameters:&lt;/p>
+ionising species name with a number appended. For example, with the Carbon
+species block, the species named &amp;ldquo;Carbon1&amp;rdquo;, &amp;ldquo;Carbon2&amp;rdquo; and &amp;ldquo;Carbon3&amp;rdquo;
+are automatically created. Note that for pre-ionised species like the Carbon4 block,
+species would be named &amp;ldquo;Carbon41&amp;rdquo;, &amp;ldquo;Carbon42&amp;rdquo;. These species will also
+inherit the ``dump''
+parameter from their parent species. This behaviour can be overridden by explicitly
+adding a species block of the same name with a differing dumpmask.&lt;/p>
+&lt;p>Field ionisation consists of three distinct regimes; multiphoton in which
+ionisation is best described as absorption of multiple photons, tunnelling
+in which deformation of the atomic Coulomb potential is the dominant factor,
+and barrier suppression ionisation in which the electric field is strong
+enough for an electron to escape classically. It is possible to turn off
+multiphoton or barrier suppression ionisation through the input deck
+using the following control block parameters:&lt;/p>
 &lt;ul>
-&lt;li>&lt;code>use_multiphoton&lt;/code> - Logical flag which turns on modelling
+&lt;li>
+&lt;p>&lt;code>use_multiphoton&lt;/code> - Logical flag which turns on modelling
 ionisation by multiple photon absorption. This should be set to &amp;ldquo;F&amp;rdquo; if
-there is no laser attached to a boundary as it relies on laser
-frequency. The default is &amp;ldquo;T&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>use_bsi&lt;/code> - Logical flag which turns on barrier
-suppression ionisation correction to the tunnelling ionisation model for
-high intensity lasers. The default is &amp;ldquo;T&amp;rdquo;.&lt;/li>
+there is no laser attached to a boundary as it relies on laser frequency.
+The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_bsi&lt;/code> - Logical flag which turns on barrier suppression
+ionisation correction to the tunnelling ionisation model for high intensity
+lasers. The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;h1 id="species_boundary_conditions">Species Boundary Conditions&lt;/h1>
 &lt;ul>
@@ -2984,12 +2913,17 @@ copies of all particles which cross a point/line/plane in a given
 direction which meet minimum and maximum kinetic energy criteria and
 output the particle properties into the normal output files. Particle
 probes record the positions, momenta and weight of all particles passing
-through the plane. To use particle probes, the code must not have been
-compiled with the &lt;strong>&lt;code>-DNO_PARTICLE_PROBES&lt;/code>&lt;/strong> compiler option. This is a
-fairly heavyweight diagnostic since each particle position must be
-tested from within the particle push. The code will run faster if it is
-not compiled in.
-The probe is specified in terms of a point in the plane and the normal
+through the plane.
+If the code is compiled with &lt;strong>&lt;code>-DPARTICLE_ID&lt;/code>&lt;/strong> or &lt;strong>&lt;code>-DPARTICLE_ID4&lt;/code>&lt;/strong>,
+the code also outputs the ID of passing particles.
+If the code is compiled with &lt;strong>&lt;code>-DPROBE_TIME&lt;/code>&lt;/strong>, the time at which the
+particle touches the probe surface is also output.
+To use particle probes, the code must not have been
+compiled with the &lt;strong>&lt;code>-DNO_PARTICLE_PROBES&lt;/code>&lt;/strong> compiler option. This is
+a fairly heavyweight diagnostic since each particle position must be tested
+from within the particle push. The code will run faster if it is not compiled
+in.&lt;/p>
+&lt;p>The probe is specified in terms of a point in the plane and the normal
 vector to the plane which is to be monitored. Particles are only
 recorded if they cross the plane in the direction given by the normal
 vector. If you want to record particles travelling in both directions
@@ -3030,99 +2964,151 @@ memory requirements can increase drastically if this code only dumps
 probe information infrequently. If this is set to &lt;strong>never&lt;/strong> then the
 code effectively never uses the probe.&lt;/li>
 &lt;/ul>
-&lt;!-- ######################## Cross references ######################## --></description></item><item><title>collisions block</title><link>/documentation/input_deck/input_deck_collisions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_collisions.html</guid><description>&lt;p>This block contains information about particle collisions. See
+&lt;!-- ######################## Cross references ######################## --></description></item><item><title>collisions block</title><link>/documentation/input_deck/input_deck_collisions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_collisions.html</guid><description>&lt;p>This block contains information about bremsstrahlung radiation. See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH
 input deck&lt;/a> for more information on the
 input deck.&lt;/p>
-&lt;p>EPOCH has a particle collision routine with scattering algorithms based
-on the model presented by Sentoku and Kemp&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> or the model presented by
-Pérez et al &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>, which in turn was based on the work of Nanbu and
-Yonemura&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>. This adds a new output block named &amp;ldquo;collisions&amp;rdquo; which
-accepts the following four parameters.&lt;/p>
-&lt;ul>
-&lt;li>&lt;code>use_collisions&lt;/code> - This is a logical flag which determines
-whether or not to call the collision routine. If omitted, the default is
-&amp;ldquo;T&amp;rdquo; if any of the frequency factors are non-zero (see below) and &amp;ldquo;F&amp;rdquo;
-otherwise.&lt;/li>
-&lt;li>&lt;code>use_nanbu&lt;/code> - This logical flag determines whether the scattering angle of
-Pérez/Nanbu will be used. The default is &amp;ldquo;T&amp;rdquo;. If &amp;ldquo;F&amp;rdquo;, the
-Sentoku-Kemp algorithm will be used.&lt;/li>
-&lt;li>&lt;code>coulomb_log&lt;/code> - This may either be set to a real value,
-specifying the Coulomb logarithm to use when scattering the
-particles or to the special value &amp;ldquo;auto&amp;rdquo;. If &amp;ldquo;auto&amp;rdquo; is used then the
-routine will calculate a value based on the local temperature and
-density of the particle species being scattered, along with the two
-particle charges. If omitted, the default value is &amp;ldquo;auto&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>collide&lt;/code> - This sets up a symmetric square matrix of
-size $nspecies,\times,nspecies$ containing the collision frequency
-factors to use between particle species. The element (s1,s2) gives
-the frequency factor used when colliding species s1 with species s2.
-If the factor is less than zero, no collisions are performed. If it
-is equal to one, collisions are performed normally. For any value
-between zero and one, the collisions are performed using a frequency
-multiplied by the given factor.&lt;/li>
-&lt;/ul>
-&lt;p>If &amp;ldquo;collide&amp;rdquo; has a value of &amp;ldquo;all&amp;rdquo; then all elements of the matrix are
-set to one. If it has a value of &amp;ldquo;none&amp;rdquo; then all elements are set to
-minus one.
-If the syntax &amp;ldquo;species1 species2 &lt;value>&amp;rdquo; is used, then the
-(species1,species2) element of the matrix is set to the factor
-&amp;ldquo;&lt;value>&amp;rdquo;. This may either be a real number, or the special value &amp;ldquo;on&amp;rdquo;
-or &amp;ldquo;off&amp;rdquo;. The &amp;ldquo;collide&amp;rdquo; parameter may be used multiple times.
-The default value is &amp;ldquo;all&amp;rdquo; (ie. all elements of the matrix are set to
-one).&lt;/p>
-&lt;ul>
-&lt;li>&lt;code>collisional_ionisation&lt;/code> - If this logical flag is set to
-&amp;ldquo;T&amp;rdquo; then the collisional ionisation model is enabled. This process is
-independent of &lt;em>field_ionisation&lt;/em> (see
-&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a>). However, in
-order to set up &lt;em>collisional_ionisation&lt;/em> you must also specify
-ionisation energies and electrons in a &lt;em>species&lt;/em> block (see
-&lt;a href="/documentation/input_deck/input_deck_species#ionisation">here&lt;/a>). The default
-value is &amp;ldquo;F&amp;rdquo;.
-For example:&lt;/li>
-&lt;/ul>
-&lt;pre>&lt;code class="language-perl">begin:collisions
-use_collisions = T
-use_nanbu = T
-coulomb_log = auto
-collide = all
-collide = spec1 spec2 off
-collide = spec2 spec3 0.1
-end:collisions
+&lt;p>EPOCH is capable of simulating bremsstrahlung radiation using the teqhniques described by Morris &lt;em>et al&lt;/em>[^1] and Vyskočil &lt;em>et al&lt;/em>[^2].
+In order to run this module, the compiler flag &lt;strong>&lt;code>-DBREMSSTRAHLUNG&lt;/code>&lt;/strong> must be
+switched on in the Makefile. There should also be a corresponding
+&amp;ldquo;bremsstrahlung&amp;rdquo; block for the input deck which uses a similar
+format to the &amp;ldquo;qed&amp;rdquo; block. Bremsstrahlung cross sections may be calculated
+for both electrons and positrons. Photons may also undergo pair production
+according to the Bethe-Heitler model.&lt;/p>
+&lt;p>An example bremsstrahlung block is shown below:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:bremsstrahlung
+enable = T
+start_time = 0
+produce_photons = T
+photon_energy_min = 1 * kev
+photon_weight = 1.0
+photon_dynamics = F
+use_plasma_screening = F
+use_brem_scatter = T
+use_bethe_heitler = F
+use_positron_brem = F
+end:bremsstrahlung
 &lt;/code>&lt;/pre>
-&lt;p>With this block, collisions are turned on, the Nanbu-Pérez scattering
-algorithm is used and the Coulomb logarithm is automatically calculated.
-All values of the frequency array are set to one except (spec1,spec2) is
-set to minus one (and also (spec2,spec1)) and (spec2,spec3) is set to
-0.1&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>enable&lt;/code> - Logical flag to turn bremsstrahlung on or off.
+&amp;ldquo;use_bremsstrahlung&amp;rdquo; is accepted as an alias. The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>start_time&lt;/code> - Floating point value specifying the time after
+which bremsstrahlung radiation is modelled. The default is 0.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>produce_photons&lt;/code> - Logical flag to allow population of a photon
+species. If &amp;ldquo;F&amp;rdquo;, then only the energy loss of the electrons will be
+simulated. The photon species can be specified by including the line
+&lt;code>identify:brem_photon&lt;/code> in the corresponding species block. If the
+compiler flag &lt;strong>&lt;code>-DPHOTONS&lt;/code>&lt;/strong> is active, QED and bremsstrahlung will both
+populate the first species with &lt;code>identify:photon&lt;/code> if no
+&lt;em>brem_photon&lt;/em> species is specified. The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>photon_energy_min&lt;/code> - Floating point value specifying the minimum
+energy of produced photons. Electron energy loss is still calculated for
+lower energy photon emissions, but these photons are not added to the photon
+species. The default is 0.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>photon_weight&lt;/code> - Floating point value which applies a multiplier to
+the weight of produced macro-photons, in order to increase the number
+of overall emissions and obtain better spectra. Must be less than or equal
+to 1 and greater than 0. For example, 0.1 would make emission 10 times more
+likely, but for macro-photons only 10% the weight of the generating
+macro-electrons. Electron recoil would be reduced accordingly. The default is 1. Note that only one emission is possible
+per macro-electron per timestep, so setting this too low will saturate
+emissions.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>photon_dynamics&lt;/code> - Logical flag to specify whether or not to push
+photons. If &amp;ldquo;F&amp;rdquo;, then the generated photons are immobilised at the point of
+emission. The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_plasma_screening&lt;/code> - Logical flag to specify whether a cross
+section enhancement due to heated ionised targets is considered, based on
+theory described by Wu &lt;em>et al&lt;/em>[^3]. It is expected that for high energy
+electrons passing through low density, ionised plasmas with electron
+temperatures over $\sim$100 eV ($\sim8\times 10^{5}$ K), the bremsstrahlung
+emission rate could increase by a factor of 2-3. This has not been tested
+experimentally, and so the default value is set to &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_radiation_reaction&lt;/code> - Logical flag to specify whether the
+electrons experience energy loss when emitting photons or not.
+&amp;ldquo;use_bremsstrahlung_recoil&amp;rdquo; is accepted as an alias. Debugging
+flag, default &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>table_location&lt;/code> - String specifying the
+location of the emission look-up tables for bremsstrahlung.
+The default path is set to
+&lt;code>src/physics_packages/TABLES/br&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_brem_scatter&lt;/code> - Samples photon ejection angle from a
+differential cross section. Default is &amp;ldquo;F&amp;rdquo;, where photons are emitted in the
+direction of the incident particle (ultra-relativistic approximation).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_bethe_heitler&lt;/code> - Allows photons to undergo Bethe-Heitler pair
+production. Default is &amp;ldquo;F&amp;rdquo;. This requires both electron and positron species
+to be defined.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_positron_brem&lt;/code> - Samples bremsstrahlung radiation from positrons.
+Default is &amp;ldquo;F&amp;rdquo;. If &amp;ldquo;T&amp;rdquo;, electrons and positrons share the same
+parameter values set in the bremsstrahlung block.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>Bremsstrahlung, like QED, requires the code to know which species are electrons
+and which are photons, so uses the same identify system (with
+&lt;code>identify:brem_photon&lt;/code> for a bremsstrahlung-only photon species).
+Additionally, the atomic numbers of the atom/ion species are required in
+the species block. For example, atomic aluminium (charge = 0) could be
+specified as:&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:species
+name = Aluminium
+atomic_number = 13
+charge = 0
+mass = 49218
+number_density = 6.022e28
+fraction = 0.5
+dump = T
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>If the atomic number is not specified then it will be assumed that the ion is
+fully ionised and the atomic number would be set to the charge (the nearest
+integer to the ion charge when expressed in units of elementary charge). If
+ionisation is considered, the atomic number must be specified once, and all child species will retain the same atomic number.&lt;/p>
+&lt;p>If Bethe-Heitler pair production is considered, the user may identify specific
+species to populate with Bethe-Heitler electrons and positrons using the identity
+aliases:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>identify:bethe_heitler_electron&lt;/code> - bh_electron is also accepted.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>identify:bethe_heitler_positron&lt;/code> - bh_positron is also accepted.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>If these species are unspecified, EPOCH will populate the first electron and
+positron species present read in from the input deck. Additional identity aliases are provided in the
+&lt;a href="/documentation/input_deck/input_deck_qed">QED&lt;/a> section.&lt;/p>
 &lt;h1 id="references">References&lt;/h1>
 &lt;p>&lt;references />&lt;/p>
-&lt;!-- ######################## Cross references ######################## -->
-&lt;section class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1" role="doc-endnote">
-&lt;p>Y. Sentoku and A. J. Kemp, &amp;ldquo;Numerical methods for particle
-simulations at extreme densities and temperatures: Weighted
-particles, relativistic collisions and reduced currents,&amp;rdquo; J. Comput.
-Phys., 2008.
-&lt;a href="http://www.sciencedirect.com/science/article/pii/S0021999108001988" target="_blank" rel="noopener">1&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:2" role="doc-endnote">
-&lt;p>F. Pérez et al, &amp;ldquo;Improved modeling of relativistic collisions and
-collisional ionization in particle-in-cell codes ,&amp;rdquo; Physics of
-Plasmas, 2012.
-&lt;a href="https://doi.org/10.1063/1.4742167" target="_blank" rel="noopener">2&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:3" role="doc-endnote">
-&lt;p>K. Nanbu and S. Yonemura, &amp;ldquo;Weighted Particles in Coulomb Collision
-Simulations Based on the Theory of a Cumulative Scattering Angle,&amp;rdquo;
-J. Comput. Phys., 1998.
-&lt;a href="https://doi.org/10.1006/jcph.1998.6049" target="_blank" rel="noopener">3&lt;/a>&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/section></description></item><item><title>qed block</title><link>/documentation/input_deck/input_deck_qed.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_qed.html</guid><description>&lt;p>This block contains information about QED pair production. See
+&lt;p>[^1] Morris, S., Robinson, A., &amp;amp; Ridgers, C. (2021). Highly efficient conversion of laser energy to hard x-rays in high-intensity laser–solid simulations. Physics of Plasmas, 28(10), 103304.
+&lt;a href="https://aip.scitation.org/doi/full/10.1063/5.0055398" target="_blank" rel="noopener">1&lt;/a>&lt;/p>
+&lt;p>[^2] J. Vyskočil, O. Klimo, and S. Weber, “Simulations of bremsstrahlung emission in ultra-intense laser
+interactions with foil targets,” Plasma Physics and Controlled Fusion, vol. 60, no. 5, p. 054013, 2018.
+&lt;a href="https://iopscience.iop.org/article/10.1088/1361-6587/aab4c3/meta" target="_blank" rel="noopener">2&lt;/a>&lt;/p>
+&lt;p>[^3] Wu, D., He, X. T., Yu, W., &amp;amp; Fritzsche, S. (2018). Particle-in-cell simulations of laser–plasma interactions at solid densities and relativistic intensities: the role of atomic processes. High Power Laser Science and Engineering, 6.
+&lt;a href="https://www.cambridge.org/core/journals/high-power-laser-science-and-engineering/article/particleincell-simulations-of-laserplasma-interactions-at-solid-densities-and-relativistic-intensities-the-role-of-atomic-processes/82560EBD1E5A4869CC5EC059C47A017A" target="_blank" rel="noopener">3&lt;/a>&lt;/p>
+&lt;!-- ######################## Cross references ######################## --></description></item><item><title>qed block</title><link>/documentation/input_deck/input_deck_qed.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_qed.html</guid><description>&lt;p>This block contains information about QED pair production. See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH
 input deck&lt;/a> for more information on the
 input deck.&lt;/p>
@@ -3133,40 +3119,56 @@ Trident process is enabled using &lt;strong>&lt;code>-DTRIDENT_PHOTONS&lt;/code>
 &lt;p>A new input deck block named &amp;ldquo;qed&amp;rdquo; has been added which accepts the
 following parameters:&lt;/p>
 &lt;ul>
-&lt;li>&lt;code>use_qed&lt;/code> - Logical flag which turns QED on or off. The
-default is &amp;ldquo;F&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>qed_start_time&lt;/code> - Floating point value specifying the
-time after which QED effects should be turned on. The default is 0.&lt;/li>
-&lt;li>&lt;code>produce_photons&lt;/code> - Logical flag which specifies whether
+&lt;li>
+&lt;p>&lt;code>use_qed&lt;/code> - Logical flag which turns QED on or off. The
+default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>qed_start_time&lt;/code> - Floating point value specifying the
+time after which QED effects should be turned on. The default is 0.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>produce_photons&lt;/code> - Logical flag which specifies whether
 to track the photons generated by synchrotron emission. If this is &amp;ldquo;F&amp;rdquo;
 then the radiation reaction force is calculated but the properties of
-the emitted photons are not tracked. The default is &amp;ldquo;F&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>photon_energy_min&lt;/code> - Minimum energy of produced photons.
+the emitted photons are not tracked. The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>photon_energy_min&lt;/code> - Minimum energy of produced photons.
 Radiation reaction is calculated for photons of all energies, but
-photons with energy below this cutoff are not tracked. The default is 0.&lt;/li>
-&lt;li>&lt;code>photon_dynamics&lt;/code> - Logical flag which specifies whether
+photons with energy below this cutoff are not tracked. The default is 0.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>photon_dynamics&lt;/code> - Logical flag which specifies whether
 to push photons. If &amp;ldquo;F&amp;rdquo; then photons are generated, but their motion
 through the domain is not simulated and they stay where they were
-generated. The default is &amp;ldquo;F&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>produce_pairs&lt;/code> - Logical flag which determines whether or
+generated. The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>produce_pairs&lt;/code> - Logical flag which determines whether or
 not to simulate the process of pair generation from gamma ray photons.
 Both produce_photons and photon_dynamics must be &amp;ldquo;T&amp;rdquo; for this to work.
-The default is &amp;ldquo;F&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>qed_table_location&lt;/code> - EPOCH&amp;rsquo;s QED routines use lookup
+The default is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>qed_table_location&lt;/code> - EPOCH&amp;rsquo;s QED routines use lookup
 tables to calculate gamma ray emission and pair production. If you want
 to use tables in a different location from the default, specify the new
 location using this parameter. The default is
-&amp;ldquo;src/physics_packages/TABLES&amp;rdquo;.&lt;/li>
-&lt;li>&lt;code>use_radiation_reaction&lt;/code> - Logical flag which determines
+&amp;ldquo;src/physics_packages/TABLES&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_radiation_reaction&lt;/code> - Logical flag which determines
 whether or not to calculate the radiation reaction force. If set to &amp;ldquo;F&amp;rdquo;
 then the force is not calculated. This should nearly always be enabled
 when using the QED model. It is only provided for testing purposes. The
-default value is &amp;ldquo;T&amp;rdquo;.
-QED also requires that the code now know which species are electrons,
+default value is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>QED also requires that the code now know which species are electrons,
 positrons and photons. The species type is specified using a single
 &amp;ldquo;identify&amp;rdquo; tag in a species block. To specify an electron the block in
-the deck would look like&lt;/li>
-&lt;/ul>
+the deck would look like&lt;/p>
 &lt;pre>&lt;code class="language-perl">begin:species
 name = electron
 frac = 0.5
@@ -3178,29 +3180,44 @@ end:species
 assigns mass and charge states for the species. Possible identities
 are:&lt;/p>
 &lt;ul>
-&lt;li>&lt;code>electron&lt;/code> - A normal electron species. All species of
+&lt;li>
+&lt;p>&lt;code>electron&lt;/code> - A normal electron species. All species of
 electrons in the simulation must be identified in this way or they will
-not generate photons.&lt;/li>
-&lt;li>&lt;code>positron&lt;/code> - A normal positron species. All species of
+not generate photons.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>positron&lt;/code> - A normal positron species. All species of
 positron in the simulation must be identified in this way or they will
-not generate photons.&lt;/li>
-&lt;li>&lt;code>photon&lt;/code> - A normal photon species. One species of this
+not generate photons.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>photon&lt;/code> - A normal photon species. One species of this
 type is needed for photon production to work. If multiple species are
 present then generated photons will appear in the first species of this
-type.&lt;/li>
-&lt;li>&lt;code>bw_electron&lt;/code> - The electron species for pair production
+type.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bw_electron&lt;/code> - The electron species for pair production
 by the Breit-Wheeler process. If a species of this type exists then
 electrons from the pair production module will be created in this
 species. If no species of this type is specified then pair electrons
-will be generated in the first electron species.&lt;/li>
-&lt;li>&lt;code>bw_positron&lt;/code> - As above but for positrons.&lt;/li>
-&lt;li>&lt;code>trident_electron&lt;/code> - The electron species for pair
+will be generated in the first electron species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bw_positron&lt;/code> - As above but for positrons.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>trident_electron&lt;/code> - The electron species for pair
 production by the Trident process. If a species of this type exists then
 electrons from the pair production module will be created in this
 species. If no species of this type is specified then pair electrons
-will be generated in the first electron species.&lt;/li>
-&lt;li>&lt;code>trident_positron&lt;/code> - As above but for positrons.&lt;/li>
-&lt;li>&lt;code>proton&lt;/code> - A normal proton species. This is for convenience
+will be generated in the first electron species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>trident_positron&lt;/code> - As above but for positrons.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>proton&lt;/code> - A normal proton species. This is for convenience
 only and is not required by the pair production routines.
 A species should be identified only once, so a &amp;ldquo;bw_electron&amp;rdquo; species
 does not need to also be identified as an &amp;ldquo;electron&amp;rdquo; species. If the
@@ -3211,7 +3228,21 @@ bw_electron) species and one positron (or bw_positron) species. These
 species will usually be defined with zero particles from the start of
 the simulation and will accumulate particles as the simulation
 progresses. The code will fail to run if the needed species are not
-specified.&lt;/li>
+specified.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>brem_photon&lt;/code> - A bremsstrahlung photon species. This is used by the bremsstrahlung radiation model. See the
+&lt;a href="/documentation/input_deck/input_deck_bremsstrahlung">bremsstrahlung&lt;/a> page.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bh_electron&lt;/code> - An electron produced in a Bethe-Heitler pair. See the
+&lt;a href="/documentation/input_deck/input_deck_bremsstrahlung">bremsstrahlung&lt;/a> page for more details.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>bh_positron&lt;/code> - A positron produced in a Bethe-Heitler pair.
+See the
+&lt;a href="/documentation/input_deck/input_deck_bremsstrahlung">bremsstrahlung&lt;/a> page for more details.&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;p>The basic input deck has now been considered fully but it is possible
 for an end user to add new blocks to the input deck As a result, a
@@ -3433,9 +3464,11 @@ and &lt;em>c&lt;/em>) and also several functions (&lt;em>critical&lt;/em>, &lt;e
 &lt;!-- ######################## Cross references ######################## --></description></item><item><title>injector block</title><link>/documentation/input_deck/input_deck_injector.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_injector.html</guid><description>&lt;p>The &lt;em>injector&lt;/em> block specifies a particle source to be introduced
 through a simulation boundary. Each injector block specifies a source of
 a single species of particle defined by a density, centre of mass drift
-momentum, temperature and number of simulation particles per cell. The
+momentum, temperature and number of simulation particles per cell. Injectors may also be set-up to
+inject particles with properties and at times read from files created by the user.
+The
 current version of the injectors is incompatible with the
-PER_SPECIES_WEIGHT compiler flag, and attempting to use an injector
+&lt;strong>&lt;code>-DPER_SPECIES_WEIGHT&lt;/code>&lt;/strong> compiler flag, and attempting to use an injector
 with a version of EPOCH compiled with this flag will fail.&lt;/p>
 &lt;h1 id="concepts">Concepts&lt;/h1>
 &lt;p>EPOCH can inject particles through any of the simulation boundaries.
@@ -3453,6 +3486,10 @@ to produce a neutral beam. Great care must be taken when introducing
 relativistic beams since the current due to a highly relativistic beam
 will not be the current due to the centre of mass velocity since EPOCH
 does not use the Maxwell-Jüttner distribution for loading particles.&lt;/p>
+&lt;p>The user may over-ride this behaviour and inject particles with specific momenta, positions, weights
+and ID values, at specific simulation times. These particle parameters are read from files, and syntax
+for these is provided
+&lt;a href="#inject-particles-from-file">here&lt;/a>.&lt;/p>
 &lt;h1 id="boundary_conditions">Boundary conditions&lt;/h1>
 &lt;p>The injectors only work properly with certain boundary conditions. For
 most purposes the &amp;ldquo;open&amp;rdquo; boundary condition is the only one that makes
@@ -3478,26 +3515,41 @@ profile for the moving window that stops at times when particles are to
 be injected and then starts again once the injection is complete.&lt;/p>
 &lt;h1 id="keys">Keys&lt;/h1>
 &lt;ul>
-&lt;li>&lt;code>boundary&lt;/code> - specifies which boundary to attach the particle source
+&lt;li>
+&lt;p>&lt;code>boundary&lt;/code> - specifies which boundary to attach the particle source
 too. Same specification as the
 &lt;a href="/documentation/input_deck/input_deck_laser">laser block&lt;/a>, so
 permitted values are x_min, x_max, y_min, y_max, z_min and
-z_max&lt;/li>
-&lt;li>&lt;code>species&lt;/code> - specifies which species should be injected through the
-boundary. Just specify the name of the species required.&lt;/li>
-&lt;li>&lt;code>t_start&lt;/code> - Time at which to start the injector&lt;/li>
-&lt;li>&lt;code>t_end&lt;/code> - Time at which to end the injector&lt;/li>
-&lt;li>&lt;code>npart_per_cell&lt;/code> - target pseudo-particle density for the injector.
-Average number of particles injected will be this value or slightly
-higher if very few particles are specified&lt;/li>
-&lt;li>&lt;code>number_density&lt;/code> - Number density of the particle source in $m^{-3}$.
+z_max&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>species&lt;/code> - specifies which species should be injected through the
+boundary. Just specify the name of the species required.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>t_start&lt;/code> - Time at which to start the injector&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>t_end&lt;/code> - Time at which to end the injector&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>npart_per_cell&lt;/code> - target pseudo-particle density for the injector.&lt;/p>
+&lt;p>Average number of particles injected will be this value or slightly
+higher if very few particles are specified&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>number_density&lt;/code> - Number density of the particle source in $m^{-3}$.
 Can be space varying along the boundary to which the injector is
-attached and time varying&lt;/li>
-&lt;li>&lt;code>number_density_min&lt;/code> - Minimum number density in $m^{-3}$ below
+attached and time varying&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>number_density_min&lt;/code> - Minimum number density in $m^{-3}$ below
 which pseudo particles are not loaded. Use if the density has a
 profile to avoid injecting low weight particles in low density
-regions&lt;/li>
-&lt;li>&lt;code>number_density_max&lt;/code> - Maximum particle number density in $m^{-3}$.
+regions&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>number_density_max&lt;/code> - Maximum particle number density in $m^{-3}$.
 When the number density in a cell rises above &lt;em>number_density_max&lt;/em>
 the injector clips the density to number_density_max allowing easy
 implementation of exponential rises to plateaus for time-varying injectors.
@@ -3505,27 +3557,48 @@ Note that the number of particles per cell is kept fixed and the number
 density adjustment is achieved by modifying the particle weight. This
 flag has no effect for particles with per-species weighting. If the
 flag has a negative value then no clipping is performed.
-This is the default.&lt;/li>
-&lt;li>&lt;code>temp_x&lt;/code> - Temperature in x direction (K)&lt;/li>
-&lt;li>&lt;code>temp_y&lt;/code> - Temperature in y direction (K)&lt;/li>
-&lt;li>&lt;code>temp_z&lt;/code> - Temperature in z direction (K)&lt;/li>
-&lt;li>&lt;code>temp&lt;/code> - Sets an isotropic temperature distribution in Kelvin. If both temp
+This is the default.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>temp_x&lt;/code> - Temperature in x direction (K)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>temp_y&lt;/code> - Temperature in y direction (K)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>temp_z&lt;/code> - Temperature in z direction (K)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>temp&lt;/code> - Sets an isotropic temperature distribution in Kelvin. If both temp
 and a specific temp_x, temp_y, temp_z parameter is specified then the last
 to appear in the deck has precedence. If neither are given then the
-injector will have a default temperature of zero Kelvin.&lt;/li>
-&lt;li>&lt;code>temp_{x,y,z}_ev, temp_ev&lt;/code> - These are the same as the temperature
+injector will have a default temperature of zero Kelvin.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>temp_{x,y,z}_ev, temp_ev&lt;/code> - These are the same as the temperature
 parameters described above except the units are given in electronvolts
-rather than Kelvin, i.e. using 1ev = 11604.5K .&lt;/li>
-&lt;li>&lt;code>drift_x&lt;/code> - Momentum drift in x direction in $kg.m/s$&lt;/li>
-&lt;li>&lt;code>drift_y&lt;/code> - Momentum drift in y direction in $kg.m/s$&lt;/li>
-&lt;li>&lt;code>drift_z&lt;/code> - Momentum drift in z direction in $kg.m/s$&lt;/li>
-&lt;li>&lt;code>drift_{x,y,z}&lt;/code> - Specifies a momentum space offset in $kg m/s$ to the
-distribution function for this injector. By default, the drift is zero.&lt;/li>
-&lt;li>&lt;code>use_flux_maxwellian&lt;/code> - Logical flag to determine whether to use an
+rather than Kelvin, i.e. using 1ev = 11604.5K .&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>drift_x&lt;/code> - Momentum drift in x direction in $kg.m/s$&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>drift_y&lt;/code> - Momentum drift in y direction in $kg.m/s$&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>drift_z&lt;/code> - Momentum drift in z direction in $kg.m/s$&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>drift_{x,y,z}&lt;/code> - Specifies a momentum space offset in $kg m/s$ to the
+distribution function for this injector. By default, the drift is zero.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_flux_maxwellian&lt;/code> - Logical flag to determine whether to use an
 accelerated flux Maxwellian rather than a drifting Maxwellian. This
 calculates the flux due to passing a Maxwellian source into an
 electrostatic accelerator instead of a drifting Maxwellian. If your
-particle source is a lab accelerator then you may want to set this to true.&lt;/li>
+particle source is a lab accelerator then you may want to set this to true.&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;h1 id="example_deck">Example Deck&lt;/h1>
 &lt;pre>&lt;code class="language-perl">begin:injector
@@ -3537,6 +3610,76 @@ drift_x = drift_p
 npart_per_cell = 32
 end:injector
 &lt;/code>&lt;/pre>
+&lt;h1 id="inject-particles-from-file">Inject particles from file&lt;/h1>
+&lt;p>The plasma injectors may be over-written to allow the user to inject macro-particles
+with specific momenta, positions and weight, at given simulation times on given boundaries.
+Files containing injected particle properties must be formatted in a particular way.
+Each variable type (position, momentum, weight, time) must be stored in a separate file.
+Each line of a given file corresponds to a variable value for one particle, and particles must
+be arranged in chronological order.&lt;/p>
+&lt;p>For example, a user wants to inject 3 particles of weights 10, 20 and 30, at times 1.0e-15 s,
+2.0e-15 s and 3.0e-15 s respectively, into a 1D simulation through the &lt;em>x_min&lt;/em> boundary.
+The file containing injection time data (&lt;em>inject_t.txt&lt;/em>) would contain:&lt;/p>
+&lt;pre>&lt;code class="language-perl">1.0e-15
+2.0e-15
+3.0e-15
+&lt;/code>&lt;/pre>
+&lt;p>and the weight data file (&lt;em>inject_w.txt&lt;/em>) would contain:&lt;/p>
+&lt;pre>&lt;code class="language-perl">10
+20
+30
+&lt;/code>&lt;/pre>
+&lt;p>The user could create similar files to describe the $p_x$, $p_y$ and $p_z$
+momentum components of each injected particle, where the first value in
+each file would be assigned to the 1.0e-15 macro-particle. In higher
+dimensions, injection position on the boundary must also be specified.
+Particle ID may be given if &lt;strong>&lt;code>-DPARTICLE_ID&lt;/code>&lt;/strong> or &lt;strong>&lt;code>-DPARTICLE_ID4&lt;/code>&lt;/strong>
+are specified.&lt;/p>
+&lt;p>The user may have multiple file-injectors running simultaneously, by
+defining multiple file-injector blocks. An example block is provided below
+for a 2D simulation. In this example, all files are present in the same
+directory as the input deck.&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:injector
+boundary = x_min
+species = Electron
+inject_from_file = T
+y_data = &amp;quot;inject_y.txt&amp;quot;
+px_data = &amp;quot;inject_px.txt&amp;quot;
+py_data = &amp;quot;inject_py.txt&amp;quot;
+w_data = &amp;quot;inject_w.txt&amp;quot;
+t_data = &amp;quot;inject_t.txt&amp;quot;
+end:injector
+&lt;/code>&lt;/pre>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>inject_from_file&lt;/code> - If &amp;ldquo;T&amp;rdquo;, the code will ignore the flux-Maxwellian keys,
+and will instead inject particles based on the {&amp;hellip;}_data keys.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>{x, y, z}_data&lt;/code> - Files containing the positions of injected particles.
+These are not used in 1D simulations, but must be used in 2D and 3D. In this example,
+no $x$ file is given, as all particles are injected through &lt;em>x_min&lt;/em>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>{px, py, pz}_data&lt;/code> - Files containing the momenta of injected particles.
+These are optional parameters - if a momentum component file is missing, this
+component will be set to zero for all injected particles.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>w_data&lt;/code> - The file containing the weights of all injected particles. This
+data is mandatory.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>t_data&lt;/code> - The file containing the times each particle passes the boundary.
+Injected particles will be positioned outside the simulation window, such that
+they pass the boundary at the time specified in this file. This data is mandatory.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>id_data&lt;/code> - The file containing the ID values assigned to each injected
+particle. This is optional, and may only be used if the code is compiled with
+either &lt;strong>&lt;code>-DPARTICLE_ID&lt;/code>&lt;/strong> or &lt;strong>&lt;code>-DPARTICLE_ID4&lt;/code>&lt;/strong>.&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h1 id="warnings">Warnings&lt;/h1>
 &lt;p>Currently injectors are a beta feature of EPOCH. We believe them to work
 correctly, but unusual results must be considered suspect. If you get
