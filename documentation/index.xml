@@ -679,7 +679,116 @@ Comptes Rendus Mcanique, 2014
 &lt;a href="http://www.sciencedirect.com/science/article/pii/S163107211400148X" target="_blank" rel="noopener">6&lt;/a>&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>boundaries block</title><link>/documentation/input_deck/input_deck_boundaries.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_boundaries.html</guid><description>&lt;p>This block contains information about the boundary conditions for this
+&lt;/section></description></item><item><title>ionisation</title><link>/documentation/input_deck/input_deck_ionisation.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_ionisation.html</guid><description>&lt;p>EPOCH now includes both field and collisional ionisation, which can be
+activated by switching on keys in different blocks. Previous versions of
+EPOCH forced the user to specify ionisation energies for each ion charge
+state, but since EPOCH 4.19, these are set automatically using look-up tables.&lt;/p>
+&lt;p>Field and collisional ionisation must be switched on in the control block and
+collision block respectively, and species which are to be ionised must be
+specified in their species block. A basic example of using both ionisation
+mechanisms is given below, where non-relevant lines have been omitted.&lt;/p>
+&lt;pre>&lt;code class="language-perl">begin:control
+use_multi_photon = T
+use_bsi = F
+field_ionisation = T
+end:control
+begin:collisions
+use_collisional_ionisation = T
+ci_n_step = 3
+end:collisions
+begin:species
+name = Carbon
+charge = 0
+atomic_no = 6
+ionise = T
+ionise_limit = 3
+unique_electron_species = T
+end:species
+begin:species
+name = Carbon4
+charge = 4
+atomic_no = 6
+ionise = T
+ionisation_electron_species = (Electron4, Electron)
+end:species
+&lt;/code>&lt;/pre>
+&lt;p>Descriptions of these flags can be found in the documentation for each block,
+but a summary has been provided here for clarity:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>field_ionisation&lt;/code> - Switches on field ionisation.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_collisional_ionisation&lt;/code> - Switches on ionisation by collisional
+electron impact.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ci_n_step&lt;/code> - Only performs the collisional ionisation calculation
+once every &lt;em>n&lt;/em> steps, where &lt;em>n&lt;/em> is set by this parameter. This is done
+to speed up the code, and the default is 1 (every step). When
+this is greater than 1, the assumed time-step for the collisional ionisation
+calculation is &lt;em>n*dt&lt;/em>. Note that an ion may only be ionised once per calculation,
+so if &lt;em>n&lt;/em> is too high, the number of ions will be underestimated.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>atomic_no&lt;/code> - Atomic number of the element. When combined with the
+charge, the code can deduce the element and charge-state of the ion, and
+may use the appropriate ionisation energy and shell binding energies.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ionise&lt;/code> - Allows ionisation of this species, and generates additional
+particle species for each ion charge state.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ionise_limit&lt;/code> - This limits the number of additional particle species to
+be generated. In this example, ion macro-particles in the Carbon species can only
+be ionised 3 times - ionisation of Carbon3 will not be considered.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>ionisation_electron_species&lt;/code> - Name of the electron species to
+populate with ejected electrons. This
+can be specified as an array in the event that the user wishes some levels
+to have a different electron species which can be handy for monitoring
+ionisation at specific levels. &lt;code>electron&lt;/code> and &lt;code>electron_species&lt;/code> are
+accepted as synonyms. Either one species for &lt;strong>all&lt;/strong> ionisation levels, or one species
+for &lt;strong>each&lt;/strong> level should be specified. In the Carbon4 example, the user may have
+written &lt;code>ionisation_electron_species = Electron&lt;/code> to use the Electron species
+for all ejected electrons.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>unique_electron_species&lt;/code> - If &amp;ldquo;T&amp;rdquo;, this generates a
+unique electron species to populate with ejected electrons from each
+ion charge state. The user must use this, or &lt;strong>ionisation_electron_species&lt;/strong>.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>Ionised states are created automatically and are named according to the
+ionising species name with a number appended. For example, with the Carbon
+species block, the species named &amp;ldquo;Carbon1&amp;rdquo;, &amp;ldquo;Carbon2&amp;rdquo; and &amp;ldquo;Carbon3&amp;rdquo;
+are automatically created. Note that for pre-ionised species like the Carbon4 block,
+species would be named &amp;ldquo;Carbon41&amp;rdquo;, &amp;ldquo;Carbon42&amp;rdquo;. These species will also
+inherit the ``dump''
+parameter from their parent species. This behaviour can be overridden by explicitly
+adding a species block of the same name with a differing dumpmask.&lt;/p>
+&lt;p>Field ionisation consists of three distinct regimes; multiphoton in which
+ionisation is best described as absorption of multiple photons, tunnelling
+in which deformation of the atomic Coulomb potential is the dominant factor,
+and barrier suppression ionisation in which the electric field is strong
+enough for an electron to escape classically. It is possible to turn off
+multiphoton or barrier suppression ionisation through the input deck
+using the following control block parameters:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>use_multiphoton&lt;/code> - Logical flag which turns on modelling
+ionisation by multiple photon absorption. This should be set to &amp;ldquo;F&amp;rdquo; if
+there is no laser attached to a boundary as it relies on laser frequency.
+The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>use_bsi&lt;/code> - Logical flag which turns on barrier suppression
+ionisation correction to the tunnelling ionisation model for high intensity
+lasers. The default is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>boundaries block</title><link>/documentation/input_deck/input_deck_boundaries.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_boundaries.html</guid><description>&lt;p>This block contains information about the boundary conditions for this
 run. See
 &lt;a href="/documentation/input_deck/input_deck">EPOCH input deck&lt;/a> for more
 information on the input deck.&lt;/p>
