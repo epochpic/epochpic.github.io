@@ -341,3 +341,76 @@ end:output
 The deck is based on the laser test deck supplied with Epoch, with a
 modified laser and longer runtime. Other classes of beam (Bessel etc)
 can be created similarly.
+
+# Injecting the laser at an angle {#angle_laser_injection}
+
+By setting up a phase shift as a function of space, it is possible to force
+wavefronts to arrive at different points on the boundary at different times
+(for 2D and 3D simulations). This allows the user to inject lasers with an
+angle to the boundary normal.
+
+#### Angled incident laser profile {#laser_angled}
+![Angled laser profile in EPOCH2D](oblique_incidence.png)
+
+The setup for this is not entirely straightforward and requires a little
+bit of explanation. The above [figure](#laser_angled) illustrates a laser being driven at
+an angle on the $x_{min}$ boundary. Different wave fronts cross the $y$-axis
+at different places and this forms a sinusoidal profile along $y$ that
+represents the phase. The wavelength of this profile is
+given by $\lambda_\phi = \lambda / \sin\theta$, where $\lambda$ is the
+wavelength of the laser and $\theta$ is the angle of the propagation
+direction with respect to the $x$-axis. The actual phase to use will
+be $\phi(y) = -k_\phi y = -2\pi y / \lambda_\phi$. It is negative because
+the phase of the wave is propagating in the positive $y$ direction.
+It is also necessary to alter the wavelength of the driver since this
+is given in the direction perpendicular to the boundary. The new
+wavelength to use will be $\lambda\cos\theta$. The [figure](#laser_angled) shows
+the resulting $E_y$ field for a laser driven at an angle of $\pi / 6$. Note
+that since the boundary conditions in the code are derived for propagation
+perpendicular to the boundary, there will be artefacts on the scale of the
+grid for lasers driven at an angle.
+
+The input deck used to generate this figure is given below:
+
+```perl
+begin:control  
+  nx = 2000          
+  ny = 2000             
+  t_end = 50.e-15      
+  x_min = -10.0e-6    
+  x_max = 10.0e-6      
+  y_min = -10.0e-6
+  y_max = 10.0e-6  
+end:control  
+  
+begin:boundaries  
+  bc_x_min = simple_laser  
+  bc_x_max = simple_outflow  
+  bc_y_min = simple_outflow  
+  bc_y_max = simple_outflow
+end:boundaries  
+ 
+begin:constant  
+  laser_angle = pi / 6      # Set angle of laser w.r.t positive x unit vector
+  laser_fwhm = 2.0e-6       # Size of gaussian profile for laser electric field
+  laser_wavelength = 1.0e-6
+  laser_k = 2 * pi / laser_wavelength
+end:constant  
+  
+begin:laser 
+  boundary = x_min 
+  intensity_w_cm2 = 1.0e15 
+  profile = gauss(y, 0, laser_fwhm / (2.0 * sqrt(loge(2.0))))
+  t_profile = 1
+  phase = -y * laser_k * sin(laser_angle) # Vary wave-front position in space
+  lambda = laser_wavelength * cos(laser_angle) # Space wave-fronts apart 
+                                               # correctly along k
+end:laser    
+ 
+begin:output
+  dt_snapshot = 10.e-15   
+  grid = always 
+  ey = always  
+end:output  
+
+```

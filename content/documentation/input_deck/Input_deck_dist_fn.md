@@ -87,7 +87,12 @@ end:dist_fn
 
 The flags "dir_xy_angle", "dir_yz_angle" and "dir_zx_angle"
 calculate the distribution of particle momentum directions in the X-Y,
-Y-Z and Z-X planes.
+Y-Z and Z-X planes. In general, "dir_ij_angle" collapses the particle
+momentum into the $ij$ plane, and quotes the momentum angle with 
+respect to the positive $i$ unit vector. The angle is output in the
+range of $\pi$ to $-\pi$. Angles towards $+j$ are positive, and vice-versa
+for negative $j$.  
+
 - `range**n**` - The range between which this axis should
 run. This is in the form of (minimum, maximum). Any particle which
 exceeds the range is ignored. For momentum directions this parameter is
