@@ -2502,7 +2502,11 @@ does not exist in EPOCH1D.&lt;/li>
 &lt;/ul>
 &lt;p>The flags &amp;ldquo;dir_xy_angle&amp;rdquo;, &amp;ldquo;dir_yz_angle&amp;rdquo; and &amp;ldquo;dir_zx_angle&amp;rdquo;
 calculate the distribution of particle momentum directions in the X-Y,
-Y-Z and Z-X planes.&lt;/p>
+Y-Z and Z-X planes. In general, &amp;ldquo;dir_ij_angle&amp;rdquo; collapses the particle
+momentum into the $ij$ plane, and quotes the momentum angle with
+respect to the positive $i$ unit vector. The angle is output in the
+range of $\pi$ to $-\pi$. Angles towards $+j$ are positive, and vice-versa
+for negative $j$.&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>range**n**&lt;/code> - The range between which this axis should
 run. This is in the form of (minimum, maximum). Any particle which
