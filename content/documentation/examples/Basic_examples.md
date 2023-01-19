@@ -348,9 +348,9 @@ end:output
 
 In this example, EPOCH correctly reproduces the focal point position,
 laser wavelength, and radial FWHM at the focus - however, the peak
-intensity is only $0.88\times 10^{15} \text{Wcm}^{-2}$. This
+intensity is only $0.88\times 10^{15} \text{ Wcm}^{-2}$. This
 intensity reduction from target is due to the tight focal spot, 
-with $w_0\approx 1.7e-6$ being close to $\lambda = 1.0e-6$.
+with $w_0\approx 1.7$ μm being close to $\lambda = 1.0$ μm.
 
 The deck is based on the laser test deck supplied with EPOCH, with a
 modified laser and longer runtime. Other classes of beam (Bessel etc)
