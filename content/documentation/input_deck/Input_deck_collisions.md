@@ -64,6 +64,13 @@ ionisation energies and electrons in a *species* block (see
 [here][Input_deck_species__ionisation]). The default
 value is "F".
 
+- `coll_n_step` - Number of time-steps, $n$, between collision calculations. This key speeds up the
+collisions routine by reducing the number of collision calculations performed. On steps which apply
+collisions, the calculation is performed using a time-step of $n$*dt, where dt is the simulation time-step.
+The default is 1 (calculate collisions every step).
+
+- `ci_n_step` - Only performs the collisional ionisation calculation once every $n$ steps, where $n$ is set by this parameter. This is done to speed up the code, and the default is 1 (every step). When this is greater than 1, the assumed time-step for the collisional ionisation calculation is $n$*dt. Note that an ion may only be ionised once per calculation, so if $n$ is too high, the number of ions will be underestimated.
+
 An example deck using full binary collisions could be set up as follows.
 
 ```perl
@@ -73,7 +80,8 @@ begin:collisions
    coulomb_log = auto
    collide = all
    collide = spec1 spec2 off
-   collide = spec2 spec3 0.1
+   collide = spec2 spec3 0.5
+   coll_n_step = 10
 end:collisions
 ```
 
@@ -81,7 +89,9 @@ With this block, collisions are turned on, the Nanbu-Pérez scattering
 algorithm is used and the Coulomb logarithm is automatically calculated.
 All values of the frequency array are set to one except (spec1,spec2) is
 set to minus one (and also (spec2,spec1)) and (spec2,spec3) is set to
-0.1. Note: only a frequency value of 1 provides a physical scatter.
+0.5. Note: only a frequency value of 1 provides a physical scatter.
+Collisions are only calculated once every 10 steps, but using an 
+inferred time-step of 10*dt.
 
 # Background collisions
 
