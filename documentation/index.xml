@@ -1530,7 +1530,11 @@ is no need to specify both intensity and amp and the last specified in
 the block is the value used. It is mandatory to specify at least one.
 The amplitude of the laser is calculated from intensity using the
 formula &lt;code>amp = sqrt(2*intensity/c/epsilon0)&lt;/code>. &amp;ldquo;irradiance&amp;rdquo; is accepted
-as a synonym.&lt;/li>
+as a synonym. Note that spatial and temporal profiles are applied to
+the electromagnetic fields of the laser, not the intensity. For
+example, if a laser enters through a boundary in a cell where the
+profile is set to 0.5, the intensity would be reduced to 0.25 the value
+set here.&lt;/li>
 &lt;li>&lt;code>intensity_w_cm2&lt;/code> - This is identical to the
 &lt;strong>intensity&lt;/strong> parameter described above, except that the units are
 specified in $W/cm^2$.&lt;/li>
