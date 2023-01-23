@@ -48,7 +48,11 @@ is no need to specify both intensity and amp and the last specified in
 the block is the value used. It is mandatory to specify at least one.
 The amplitude of the laser is calculated from intensity using the
 formula `amp = sqrt(2*intensity/c/epsilon0)`. "irradiance" is accepted
-as a synonym.
+as a synonym. Note that spatial and temporal profiles are applied to
+the electromagnetic fields of the laser, not the intensity. For 
+example, if a laser enters through a boundary in a cell where the 
+profile is set to 0.5, the intensity would be reduced to 0.25 the value
+set here.
 - `intensity_w_cm2` - This is identical to the
 **intensity** parameter described above, except that the units are
 specified in $W/cm^2$.
@@ -94,7 +98,7 @@ field is multiplied by the profile to give its final amplitude so the
 intention is to use a value between zero and one. By default it is a
 unit constant and therefore has no affect on the laser amplitude. This
 parameter is redundant in 1D and is only included for consistency with
-2D and 3D versions of the code.
+2D and 3D versions of the code. 
 - `t_profile` - Used to specify the time profile for the
 laser amplitude. Like **profile** the laser field is multiplied by this
 parameter but it is only a function of time and not space. In a similar
