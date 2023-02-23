@@ -320,6 +320,10 @@ next output dump, it is a heavyweight diagnostic. If you don&amp;rsquo;t
 require the diagnostic you can set this flag to disable it.&lt;/p>
 &lt;/li>
 &lt;li>
+&lt;p>PROBE_TIME - Paticle probes also output the time particles pass the probe.
+Without this key, only the time of the SDF output dump will be available.&lt;/p>
+&lt;/li>
+&lt;li>
 &lt;p>PARTICLE_SHAPE_TOPHAT - By default, the code uses a first order
 b-spline (triangle) shape function to represent particles giving
 third order particle weighting. Using this flag changes the particle
@@ -351,6 +355,10 @@ radiation reaction and pair production (see
 &lt;li>
 &lt;p>TRIDENT_PHOTONS - This enables support for virtual photons which
 are used by the Trident process for pair production.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>BREMSSTRAHLUNG - Similar to photons, but for modelling bremsstrahlung
+radiation instead of QED emission.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>PREFETCH - This enables an Intel-specific code optimisation.&lt;/p>
@@ -432,6 +440,15 @@ code to be compiled against older versions of the MPI library. The
 flag should only be enabled if the code fails to compile without it.&lt;/p>
 &lt;/li>
 &lt;/ul>
+&lt;h1 id="changing-precompiler-directives">Changing precompiler directives&lt;/h1>
+&lt;p>If a user has already compiled EPOCH, and would like to change the active
+compiler flags, then the user may comment and uncomment different flags in the
+Makefile (by adding or removing # at the start of the line), and recompiling the
+code using the commands:&lt;/p>
+&lt;pre>&lt;code class="language-perl">make clean
+make COMPILER=gfortran -j4
+&lt;/code>&lt;/pre>
+&lt;p>Where in this example, the gfortran compiler has been chosen.&lt;/p>
 &lt;h1 id="errors_for_unspecified_precompiler_directives">Errors for unspecified precompiler directives&lt;/h1>
 &lt;p>If a user requests an option which the code has not been compiled to
 support then the code will give an error or warning message as follows:&lt;/p>
