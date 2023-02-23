@@ -63,6 +63,8 @@ are:
     particles pusher and also to store copies of particles until the
     next output dump, it is a heavyweight diagnostic. If you don't
     require the diagnostic you can set this flag to disable it.
+-   PROBE_TIME - Paticle probes also output the time particles pass the probe.
+    Without this key, only the time of the SDF output dump will be available.
 -   PARTICLE_SHAPE_TOPHAT - By default, the code uses a first order
     b-spline (triangle) shape function to represent particles giving
     third order particle weighting. Using this flag changes the particle
@@ -85,6 +87,8 @@ are:
     [here][Input_deck_qed]).
 -   TRIDENT_PHOTONS - This enables support for virtual photons which
     are used by the Trident process for pair production.
+-   BREMSSTRAHLUNG - Similar to photons, but for modelling bremsstrahlung
+    radiation instead of QED emission.
 -   PREFETCH - This enables an Intel-specific code optimisation.
 -   PARSER_DEBUG - The code outputs more detailed information whilst
     parsing the input deck. This is a debug mode for code development.
@@ -134,6 +138,20 @@ are:
     features such as the "MPI_TYPE_SIZE_X" routine. This allows the
     code to be compiled against older versions of the MPI library. The
     flag should only be enabled if the code fails to compile without it.
+
+# Changing precompiler directives
+
+If a user has already compiled EPOCH, and would like to change the active
+compiler flags, then the user may comment and uncomment different flags in the
+Makefile (by adding or removing # at the start of the line), and recompiling the
+code using the commands:
+
+```perl
+make clean
+make COMPILER=gfortran -j4
+```
+
+Where in this example, the gfortran compiler has been chosen.
 
 # Errors for unspecified precompiler directives {#errors_for_unspecified_precompiler_directives}
 
