@@ -131,7 +131,7 @@ particle species to use as output then a better mechanism to use is
 "tracer" is currently accepted as an alias but this will be removed in
 version 5.0. "zero_current = F" is the default value.
 - `identify` - Used to identify the type of particle.
-Currently this is used primarily by the QED routines. See
+Originally this was used for the QED routines, but it has since been adopted for other physics packages too. See
 [here][Input_deck_qed] for details.
 - `immobile` - Logical flag. If this parameter is set to "T"
 then the species will be ignored during the particle push. The default
@@ -393,6 +393,8 @@ using the following control block parameters:
 -   `use_bsi` - Logical flag which turns on barrier suppression
     ionisation correction to the tunnelling ionisation model for high intensity
     lasers. The default is "T".
+
+When collisional ionisation is switched on, ionisation between all electron species and all species which may be ionised is considered - the `collide` parameter used in the collisions block has no effect on collisional ionisation. Species which may be ionised include any species with `ionise=T` set, and the ionised variants of this species up to the fully ionised state, or `ionise_limit`. For electrons, EPOCH will identify any species set as a destination for ejected electrons as an electron species, which can trigger further collisional ionisation. To mark other species as electrons for collisional ionisaiton, the `identify` key must be used. All electron aliases may be used for `identify`, including electrons created from pair production.
 
 # Species Boundary Conditions {#species_boundary_conditions}
 
