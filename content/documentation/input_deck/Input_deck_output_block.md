@@ -403,6 +403,9 @@ The synonym "temp" may also be used. Can have species dump mask.
 $K$. The synonyms "temp_{x,y,z}" and "t{x,y,z}" may also be used.
 Can have species dumpmask.
 - `poynt_flux` - Poynting flux in each direction in $W/m^2$.
+- `coulomb_logarithm` - An estimate for the averaged Coulomb logarithm in each cell between
+the first listed species, and all other species. If the “species” dumpmask is given, then this calculation
+is repeated for the remaining particle species.
 
 # Other Variables {#other_variables}
 
