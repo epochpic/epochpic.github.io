@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Quick start | EPOCH</title><link>/quickstart.html</link><atom:link href="/quickstart/index.xml" rel="self" type="application/rss+xml"/><description>Quick start</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 14 Jun 2021 00:00:00 +0000</lastBuildDate><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Quick start</title><link>/quickstart.html</link></image><item><title>Quick-start</title><link>/quickstart/quickstart.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/quickstart.html</guid><description>&lt;h1 id="ultra_simple_getting_epoch_guide">Quick-start guide&lt;/h1>
+&lt;h2 id="pre-requisites">Pre-requisites&lt;/h2>
+&lt;p>EPOCH is mostly a self-contained code. The code is intended to be run on a Linux-based operating system, and this section will be written for Linux machines. Experienced programmers may be able to adapt these instructions for Windows and Mac, or may choose to run EPOCH from a virtual Linux machine if they don&amp;rsquo;t have access to Linux.&lt;/p>
+&lt;p>To compile and run EPOCH, the system requires:&lt;/p>
+&lt;ul>
+&lt;li>A fortran compiler (e.g. GNU Fortran)&lt;/li>
+&lt;li>An MPI library (e.g. Open MPI)&lt;/li>
+&lt;/ul>
+&lt;p>These packages can easily be installed by entering the commands&lt;/p>
+&lt;pre>&lt;code>sudo apt-get install gfortran
+sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev libgtk2.0-dev
+&lt;/code>&lt;/pre>
+&lt;p>into a Linux terminal.&lt;/p>
+&lt;h2 id="installing-epoch">Installing EPOCH&lt;/h2>
+&lt;p>These instructions should work in your host institute if you have git. To install EPOCH, open a linux terminal and type into a command line:&lt;/p>
+&lt;pre>&lt;code>git clone --recursive https://github.com/Warwick-Plasma/epoch.git
+&lt;/code>&lt;/pre>
+&lt;p>You will now have a directory called &amp;lsquo;epoch&amp;rsquo;. Inside this directory will
+be three EPOCH sub-directories &lt;code>epoch1d&lt;/code>, &lt;code>epoch2d&lt;/code> and &lt;code>epoch3d&lt;/code>, an &lt;code>SDF&lt;/code>
+directory and a few other files. EPOCH is split into 3 codes, one for each dimension - these must be built separately.&lt;/p>
+&lt;p>If you are unable to access git, you may download a compressed tar-file containing the code from the
+&lt;a href="https://github.com/Warwick-Plasma/epoch/releases" target="_blank" rel="noopener">&amp;lsquo;Releases&amp;rsquo;&lt;/a>
+section on the EPOCH GitHub webpage. Note that this will not include any bug-fixes since
+the last release, so it is strongly recommended to use the git installation.&lt;/p>
+&lt;h2 id="building-the-code">Building the code&lt;/h2>
+&lt;p>To build one of the EPOCH codes, navigate to either the &lt;code>epoch1d&lt;/code>, &lt;code>epoch2d&lt;/code> or &lt;code>epoch3d&lt;/code> directories within a Linux terminal, and run:&lt;/p>
+&lt;pre>&lt;code>make COMPILER=gfortran -j4
+&lt;/code>&lt;/pre>
+&lt;p>Here we assume you are compiling using mpif90, other compiler options are available. The &lt;code>-j4&lt;/code> key splits the compilation between 4 processors for a speed-up, the 4 can be replaced with a higher number if your system permits.&lt;/p>
+&lt;p>This command installs a basic version of EPOCH - some additional features like bremsstrahlung radiation or particle-ID require adjustments to the Makefile. The optional compilation flags are discussed
+&lt;a href="/documentation/basic_usage/Compiler_Flags">here&lt;/a>.&lt;/p>
+&lt;h2 id="running_the_codes">Running the code&lt;/h2>
+&lt;p>EPOCH simulations are specified using an input file called &lt;code>input.deck&lt;/code>, which is read by the code. Example input decks are present in the &lt;code>example_decks&lt;/code> sub-directory in the &lt;code>epoch1d&lt;/code>, &lt;code>epoch2d&lt;/code> and &lt;code>epoch3d&lt;/code> directories. Whichever dimension you chose, &lt;code>ionisation.deck&lt;/code> provides a small example simulation which can be run using the default EPOCH build.&lt;/p>
+&lt;p>Once you have a file called &lt;code>input.deck&lt;/code>
+(either copied and renamed from &lt;code>ionisation.deck&lt;/code>, or something you have written yourself), then you may run the code.&lt;/p>
+&lt;p>To run any EPOCH code, you must first navigate to the sub-directory of the code in a Linux terminal, such that the &lt;code>ls&lt;/code> command shows the &lt;code>bin&lt;/code> sub-directory. EPOCH expects you to be here when looking up physics tables. For example, the 2d code can be run by entering &lt;code>epoch2d&lt;/code> and running:&lt;/p>
+&lt;pre>&lt;code>mpirun -np 4 ./bin/epoch2d
+&lt;/code>&lt;/pre>
+&lt;p>You will then be prompted to enter the path to the directory containing your &lt;code>input.deck&lt;/code> file. This step may be skipped by piping in the path directly into the run command, using:&lt;/p>
+&lt;pre>&lt;code>mpirun -np 4 ./bin/epoch2d &amp;lt;&amp;lt;&amp;lt; /path/to/input/
+&lt;/code>&lt;/pre>
+&lt;p>where /path/to/input is the path to the directory containing the &lt;code>input.deck&lt;/code>.&lt;/p>
+&lt;h1 id="visualising_the_data">Visualising the data&lt;/h1>
+&lt;p>The code generates data in the SDF format. The data is
+written to a self-describing file format called SDF. This has been
+developed for use by several codes maintained at the University of
+Warwick. There are routines for reading the data from within IDL, VisIt,
+MatLab and Python.&lt;/p>
+&lt;p>More complete documentation on visualisation routines is available
+&lt;a href="/documentation/visualising_output">here&lt;/a>&lt;/p>
+&lt;p>As a quick summary:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>MATLAB: To read data from the SDF file &amp;ldquo;0007.sdf&amp;rdquo;, run the command: &lt;code>data = GetDataSDF('0007.sdf');&lt;/code>. The &lt;code>GetDataSDF&lt;/code> function is present in the folder &lt;code>SDF/MATLAB&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Python: Data may be extracted and plotted using the &lt;code>sdf_helper&lt;/code> library, which can be built using the Makefile. Data can then be read using:&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data = sh.getdata(7)
+&lt;/code>&lt;/pre>
+&lt;ul>
+&lt;li>
+&lt;p>IDL/GDL: The following commands are useful for listing the variables and reading the data: &lt;code>list_variables,7,'Data'&lt;/code>, &lt;code>data = getstruct(7,/varname)&lt;/code>, &lt;code>help,data,/struct&lt;/code>, where &lt;code>/varname&lt;/code> is the name of a variable output from the list. More detailed instructions are present
+&lt;a href="/documentation/visualising_output/visualising_sdf_files_with_llnl_visit">here&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>VisIt: Consult the running instructions at this URL:
+&lt;a href="/documentation/visualising_output/visualising_sdf_files_with_llnl_visit">
+here&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="other_laser_plasma_example_decks">Further examples&lt;/h1>
+&lt;p>Now the basics have been covered, you&amp;rsquo;re free to start running EPOCH. Documentation on writing input deck files is given
+&lt;a href="/documentation/input_deck">here&lt;/a>. There are also further examples from previous workshops we have run, which can be viewed in these pages:&lt;/p>
+&lt;p>
+&lt;a href="/documentation/examples/Basic_examples">Basic examples&lt;/a>&lt;/p>
+&lt;p>
+&lt;a href="/documentation/examples/workshop_examples_continued">Workshop&lt;/a>&lt;/p>
+&lt;!-- ######################## Cross references ######################## --></description></item></channel></rss>
