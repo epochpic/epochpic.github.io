@@ -1,12 +1,11 @@
----
-draft: false
-toc: true
-type: docs
-
-title: Quick-start
-linktitle: Quick-start
-weight: 350
----
++++
+title = "Quick start"
+headless = true  # This file represents a page section.
+widget = "blank"
+weight = 1
+[design]
+  columns = "1"
++++
 
 # Quick-start guide {#ultra_simple_getting_epoch_guide}
 
