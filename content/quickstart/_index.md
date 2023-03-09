@@ -13,5 +13,3 @@ header:
   caption: ""
   image: ""
 ---
-
-Information about downloading and compiling EPOCH

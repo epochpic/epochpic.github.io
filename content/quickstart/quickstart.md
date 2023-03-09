@@ -6,10 +6,6 @@ type: docs
 title: Quick-start
 linktitle: Quick-start
 weight: 350
-menu:
-  documentation:
-    parent: Quick start
-    weight: 20
 ---
 
 # Quick-start guide {#ultra_simple_getting_epoch_guide}
