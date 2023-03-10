@@ -14,7 +14,7 @@ menu:
 
 ---
 
-## Pre-requisites
+# Pre-requisites
 
 EPOCH is mostly a self-contained code. The code is intended to be run on a Linux-based operating system, and this section will be written for Linux machines. Experienced programmers may be able to adapt these instructions for Windows and Mac, or may choose to run EPOCH from a virtual Linux machine if they don't have access to Linux.
 
@@ -31,7 +31,7 @@ sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev libgtk2.0-dev
 
 into a Linux terminal.
 
-## Installing EPOCH
+# Installing EPOCH
 
 These instructions should work in your host institute if you have git. To install EPOCH, open a linux terminal and type into a command line:
 ```
@@ -46,7 +46,7 @@ If you are unable to access git, you may download a compressed tar-file containi
 section on the EPOCH GitHub webpage. Note that this will not include any bug-fixes since 
 the last release, so it is strongly recommended to use the git installation.
 
-## Building the code
+# Building the code
 
 To build one of the EPOCH codes, navigate to either the `epoch1d`, `epoch2d` or `epoch3d` directories within a Linux terminal, and run:
 
@@ -58,7 +58,7 @@ Here we assume you are compiling using mpif90, other compiler options are availa
 
 This command installs a basic version of EPOCH - some additional features like bremsstrahlung radiation or particle-ID require adjustments to the Makefile. The optional compilation flags are discussed [here][Compiler flags].
 
-## Running the code {#running_the_codes}
+# Running the code {#running_the_codes}
 
 EPOCH simulations are specified using an input file called `input.deck`, which is read by the code. Example input decks are present in the `example_decks` sub-directory in the `epoch1d`, `epoch2d` and `epoch3d` directories. Whichever dimension you chose, `ionisation.deck` provides a small example simulation which can be run using the default EPOCH build.
 
