@@ -1,5 +1,5 @@
 ---
-title: Quick start
+title: Quick Start
 
 date: 2023-Mar-10
 
@@ -13,17 +13,6 @@ menu:
     weight: 1
 
 ---
-
-+++
-title = "Quick start"
-headless = true  # This file represents a page section.
-widget = "blank"
-weight = 1
-[design]
-  columns = "1"
-+++
-
-# Quick-start guide {#ultra_simple_getting_epoch_guide}
 
 ## Pre-requisites
 
