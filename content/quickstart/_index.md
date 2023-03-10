@@ -1,3 +1,19 @@
+---
+title: Quick start
+
+date: 2023-Mar-10
+
+draft: false
+toc: true
+type: docs
+
+menu:
+  quickstart:
+    name: Quick Start
+    weight: 1
+
+---
+
 +++
 title = "Quick start"
 headless = true  # This file represents a page section.

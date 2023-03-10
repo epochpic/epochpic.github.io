@@ -1,2 +1,12 @@
-resources/
-public
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+404.html
+Gemfile
+Gemfile.lock
+_config.yml
+_posts*
+about.markdown
+index.markdown
