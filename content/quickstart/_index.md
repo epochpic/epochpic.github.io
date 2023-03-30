@@ -56,7 +56,7 @@ make COMPILER=gfortran -j4
 
 Here we assume you are compiling using mpif90, other compiler options are available. The `-j4` key splits the compilation between 4 processors for a speed-up, the 4 can be replaced with a higher number if your system permits.
 
-This command installs a basic version of EPOCH - some additional features like bremsstrahlung radiation or particle-ID require adjustments to the Makefile. The optional compilation flags are discussed [here][Compiler flags].
+This command installs a basic version of EPOCH - some additional features like bremsstrahlung radiation or particle-ID require adjustments to the Makefile. The optional compilation flags are discussed [here](/documentation/basic_usage/compiler_flags.html).
 
 # Running the code {#running_the_codes}
 
@@ -89,7 +89,7 @@ Warwick. There are routines for reading the data from within IDL, VisIt,
 MatLab and Python.
 
 More complete documentation on visualisation routines is available
-[here][Visualisation]
+[here](/documentation/visualising_output.html)
 
 As a quick summary:
 
@@ -102,18 +102,18 @@ import sdf_helper as sh
 data = sh.getdata(7)
 ```
 
-- IDL/GDL: The following commands are useful for listing the variables and reading the data: `list_variables,7,'Data'`, `data = getstruct(7,/varname)`, `help,data,/struct`, where `/varname` is the name of a variable output from the list. More detailed instructions are present [here][Visualising_SDF_files_with_LLNL_VisIt]
+- IDL/GDL: The following commands are useful for listing the variables and reading the data: `list_variables,7,'Data'`, `data = getstruct(7,/varname)`, `help,data,/struct`, where `/varname` is the name of a variable output from the list. More detailed instructions are present [here](/documentation/visualising_output/visualising_sdf_files_with_llnl_visit.html)
 
 - VisIt: Consult the running instructions at this URL: [
-here][Visualising_SDF_files_with_LLNL_VisIt]
+here](/documentation/visualising_output/visualising_sdf_files_with_llnl_visit.html)
 
 # Further examples {#other_laser_plasma_example_decks}
 
 Now the basics have been covered, you're free to start running EPOCH. Documentation on writing input deck files is given [here][input_decks]. There are also further examples from previous workshops we have run, which can be viewed in these pages: 
 
-[Basic examples][Basic_examples]
+[Basic examples](/documentation/examples/basic_examples.html)
 
-[Workshop][Workshop_examples_continued]
+[Workshop](/documentation/examples/workshop_examples_continued.html)
 
 
 
@@ -122,7 +122,7 @@ Now the basics have been covered, you're free to start running EPOCH. Documentat
 [Basic_examples]: /documentation/examples/Basic_examples
 [Compiler flags]: /documentation/basic_usage/Compiler_Flags
 [Input_deck_output_block]: /documentation/input_deck/input_deck_output_block
-[input_decks]: /documentation/input_deck
+[input_decks]: /documentation/input_deck/input_deck.html
 [Landing_Page]: /documentation
 [Visualisation]: /documentation/visualising_output
 [Visualising_SDF_files_with_LLNL_VisIt]: /documentation/visualising_output/visualising_sdf_files_with_llnl_visit

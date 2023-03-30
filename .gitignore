@@ -10,3 +10,5 @@ _config.yml
 _posts*
 about.markdown
 index.markdown
+public/*
+resources/*
