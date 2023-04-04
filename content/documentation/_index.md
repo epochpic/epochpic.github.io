@@ -106,21 +106,21 @@ changed so it still contains plenty of useful and relevant information.
 <!-- ########################  Cross references  ######################## -->
 
 
-[Acknowledging_EPOCH]: /documentation/basic_usage/acknowledging_epoch
-[Basic_examples]: /documentation/examples/basic_examples
-[Compiler_Flags]: /documentation/basic_usage/compiler_flags
-[Compiling]: /documentation/basic_usage/compiling
-[FAQ]: /documentation/basic_usage/faq
+[Acknowledging_EPOCH]: /documentation/basic_usage/acknowledging_epoch.html
+[Basic_examples]: /documentation/examples/basic_examples.html
+[Compiler_Flags]: /documentation/basic_usage/compiler_flags.html
+[Compiling]: /documentation/basic_usage/compiling.html
+[FAQ]: /documentation/basic_usage/faq.html
 [FAQ__how_do_i_obtain_the_code]: /documentation/basic_usage/faq#how_do_i_obtain_the_code
-[Input_deck]: /documentation/input_deck/input_deck
-[Input_deck_boundaries]: /documentation/input_deck/input_deck_boundaries
-[Input_deck_collisions]: /documentation/input_deck/input_deck_collisions
-[Input_deck_constant]: /documentation/input_deck/input_deck_constant
-[Input_deck_control]: /documentation/input_deck/input_deck_control
-[Input_deck_dist_fn]: /documentation/input_deck/input_deck_dist_fn
-[Input_deck_fields]: /documentation/input_deck/input_deck_fields
-[Input_deck_injector]: /documentation/input_deck/input_deck_injector
-[Input_deck_laser]: /documentation/input_deck/input_deck_laser
+[Input_deck]: /documentation/input_deck/input_deck.html
+[Input_deck_boundaries]: /documentation/input_deck/input_deck_boundaries.html
+[Input_deck_collisions]: /documentation/input_deck/input_deck_collisions.html
+[Input_deck_constant]: /documentation/input_deck/input_deck_constant.html
+[Input_deck_control]: /documentation/input_deck/input_deck_control.html
+[Input_deck_dist_fn]: /documentation/input_deck/input_deck_dist_fn.html
+[Input_deck_fields]: /documentation/input_deck/input_deck_fields.html
+[Input_deck_injector]: /documentation/input_deck/input_deck_injector.html
+[Input_deck_laser]: /documentation/input_deck/input_deck_laser.html
 [Input_deck_output_block]: /documentation/input_deck/input_deck_output_block
 [Input_deck_output_global]: /documentation/input_deck/input_deck_output_global
 [Input_deck_probe]: /documentation/input_deck/input_deck_probe

@@ -24,7 +24,7 @@ To compile and run EPOCH, the system requires:
 
 These packages can easily be installed by entering the commands
 
-```
+```perl
 sudo apt-get install gfortran
 sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev libgtk2.0-dev
 ```
@@ -34,7 +34,7 @@ into a Linux terminal.
 # Installing EPOCH
 
 These instructions should work in your host institute if you have git. To install EPOCH, open a linux terminal and type into a command line:
-```
+```perl
 git clone --recursive https://github.com/Warwick-Plasma/epoch.git
 ```
 
@@ -50,7 +50,7 @@ the last release, so it is strongly recommended to use the git installation.
 
 To build one of the EPOCH codes, navigate to either the `epoch1d`, `epoch2d` or `epoch3d` directories within a Linux terminal, and run:
 
-```
+```perl
 make COMPILER=gfortran -j4
 ```
 

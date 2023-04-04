@@ -14,9 +14,14 @@
   weight = 20
 
 [[main]]
-  name = "Documentation"
+  name = "User Guide"
   url = "/documentation.html"
   weight = 30
+
+[[main]]
+  name = "Dev Guide"
+  url = "/developer.html"
+  weight = 35
 
 [[main]]
   name = "Publications"
