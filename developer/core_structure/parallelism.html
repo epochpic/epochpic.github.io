@@ -1,0 +1,218 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="EPOCH is a massively parallel code written using standard MPI. Due to the massively parallel nature of EPOCH, there are MPI commands scattered throughout many parts of the code, although the MPI has been hidden as far as possible from the end user."><link rel=alternate hreflang=en-us href=/developer/core_structure/parallelism.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/developer/core_structure/parallelism.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/developer/core_structure/parallelism.html"><meta property="og:title" content="Parallelism | EPOCH"><meta property="og:description" content="EPOCH is a massively parallel code written using standard MPI. Due to the massively parallel nature of EPOCH, there are MPI commands scattered throughout many parts of the code, although the MPI has been hidden as far as possible from the end user."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2023-04-04T13:41:14+01:00"><title>Parallelism | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/developer.html>Overview</a><ul class="nav docs-sidenav"><li><a href=/developer/source_code_files.html>Source code files</a></li><li><a href=/developer/makefile.html>Makefile</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/core_structure.html>Core Structure</a><ul class="nav docs-sidenav"><li><a href=/developer/core_structure/basic_structures.html>Basic Structures</a></li><li><a href=/developer/core_structure/macro_particles.html>Particles</a></li><li><a href=/developer/core_structure/linked_lists.html>Linked Lists</a></li><li><a href=/developer/core_structure/partlist.html>Partlist</a></li><li><a href=/developer/core_structure/field_solver.html>Field Solver</a></li><li><a href=/developer/core_structure/particle_pusher.html>Particle Pusher</a></li><li><a href=/developer/core_structure/shape_functions.html>Weighting Functions</a></li><li><a href=/developer/core_structure/current_solver.html>Current solver</a></li><li><a href=/developer/core_structure/boundary_conditions.html>Boundary Conditions</a></li><li class=active><a href=/developer/core_structure/parallelism.html>Parallelism</a></li><li><a href=/developer/core_structure/precompiler_flags.html>Pre-compilation Flags</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/input_output.html>Input Output</a><ul class="nav docs-sidenav"><li><a href=/developer/input_output/basic_output.html>Basic Output</a></li><li><a href=/developer/input_output/string_handling.html>String Handling</a></li><li><a href=/developer/input_output/error_codes.html>Error Codes</a></li><li><a href=/developer/input_output/adding_outputs.html>Adding Outputs</a></li><li><a href=/developer/input_output/custom_maths_parser.html>Custom Maths Parser</a></li><li><a href=/developer/input_output/custom_deck.html>Custom Deck</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/extensions.html>Extending EPOCH</a><ul class="nav docs-sidenav"><li><a href=/developer/extensions/input_deck.html>Input Deck</a></li><li><a href=/developer/extensions/maths_parser.html>Maths Parser</a></li><li><a href=/developer/extensions/new_modules.html>New Module</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#general-mpi-in-epoch>General MPI in EPOCH</a></li><li><a href=#mpi_routinesf90><code>mpi_routines.F90</code></a></li><li><a href=#mpi_subtype_controlf90><code>mpi_subtype_control.f90</code></a></li><li><a href=#create_particle_subtype>create_particle_subtype</a></li><li><a href=#create_ordered_particle_offsets>create_ordered_particle_offsets</a></li><li><a href=#create_field_subtype>create_field_subtype</a></li><li><a href=#the-load-balancer>The load balancer</a></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Parallelism</h1><div class=article-style><p>EPOCH is a massively parallel code written using standard MPI. Due to the
+massively parallel nature
+of EPOCH, there are MPI commands scattered throughout many parts of the code,
+although the MPI has been hidden as far as possible from the end user. The main
+use of MPI occurs during I/O, in the boundary conditions and during load
+balancing. The MPI setup routines are all in
+<code>src/housekeeping/mpi_routines.F90</code>, and the routines which are
+used to create the MPI types used by MPI-IO are in
+<code>src/housekeeping/mpi_subtype_control.f90</code>.</p><h2 id=general-mpi-in-epoch>General MPI in EPOCH</h2><p>EPOCH uses Cartesian domain decomposition for parallelism and creates an MPI
+Cartesian topology using <code>MPI_CART_CREATE</code>. The use of MPI in
+EPOCH is deliberately kept as simple as possible, but there are some points
+which must be made and some variables which must be explained.</p><ul><li>MPI decomposition is reversed compared to array ordering. Due to the
+layout of arrays in Fortran, you get slightly faster performance if you split
+arrays so that the first index remains as long as possible. Since EPOCH
+uses <code>MPI_DIMS_CREATE</code> to do array subdivision, this means that
+the MPI coordinate system is ordered backwards compared to the main arrays.
+This means that the <code>coordinates</code> array which holds the
+coordinates of the current processor in the Cartesian topology is ordered
+as {coord_z, coord_y, coord_x}.</li><li>To make this easier, there are some helper variables. The simplest of
+these just gives the processors attached to each face of the domain on the
+current processor. These variables are named <code>x_min, x_max,</code>
+<code>y_min, y_max, z_min</code> and <code>z_max</code>.</li><li>Since it is possible for particles to cross boundaries diagonally there
+is another variable <code>neighbour</code> which identifies every possible
+neighbouring processor including those meeting at single edges and at
+corners. <code>neighbour</code> is an array which runs (-1:1,-1:1,-1:1) and,
+perhaps inconsistently, is ordered in normal order rather than reversed
+order. This means that <code>x_min == neighbour(-1,0,0)</code> and
+<code>z_max == neighbour(0,0,1)</code>.</li><li>The variable <code>comm</code> is the handle for the Cartesian
+communicator returned from MPI_CART_CREATE.</li><li>The variable <code>errcode</code> is the standard error variable for all
+MPI communications. However, EPOCH uses the standard
+MPI_ERRORS_ARE_FATAL error handler so this variable is never tested.</li><li>EPOCH uses a single variable, <code>status</code>, to hold all MPI
+status calls. Since there is no non-blocking communication this variable
+is never checked.</li><li>The rank of the current processor is stored in the variable
+<code>rank</code>.</li><li>The number of processors is stored in <code>nproc</code>.</li><li>The number of processors assigned to any given direction of the Cartesian
+topology is given by <code>nproc{x,y,z}</code>.</li></ul><p>There are some other variables which are not technically part of the MPI
+implementation, but which only exist because the code is running in
+parallel. These are</p><ul><li><code>REAL(num) :: {x,y,z}_min_local</code> - The location of the start of the
+domain on the local processor in real units.</li><li><code>REAL(num) :: {x,y,z}_max_local</code> - The location of the end of the
+domain on the local processor in real units.</li><li><code>INTEGER, DIMENSION(1:nproc{x,y,z}) :: cell_{x,y,z}_min</code> - The cell
+number for the start of the local part of the global array in each direction.</li><li><code>INTEGER, DIMENSION(1:nproc{x,y,z}) :: cell_{x,y,z}_max</code></li><li>The cell number for the end of the local part of the global array in each
+direction.</li></ul><h2 id=mpi_routinesf90><code>mpi_routines.F90</code></h2><p><code>mpi_routines.F90</code> is the file which contains all the MPI setup
+code. It contains the following routines:</p><ul><li>mpi_minimal_init - Contains code to start MPI enough to
+allow the input deck reader to work. The default EPOCH code setup means
+that it needs to initialise MPI, obtain the rank and the number of processors.</li><li>setup_communicator - Routine which creates the Cartesian communicator
+used by the code after the input deck has been parsed. It also populates
+<code>x_min, x_max</code> etc. It is in its own subroutine so that it can be
+recalled after the start of the window move when the code is using a moving
+window. This is needed since it is valid to have a non-periodic boundary
+before the window starts to move and a periodic boundary afterwards.</li><li>mpi_initialise - This routine calls <code>setup_communicator</code> and
+then allocates all the arrays to do with fields, etc. It also sets up the
+particle list objects for each species. If the code is running with only
+manual initial conditions then this routine loads the requested number of
+particles on each processor. Otherwise either the restart or the autoloader
+code load the particles.</li><li>mpi_close - This routine performs all the needed cleanup before the
+final call to <code>MPI_FINALIZE</code>.</li></ul><h2 id=mpi_subtype_controlf90><code>mpi_subtype_control.f90</code></h2><p>This file contains all the routines which are used to create the MPI types
+which are used in the SDF I/O system. Most of the routines in this section are
+used to create the types used for writing the default variables and,
+when modifying the code, it is possible to output anything which has the same
+shape and size on disk as the default variables without ever having to use the
+routines in this file. However, if you are creating more general modifications
+which can include variables of different sizes with different layouts across
+processors then you may wish to use these routines to create new MPI types which
+match your data layout. Any valid MPI type describing the data layout will work
+with the SDF library, so there is no absolute need to use these routines. Only
+the general purpose subroutines are described here, since most of the other
+routines are fairly clear and use these routines internally.</p><h2 id=create_particle_subtype>create_particle_subtype</h2><pre><code class=language-perl>FUNCTION create_particle_subtype(npart_local)
+  
+INTEGER(KIND=8), INTENT(IN) :: npart_local
+</code></pre><p><code>create_particle_subtype</code> is a routine which creates an MPI type
+representing particles which are spread across different processors with
+<code>npart_local</code> particles on each
+processor. <code>npart_local</code> does not have to be the same number on all
+processors.</p><p>Currently this is only used for reading particle data from restart snapshots.
+It is likely to go away in the near future.</p><h2 id=create_ordered_particle_offsets>create_ordered_particle_offsets</h2><pre><code class=language-perl>SUBROUTINE create_ordered_particle_offsets(n_dump_species,&amp;
+    npart_local)
+  
+INTEGER, INTENT(IN) :: n_dump_species
+INTEGER(KIND=8), DIMENSION(n_dump_species), &amp;
+    INTENT(IN) :: npart_local
+</code></pre><p><code>create_ordered_particle_offsets</code> is a routine which creates an
+array of offsets representing particles from <code>n_dump_species</code>
+which are spread across different processors with
+<code>npart_local(ispecies)</code> particles of each species on each
+processor. <code>npart_local</code> does not
+have to be the same number on all processors and does not have to be the same
+number for each species.</p><h2 id=create_field_subtype>create_field_subtype</h2><pre><code class=language-perl>FUNCTION create_field_subtype(n{x,y,z}_local, &amp;
+    cell_start_{x,y,z}_local)
+  
+INTEGER, INTENT(IN) :: nx_local, ny_local, nz_local
+INTEGER, INTENT(IN) :: cell_start_x_local
+INTEGER, INTENT(IN) :: cell_start_y_local
+INTEGER, INTENT(IN) :: cell_start_z_local
+</code></pre><p><code>create_field_subtype</code> is a routine which creates an MPI type
+representing a field that is defined across some or all of the processors. The
+<code>n{x,y,z}_local</code> parameters are the number of points in the x,
+y, z directions (if they exist in the version of the code that you are working
+on) that are on the local processor. The
+<code>cell_start_{x,y,z}_local</code> parameters are the offset of the
+top, left, back corner of the local subarray in the global array that would
+exist if the code was running on one processor. This is an <em>offset</em>, not a
+position and so it begins at {0,0,0} NOT {1,1,1}.</p><p>In EPOCH3D there is also a routine called
+<code>create_field_subtype_2d</code> which is exactly equivalent to
+<code>create_field_subtype</code> in EPOCH2D and is used for writing the 2D
+distribution functions. At present, there are not equivalent 1D functions
+except in EPOCH1D, but these could easily by added if required.</p><h2 id=the-load-balancer>The load balancer</h2><p>One of the major limiting factors in the scalability of PIC codes is load
+balancing. Due to the synchronisation of the currents required for the update
+of the EM fields the entire code runs at the speed of the slowest
+process. Since most of the time in the main EPOCH cycle is taken by the
+particle pusher, this equates to the process with the highest number of
+particles being the slowest. Since the location of particles is dependent upon
+the solution of the problem under consideration, in general the code will not
+have exactly the same number of particles on each processor. The load balancer
+is used to move the inter-processor boundaries so that the number of particles
+is as close to the same on each processor as possible. The load balancer is
+invoked at the start of the code and when the ratio of the least loaded
+processor to the most loaded processor falls below a user specified critical
+point.</p><p>EPOCH&rsquo;s load balancer works by rearranging the processor boundaries in 1D
+sweeps in each direction, rather than attempting to perform multidimensional
+optimisation. Also, at present the MPI in EPOCH requires each processor to be
+simply connected at every point, so it must have one processor to the left, one
+to the front etc. which introduces a further restriction on the load
+balancer. Otherwise, the load balancer is fully general. The load balancing
+sweep is illustrated here:</p><p><img src=/developer/sweep.png alt="Illustration of the load balancing sweep"></p><p>The load balancer is
+implemented in the file <code>src/housekeeping/balance.F90</code> and is called
+by the routine <code>balance_workload(override)</code>. The parameter
+<code>override</code> is used to force the code to perform a load balancing
+sweep even when it would normally determine that the imbalance is not large
+enough to force a load balancing sweep. Although the load balancer is hard
+coded to load balance in all available directions, the code is written in such
+a way that it is possible to modify the code to load balance in only one
+direction, or to automatically determine which single direction gives the best
+performance.</p><p>The details of the load balancer are fairly intricate, and if major
+modification to the load balancer is required, it is recommended that the
+original authors be contacted for detailed advice on how to proceed. However,
+the general layout of the routine is as follows.</p><ul><li>Use MPI_ALLREDUCE to determine the global minimum and maximum number of
+particles. If the ratio of the minimum to the maximum is above the load
+balance threshold then just return from the subroutine.</li><li>The code uses the routines <code>get_load_in_{x,y,z}</code> to
+determine the work load along each direction of the domain.
+The <code>get_load_in_x</code> routine uses the x-coordinate of every
+particle to create a 1D particle density in the x-direction. This is then
+combined with the total number of grid cells in the y-z plane to give
+a 1D array of the work load in the x-direction. Similarly for
+<code>get_load_in_{y,z}</code>.</li><li>Next the load array is passed to the <code>calculate_breaks</code>
+routine which fills the arrays <code>starts_{x,y,z}</code>
+and <code>ends_{x,y,z}</code>. These arrays contain the starting and
+ending cell numbers of the hypothetical global array in each direction for
+each processor.</li><li>The routine <code>redistribute_fields</code> is then called to move the
+information about field variables which cannot be recalculated. If new field
+variables are created that cannot be recalculated after the load balancing is
+completed then <code>redistribute_fields</code> has to be modified for these
+new variables.</li><li>The next section of the routine deals with those variables which can be
+recalculated after the load balance sweep is complete, such as the coordinate
+axes and the arrays which hold the particle kinetic energy.</li><li>The penultimate section of the routine then changes the variables which
+tell the code where the edges of its domain lie in real space to reflect the
+changed shape of the domains.</li><li>The final part is the call to <code>distribute_particles</code> which
+moves the particles to the new processor. Once this is
+finished, the code should have as near as possible the same number of
+particles on each processor.</li></ul><p>Most of the load balancer is purely mechanical and should only be changed if
+the way in which the code is to perform load balancing is fundamentally
+altered. The redistribution of particles that takes place in
+<code>distribute_particles</code> uses the standard particle_list objects, so
+that if the necessary changes have been made to the routines in
+<code>src/housekeeping/partlist.F90</code> to allow correct
+boundary swaps of particles then the load balancer should work with no further
+modification. The only part of the load balancer which should need changing is
+<code>redistribute_fields</code> which requires explicit modification if new
+field variables are required. For fields which are the same shape as the main
+array there is significant assistance provided within the code to make the
+re-balancing simpler. There are also routines which can help with re-balancing
+variables which are the size of only one edge or face of the domain. Variables
+which are of a completely different size but still need to be rebalanced when
+coordinate axes move have to have full load balancing routines implemented by
+the developer. This is beyond the scope of this manual and any developer who
+needs assistance with development such a modification should contact the
+original author of the code. The field balancer is fairly simple and mostly
+calls one of three routines: <code>redistribute_field</code> and either
+<code>redistribute_field_2d</code> or <code>redistribute_field_1d</code>
+depending on the dimensionality of your code. To redistribute full field
+variables the routine to use is <code>redistribute_field</code>, and an
+example of using the code looks like:</p><pre><code class=language-perl> temp = 0.0_num
+ CALL redistribute_field(new_domain, bz, temp)
+ DEALLOCATE(bz)
+ ALLOCATE(bz(-2:nx_new+3,-2:ny_new+3))
+ bz = temp
+</code></pre><p>In this calling sequence the
+<code>redistribute_field</code> subroutine is used to redistribute the field
+<code>bz</code>, and the newly redistributed field is copied
+into <code>temp</code>; an array which is already allocated to the
+correct size. The <code>new_domain</code> parameter is an array indicating the
+location of the start and end points of the new domain for the current processor
+in gridpoints offset from the start of the global array. It is passed into the
+<code>redistribute_fields</code> subroutine as a parameter from the
+<code>balance_workload</code> subroutine and should not be changed. The
+<code>temp</code> variable is needed since Fortran standards before Fortran2000
+do not allow the deallocation and reallocation of parameters passed to a
+subroutine. There is a more elegant solution, where <code>temp</code> is
+hidden inside the <code>redistribute_field</code> subroutine. However, support
+for this in current Fortran2000 implementations is unreliable.</p><p>The routine for re-balancing variables which lie along an edge of the domain are
+very similar and are demonstrated in the <code>redistribute_fields</code>
+subroutine for lasers attached to different boundaries. It is
+recommended that a developer examine this code when developing new routines.</p></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/developer/core_structure/linked_lists.html rel=next>Linked Lists</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/developer/core_structure/particle_pusher.html rel=prev>Particle Pusher</a></div></div></div></div><div class=body-footer><p>Last updated on Apr 4, 2023</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>

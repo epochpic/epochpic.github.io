@@ -1,0 +1,2128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code Structure | EPOCH</title><link>/developer/core_structure.html</link><atom:link href="/developer/core_structure/index.xml" rel="self" type="application/rss+xml"/><description>Code Structure</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Code Structure</title><link>/developer/core_structure.html</link></image><item><title>Basic Structures</title><link>/developer/core_structure/basic_structures.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/basic_structures.html</guid><description>&lt;p>This page details a few basic background components of EPOCH. Here we introduce
+the global shared data modules and its physical constants, variables used to
+define the cell grid, and the functions used to load macro-particles onto the
+grid.&lt;/p>
+&lt;h2 id="physical-constants">Physical constants&lt;/h2>
+&lt;p>In order to ensure that different parts of the code run at the same precision
+common physical constants are defined in &lt;code>constants.F90&lt;/code> and any
+new physical constants required by extensions to the code should be placed in
+the same location. The constants available in the code are&lt;/p>
+&lt;ul>
+&lt;li>pi - Ratio of a circle&amp;rsquo;s circumference to its diameter.&lt;/li>
+&lt;li>q0 - Charge on electron.&lt;/li>
+&lt;li>m0 - Rest mass of electron.&lt;/li>
+&lt;li>c - Speed of light in vacuum.&lt;/li>
+&lt;li>kb - Boltzmann&amp;rsquo;s constant.&lt;/li>
+&lt;li>mu0 - Permeability of free space.&lt;/li>
+&lt;li>epsilon0 - Permittivity of free space.&lt;/li>
+&lt;li>h_planck - Planck&amp;rsquo;s constant.&lt;/li>
+&lt;li>ev - The value of an electron volt.&lt;/li>
+&lt;li>h_bar - Planck&amp;rsquo;s constant divided by $2\pi$ .&lt;/li>
+&lt;li>a0 - The Bohr radius.&lt;/li>
+&lt;li>hartree - Double the Rydberg energy.&lt;/li>
+&lt;li>alpha - Fine structure constant.&lt;/li>
+&lt;li>atomic_time - Time in atomic units (h_bar / hartree).&lt;/li>
+&lt;li>atomic_electric_field - Electric field in atomic units (hatree / q0 / a0).&lt;/li>
+&lt;li>mc0 - Electron mass * speed of light.&lt;/li>
+&lt;li>m0c2 - Electron rest mass energy.&lt;/li>
+&lt;/ul>
+&lt;p>Further constants are used in the QED (photons) physics package and the
+bremsstrahlnug package.&lt;/p>
+&lt;p>Any new constants required should be specified in the same place in
+&lt;code>constants.F90&lt;/code>.&lt;/p>
+&lt;h2 id="shape-and-size-variables">Shape and size variables&lt;/h2>
+&lt;p>As well as the physical constants, there are some important variables which
+you will have to use to do any development with EPOCH. As a general note,
+since EPOCH is written with separate 1D, 2D and 3D versions, definitions will
+be given for the 3D version of the code and irrelevant dimensions should just
+be left out.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: nx, ny, nz&lt;/code> - The number of gridpoints on the current
+processor in each direction. This may change when the load balancer
+activates, so always use these variables rather than local copies.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: nx_global, ny_global, nz_global&lt;/code> - The number of gridpoints
+in each direction of the whole domain. These numbers will never change and
+will be the numbers read in from the input deck.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER(KIND=8) :: npart_global&lt;/code> - The global number of particles
+specified in the input deck. This is not updated as particles leave the
+domain through boundaries etc. so it is not guaranteed to be accurate.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: n_species&lt;/code> - The number of species of particles specified.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: nsteps&lt;/code> - The maximum number of steps that the core solver
+should take.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER, DIMENSION(1:nproc{x,y,z}), ALLOCATABLE :: cell_{x,y,z}_min,&lt;/code>
+&lt;code>cell_{x,y,z}_max&lt;/code> - The variables &lt;code>cell_{x,y,z}_min&lt;/code> and
+&lt;code>cell_{x,y,z}_max&lt;/code> represent the part of a global array which is held by the
+current processor. Since EPOCH is an MPI code, there doesn&amp;rsquo;t exist a
+single copy of any of the global arrays anywhere, but if there did then each
+processor would be responsible for the slice which runs
+(cell_x_min(rank):cell_x_max(rank),
+cell_y_min(rank):cell_y_max(rank))
+in 2D. These variables are used internally in the load balancer, where it is
+updated, but is also used when calculating distribution functions. Here it is
+used to define the extents of the MPI type which is used to write the
+distribution function to disk.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>-Useful global parameters exist for tracking the position and size of the fields
+stored by each MPI rank. The variables:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>INTERGER :: {x,y,z}_grid_min_local&lt;/code> - These give the position of the
+cell-&lt;strong>centre&lt;/strong> which has indices (1,1,1) on the current MPI rank. The grids on
+each rank only contain a fraction of the total simulation cells.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: {x,y,z}_{min,max}_boundary&lt;/code> - Logical flags to determine whether
+the current rank is on the simulation edge. If &lt;code>x_min_boundary&lt;/code> is true, then
+the current MPI rank has no neighbouring ranks on the low-$x$ edge.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-timestep">The timestep&lt;/h2>
+&lt;p>The timestep is calculated in the subroutine &lt;code>set_dt&lt;/code> in the file
+&lt;code>src/housekeeping/setup.F90&lt;/code>. All that the subroutine has to do is set
+the variable &lt;code>dt&lt;/code> to set the timestep for the whole code. Any
+additional timestep constraints should be coded into this subroutine. This
+should be implemented after the existing &lt;code>dt=&lt;/code> lines but before the
+line &lt;code>dt = dt_multiplier * dt&lt;/code>. Such a modification should be set so
+that it only changes the timestep if the timestep is MORE restrictive than that
+calculated from the core code. An example would be:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> dt = dx * dy / SQRT(dx**2 + dy**2) / c
+dt = MIN(dt, my_new_dt)
+&lt;/code>&lt;/pre>
+&lt;p>In the core EPOCH code the timestep can be calculated identically on each
+processor, so there is no requirement to synchronise the timestep across
+multiple processors. If your new timestep restriction uses information local to
+each processor then some additional lines must be added to the
+&lt;code>set_dt&lt;/code> routine after the timestep has been calculated which
+should read:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> REAL(num) :: dt_global
+.
+.
+.
+CALL MPI_ALLREDUCE(dt_global, dt, 1, mpireal, MPI_MIN, comm, errcode)
+dt = dt_global
+&lt;/code>&lt;/pre>
+&lt;p>This uses another MPI command to determine the most restrictive timestep across
+all processors. EPOCH is not written in a way that permits operation with
+different timesteps on different processors, and the behaviour of the code is
+undefined (and likely wrong) if the code runs with different timesteps on
+different processors.&lt;/p>
+&lt;h2 id="input-deck-variables">Input deck variables&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>CHARACTER(LEN=entry_length) :: blank&lt;/code> - A special string which the input
+deck parser uses to indicate that it&amp;rsquo;s passing a blank string rather than a
+string read from the deck which just happens to be blank.&lt;/li>
+&lt;li>&lt;code>INTEGER :: deck_state&lt;/code> - An integer determining the current sweep of
+the input deck by the deck parser.&lt;/li>
+&lt;li>&lt;code>INTEGER, PARAMETER :: num_vars_to_dump&lt;/code> - A variable describing the
+number of variables which should be selectable in the input deck as possible
+variables to dump.&lt;/li>
+&lt;li>&lt;code>CHARACTER(LEN=entry_length) :: extended_error_string&lt;/code> - String used by
+some error codes in the deck parser to give more user friendly error
+messages.&lt;/li>
+&lt;li>&lt;code>INTEGER :: data_dir_max_length&lt;/code> - The maximum number of characters in
+the name of the output directory.&lt;/li>
+&lt;li>&lt;code>INTEGER :: n_zeros&lt;/code> - The number of leading zeros in the output filenames
+from EPOCH.&lt;/li>
+&lt;/ul>
+&lt;h2 id="initial-conditions-autoloader-variables">Initial conditions (autoloader) variables&lt;/h2>
+&lt;p>Initial conditions for the autoloader for a given species are described in
+EPOCH by the Fortran TYPE &lt;code>initial_conditions_block&lt;/code>. The
+definition (in 3D) is:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE initial_condition_block
+REAL(num), DIMENSION(:,:,:), POINTER :: density
+REAL(num), DIMENSION(:,:,:,:), POINTER :: temp
+REAL(num), DIMENSION(:,:,:,:), POINTER :: drift
+REAL(num) :: density_min
+REAL(num) :: density_max
+END TYPE initial_condition_block
+&lt;/code>&lt;/pre>
+&lt;p>In 2D, the arrays have one fewer index, and in 1D they have two fewer.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>REAL(num) :: density&lt;/code> - Number density for the particles in the species.
+When defined runs (-2:nx+3,-2:ny+3,-2:nz+3).&lt;/li>
+&lt;li>&lt;code>REAL(num) :: temp&lt;/code> - Temperature in Kelvin of the species in space. When
+defined runs (-2:nx+3,-2:ny+3,-2:nz+3,1:3). The final index of the array
+is a direction index, used to give anisotropic thermal distributions.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: drift&lt;/code> - Velocity drift in $m/s$ of the species in space.
+When defined runs (-2:nx+3,-2:ny+3,-2:nz+3,1:3). The final index of the array
+is the velocity direction component.&lt;/li>
+&lt;li>&lt;code>density_min&lt;/code> - The minimum density below which the autoloader
+should not load particles.&lt;/li>
+&lt;li>&lt;code>density_max&lt;/code> - The maximum density above which the autoloader
+should clip the density function.&lt;/li>
+&lt;/ul>
+&lt;p>The initial conditions themselves are in the variable&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE(initial_condition_block), DIMENSION(:), ALLOCATABLE :: initial_conditions
+&lt;/code>&lt;/pre>
+&lt;p>which is allocated to an array of size &lt;code>1:n_species&lt;/code>.&lt;/p></description></item><item><title>Boundary Conditions</title><link>/developer/core_structure/boundary_conditions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/boundary_conditions.html</guid><description>&lt;p>Boundary conditions in EPOCH are split into three types&lt;/p>
+&lt;ul>
+&lt;li>Simple field boundaries.&lt;/li>
+&lt;li>Laser and outflow boundaries.&lt;/li>
+&lt;li>Particle boundaries.&lt;/li>
+&lt;/ul>
+&lt;p>These boundaries can be combined in different ways to give different
+effects. From the end user perspective there are 4 boundaries which can be
+applied to each edge of the simulation domain. These are&lt;/p>
+&lt;ul>
+&lt;li>Periodic
+&lt;ul>
+&lt;li>Particles periodic&lt;/li>
+&lt;li>Fields periodic&lt;/li>
+&lt;li>Lasers off&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Other
+&lt;ul>
+&lt;li>Particles reflect&lt;/li>
+&lt;li>Fields clamped zero&lt;/li>
+&lt;li>Lasers off&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Simple Laser
+&lt;ul>
+&lt;li>Particles transmissive&lt;/li>
+&lt;li>Fields clamped zero&lt;/li>
+&lt;li>Lasers applied at half timestep for $B$ field&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Simple outflow
+&lt;ul>
+&lt;li>Particles transmissive&lt;/li>
+&lt;li>Fields clamped zero&lt;/li>
+&lt;li>No lasers applied at half timestep, but outflow conditions applied
+to $B$ field at half timestep&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>The boundary conditions are applied in too many places in the code to give a
+full description of them, but the laser boundaries are only applied in
+&lt;code>src/fields.f90&lt;/code>. The boundaries requested by the user are converted
+into the conditions on the fields and particles in the routine
+&lt;code>setup_particle_boundaries&lt;/code> in
+&lt;code>src/boundaries.F90&lt;/code>. For each of the six possible boundaries
+(x_min, x_max, y_min, y_max, z_min, z_max) there is a variable which will
+be named something like &lt;code>bc_x_min_particle&lt;/code> or
+&lt;code>bc_y_max_field&lt;/code> which controls the boundary condition which will
+be applied to either the field or the particles.&lt;/p>
+&lt;h2 id="simple-field-boundaries">Simple field boundaries&lt;/h2>
+&lt;p>There are two subroutines which apply the standard boundary conditions:
+&lt;code>field_zero_gradient&lt;/code> and &lt;code>field_clamp_zero&lt;/code>. The
+type of boundary condition that the two apply is obvious from the name, but
+the two functions have different calling conventions.&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE field_zero_gradient
+REAL(num), DIMENSION(-2:,-2:,-2:), INTENT(INOUT) :: field
+INTEGER, INTENT(IN) :: stagger_type, boundary
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>field_zero_gradient&lt;/code> is the routine which applies zero gradient
+boundary conditions to a field variable passed in the parameter
+&lt;code>field&lt;/code>. The remaining two parameters are the stagger type and
+the boundary number. These are named constants defined in
+&lt;code>src/shared_data.F90&lt;/code>, &lt;code>c_stagger_*&lt;/code> for the
+stagger type and &lt;code>c_bd_*&lt;/code> for the boundary number.
+The routine can be used as a global field boundary condition by
+setting one of the field boundary conditions to c_bc_zero_gradient in
+&lt;code>setup_particle_boundaries&lt;/code>, but it is mostly used to give
+boundary conditions for the autoloader.&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE field_clamp_zero
+REAL(num), DIMENSION(-2:,-2:,-2:), INTENT(INOUT) :: field
+INTEGER, INTENT(IN) :: stagger_type, boundary
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>field_clamp_zero&lt;/code> is the routine which clamps the field given by
+the &lt;code>field&lt;/code> variable to zero on the boundary.
+The remaining two parameters are the stagger type and
+the boundary number. These are named constants defined in
+&lt;code>src/shared_data.F90&lt;/code>, &lt;code>c_stagger_*&lt;/code> for the
+stagger type and &lt;code>c_bd_*&lt;/code> for the boundary number.&lt;/p>
+&lt;p>Additional boundary conditions should follow the same basic principle as these
+routines. Note that all of the routines test for
+&lt;code>\{x,y,z\}_\{min,max\}_boundary&lt;/code> to confirm that a given processor is at the
+edge of the real domain, and so should have a real boundary condition applied
+to it. This also explains why there are no explicit periodic boundary condition
+routines, since by connecting the processors cyclically in a periodic direction
+the domain boundary effectively becomes another internal processor boundary.&lt;/p>
+&lt;h2 id="laser-and-outflow-boundaries">Laser and outflow boundaries&lt;/h2>
+&lt;p>The laser boundaries in EPOCH are based on a rewriting of Maxwell&amp;rsquo;s
+equations (combining Ampere-Maxwell and Faraday-Lenz) into a new form which
+expresses the fields explicitly in terms of waves
+propagating in both directions along each co-ordinate axis with both S and P
+polarisation states. In the $x$ direction,&lt;/p>
+&lt;p>$$
+\partial_t(E_y \pm cB_z) \pm \partial_x(E_y \pm cB_z) = \pm \partial_yE_x c + \partial_zB_x c^2 -\frac{j_y}{\epsilon_0}
+$$&lt;/p>
+&lt;p>$$
+\partial_t(E_z \mp cB_y) \pm \partial_x(E_z \mp cB_y) = \pm \partial_zE_x c - \partial_yB_x c^2 -\frac{j_z}{\epsilon_0}
+$$&lt;/p>
+&lt;p>It is then possible to rewrite these equations to provide a boundary condition
+on $B_z$ and $B_y$ to give propagating EM waves at the boundary. For waves
+travelling into the boundary, this gives a transmissive boundary, and if the
+components for waves propagating out from the boundary are set to be non-zero
+then it also introduces an EM wave propagating from the left boundary.&lt;/p>
+&lt;p>This boundary condition is found in the file &lt;code>laser.f90&lt;/code> which also
+includes the routines for handling the &lt;code>laser_block&lt;/code> objects which
+represent how lasers are represented in EPOCH.&lt;/p>
+&lt;h2 id="particle-boundaries">Particle boundaries&lt;/h2>
+&lt;p>Due to the time that is required to loop over all the particles the particle
+boundary conditions in EPOCH combine the inter-processor boundary conditions
+with the real boundary conditions. The boundary conditions for particles are in
+the routine &lt;code>particle_bcs&lt;/code> in the file &lt;code>boundary.f90&lt;/code>&lt;br>
+Currently EPOCH includes only three particle boundary conditions&lt;/p>
+&lt;ul>
+&lt;li>c_bc_open - Particles pass through the boundary and are destroyed. Total
+pseudoparticle number is not conserved in this mode.&lt;/li>
+&lt;li>c_bc_periodic - Particles which leave one side of the box reappear on
+the other side.&lt;/li>
+&lt;li>c_bc_reflect - Particles reflect off the boundary as if it was a hard
+boundary.&lt;/li>
+&lt;/ul>
+&lt;p>Although the routine looks rather messy, it is fairly easy to understand. The
+sequence goes:&lt;/p>
+&lt;ul>
+&lt;li>Loop over all species.&lt;/li>
+&lt;li>Create particle list objects for particles to be sent to and received from
+other processors.&lt;/li>
+&lt;li>Loop over all particles in the species.&lt;/li>
+&lt;li>If the particle has crossed a local boundary then it either
+has crossed the boundary of the problem domain and needs a boundary condition
+to be applied or it has just crossed a processor boundary and
+needs to be transferred to a neighbouring process. Set
+&lt;code>{x,y,z}bd&lt;/code> which is used to identify which processor relative
+to the current processor the particle potentially needs to be moved to and
+then test for the domain boundary.&lt;/li>
+&lt;li>If the particle has crossed an open domain boundary then either add it to
+another list to be dumped to disk if the user has requested this, or
+otherwise just deallocate the particle to reclaim memory. Set
+&lt;code>out_of_bounds&lt;/code> to indicate that the particle has left the
+system.&lt;/li>
+&lt;li>If the particle has crossed the domain boundary and that boundary has
+reflecting boundary conditions then reflect the particle.&lt;/li>
+&lt;li>If the particle has crossed the domain boundary and that boundary has
+periodic boundary conditions then move the particle to the opposite side
+of the domain.&lt;/li>
+&lt;li>End particle loop.&lt;/li>
+&lt;li>Remove all the particles which have left the current process.&lt;/li>
+&lt;li>Loop over all possible neighbouring processors for the current processor
+and exchange particle lists with that processor.&lt;/li>
+&lt;li>Add any received particles onto the particle list for the current
+species.&lt;/li>
+&lt;li>End species loop.&lt;/li>
+&lt;/ul>
+&lt;p>Note that, unlike for fields, there is explicit periodic boundary code. This is
+because although the MPI routines place the particle on the correct processor
+after the MPI routines, the particle&amp;rsquo;s position variable still places it beyond
+the other end of the domain. The MPI parallelism for exchanging particles is
+hidden in the routines which deal with the particle list objects and are
+described in the next section.&lt;/p>
+&lt;h2 id="mpi-boundaries">MPI Boundaries&lt;/h2>
+&lt;p>There are three routines which deal with MPI exchange for field variables in
+EPOCH. Two are closely related and will be considered together. The third
+deals with using MPI to sum variables at processor boundaries rather than
+synchronise ghost cells.&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE field_bc
+REAL(num), DIMENSION(-2:,-2:,-2:), INTENT(INOUT) :: field
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>field_bc&lt;/code> exchanges the information in the ghost cells between
+adjacent processors. Any field variable which is used in a calculation that
+requires operations involving information from points other than the
+current point should call this routine each time the variable is updated. This
+will ensure that the ghost cells are populated from adjacent processors.
+(i.e. if you only need to access field(ix,iy,iz) there is no need to update
+ghost cells, whilst if you use field(ix-1,iy,iz) you do).&lt;/p>
+&lt;p>The &lt;code>field_bc&lt;/code> routine just calls the
+&lt;code>do_field_mpi_with_lengths&lt;/code> routine which is a more general
+routine that allows ghost cell information to be exchanged for fields with
+an arbitrary number of cells, rather than fields which are
+(-2:nx+3,-2:ny+3,-2:nz+3). This routine is used internally in the load
+balancing routine when fields with both the old and new sizes must be handled
+at the same time.&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE processor_summation_bcs
+REAL(num), DIMENSION(-2:,-2:,-2:), INTENT(INOUT) :: field
+INTEGER, INTENT(IN), OPTIONAL :: flip_direction
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>processor_summation_bcs&lt;/code> is a routine which is used to deal with
+variables, like $\vec{j}$ or number density that should be added at boundaries
+to include contributions from particles on both sides of a processor boundary.
+The routine is used for the current inside the particle pusher and inside most
+of the routines for calculating derived variables. If you have a variable
+which needs to add contributions from adjacent processors then you should
+calculate the quantity on each processor, including contributions from the
+particles to the ghost cells and then call this routine. When reflecting
+boundary conditions are in operation, the current in the direction crossing
+the boundary needs to be flipped over. This is decided upon using the
+&lt;code>flip_direction&lt;/code> parameter.&lt;/p>
+&lt;p>These routines can be used for most MPI calls required by all but the most
+extreme modifications to EPOCH.&lt;/p></description></item><item><title>Current solver</title><link>/developer/core_structure/current_solver.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/current_solver.html</guid><description>&lt;p>EPOCH uses the
+&lt;a href="https://www.sciencedirect.com/science/article/abs/pii/001046559290169Y" target="_blank" rel="noopener">Villasenor and Buneman&lt;/a> current calculating scheme which
+solves the additional equation
+${\partial \rho}/{\partial t} = \nabla\cdot\vec{J}$ to
+calculate the current at each timestep. The main advantage of this scheme is
+that it conserves charge &lt;em>on the grid&lt;/em> rather than just globally conserving
+charge on the particles. This means that the error in the solution to Gauss&amp;rsquo;s
+law is conserved, so if Gauss&amp;rsquo;s law is satisfied for $t = 0$ it
+remains satisfied for all time.&lt;/p>
+&lt;p>The Villasenor and Buneman scheme works because exactly the same charge added
+to one cell is subtracted from another cell, which in turn means that exactly
+the same current added to one cell is subtracted from another cell. This is
+intuitively correct since a point particle crossing a cell boundary would
+represent the loss of that particle&amp;rsquo;s contribution to the current from the
+source cell and the gain of that particle&amp;rsquo;s contribution to the current by the
+destination cell. In fact this simple type of cell boundary crossing
+current calculation was used in classical Buneman type PIC codes.&lt;/p>
+&lt;p>The scheme is messy, in practise, but simple. After the main particle push, the
+particle is advanced a further half timestep into the future to first order
+using the velocities calculated at the end of the particle push. The particle
+position at $t + dt/2$ were stored earlier, and combined with the newly
+calculated particle position at $t + {3dt}/{2}$ this allows a time centred
+evaluation of ${\partial \rho}/{\partial t}$ meaning that the current
+update is second order accurate in time. The spatial order of the scheme
+matches the spatial order of the particle weight function.&lt;/p>
+&lt;p>The weight functions for transferring particle properties onto the grid at the
+two timesteps are calculated including a shift when necessary to allow for the
+particle having crossed a cell boundary. Since the charge associated with the
+particle is spatially distributed using the weight function, all that is
+necessary to calculate ${\partial \rho}/{\partial t}$ is to subtract the
+two functions, multiply by the charge on the pseudoparticle and the
+pseudoparticle weight and finally divide by $dt$. The spatial derivative of
+$\vec{J}$ is then converted to a one sided finite difference form and solved
+directly. In multiple dimensions this is slightly complicated by the effects of
+offsets in directions other than the direction that a given current component
+is pointing in, with this adding additional weight factors based on the overlap
+of the shape functions in other directions. This is explained in full in the
+Villasenor and Buneman paper already quoted.&lt;/p>
+&lt;p>Currents in ignorable directions are simply calculated using $J = n\rho\vec{v}$
+with the correct shape functions to ensure that the current is placed in the
+correct places.&lt;/p>
+&lt;h2 id="example">Example&lt;/h2>
+&lt;p>In EPOCH2D V4.19.2, the source-code for the current update looks like this:&lt;/p>
+&lt;pre>&lt;code> jyh = 0.0_num
+DO iy = ymin, ymax
+cy = cell_y1 + iy
+yfac1 = gy(iy) + 0.5_num * hy(iy)
+yfac2 = third * hy(iy) + 0.5_num * gy(iy)
+hy_iy = hy(iy)
+jxh = 0.0_num
+DO ix = xmin, xmax
+cx = cell_x1 + ix
+xfac1 = gx(ix) + 0.5_num * hx(ix)
+wx = hx(ix) * yfac1
+wy = hy_iy * xfac1
+wz = gx(ix) * yfac1 + hx(ix) * yfac2
+! This is the bit that actually solves d(rho)/dt = -div(J)
+jxh = jxh - fjx * wx
+jyh(ix) = jyh(ix) - fjy * wy
+jzh = fjz * wz
+jx(cx, cy) = jx(cx, cy) + jxh
+jy(cx, cy) = jy(cx, cy) + jyh(ix)
+jz(cx, cy) = jz(cx, cy) + jzh
+END DO
+END DO
+&lt;/code>&lt;/pre>
+&lt;p>At this point in the code, &lt;code>gx&lt;/code> and &lt;code>gy&lt;/code> contain the weight distribution of
+the macro-particle at time $t+dt/2$, where the 0 index in these arrays
+correspond to the cell containing the macro-particle centre at this time (or
+the low-x, low-y corner for TOPHAT shapes). The &lt;code>hx&lt;/code> and &lt;code>hy&lt;/code> parameters contain
+the difference of weights in each cell between $t+3dt/2$ and $t+dt/2$. The loop
+occurs from &lt;code>gx&lt;/code> index &lt;code>xmin&lt;/code> to &lt;code>xmax&lt;/code>, and &lt;code>gy&lt;/code> index &lt;code>ymin&lt;/code> to &lt;code>ymax&lt;/code>. These
+min/max indices will describe an array which has the same size as the number of
+cells which the macro-particle shape has touched over the time-step.&lt;/p>
+&lt;p>As an example, consider the $j_x$ update. For cell index &lt;code>ix=xmin&lt;/code>, we first
+calculate the average y-weight for each &lt;code>iy&lt;/code> using the line:&lt;/p>
+&lt;pre>&lt;code> yfac1 = gy(iy) + 0.5_num * hy(iy)
+&lt;/code>&lt;/pre>
+&lt;p>as &lt;code>gy(iy)&lt;/code> is the initial y-weight, and &lt;code>gy(iy) + hy(iy)&lt;/code> is the final
+y-weight. We assume the macro-particle moves at a constant speed when taking the
+average. Hence, the change in macro-particle weight due to motion in the $x$
+direction from the &lt;code>ix=xmin&lt;/code> cell is &lt;code>hx(xmin) * (gy(iy) + 0.5*hy(iy))&lt;/code>. In the
+code, this is &lt;code>wx&lt;/code>. We can multiply this by the macro-particle charge
+(charge * weight) to get the charge change due to $x$ motion, divide by &lt;code>dt&lt;/code> to
+get a current, and divide by &lt;code>dy&lt;/code> to get the current per unit area
+(as &lt;code>dz&lt;/code> = 1m in EPOCH2D). These particle variables and simulation constants are
+contained in the &lt;code>fjx&lt;/code> variable.&lt;/p>
+&lt;p>Finally, we must remember that this refers to the total current density change
+in the cell - we do not know the boundary this current flows through. In the
+&lt;code>xmin&lt;/code> cell, we know no macro-particle weight enters &lt;code>xmin-1&lt;/code> by definition of
+&lt;code>xmin&lt;/code>, so all the current density flows into the cell with &lt;code>ix=xmin+1&lt;/code>. Hence,
+the current change is unambiguous here. If there is no current change in
+&lt;code>xmin+1&lt;/code>, then an equal current must flow in and out. We have just calculated
+the &lt;code>xmin&lt;/code> to &lt;code>xmin+1&lt;/code> current, so we can subtract this from the new cell to
+determine the current on the next boundary. Because we need to remember the
+current from the previous calculation, we must subtract &lt;code>jxh&lt;/code> from the
+previously calculated &lt;code>jxh&lt;/code> in:&lt;/p>
+&lt;pre>&lt;code>jxh = jxh - fjx * wx
+&lt;/code>&lt;/pre>
+&lt;p>This calculation may then iterate through the particle shape, until the $j_x$
+contribution from this macro-particle is recorded in all cells it influences.
+The remaining current density components can be calculated using similar logic.&lt;/p></description></item><item><title>Field Solver</title><link>/developer/core_structure/field_solver.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/field_solver.html</guid><description>&lt;p>Each EPOCH MPI rank tracks a separate part of the simulation domain, using
+arrays of indices (1:nx, 1:ny, 1:nz) in 3D. The MPI ranks also track a
+small number of cells in neighbouring ranks, such that fields can be
+interpolated to macro-particle shapes which extend beyond the boundaries of a
+single rank. These additional surrounding copy-cells are termed &amp;ldquo;ghost
+cells&amp;rdquo;.&lt;/p>
+&lt;h2 id="field-variables">Field variables&lt;/h2>
+&lt;p>There are nine variables which are used in updating the EM field solver. These
+are&lt;/p>
+&lt;ul>
+&lt;li>ex - Electric field in the X direction.&lt;/li>
+&lt;li>ey - Electric field in the Y direction.&lt;/li>
+&lt;li>ez - Electric field in the Z direction.&lt;/li>
+&lt;li>bx - Magnetic field in the X direction.&lt;/li>
+&lt;li>by - Magnetic field in the Y direction.&lt;/li>
+&lt;li>bz - Magnetic field in the Z direction.&lt;/li>
+&lt;li>jx - Current in the X direction.&lt;/li>
+&lt;li>jy - Current in the Y direction.&lt;/li>
+&lt;li>jz - Current in the Z direction.&lt;/li>
+&lt;/ul>
+&lt;p>The EM fields in EPOCH are simple allocatable arrays, which are of size
+(-2:nx+3,-2:ny+3,-2:nz+3), although this includes the ghost cells. The length of
+the core domain is different for each variable due to the grid stagger.&lt;/p>
+&lt;p>The EPOCH field solver is a Yee staggered 2nd order FDTD scheme, directly
+based on the scheme in the PSC by Hartmut Ruhl and is contained in the file
+&lt;code>fields.f90&lt;/code>. To locate a variable on the grid there is a simple
+rule.&lt;/p>
+&lt;ul>
+&lt;li>Start at the cell centre.&lt;/li>
+&lt;li>For an $E$ field component, move the field half a grid point in the
+direction that the field points if possible.&lt;/li>
+&lt;li>For a $B$ field component, move the field half a grid point in all
+directions &lt;em>except&lt;/em> the one it points.&lt;/li>
+&lt;/ul>
+&lt;p>This is illustrated below for the 2D case.&lt;/p>
+&lt;p>&lt;img src="/developer/stagger.png" alt="The Yee grid in 2D">&lt;/p>
+&lt;p>The grid stagger means that you have to be careful with boundary conditions
+since some variables are defined on the domain boundaries whereas others are
+defined on either side of a domain boundary. This is handled automatically by
+the built in boundary routines, but must be understood if developing other
+boundary conditions. To explain it, consider only the left/right boundary in 1D
+and consider $E_x$ and $B_x$.&lt;/p>
+&lt;p>$E_x$ is defined on the cell boundary, so &lt;code>ex(0)&lt;/code> is the value of
+$E_x$ on the left boundary and similarly &lt;code>ex(nx)&lt;/code> is the
+value on the right boundary. Conversely, in the 1D code $B_x$ is cell centred
+(in reality, $B_x$ is never used in the field update and is unimportant since
+any gradients in $B_x$ in 1D automatically break the solenoidal condition, but
+this is still a useful example.). This means that &lt;code>bx(1)&lt;/code> is the
+centre of the first cell in the domain, and &lt;code>bx(0)&lt;/code> is the value at
+the centre of the first left hand ghost cell. This means the you must do
+different things as boundary conditions for the two fields for some boundary
+conditions.&lt;/p>
+&lt;p>For example, if you want to clamp the value of $E_x$ to be zero on the
+boundary, then just set &lt;code>ex(0) = 0.0_num&lt;/code> since &lt;code>ex(0)&lt;/code>
+lies on the boundary. To do the same for $B_x$ on the boundary you have to
+set &lt;code>bx(0) = -bx(1)&lt;/code>. This is because if you use a linear
+reconstruction of $B_x$ (i.e second order) then the point between
+&lt;code>bx(0)&lt;/code> and &lt;code>bx(1)&lt;/code> has the value
+$B_x(1/2) = \left(B_x(1)+B_x(0)\right)/2$. Similarly, if you want to set zero
+gradient on the boundary then for $E_x$ you set &lt;code>ex(-1) = ex(1)&lt;/code>,
+whereas for $B_x$ you would set &lt;code>bx(0) = bx(1)&lt;/code>.&lt;/p>
+&lt;p>In the particle pusher, time centred field variables are needed for second
+order accuracy, so an FDTD scheme is used to advance the fields. This looks
+like&lt;/p>
+&lt;ul>
+&lt;li>$\vec{E}^{n+\frac{1}{2}} = \vec{E}^n + \frac{\Delta t}{2} \left( c^2
+\nabla \wedge \vec{B}^{n} -\vec{j}^{n} \right)$&lt;/li>
+&lt;li>$\vec{B}^{n+\frac{1}{2}} = \vec{B}^n - \frac{\Delta t}{2} \left( \nabla
+\wedge \vec{E}^{n+\frac{1}{2}} \right)$&lt;/li>
+&lt;li>Call particle pusher which calculates $j^{n+1}$ currents&lt;/li>
+&lt;li>$\vec{B}^{n+1} = \vec{B}^{n+\frac{1}{2}} - \frac{\Delta t}{2} \left(
+\nabla \wedge \vec{E}^{n+\frac{1}{2}} \right)$&lt;/li>
+&lt;li>$\vec{E}^{n+1} = \vec{E}^{n+\frac{1}{2}} + \frac{\Delta t}{2} \left( c^2
+\nabla \wedge \vec{B} ^{n+1} - \vec{j}^{n+1} \right)$&lt;/li>
+&lt;/ul>
+&lt;p>Note that all spatial derivatives are calculated using the staggered grid, so
+the final derivatives in the code appear one sided. However, this is not the
+case, and all spatial derivatives are second order accurate. Higher order
+spatial derivatives schemes for EPOCH are being developed to improve the
+dispersion properties of the code when resolving small timescales.&lt;/p></description></item><item><title>Linked Lists</title><link>/developer/core_structure/linked_lists.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/linked_lists.html</guid><description>&lt;p>In EPOCH, different processors are responsible for different cells, and each
+MPI rank only tracks the particles which exist with these cells. Hence, as
+macro-particles move around the simulation, they must be removed from one
+processor and added to another. If macro-particles were stored in arrays, these
+would continuously have to be resized as macro-particles moved around. Instead,
+EPOCH stores macro-particles in &lt;em>linked lists&lt;/em>.&lt;/p>
+&lt;p>Linked lists are a standard computer programming technique which is still
+slightly unusual in Fortran, and may well be unfamiliar to many Fortran
+programmers. They effectively allow you to have an array of arbitrary length,
+although this comes with various trade-offs about memory locality and speed of
+accessing elements. The general concept is that of a chain where each link in
+the chain only knows about the previous link in the chain and the next link in
+the chain. Although there are schemes for doing this in languages which don&amp;rsquo;t
+have pointers, the normal method of implementing linked lists is to use
+pointers to point to previous and next elements in the list, and this is how
+they are implemented in EPOCH. Since both linked lists and Fortran pointers
+are slightly esoteric concepts, while being key to the operation of EPOCH a
+brief overview of them is presented here.&lt;/p>
+&lt;p>The simplest possible form of a linked list element would be a TYPE which
+looks like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE linked_list
+TYPE(linked_list), POINTER :: next
+TYPE(linked_list), POINTER :: prev
+END TYPE linked_list
+&lt;/code>&lt;/pre>
+&lt;p>You also have to have a pointer to the start of the list, and to speed up
+adding new elements to the list, you normally also keep a pointer to the
+last element of the list. Therefore, you would also have variables which look
+like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE(linked_list) :: head, tail
+&lt;/code>&lt;/pre>
+&lt;p>Since Fortran pointers are not initialised in any particular state, you have
+to remember to set the head and tail pointers to explicitly point nowhere
+(normally called a null pointer by analogy with the older C style
+pointers). This is done using the nullify command.&lt;/p>
+&lt;pre>&lt;code class="language-perl">NULLIFY(head)
+NULLIFY(tail)
+&lt;/code>&lt;/pre>
+&lt;p>The same thing is important when creating a new linked list element, so you
+would normally have a creation function for linked list elements.&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_element(element)
+TYPE(linked_list), POINTER :: element
+ALLOCATE(element)
+NULLIFY(element%next)
+NULLIFY(element%prev)
+END SUBROUTINE create_element
+&lt;/code>&lt;/pre>
+&lt;p>Note that the allocate function can be used on pointers in the same way that
+it can be used with variables which have the allocatable attribute. However,
+there is one important difference between a pointer and an allocatable
+variable. If you attempt to allocate an already allocated variable which has
+the allocatable attribute then the code will fail, whereas allocating an
+already allocated pointer is perfectly valid, and will allocate the new
+variable and point the pointer to it. This does not deallocate the memory that
+the pointer previously pointed to, and Fortran does not have a &amp;ldquo;garbage
+collector&amp;rdquo; which deallocates memory no longer accessible. So if you
+allocate a pointer which already points to a variable, it is very important
+that you have another pointer somewhere which points to the same memory. Once
+you no longer have a pointer to an area of memory, that area of memory is
+completely inaccessible and cannot even be deallocated. This is termed a
+memory leak and for programs which run for many cycles and have a memory leak
+on each cycle, the entire memory can very quickly be used up.&lt;/p>
+&lt;p>So, to add a new element to the list you would have a subroutine which looks
+like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE add_element(element)
+TYPE(linked_list), POINTER :: element
+IF (.NOT. ASSOCIATED(head)) THEN
+! Adding first element to list, so just set
+! both head and tail to the element
+head=&amp;gt;element
+tail=&amp;gt;element
+RETURN
+ENDIF
+tail%next=&amp;gt;element
+element%prev=&amp;gt;tail
+tail=&amp;gt;element
+END SUBROUTINE add_element
+&lt;/code>&lt;/pre>
+&lt;p>This subroutine adds the new Fortran operator of &lt;code>=&amp;gt;&lt;/code> which means &amp;ldquo;points
+to&amp;rdquo;. Unlike C or similar languages, Fortran pointers try to be partially
+transparent to the end user, so the following code would fail:&lt;/p>
+&lt;pre>&lt;code class="language-perl">PROGRAM test
+REAL, TARGET :: a = 10.0
+REAL, POINTER :: b
+b = a
+END PROGRAM test
+&lt;/code>&lt;/pre>
+&lt;p>This happens because Fortran will try to copy the value of &amp;ldquo;a&amp;rdquo; into &amp;ldquo;b&amp;rdquo;.
+However, &amp;ldquo;b&amp;rdquo; is a pointer which hasn&amp;rsquo;t been initialised, so the code will
+crash when it tries to copy the data in (in theory, the code may not crash if
+the uninitialised &amp;ldquo;b&amp;rdquo; pointer happens to point somewhere in memory which is
+a valid target, but this is very unlikely). Note also that &amp;ldquo;a&amp;rdquo; has the
+attribute &amp;ldquo;TARGET&amp;rdquo;. The target attribute means that it is possible to point
+a pointer to this variable. You can only point a pointer to a variable which
+is either a pointer itself or has the target attribute. This is to try and
+keep Fortran pointers &amp;ldquo;safer&amp;rdquo; than C style pointers. The correct code would
+use &lt;code>b=&amp;gt;a&lt;/code>, at which point &amp;ldquo;b&amp;rdquo; is set to point to &amp;ldquo;a&amp;rdquo; and
+can then be used everywhere in place of &amp;ldquo;a&amp;rdquo;.&lt;/p>
+&lt;p>So, to set up a linked list of n elements, you would use the following code:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE(linked_list), POINTER :: new
+NULLIFY(new)
+DO i = 1,n
+CALL create_element(new)
+CALL add_element(new)
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>To then run through the elements of your newly created linked list, you would
+use code like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE(linked_list), POINTER :: current
+current=&amp;gt;head
+DO WHILE(ASSOCIATED(current))
+! Do stuff
+current=&amp;gt;current%next
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>This code snippet introduces one new function &amp;ldquo;ASSOCIATED&amp;rdquo;, which tells you
+whether a pointer is a null pointer or not (this is why it is so important to
+nullify new pointers, because ASSOCIATED on its own doesn&amp;rsquo;t check whether a
+pointer is valid, just whether or not it is a null pointer). You can also use
+ASSOCIATED to check whether a pointer points to a particular object or not, in
+which case the syntax is &lt;code>RESULT = ASSOCIATED(b, TARGET=a)&lt;/code>, which
+returns true if &amp;ldquo;b&amp;rdquo; points to &amp;ldquo;a&amp;rdquo;, or false if it doesn&amp;rsquo;t, even if &amp;ldquo;b&amp;rdquo;
+is a valid pointer pointing to something else. It also introduces the way in
+which you must use linked lists in EPOCH. The execution flow is as follows&lt;/p>
+&lt;ul>
+&lt;li>Point current to the current element to the start of the linked list
+(head).&lt;/li>
+&lt;li>Iterate while current points to a valid element.&lt;/li>
+&lt;li>Perform whatever actions you want on current.&lt;/li>
+&lt;li>Point current to the next element in the chain.&lt;/li>
+&lt;/ul>
+&lt;p>This leads to the slightly counter intuitive behaviour where even though the
+loop only acts on the variable named &amp;ldquo;current&amp;rdquo;, all of the elements in the
+list are operated on. Although there are many tricks which can be performed
+with linked lists, the only other aspect which needs to be explained is how
+to delete elements. A subroutine to remove a single element from a linked list
+would look like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE remove_element(element)
+TYPE(linked_list), POINTER :: element
+IF (ASSOCIATED(element%prev)) THEN
+! Previous element exists
+element%prev%next=&amp;gt;element%next
+ELSE
+! Previous element does not exist therefore element is the head. When
+! element is removed the head is the element after the one being removed
+head=&amp;gt;element%next
+ENDIF
+IF (ASSOCIATED(element%next)) THEN
+! next element exists
+element%next%prev=&amp;gt;element%prev
+ELSE
+! next element does not exists therefore element is the tail. When element
+! is removed the head is the element before the one being removed
+tail=&amp;gt;element%prev
+ENDIF
+END SUBROUTINE remove_element
+&lt;/code>&lt;/pre>
+&lt;p>Once again, this code looks slightly counter-intuitive, but if you go through
+step by step, it&amp;rsquo;s fairly simple. In the following discussion the element
+being removed is called &amp;ldquo;C&amp;rdquo;, the element before &amp;ldquo;C&amp;rdquo; (if it exists) is
+called &amp;ldquo;P&amp;rdquo; and the element after &amp;ldquo;C&amp;rdquo; (if it exists) is called &amp;ldquo;N&amp;rdquo;&lt;/p>
+&lt;ul>
+&lt;li>Check whether &lt;code>C&lt;/code>&amp;rsquo;s prev element exists, this means that
+&lt;code>P&lt;/code> exists.&lt;/li>
+&lt;li>If &lt;code>P&lt;/code> exists then the element to be removed isn&amp;rsquo;t at the
+start of the chain. When &lt;code>C&lt;/code> is removed, we need
+&lt;code>P&lt;/code>%next to point to &lt;code>C&lt;/code>%next. This leads to the odd
+looking element%prev%next=&amp;gt; element%next syntax.&lt;/li>
+&lt;li>If &lt;code>P&lt;/code> does not exist then &lt;code>C&lt;/code> is at the the start
+of the chain. In order to not leave the chain orphaned when &lt;code>C&lt;/code>
+is removed, we need head to point to &lt;code>C&lt;/code>%next.&lt;/li>
+&lt;li>Exactly the same logic applies for updating the element after
+&lt;code>C&lt;/code>.&lt;/li>
+&lt;li>Check whether &lt;code>C&lt;/code>&amp;rsquo;s next element exists, this means that
+&lt;code>N&lt;/code> exists.&lt;/li>
+&lt;li>If &lt;code>N&lt;/code> exists then the element to be removed isn&amp;rsquo;t at the end
+of the chain. When &lt;code>C&lt;/code> is removed, we need &lt;code>N&lt;/code>%prev
+to point to &lt;code>C&lt;/code>%prev.&lt;/li>
+&lt;li>If &lt;code>P&lt;/code> does not exist then &lt;code>C&lt;/code> is at the the start
+of the chain. In order to not leave the chain orphaned when &lt;code>C&lt;/code>
+is removed, we need head to point to &lt;code>C&lt;/code>%next.&lt;/li>
+&lt;/ul>
+&lt;p>Therefore, code to remove some elements from a linked list would look like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE(linked_list), POINTER :: current, next
+current=&amp;gt;head
+DO WHILE(ASSOCIATED(current))
+next=&amp;gt;current%next
+IF (dealloc) THEN
+CALL remove_element(current)
+DEALLOCATE(current)
+ENDIF
+current=&amp;gt;next
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>Note that &amp;ldquo;current&amp;rdquo; must be deallocated explicitly even after it has been
+removed from the linked list to prevent a memory leak. Note also that the
+pointer to the &amp;ldquo;next&amp;rdquo; element is saved before &amp;ldquo;current&amp;rdquo; is deallocated.
+This is not necessary but means that there is only one IF statement rather
+than the two otherwise required.&lt;/p></description></item><item><title>Parallelism</title><link>/developer/core_structure/parallelism.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/parallelism.html</guid><description>&lt;p>EPOCH is a massively parallel code written using standard MPI. Due to the
+massively parallel nature
+of EPOCH, there are MPI commands scattered throughout many parts of the code,
+although the MPI has been hidden as far as possible from the end user. The main
+use of MPI occurs during I/O, in the boundary conditions and during load
+balancing. The MPI setup routines are all in
+&lt;code>src/housekeeping/mpi_routines.F90&lt;/code>, and the routines which are
+used to create the MPI types used by MPI-IO are in
+&lt;code>src/housekeeping/mpi_subtype_control.f90&lt;/code>.&lt;/p>
+&lt;h2 id="general-mpi-in-epoch">General MPI in EPOCH&lt;/h2>
+&lt;p>EPOCH uses Cartesian domain decomposition for parallelism and creates an MPI
+Cartesian topology using &lt;code>MPI_CART_CREATE&lt;/code>. The use of MPI in
+EPOCH is deliberately kept as simple as possible, but there are some points
+which must be made and some variables which must be explained.&lt;/p>
+&lt;ul>
+&lt;li>MPI decomposition is reversed compared to array ordering. Due to the
+layout of arrays in Fortran, you get slightly faster performance if you split
+arrays so that the first index remains as long as possible. Since EPOCH
+uses &lt;code>MPI_DIMS_CREATE&lt;/code> to do array subdivision, this means that
+the MPI coordinate system is ordered backwards compared to the main arrays.
+This means that the &lt;code>coordinates&lt;/code> array which holds the
+coordinates of the current processor in the Cartesian topology is ordered
+as {coord_z, coord_y, coord_x}.&lt;/li>
+&lt;li>To make this easier, there are some helper variables. The simplest of
+these just gives the processors attached to each face of the domain on the
+current processor. These variables are named &lt;code>x_min, x_max,&lt;/code>
+&lt;code>y_min, y_max, z_min&lt;/code> and &lt;code>z_max&lt;/code>.&lt;/li>
+&lt;li>Since it is possible for particles to cross boundaries diagonally there
+is another variable &lt;code>neighbour&lt;/code> which identifies every possible
+neighbouring processor including those meeting at single edges and at
+corners. &lt;code>neighbour&lt;/code> is an array which runs (-1:1,-1:1,-1:1) and,
+perhaps inconsistently, is ordered in normal order rather than reversed
+order. This means that &lt;code>x_min == neighbour(-1,0,0)&lt;/code> and
+&lt;code>z_max == neighbour(0,0,1)&lt;/code>.&lt;/li>
+&lt;li>The variable &lt;code>comm&lt;/code> is the handle for the Cartesian
+communicator returned from MPI_CART_CREATE.&lt;/li>
+&lt;li>The variable &lt;code>errcode&lt;/code> is the standard error variable for all
+MPI communications. However, EPOCH uses the standard
+MPI_ERRORS_ARE_FATAL error handler so this variable is never tested.&lt;/li>
+&lt;li>EPOCH uses a single variable, &lt;code>status&lt;/code>, to hold all MPI
+status calls. Since there is no non-blocking communication this variable
+is never checked.&lt;/li>
+&lt;li>The rank of the current processor is stored in the variable
+&lt;code>rank&lt;/code>.&lt;/li>
+&lt;li>The number of processors is stored in &lt;code>nproc&lt;/code>.&lt;/li>
+&lt;li>The number of processors assigned to any given direction of the Cartesian
+topology is given by &lt;code>nproc{x,y,z}&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;p>There are some other variables which are not technically part of the MPI
+implementation, but which only exist because the code is running in
+parallel. These are&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>REAL(num) :: {x,y,z}_min_local&lt;/code> - The location of the start of the
+domain on the local processor in real units.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: {x,y,z}_max_local&lt;/code> - The location of the end of the
+domain on the local processor in real units.&lt;/li>
+&lt;li>&lt;code>INTEGER, DIMENSION(1:nproc{x,y,z}) :: cell_{x,y,z}_min&lt;/code> - The cell
+number for the start of the local part of the global array in each direction.&lt;/li>
+&lt;li>&lt;code>INTEGER, DIMENSION(1:nproc{x,y,z}) :: cell_{x,y,z}_max&lt;/code>&lt;/li>
+&lt;li>The cell number for the end of the local part of the global array in each
+direction.&lt;/li>
+&lt;/ul>
+&lt;h2 id="mpi_routinesf90">&lt;code>mpi_routines.F90&lt;/code>&lt;/h2>
+&lt;p>&lt;code>mpi_routines.F90&lt;/code> is the file which contains all the MPI setup
+code. It contains the following routines:&lt;/p>
+&lt;ul>
+&lt;li>mpi_minimal_init - Contains code to start MPI enough to
+allow the input deck reader to work. The default EPOCH code setup means
+that it needs to initialise MPI, obtain the rank and the number of processors.&lt;/li>
+&lt;li>setup_communicator - Routine which creates the Cartesian communicator
+used by the code after the input deck has been parsed. It also populates
+&lt;code>x_min, x_max&lt;/code> etc. It is in its own subroutine so that it can be
+recalled after the start of the window move when the code is using a moving
+window. This is needed since it is valid to have a non-periodic boundary
+before the window starts to move and a periodic boundary afterwards.&lt;/li>
+&lt;li>mpi_initialise - This routine calls &lt;code>setup_communicator&lt;/code> and
+then allocates all the arrays to do with fields, etc. It also sets up the
+particle list objects for each species. If the code is running with only
+manual initial conditions then this routine loads the requested number of
+particles on each processor. Otherwise either the restart or the autoloader
+code load the particles.&lt;/li>
+&lt;li>mpi_close - This routine performs all the needed cleanup before the
+final call to &lt;code>MPI_FINALIZE&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;h2 id="mpi_subtype_controlf90">&lt;code>mpi_subtype_control.f90&lt;/code>&lt;/h2>
+&lt;p>This file contains all the routines which are used to create the MPI types
+which are used in the SDF I/O system. Most of the routines in this section are
+used to create the types used for writing the default variables and,
+when modifying the code, it is possible to output anything which has the same
+shape and size on disk as the default variables without ever having to use the
+routines in this file. However, if you are creating more general modifications
+which can include variables of different sizes with different layouts across
+processors then you may wish to use these routines to create new MPI types which
+match your data layout. Any valid MPI type describing the data layout will work
+with the SDF library, so there is no absolute need to use these routines. Only
+the general purpose subroutines are described here, since most of the other
+routines are fairly clear and use these routines internally.&lt;/p>
+&lt;h2 id="create_particle_subtype">create_particle_subtype&lt;/h2>
+&lt;pre>&lt;code class="language-perl">FUNCTION create_particle_subtype(npart_local)
+INTEGER(KIND=8), INTENT(IN) :: npart_local
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_particle_subtype&lt;/code> is a routine which creates an MPI type
+representing particles which are spread across different processors with
+&lt;code>npart_local&lt;/code> particles on each
+processor. &lt;code>npart_local&lt;/code> does not have to be the same number on all
+processors.&lt;/p>
+&lt;p>Currently this is only used for reading particle data from restart snapshots.
+It is likely to go away in the near future.&lt;/p>
+&lt;h2 id="create_ordered_particle_offsets">create_ordered_particle_offsets&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_ordered_particle_offsets(n_dump_species,&amp;amp;
+npart_local)
+INTEGER, INTENT(IN) :: n_dump_species
+INTEGER(KIND=8), DIMENSION(n_dump_species), &amp;amp;
+INTENT(IN) :: npart_local
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_ordered_particle_offsets&lt;/code> is a routine which creates an
+array of offsets representing particles from &lt;code>n_dump_species&lt;/code>
+which are spread across different processors with
+&lt;code>npart_local(ispecies)&lt;/code> particles of each species on each
+processor. &lt;code>npart_local&lt;/code> does not
+have to be the same number on all processors and does not have to be the same
+number for each species.&lt;/p>
+&lt;h2 id="create_field_subtype">create_field_subtype&lt;/h2>
+&lt;pre>&lt;code class="language-perl">FUNCTION create_field_subtype(n{x,y,z}_local, &amp;amp;
+cell_start_{x,y,z}_local)
+INTEGER, INTENT(IN) :: nx_local, ny_local, nz_local
+INTEGER, INTENT(IN) :: cell_start_x_local
+INTEGER, INTENT(IN) :: cell_start_y_local
+INTEGER, INTENT(IN) :: cell_start_z_local
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_field_subtype&lt;/code> is a routine which creates an MPI type
+representing a field that is defined across some or all of the processors. The
+&lt;code>n{x,y,z}_local&lt;/code> parameters are the number of points in the x,
+y, z directions (if they exist in the version of the code that you are working
+on) that are on the local processor. The
+&lt;code>cell_start_{x,y,z}_local&lt;/code> parameters are the offset of the
+top, left, back corner of the local subarray in the global array that would
+exist if the code was running on one processor. This is an &lt;em>offset&lt;/em>, not a
+position and so it begins at {0,0,0} NOT {1,1,1}.&lt;/p>
+&lt;p>In EPOCH3D there is also a routine called
+&lt;code>create_field_subtype_2d&lt;/code> which is exactly equivalent to
+&lt;code>create_field_subtype&lt;/code> in EPOCH2D and is used for writing the 2D
+distribution functions. At present, there are not equivalent 1D functions
+except in EPOCH1D, but these could easily by added if required.&lt;/p>
+&lt;h2 id="the-load-balancer">The load balancer&lt;/h2>
+&lt;p>One of the major limiting factors in the scalability of PIC codes is load
+balancing. Due to the synchronisation of the currents required for the update
+of the EM fields the entire code runs at the speed of the slowest
+process. Since most of the time in the main EPOCH cycle is taken by the
+particle pusher, this equates to the process with the highest number of
+particles being the slowest. Since the location of particles is dependent upon
+the solution of the problem under consideration, in general the code will not
+have exactly the same number of particles on each processor. The load balancer
+is used to move the inter-processor boundaries so that the number of particles
+is as close to the same on each processor as possible. The load balancer is
+invoked at the start of the code and when the ratio of the least loaded
+processor to the most loaded processor falls below a user specified critical
+point.&lt;/p>
+&lt;p>EPOCH&amp;rsquo;s load balancer works by rearranging the processor boundaries in 1D
+sweeps in each direction, rather than attempting to perform multidimensional
+optimisation. Also, at present the MPI in EPOCH requires each processor to be
+simply connected at every point, so it must have one processor to the left, one
+to the front etc. which introduces a further restriction on the load
+balancer. Otherwise, the load balancer is fully general. The load balancing
+sweep is illustrated here:&lt;/p>
+&lt;p>&lt;img src="/developer/sweep.png" alt="Illustration of the load balancing sweep">&lt;/p>
+&lt;p>The load balancer is
+implemented in the file &lt;code>src/housekeeping/balance.F90&lt;/code> and is called
+by the routine &lt;code>balance_workload(override)&lt;/code>. The parameter
+&lt;code>override&lt;/code> is used to force the code to perform a load balancing
+sweep even when it would normally determine that the imbalance is not large
+enough to force a load balancing sweep. Although the load balancer is hard
+coded to load balance in all available directions, the code is written in such
+a way that it is possible to modify the code to load balance in only one
+direction, or to automatically determine which single direction gives the best
+performance.&lt;/p>
+&lt;p>The details of the load balancer are fairly intricate, and if major
+modification to the load balancer is required, it is recommended that the
+original authors be contacted for detailed advice on how to proceed. However,
+the general layout of the routine is as follows.&lt;/p>
+&lt;ul>
+&lt;li>Use MPI_ALLREDUCE to determine the global minimum and maximum number of
+particles. If the ratio of the minimum to the maximum is above the load
+balance threshold then just return from the subroutine.&lt;/li>
+&lt;li>The code uses the routines &lt;code>get_load_in_{x,y,z}&lt;/code> to
+determine the work load along each direction of the domain.
+The &lt;code>get_load_in_x&lt;/code> routine uses the x-coordinate of every
+particle to create a 1D particle density in the x-direction. This is then
+combined with the total number of grid cells in the y-z plane to give
+a 1D array of the work load in the x-direction. Similarly for
+&lt;code>get_load_in_{y,z}&lt;/code>.&lt;/li>
+&lt;li>Next the load array is passed to the &lt;code>calculate_breaks&lt;/code>
+routine which fills the arrays &lt;code>starts_{x,y,z}&lt;/code>
+and &lt;code>ends_{x,y,z}&lt;/code>. These arrays contain the starting and
+ending cell numbers of the hypothetical global array in each direction for
+each processor.&lt;/li>
+&lt;li>The routine &lt;code>redistribute_fields&lt;/code> is then called to move the
+information about field variables which cannot be recalculated. If new field
+variables are created that cannot be recalculated after the load balancing is
+completed then &lt;code>redistribute_fields&lt;/code> has to be modified for these
+new variables.&lt;/li>
+&lt;li>The next section of the routine deals with those variables which can be
+recalculated after the load balance sweep is complete, such as the coordinate
+axes and the arrays which hold the particle kinetic energy.&lt;/li>
+&lt;li>The penultimate section of the routine then changes the variables which
+tell the code where the edges of its domain lie in real space to reflect the
+changed shape of the domains.&lt;/li>
+&lt;li>The final part is the call to &lt;code>distribute_particles&lt;/code> which
+moves the particles to the new processor. Once this is
+finished, the code should have as near as possible the same number of
+particles on each processor.&lt;/li>
+&lt;/ul>
+&lt;p>Most of the load balancer is purely mechanical and should only be changed if
+the way in which the code is to perform load balancing is fundamentally
+altered. The redistribution of particles that takes place in
+&lt;code>distribute_particles&lt;/code> uses the standard particle_list objects, so
+that if the necessary changes have been made to the routines in
+&lt;code>src/housekeeping/partlist.F90&lt;/code> to allow correct
+boundary swaps of particles then the load balancer should work with no further
+modification. The only part of the load balancer which should need changing is
+&lt;code>redistribute_fields&lt;/code> which requires explicit modification if new
+field variables are required. For fields which are the same shape as the main
+array there is significant assistance provided within the code to make the
+re-balancing simpler. There are also routines which can help with re-balancing
+variables which are the size of only one edge or face of the domain. Variables
+which are of a completely different size but still need to be rebalanced when
+coordinate axes move have to have full load balancing routines implemented by
+the developer. This is beyond the scope of this manual and any developer who
+needs assistance with development such a modification should contact the
+original author of the code. The field balancer is fairly simple and mostly
+calls one of three routines: &lt;code>redistribute_field&lt;/code> and either
+&lt;code>redistribute_field_2d&lt;/code> or &lt;code>redistribute_field_1d&lt;/code>
+depending on the dimensionality of your code. To redistribute full field
+variables the routine to use is &lt;code>redistribute_field&lt;/code>, and an
+example of using the code looks like:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> temp = 0.0_num
+CALL redistribute_field(new_domain, bz, temp)
+DEALLOCATE(bz)
+ALLOCATE(bz(-2:nx_new+3,-2:ny_new+3))
+bz = temp
+&lt;/code>&lt;/pre>
+&lt;p>In this calling sequence the
+&lt;code>redistribute_field&lt;/code> subroutine is used to redistribute the field
+&lt;code>bz&lt;/code>, and the newly redistributed field is copied
+into &lt;code>temp&lt;/code>; an array which is already allocated to the
+correct size. The &lt;code>new_domain&lt;/code> parameter is an array indicating the
+location of the start and end points of the new domain for the current processor
+in gridpoints offset from the start of the global array. It is passed into the
+&lt;code>redistribute_fields&lt;/code> subroutine as a parameter from the
+&lt;code>balance_workload&lt;/code> subroutine and should not be changed. The
+&lt;code>temp&lt;/code> variable is needed since Fortran standards before Fortran2000
+do not allow the deallocation and reallocation of parameters passed to a
+subroutine. There is a more elegant solution, where &lt;code>temp&lt;/code> is
+hidden inside the &lt;code>redistribute_field&lt;/code> subroutine. However, support
+for this in current Fortran2000 implementations is unreliable.&lt;/p>
+&lt;p>The routine for re-balancing variables which lie along an edge of the domain are
+very similar and are demonstrated in the &lt;code>redistribute_fields&lt;/code>
+subroutine for lasers attached to different boundaries. It is
+recommended that a developer examine this code when developing new routines.&lt;/p></description></item><item><title>Particle Pusher</title><link>/developer/core_structure/particle_pusher.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/particle_pusher.html</guid><description>&lt;p>EPOCH&amp;rsquo;s particle pusher is based on the one from the PSC by Hartmut Ruhl, and
+is a Birdsall and Landon type PIC scheme using Villasenor and Buneman current
+weighting. It is contained in the file &lt;code>particles.F90&lt;/code>. The
+operation of the particle pusher is fairly simple, but there are a few elements
+which need some clarification.&lt;/p>
+&lt;ul>
+&lt;li>The update to the particle momenta etc. does not explicitly include the
+particle weight function. This means that the pseudoparticle momenta etc. are
+the momentum for a single real particle of the collection of real particles
+represented by that pseudoparticle, NOT the momentum of the whole collection
+of real particles.&lt;/li>
+&lt;li>&lt;code>gamma&lt;/code> - The variable gamma which appears in various places
+is the relativistic $\gamma$ which is needed to convert the particle momentum
+into the particle velocity using the relation $\vec{p} = \gamma m \vec{v}$.
+Here, $\vec{p}$ is the particle momentum, $\vec{v}$ is the particle
+velocity and $m$ is the particle rest mass.
+If EPOCH was not relativistic then this would simply be $1$. Since
+EPOCH is relativistic, gamma is defined as
+$\left(\vec{p}.\vec{p}/m c^2 + 1\right)^{1/2}$.&lt;/li>
+&lt;li>&lt;code>cell_x1=cell_x1+1&lt;/code> - There are lines like this after all
+the sections of the routine where the cell a particle is in is
+calculated. This is because, for a cell centred variable, the domain runs
+(1:nx,1:ny,1:nz) rather than (0:nx-1,0:ny-1,0:nz-1).&lt;/li>
+&lt;/ul>
+&lt;p>The most complicated parts of the particle pusher are interpolating the grid
+electric and magnetic fields over the
+&lt;a href="/developer/core_structure/shape_functions.html">macro-particle shape&lt;/a>, and the
+&lt;a href="/developer/core_structure/current_solver.html">current density solver&lt;/a>.&lt;/p></description></item><item><title>Particles</title><link>/developer/core_structure/macro_particles.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/macro_particles.html</guid><description>&lt;p>In the PIC method, the simulation grid is filled with macro-particles, which
+respresent a large number of &lt;em>real&lt;/em> particles. They are described primarily by a
+position on the grid, and a momentum, charge, mass and weight. In EPOCH, the
+first few variables describe a &lt;em>single&lt;/em> real particle within the macro-particle,
+and the weight describes how many real particles the macro-particle represents.&lt;/p>
+&lt;p>Macro-particles are split between different species, set by the species blocks
+in the input deck. All macro-particles present on a single rank are contained
+within the &lt;code>species_list&lt;/code> variable, which contains lists of particles for all
+species present, along with information about each species.&lt;/p>
+&lt;p>In short, the data is distributed among types as follows:&lt;/p>
+&lt;ul>
+&lt;li>Particle type: contains information about a single macro-particle.&lt;/li>
+&lt;li>Particle list: a linked list object, containing a list of macro-particles.&lt;/li>
+&lt;li>Particle species: contains information about a set of particles as a whole,
+and a corresponding particle list.&lt;/li>
+&lt;li>Species list: an array containing all the particle species.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-particle-data-type">The particle data-type&lt;/h2>
+&lt;p>Particles are represented as linked lists of Fortran TYPES. The definition can
+be found in &lt;code>shared_data.F90&lt;/code>, which is shared globally among all modules.
+Hence, any module can use a particle data-type.&lt;/p>
+&lt;p>In this data-type, you will
+notice that many parameters are locked behind pre-processor flags, and must
+be manually switched on through the Makefile. This is because as particles move
+around the grid, they must be transferred from processor to processor as they
+move in and out of cells controlled by each rank. This MPI transfer is a major
+bottleneck for the code, so by default, EPOCH assigns the minimum amount of
+information to each particle, to minimise the rank-to-rank data transfer.&lt;/p>
+&lt;p>The datatype is shown here:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE particle
+REAL(num), DIMENSION(3) :: part_p
+REAL(num), DIMENSION(c_ndims) :: part_pos
+#if !defined(PER_SPECIES_WEIGHT) || defined(PHOTONS)
+REAL(num) :: weight
+#endif
+#ifdef DELTAF_METHOD
+REAL(num) :: pvol
+#endif
+#ifdef PER_PARTICLE_CHARGE_MASS
+REAL(num) :: charge
+REAL(num) :: mass
+#endif
+TYPE(particle), POINTER :: next, prev
+#ifdef PARTICLE_DEBUG
+INTEGER :: processor
+INTEGER :: processor_at_t0
+#endif
+#ifdef PARTICLE_ID4
+INTEGER :: id
+#elif PARTICLE_ID
+INTEGER(i8) :: id
+#endif
+#ifdef COLLISIONS_TEST
+INTEGER :: coll_count
+#endif
+#ifdef WORK_DONE_INTEGRATED
+REAL(num) :: work_x
+REAL(num) :: work_y
+REAL(num) :: work_z
+REAL(num) :: work_x_total
+REAL(num) :: work_y_total
+REAL(num) :: work_z_total
+#endif
+#ifdef PHOTONS
+REAL(num) :: optical_depth
+#endif
+#if defined(PHOTONS) || defined(BREMSSTRAHLUNG)
+REAL(num) :: particle_energy
+#endif
+#if defined(PHOTONS) &amp;amp;&amp;amp; defined(TRIDENT_PHOTONS)
+REAL(num) :: optical_depth_tri
+#endif
+#ifdef BREMSSTRAHLUNG
+REAL(num) :: optical_depth_bremsstrahlung
+#endif
+#if defined(PROBE_TIME)
+REAL(num) :: probe_time
+#endif
+END TYPE particle
+&lt;/code>&lt;/pre>
+&lt;p>And the descriptions are&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>REAL(num) :: part_p(3)&lt;/code> - The particle momentum. Always dimension 3 even
+in 1D and 2D codes. Describes the momentum of a single particle within the
+macro-particle.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: part_pos(ndims)&lt;/code> - The particle position. Has
+the same dimensions as that of the code.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: weight&lt;/code> - The particle weight if the code is running with
+per particle weighting (otherwise weight is a species parameter).&lt;/li>
+&lt;li>&lt;code>REAL(num) :: charge&lt;/code> - The particle charge in Coulombs if the code is
+running with per particle charge (otherwise charge is a species parameter).&lt;/li>
+&lt;li>&lt;code>REAL(nun) :: mass&lt;/code> - The particle mass in kilograms if the code is
+running with per particle mass (otherwise mass is a species parameter).&lt;/li>
+&lt;li>&lt;code>TYPE(particle), POINTER :: next, prev&lt;/code> - The pointers to the next and
+previous elements of the linked list.&lt;/li>
+&lt;li>&lt;code>INTEGER :: processor&lt;/code> - The rank of the processor that the particle
+thinks it is on. Used for debugging.&lt;/li>
+&lt;li>&lt;code>INTEGER :: processor_at_t0&lt;/code> - The rank of the processor that the
+particle started on. Used for debugging.&lt;/li>
+&lt;li>&lt;code>INTEGER :: id&lt;/code> - A unique integer assigned to each particle, only set for
+species which output the id, and only when the code is compiled with ID
+support.&lt;/li>
+&lt;li>&lt;code>INTEGER :: coll_count&lt;/code> - An integer present for debugging the number of
+collisions a particle undergoes (this is not used in the current version of
+EPOCH).&lt;/li>
+&lt;li>&lt;code>REAL(num) :: work_{x,y,z}&lt;/code> - Work done by the electric field on the
+particle during the last particle push, in each direction.
+Describes work done to a single particle within the macro-particle.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: work_{x,y,z}_total&lt;/code> - Work done by the electric fields on the
+particle over the full simulation, in each direction.
+Describes work done to a single particle within the macro-particle.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: optical_depth&lt;/code> - For some secondary-particle emission processes,
+a particle is assigned an &amp;ldquo;optical depth of emission&amp;rdquo;, related to how far the
+particle has moved, and the cross section of emission. The total optical depth
+is tracked, and an emission is sampled once the optical_depth goes negative.
+The original &lt;code>optical_depth&lt;/code> here describes the remaining optical depth to
+travel
+before photon emission through the QED non-linear Compton scatter process for
+electrons. For photons, this describes the remaining optical depth before
+Breit-Wheeler pair production.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: particle_energy&lt;/code> - Contains the relativistic particle energy,
+primarily for use in the QED routines.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: optical_depth_tri&lt;/code> - Remaining optical depth before emission of
+a pair through the electron trident process.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: optical_depth_bremsstrahlung&lt;/code> - Remaining optical depth before
+emission of a bremsstrahlung photon for electrons, or a Bethe-Heitler pair
+for photons.&lt;/li>
+&lt;li>&lt;code>REAL(num) :: probe_time&lt;/code> - If a particle passes a probe, a copy of the
+particle is stored in a new list. This parameter is set to the time the
+particle passes the probe, for the particle copy.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>WARNING&lt;/strong>: Simply adding a new parameter to the definition of the particle
+type is NOT
+sufficient to extend the particle type, since the communications when the
+particle crosses a processor boundary do not know about the new parameter and
+it will not be transmitted with the particle. How to add new properties to the
+particle communication layer is described later.&lt;/p>
+&lt;h2 id="particle-list-type">Particle list type&lt;/h2>
+&lt;p>The entire linked list of particles is encapsulated in another Fortran TYPE,
+called &lt;code>particle_list&lt;/code>, which is defined as:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE particle_list
+TYPE(particle), POINTER :: head
+TYPE(particle), POINTER :: tail
+INTEGER(KIND=8) :: count
+! Pointer is safe if the particles in it are all unambiguously linked
+LOGICAL :: safe
+TYPE(particle_list), POINTER :: next, prev
+END TYPE particle_list
+&lt;/code>&lt;/pre>
+&lt;p>And its properties are:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle), POINTER :: head&lt;/code> - The first particle in the linked list.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle), POINTER :: tail&lt;/code> - The last particle in the linked
+list. New particles added to the end of the list are added onto the end of
+the tail element, and the new last particle becomes the new tail element.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER(KIND=8) :: count&lt;/code> - The number of particles in this particle
+list. Note that the &lt;code>particle_list&lt;/code> type is not
+directly MPI aware, so this is literally the number of particles in
+&lt;em>this&lt;/em> particle list, not the number of particles of this species on all
+processors.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: safe&lt;/code> - A particle list &lt;em>safe&lt;/em> if the particles in it
+are unambiguously linked. That is that the &lt;code>count&lt;/code>th particle is
+guaranteed to have its &lt;code>next&lt;/code> property be null. Most particle
+lists within EPOCH are safe, but sometimes it is useful to be able to have
+particle lists which are subsets of longer particles lists, and these
+particle lists are not &lt;em>safe&lt;/em>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_list), POINTER :: next, prev&lt;/code> - At present, EPOCH does
+not use these pointers, which are intended to allow multiple particle lists to
+be attached together. Certain parts of EPOCH, such as the I/O system are
+aware of these pointers and will automatically use them if they are ever
+set. They are reserved for future use.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>The &lt;code>particle_list&lt;/code> objects are used to abstract all the functions
+of the linked list, including adding and removing particles and transporting
+particles between processors.&lt;/p>
+&lt;h2 id="particle-species-type">Particle species type&lt;/h2>
+&lt;p>The particle species are represented by yet another Fortran TYPE, this time
+called &lt;code>particle_species&lt;/code>, which in 2D is defined as:&lt;/p>
+&lt;pre>&lt;code class="language-perl">TYPE particle_species
+! Core properties
+CHARACTER(string_length) :: name
+TYPE(particle_species), POINTER :: next, prev
+INTEGER :: id
+INTEGER :: dumpmask
+INTEGER :: count_update_step
+REAL(num) :: charge
+REAL(num) :: mass
+REAL(num) :: weight
+INTEGER(i8) :: count
+TYPE(particle_list) :: attached_list
+TYPE(particle_pointer_list), POINTER :: boundary_particles =&amp;gt; NULL()
+LOGICAL :: immobile
+LOGICAL :: fill_ghosts
+! Parameters for relativistic and arbitrary particle loader
+INTEGER :: ic_df_type
+REAL(num) :: fractional_tail_cutoff
+TYPE(primitive_stack) :: dist_fn
+TYPE(primitive_stack) :: dist_fn_range(3)
+#ifndef NO_TRACER_PARTICLES
+LOGICAL :: zero_current
+#endif
+INTEGER :: atomic_no
+LOGICAL :: atomic_no_set = .FALSE.
+! Specify if species is background species or not
+LOGICAL :: background_species = .FALSE.
+! Background density
+REAL(num), DIMENSION(:,:), POINTER :: background_density
+! Do we need to make secondary lists for this species?
+LOGICAL :: make_secondary_list = .FALSE.
+! Has species list been randomised in order?
+LOGICAL :: is_shuffled
+! Specifiy if species is background for collisions
+LOGICAL :: coll_background = .FALSE.
+LOGICAL :: coll_fast = .FALSE.
+LOGICAL :: coll_pairwise = .FALSE.
+! ID code which identifies if a species is of a special type
+INTEGER :: species_type
+! particle cell division
+INTEGER(i8) :: global_count
+LOGICAL :: split
+INTEGER(i8) :: npart_max
+! Secondary list
+TYPE(particle_list), DIMENSION(:,:), POINTER :: secondary_list
+! Loading of particles
+REAL(num) :: npart_per_cell
+TYPE(primitive_stack) :: density_function, temperature_function(3)
+TYPE(primitive_stack) :: drift_function(3)
+! Thermal boundaries
+REAL(num), DIMENSION(:,:), POINTER :: ext_temp_x_min, ext_temp_x_max
+REAL(num), DIMENSION(:,:), POINTER :: ext_temp_y_min, ext_temp_y_max
+! Species_ionisation
+LOGICAL :: electron
+LOGICAL :: ionise
+INTEGER :: ionise_to_species
+INTEGER :: release_species
+INTEGER :: n
+INTEGER :: l
+REAL(num) :: ionisation_energy
+REAL(num), ALLOCATABLE :: coll_ion_incident_ke(:)
+REAL(num), ALLOCATABLE :: coll_ion_cross_sec(:)
+REAL(num), ALLOCATABLE :: coll_ion_mean_bind(:,:)
+REAL(num), ALLOCATABLE :: coll_ion_secondary_ke(:,:)
+REAL(num), ALLOCATABLE :: coll_ion_secondary_cdf(:,:)
+! Attached probes for this species
+#ifndef NO_PARTICLE_PROBES
+TYPE(particle_probe), POINTER :: attached_probes
+#endif
+! Particle migration
+TYPE(particle_species_migration) :: migrate
+! Initial conditions
+TYPE(initial_condition_block) :: initial_conditions
+! Per-species boundary conditions
+INTEGER, DIMENSION(2*c_ndims) :: bc_particle
+END TYPE particle_species
+&lt;/code>&lt;/pre>
+&lt;p>Again, most of these properties are self explanatory, but they are detailed
+below.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>CHARACTER(LEN=entry_length) :: name&lt;/code> - The name of the particle
+species. Used when constructing things like &amp;ldquo;ekbar_electron&amp;rdquo; and similar
+names.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_species), POINTER :: next, prev&lt;/code> - Particle species are
+connected to each other as a linked list using pointers as well as being
+available through a simple array. These pointers are used behind the scenes
+in the I/O.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: id&lt;/code> - The number of the species, so for the species
+&lt;code>species_list(1)&lt;/code>, the id field would be 1. For
+&lt;code>species_list(2)&lt;/code>, the id field would be 2 etc.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: dumpmask&lt;/code> - Bitmask to determine when this species should be
+dumped in diagnostic output.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: count_update_step&lt;/code> - The last step where the &lt;code>count&lt;/code> parameter
+was updated.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num) :: charge&lt;/code> - The charge on a single particle of the species in
+Coulombs.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num) :: mass&lt;/code> - The mass of a single particle of the species in
+kilograms.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num) :: weight&lt;/code> - The per-species particle weight.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER(KIND=8) :: count&lt;/code> - The number of particles of this species on
+all processors. NOTE that this is only accurate if the code is compiled with
+the correct preprocessor options. Without the correct preprocessor options,
+this will be accurate at the start of the code runtime, but will not be if
+any particles enter or leave the domain. This is mainly a debugging
+parameter.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_list) :: attached_list&lt;/code> - This is the
+&lt;code>particle_list&lt;/code> object which holds the particles assigned to this
+species on this processor. Particles are attached to this list except between
+the calls to &lt;code>reorder_particles_to_grid&lt;/code> and
+&lt;code>reattach_particles_to_mainlist&lt;/code> in
+&lt;code>epoch{1,2,3}d.F90&lt;/code> where the particles are instead attached to
+&lt;code>secondary_list&lt;/code>. This is explained later.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_pointer_list), POINTER :: boundary_particles&lt;/code> - A list of
+particles which have been pushed out of the simulation boundaries.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: immobile&lt;/code> - These particles skip the particle push if true.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: fill_ghosts&lt;/code> - Loads particles into ghost cells surrounding the
+simulation if true.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: ic_df_type&lt;/code> - Sets temperature calculation for the delta-f loader.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num) :: fractional_tail_cutoff&lt;/code> - Sets a cut-off for the relativistic
+temperature to momentum calculation in
+&lt;code>src/user_interaction/particle_temperature.F90&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(primitive_stack) :: dist_fn&lt;/code> - Arbitrary momentum distribution function
+for particle loading.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(primitive_stack) :: dist_fn_range(3)&lt;/code> - Set upper and lower ranges to
+the momentum distribution functions.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: zero_current&lt;/code> - Whether or not this species is a tracer particle.
+If
+a species is a tracer species then it moves under the fields as normal for a
+particle with its mass and charge but contributes no current.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: atomic_no&lt;/code> - Set atomic number of species. Used for bremsstrahlung
+and ionisation.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: atomic_no_set&lt;/code> - Identifies is an atomic number has been set for
+the species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: background_species&lt;/code> - If true, the species is not to load any
+particles. Instead, this is represented with a density value in each cell,
+and it can only act as a target species for bremsstrahlung radiation.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), DIMENSION(:,:,:), POINTER :: background_density&lt;/code> - The number
+density of a background species (for bremsstrahlung radiation).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: make_secondary_list&lt;/code> - Checks if this species will ever need to
+create a secondary list (see &lt;code>secondary_list&lt;/code>).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: is_shuffled&lt;/code> - Checks if the order of particles in secondary lists
+has been randomised&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: coll_background&lt;/code>- Checks if this species forms the background
+species in a fast-background pair for background particle collisions.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: coll_fast&lt;/code> - Checks if this species describes the fast species in
+a fast-background pair for background particle collisions.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: coll_pairwise&lt;/code> - Checks if this species undergoes binary
+collisions with another species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: species_type&lt;/code> - Tag the species as a particular type of particle,
+using constants like &lt;code>c_species_id_electron&lt;/code>. This is required for the
+physics packages.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER(i8) :: global_count&lt;/code> - The number of particles from this species
+summed over all ranks.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: split&lt;/code> - EPOCH includes a very early version of a particle
+splitting operator. It works mechanically but has undesirable properties at
+present. If this flag is true then the code attempts to split the particles
+when the pseudoparticle number density drops too low.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER(KIND=8) :: npart_max&lt;/code> - Used with the particle splitting
+operator. When the total number of particles equals this number, further
+particle splitting is suppressed.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_list), DIMENSION(:,:,:), POINTER :: secondary_list&lt;/code> - This
+describes an array of particle lists. The subroutine
+&lt;code>reorder_particles_to_grid&lt;/code> allocates
+&lt;code>secondary_list(0:nx+1,0:ny+1,0:nz+1)&lt;/code> and then loops over all
+particles. It calculates the cell in which each particle is and moves the
+particle from &lt;code>attached_list&lt;/code> to the correct element of
+&lt;code>secondary_list&lt;/code> for that cell. This means the particles which
+are nearby in space are now linked together in an array of linked lists.
+This allows things such as collision operators which require direct
+interaction between nearby particles.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER(KIND=8) :: npart_per_cell&lt;/code> - The number of pseudoparticles per
+cell in the initial conditions. This is used with the moving window function
+to ensure that the same number of particles per cell are used for the new
+material introduced at the leading edge of the window.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), DIMENSION(:,:), POINTER :: density&lt;/code> - The density of the
+plasma at the leading edge of the window at the start of the simulation. This
+is used to structure the density of the new material introduced at the leading
+edge of the plasma.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), DIMENSION(:,:,:), POINTER :: temperature&lt;/code> - The temperature
+in of the plasma at the leading edge of a moving window at the start of the
+simulation. The final index of the array is the direction in which the
+temperature is set (1=x, 2=y, 3=z).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), DIMENSION(:,:,:), POINTER :: ext_temp_{x,y,z}_{min,max}&lt;/code> - Sets
+the temperature on the boundary for this particle species if &lt;code>thermal&lt;/code>
+boundaries have been used.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: electron&lt;/code> - Species is tagged as an electron for the ionisation
+routines.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LOGICAL :: ionise&lt;/code> - If the ionisation model is activated then this
+species should ionise.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: ionise_to_species&lt;/code> - The species number for the next ionised
+state of this species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: release_species&lt;/code> - Specifies what type of particle should be
+released when this species ionises (i.e. which species is the electron).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num) :: ionisation_energy&lt;/code> - The ionisation energy for the next
+ionisation of this species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER :: n, l&lt;/code> - The principle and angular quantum numbers of the
+outermost electron for this species, assuming a ground-state electron
+configuration. This is used for field ionisation.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), ALLOCATABLE :: coll_ion_incident_ke(:)&lt;/code> - A table of
+logarithmically spaced kinetic energy values for incident electrons in
+collisional ionisation.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), ALLOCATABLE :: coll_ion_cross_sec(:)&lt;/code> - The collisional
+ionisation cross sections corresponding to incident electrons with kinetic
+energies given by &lt;code>coll_ion_incident_ke(:)&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), ALLOCATABLE :: coll_ion_mean_bind(:,:)&lt;/code> - For each
+incident/ejected electron energy pair for collisional ionisation,
+this gives the mean bound electron energy, weighted by the ionisation cross
+section of each bound shell.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), ALLOCATABLE :: coll_ion_secondary_ke(:,:)&lt;/code> - An array of possible
+ejected electron energies for each incident electron kinetic energy in the
+&lt;code>coll_ion_incident_ke(:)&lt;/code> table.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>REAL(num), ALLOCATABLE :: coll_ion_secondary_cdf(:,:)&lt;/code> - The cumulative
+distribution function for the probability of emission of an ejected electron
+energy for a given incident energy during collisional ionisation,
+corresponding to the energies in &lt;code>coll_ion_secondary_ke&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_probe), POINTER :: attached_probes&lt;/code> - A pointer pointing to
+the head of an attached linked list of particle probe diagnostics.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(particle_species_migration) :: migrate&lt;/code> - Determines the criteria for
+particles being moved to other species, using the particle migration routines.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>TYPE(initial_condition_block) :: initial_conditions&lt;/code> - Stores parameters
+read from the species block, describing the initial conditions of the species.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>INTEGER, DIMENSION(2*c_ndims) :: bc_particle&lt;/code> - Boundary conditions for
+particles in this species, which override the global boundaries set in the
+input deck boundary block.&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>Partlist</title><link>/developer/core_structure/partlist.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/partlist.html</guid><description>&lt;p>Collections of particles in EPOCH are represented by the &lt;code>particle_list&lt;/code>
+object. These objects abstract much of the operation of the linked lists,
+including adding and removing particles and sending particles to other
+processors. This page details the functions present in
+&lt;code>src/housekeeping/partlist.F90&lt;/code>, which details how particle lists are formed.&lt;/p>
+&lt;h2 id="create_empty_partlist">create_empty_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_empty_partlist(partlist)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_empty_partlist&lt;/code> is a routine which takes a particle_list
+object and sets it up so that it points to no particles at all. It should be
+used on newly allocated particle_list objects and when a particle_list has
+served its purpose. It DOES NOT destroy the particles linked in the list at
+the point that it is called. If the user wishes to delete all the particles in a
+particle_list then the routine &lt;code>destroy_partlist&lt;/code> should be used
+instead.&lt;/p>
+&lt;h2 id="create_unsafe_partlist">create_unsafe_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_unsafe_partlist(partlist, a_particle, &amp;amp;
+n_elements)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: a_particle
+INTEGER(KIND=8), INTENT(IN) :: n_elements
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_unsafe_partlist&lt;/code> is a routine which allows the creation of
+a particle_list which represents a subset of another particle list. This subset
+is defined as starting at the particle pointed to by &lt;code>a_particle&lt;/code>
+and extending for &lt;code>n_elements&lt;/code> elements. The new particle_list is
+then flagged as &amp;ldquo;unsafe&amp;rdquo; because if it is destroyed for any reason then it
+will affect other particle lists. Many particle_list functions can only work
+on safe particle lists.&lt;/p>
+&lt;h2 id="create_unsafe_partlist_by_tail">create_unsafe_partlist_by_tail&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_unsafe_partlist_by_tail(partlist, head, &amp;amp;
+tail)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: head, tail
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_unsafe_partlist_by_tail&lt;/code> is almost identical to
+&lt;code>create_unsafe_partlist&lt;/code>, but instead of specifying the first
+particle and a number of elements, the user specifies the first and last
+elements in the subset of the particle list. If the particle objects specified
+for head and tail are not in the same partlist or tail actually comes before
+head then the routine will fail in an undefined manner.&lt;/p>
+&lt;h2 id="create_allocated_partlist">create_allocated_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_allocated_partlist(partlist, n_elements)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+INTEGER(KIND=8), INTENT(IN) :: n_elements
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_allocated_partlist&lt;/code> is a helper routine to setup a new
+particle_list and create &lt;code>n_elements&lt;/code> new particle objects already
+in place in the list.&lt;/p>
+&lt;p>You should always use this routine when creating large numbers of new particle
+objects since there is no guarantee that the internal structure of the
+particle_list objects will not change in the future. This routine will
+be modified to reflect any changes in the underlying code.&lt;/p>
+&lt;h2 id="create_filled_partlist">create_filled_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE create_filled_partlist(partlist, data_in, &amp;amp;
+n_elements)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+REAL(num), DIMENSION(:), INTENT(IN) :: data_in
+INTEGER(KIND=8), INTENT(IN) :: n_elements
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>create_filled_partlist&lt;/code> is a helper routine to setup a new
+particle_list and create &lt;code>n_elements&lt;/code> new particle objects already
+in place in the list. These new particle objects are then assigned properties
+from the array &lt;code>data_in&lt;/code> where the particle properties are contained
+in packed form. The particle data is unpacked from the array using the
+&lt;code>unpack_particle&lt;/code> routine.&lt;/p>
+&lt;p>You should always use this routine, if possible, when copying particles out of
+packed format since there is no guarantee that the internal structure of the
+particle_list objects will not change in the future. This routine will
+be modified to reflect any changes in the underlying code.&lt;/p>
+&lt;h2 id="test_partlist">test_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">FUNCTION test_partlist(partlist)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>test_partlist&lt;/code> is a routine which tests for various possible types
+of error within a particle_list object. It has a number of possible return
+codes for different errors, using negative values for errors so severe that
+the main tests cannot be run, or with a bitmask for errors in the main tests.
+The return codes are:&lt;/p>
+&lt;ul>
+&lt;li>0 - No error, particle_list has passed all tests.&lt;/li>
+&lt;li>-1 - Either the head or tail of the particle_list object is NULL. This is
+a serious error and usually means that there is a serious error inside the
+particle_list routines.&lt;/li>
+&lt;/ul>
+&lt;p>The other error codes are returned as a bitmask and mean the following&lt;/p>
+&lt;ul>
+&lt;li>1 - A particle_list marked as safe has a head element which is linked to
+a preceding particle object.&lt;/li>
+&lt;li>2 - A particle_list marked as safe has a tail element which is linked to
+a proceding particle object.&lt;/li>
+&lt;li>4 - The count property of a particle_list does not correspond to the
+actual number of objects linked between the head and tail objects. This error
+code on its own usually means that the count property has been modified
+improperly.&lt;/li>
+&lt;/ul>
+&lt;p>Note that this routine is only intended for debugging and is very slow. It
+should never be used by the code in normal operation and all routines should be
+written in such a way that it is impossible for a particle_list object to
+become corrupted.&lt;/p>
+&lt;h2 id="destroy_partlist">destroy_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE destroy_partlist(partlist)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>destroy_partlist&lt;/code> is a helper routine to delete all the particles
+attached to a particle_list and free up the memory that they use. It also
+guarantees to leave the particle_list object itself in a blank state where new
+particles can be added to it. It DOES NOT delete the particle_list object
+itself, since it does not know whether or not the particle_list is dynamically
+allocated. If using dynamically allocated particle_list objects then it is up
+to the user to deallocate them AFTER the attached particles are destroyed using
+&lt;code>destroy_partlist&lt;/code>.&lt;/p>
+&lt;p>If a particle_list is deleted without deleting the attached particle objects,
+either using this routine or explicitly by the user, then the particles will
+become orphaned and sit around using memory until the code ends. If this
+happens regularly then the code will quickly crash, usually with a SIG_SEGV
+error.&lt;/p>
+&lt;h2 id="copt_partlist">copt_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE copy_partlist(partlist1, partlist2)
+TYPE(particle_list), INTENT(INOUT) :: partlist1, partlist2
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>copy_partlist&lt;/code> is a routine which sets &lt;code>partlist2&lt;/code> to
+point to the same linked list of particles as &lt;code>partlist1&lt;/code>. It does
+not copy the particles, just sets the head and tail pointers of
+&lt;code>partlist1&lt;/code> to point to the same particle objects as
+&lt;code>partlist1&lt;/code>.&lt;/p>
+&lt;h2 id="append_partlist">append_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE append_partlist(head, tail)
+TYPE(particle_list), INTENT(INOUT) :: head, tail
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>append_partlist&lt;/code> is a routine which takes the particles
+attached to the particle_list object &lt;code>tail&lt;/code> and adds them to the
+end of the linked list for particle_list &lt;code>head&lt;/code>. The particle_list
+&lt;code>tail&lt;/code> is then set to be an empty particle_list.&lt;/p>
+&lt;p>This routine can only append one safe particle_list to another safe
+particle_list.&lt;/p>
+&lt;h2 id="add_particle_to_partlist">add_particle_to_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE add_particle_to_partlist(partlist, new_particle)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: new_particle
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>add_particle_to_partlist&lt;/code> adds a new
+particle (&lt;code>new_particle&lt;/code>) to the end of the linked list of
+particles in the particle_list object &lt;code>partlist&lt;/code>. It deals with
+cases of empty particle_list objects automatically.&lt;/p>
+&lt;p>If you want to add a new particle to the end of a particle list you should
+always use this routine.&lt;/p>
+&lt;h2 id="remove_particle_from_partlist">remove_particle_from_partlist&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE remove_particle_from_partlist(partlist, &amp;amp;
+a_particle)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: a_particle
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>remove_particle_from_partlist&lt;/code> removes the particle object
+specified by &lt;code>a_particle&lt;/code> from the particle_list object given by
+&lt;code>partlist&lt;/code>. Be very careful that &lt;code>a_particle&lt;/code> is indeed
+in the linked list pointed to by &lt;code>partlist&lt;/code>, otherwise it is possible
+for the particle_list object which really does contain &lt;code>a_particle&lt;/code>
+to be left with an invalid pointer as its head or tail element if
+&lt;code>a_particle&lt;/code> is either the head or tail element.&lt;/p>
+&lt;p>Although this routine does work with unsafe particle_list objects, you should
+be very careful using it in this case as it can break the head or tail element
+of the primary particle_list which the unsafe particle_list is a subset of.
+As a general rule, you should only use this routine to remove particles from a
+simple particle_list which is a singly referenced primary, safe particle_list.&lt;/p>
+&lt;h2 id="setup_partlists">setup_partlists&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE setup_partlists()
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>setup_partlists&lt;/code> is a routine which is called once when EPOCH
+first starts. It sets the variable &lt;code>nvars&lt;/code> which is the number of
+REAL(num) values required to contain all the information about a
+single particle object needed when a particle is transferred to another
+processor. How the information is packed and unpacked from the particle object
+into an array of REAL(num) values is controlled in the functions
+&lt;code>pack_particle&lt;/code> and &lt;code>unpack_particle&lt;/code>.&lt;/p>
+&lt;p>If the particle type gains additional properties as the result of preprocessor
+directives then there should be a line which increments &lt;code>nvars&lt;/code> by
+the correct number when that preprocessor directive is active. For example:&lt;/p>
+&lt;pre>&lt;code class="language-perl">#ifdef PER_PARTICLE_CHARGE_MASS
+nvar = nvar+2
+#endif
+&lt;/code>&lt;/pre>
+&lt;h2 id="pack_particle-and-unpack_particle">pack_particle and unpack_particle&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE pack_particle(array, a_particle)
+SUBROUTINE unpack_particle(array, a_particle)
+REAL(num), DIMENSION(:), INTENT(INOUT) :: array
+TYPE(particle), POINTER :: a_particle
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>pack_particle&lt;/code> and &lt;code>unpack_particle&lt;/code> are subroutines
+which are used to copy all the information about a particle
+necessary for the particle to be transferred to another processor into a
+temporary array before sending to another processor. If a new particle property
+has been added to the particle then these routines must be modified to allow
+the copying of the new data into the array. The parameter &lt;code>array&lt;/code> is
+a REAL(num) array of length &lt;code>nvars&lt;/code> and is the array into which the
+data either must be packed or from which it must be
+unpacked. &lt;code>a_particle&lt;/code> is the particle object which must either have
+its data copied into the array or be
+populated with data from the array. No restriction is placed on how the
+data should be packed into the data array, but obviously
+&lt;code>pack_particle&lt;/code> and &lt;code>unpack_particle&lt;/code> must be inverse
+operations so that particles packed by one processor can be unpacked correctly
+by another processor.&lt;/p>
+&lt;p>Since it is very unlikely that EPOCH will be run on anything other than a
+homogeneous cluster, it is acceptable to use the Fortran &lt;code>TRANSFER&lt;/code>
+function to pack incompatible data types into the &lt;code>array&lt;/code> array. Just
+make sure that &lt;code>nvars&lt;/code> is defined in &lt;code>setup_partlists&lt;/code>
+to be long enough to contain all the information. More documentation on the
+&lt;code>TRANSFER&lt;/code> function (which is rarely used and dangerous!) can be
+found
+&lt;a href="http://www.macresearch.org/%advanced_fortran_90_callbacks_with_the_transfer_function" target="_blank" rel="noopener">here&lt;/a>.&lt;/p>
+&lt;h2 id="display_particle">display_particle&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE display_particle(a_particle)
+TYPE(particle), POINTER :: a_particle
+&lt;/code>&lt;/pre>
+&lt;p>Displays the key information about a particle given by the parameter
+&lt;code>a_particle&lt;/code>. Used by &lt;code>compare_particles&lt;/code>.&lt;/p>
+&lt;h2 id="compare_particles">compare_particles&lt;/h2>
+&lt;pre>&lt;code class="language-perl">FUNCTION compare_particles(particle1, particle2)
+TYPE(particle), POINTER :: particle1, particle2
+LOGICAL :: compare_particles
+&lt;/code>&lt;/pre>
+&lt;p>Compares all the properties of two particle objects and displays the
+information if they don&amp;rsquo;t match. Used internally by
+&lt;code>test_packed_particles&lt;/code>. If the particle object is extended then
+this routine should also be modified to test for equivalence of the new
+properties.&lt;/p>
+&lt;h2 id="test_packed_particles">test_packed_particles&lt;/h2>
+&lt;pre>&lt;code class="language-perl">FUNCTION test_packed_particles(partlist, array, &amp;amp;
+npart_in_data)
+TYPE(particle_list), INTENT(IN) :: partlist
+REAL(num), DIMENSION(:), INTENT(IN) :: array
+INTEGER(KIND=8), INTENT(IN) :: npart_in_data
+LOGICAL :: test_packed_particles
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>test_packed_particles&lt;/code> is a routine which checks that a packed
+array of particles can be successfully unpacked back into particle objects. The
+parameters are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>partlist&lt;/code> - The particle_list corresponding to the original
+unpacked particles.&lt;/li>
+&lt;li>&lt;code>array&lt;/code> - The REAL(num) array containing the packed data.&lt;/li>
+&lt;li>&lt;code>npart_in_data&lt;/code> - The number of particles which were packed
+into &lt;code>array&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;p>The routine tests that the number of particles in the particle_list match the
+number believed to be in the data array, that the length of the data array is
+correct and then unpacks each particle in turn from the data array and uses the
+&lt;code>compare_particles&lt;/code> function to compare the particles with the
+original versions in the particle_list. If any particles fail the comparison
+then an error is output to stdout and the function returns a value of
+&lt;code>.FALSE.&lt;/code>. The error message includes the processor
+rank on which the problem occurs but the routine does not specifically include
+any MPI commands, so it is possible to call the routine on a subset of
+processors.&lt;/p>
+&lt;h2 id="partlist_send">partlist_send&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE partlist_send(partlist, dest)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+INTEGER, INTENT(IN) :: dest
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>partlist_send&lt;/code> is a routine for sending all the particles in the
+particle_list object &lt;code>partlist&lt;/code> to another processor. The
+destination processor is identified by its rank which is given by the
+&lt;code>dest&lt;/code> parameter. The routine does not destroy the particle_list
+object which is given to it.&lt;/p>
+&lt;p>&lt;code>partlist_send&lt;/code> uses MPI blocking sends, so unless a matching
+&lt;code>partlist_recv&lt;/code> has been posted on &lt;code>dest&lt;/code> then the
+routine will deadlock. It would be fairly simple to write a non-blocking
+version of &lt;code>partlist_send&lt;/code>, but at present no need for such a
+routine has been found.&lt;/p>
+&lt;h2 id="partlist_recv">partlist_recv&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE partlist_recv(partlist, src)
+TYPE(particle_list), INTENT(INOUT) :: partlist
+INTEGER, INTENT(IN) :: src
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>partlist_recv&lt;/code> is a routine for receiving particles sent by a call
+to &lt;code>partlist_send&lt;/code> and loading them into the particle_list object
+&lt;code>partlist&lt;/code>. The source processor is identified by its rank which is
+given by the &lt;code>src&lt;/code> parameter. The routine destroys the particle_list
+which it is given and indeed will leave orphaned particles if it is not given
+an empty particle_list to receive the data.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>partlist_recv&lt;/code> uses MPI blocking receives, so unless a
+matching &lt;code>partlist_send&lt;/code> has been posted on &lt;code>src&lt;/code> then
+the routine will deadlock. It would be fairly simple to write a non-blocking
+version of &lt;code>partlist_recv&lt;/code>, but at present no need for such a
+routine has been found.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Although it is not possible to directly use &lt;code>partlist_recv&lt;/code>
+to add new particles onto an existing particle_list, it is only two lines to
+do this. First call &lt;code>partlist_recv&lt;/code> with a temporary
+particle_list to receive the data and then use &lt;code>append_partlist&lt;/code>
+to attach the particles to the end of the already populated list.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="partlist_send_recv">partlist_send_recv&lt;/h2>
+&lt;pre>&lt;code class="language-perl">SUBROUTINE partlist_send_recv(partlist_send, &amp;amp;
+partlist_recv, dest, src)
+TYPE(particle_list), INTENT(INOUT) :: partlist_send
+TYPE(particle_list), INTENT(INOUT) :: partlist_recv
+INTEGER, INTENT(IN) :: dest, src
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>partlist_sendrecv&lt;/code> is a routine equivalent to
+&lt;code>MPI_SENDRECV&lt;/code> in that it allows overlapping sends and receives to
+be written in a single line rather than the end user having to split processors
+into red/black ordered pairs for communication. It sends the particle data in
+&lt;code>partlist_send&lt;/code> to the processor with rank &lt;code>dest&lt;/code> and
+receives particle data sent by processor &lt;code>src&lt;/code> and stores it in the
+particle_list &lt;code>partlist_recv&lt;/code>. The routine is destructive to both
+sending and receiving particle_lists, and can lead to orphaned particles if a
+filled particle_list is passed as &lt;code>partlist_recv&lt;/code>. this is the
+routine which is used in the particle boundary conditions.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>partlist_sendrecv&lt;/code> uses MPI blocking sendrecv commands, so
+should be used in matching pairs or the routine will deadlock.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Although it is not possible to directly use
+&lt;code>partlist_sendrecv&lt;/code> to add new particles onto an existing
+particle_list, it is only two lines to do this. First call
+&lt;code>partlist_sendrecv&lt;/code> with a temporary particle_list to receive the
+data and then use &lt;code>append_partlist&lt;/code> to attach the particles to
+the end of the already populated list.&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>Pre-compilation Flags</title><link>/developer/core_structure/precompiler_flags.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/precompiler_flags.html</guid><description>&lt;p>EPOCH uses precompiler directives to switch certain features of the code on
+or off. The precompiler directives all begin with a &amp;ldquo;#&amp;rdquo; character and look
+like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">#ifdef MY_PRECOMPILER_DIRECTIVE
+some_fortran_of_some_kind
+#else
+some_other_fortran
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>They behave in a very simple manner. The precompiler runs BEFORE the
+Fortran compiler and, until it reaches a precompiler directive, it just creates
+a temporary file which is an exact copy of the source file. When it reaches a
+precompiler directive of this kind it treats the #ifdef commands as
+if/then/else statements. If
+&lt;code>MY_PRECOMPILER_DIRECTIVE&lt;/code> was defined in the makefile then
+&lt;code>some_fortran_of_some_kind&lt;/code> is pushed out to the temporary
+file. Otherwise &lt;code>some_other_fortran&lt;/code> is written instead.
+The precompiler directives themselves are never output to the temporary
+file. Once then preprocessor has finished, it passes this temporary file
+to the Fortran compiler which can then compile it just like any other
+standard Fortran file.&lt;/p>
+&lt;h2 id="when-to-use-precompiler-directives">When to use precompiler directives&lt;/h2>
+&lt;ul>
+&lt;li>When adding properties to the &lt;code>particle&lt;/code> structure.&lt;/li>
+&lt;li>When adding time consuming calculations to the particle pusher.&lt;/li>
+&lt;/ul>
+&lt;p>Precompiler directives should be avoided when there is no significant
+performance gain or memory reduction to be made. Wherever possible, optional
+features should be controlled by parameters in the input deck.&lt;/p>
+&lt;h2 id="the-directive-printing-routine-on-code-startup">The directive printing routine on code startup&lt;/h2>
+&lt;p>When EPOCH starts it prints the precompiler directives that it was built with
+and what they mean. This isn&amp;rsquo;t required, but has proved very useful and is
+implemented in a very simple way. Just open the file
+&lt;code>src/housekeeping/welcome.F90&lt;/code> and find the subroutine
+&lt;code>compiler_directives&lt;/code>. There are a large block of precompiler
+directives which read:&lt;/p>
+&lt;pre>&lt;code class="language-perl">#ifdef TRACER_PARTICLES
+defines = IOR(defines, c_def_tracer_particles)
+WRITE(*, *) &amp;quot;Tracer particle support -DTRACER_PARTICLES&amp;quot;
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>Simply add a new element to the end of the list.&lt;/p>
+&lt;pre>&lt;code class="language-perl">#ifdef MY_PRECOMPILER_DIRECTIVE
+defines = IOR(defines, c_def_my_precompiler_directive)
+WRITE(*,*) &amp;quot;My new physics -DMY_PRECOMPILER_DIRECTIVE&amp;quot;
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>You will also need to add &lt;code>c_def_my_precompiler_directive&lt;/code> to the list of
+constants in &lt;code>src/shared_data.F90&lt;/code>.&lt;/p></description></item><item><title>Weighting Functions</title><link>/developer/core_structure/shape_functions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/shape_functions.html</guid><description>&lt;p>The key feature of a PIC code controlling the smoothness of the solution is the
+particle shape function. That is the function that describes the assumed
+distribution of the real particles making up a macro-particle. The simplest
+solution is to assume that the macro-particles uniformly fill the cell in which
+the macro-particle is located. This has the advantages of speed and simplicity
+but produces very noisy solutions. The next simplest approach is to assume a
+triangular shape function with the peak of the triangle located at the position
+of the macro-particle and a width of $ 2 \Delta x$, as illustrated below.&lt;/p>
+&lt;p>&lt;img src="/developer/shape.png" alt="Second order particle shape function">&lt;/p>
+&lt;p>&lt;img src="/developer/tri_eq.png" alt="Triangular shape function">&lt;/p>
+&lt;p>This is the approach used
+in EPOCH and is a good trade-off between cleanness of solution and
+speed. Higher order methods based on spline interpolation can be used and do
+produce smoother solutions, but they are significantly slower and the benefits
+of the schemes can easily be overstated. EPOCH does now include an option to
+use 3rd order b-spline interpolation in all parts of the code. This option is
+enabled with the &lt;code>-DPARTICLE_SHAPE_BSPLINE3&lt;/code> compile time option
+in the makefile.&lt;/p>
+&lt;p>Functions derived from the particle shape function appear in two places in the
+core solver: when the EM fields are interpolated to the position of the
+macro-particle and when the current is updated and properties of the
+macro-particle are copied onto the grid. These two uses of the shape function
+are conceptually similar, but have different forms.&lt;/p>
+&lt;h2 id="interpolating-grid-variables-to-macro-particles">Interpolating grid variables to macro-particles&lt;/h2>
+&lt;p>To derive the equations for calculating the field acting on a particle,
+you calculate the overlap of the particle shape function with the function
+representing the fields on the grid. In EPOCH, the fields are approximated at
+first order so that the field is constant over each cell. Consider a particle
+with position $X$, where $X$ lies in the cell centred at $x_i$ and grid
+spacing $\Delta x$. The integral is split into four parts; that part of the
+shape function which overlaps with the cell $x_{i-1}$, the part of the shape
+function from the left boundary of $x_i$ to the point of the triangle, the part
+of the shape function from the point of the triangle to the right hand edge of
+$x_i$ and finally that part of the shape function which overlaps cell
+$x_{i+1}$. Assuming that fields are constant inside each cell ($F_i$), this
+takes the form&lt;/p>
+&lt;p>&lt;img src="/developer/shape_weight.png" alt="Fields interpolated to particle position">&lt;/p>
+&lt;p>Performing these integrals and remembering that $x_{i-1}+\frac{\Delta x}{2}$ is
+equal to $x_i-\frac{\Delta x}{2}$ since the grid is uniformly spaced with
+spacing $\Delta x$, this gives a final formula for the field at a particle of&lt;/p>
+&lt;p>&lt;img src="/developer/shape_weight_final.png" alt="Simplified fields interpolated to particle position">&lt;/p>
+&lt;p>In the code calculating the strength of a cell centred field on the particle
+is done as follows.&lt;/p>
+&lt;pre>&lt;code class="language-perl"> REAL(num) :: cell_x_r, cell_frac_x
+INTEGER :: cell_x1
+REAL(num) :: gx(-2:2)
+TYPE(particle), POINTER :: current
+part_x = current%part_pos(1) - x_min_local
+! Work out the grid cell number for the particle.
+! Not an integer in general.
+cell_x_r = part_x / dx
+! Round cell position to nearest cell
+cell_x1 = FLOOR(cell_x_r + 0.5_num)
+! Calculate fraction of cell between nearest cell boundary and particle
+cell_frac_x = REAL(cell_x1, num) - cell_x_r
+cell_x1 = cell_x1 + 1
+cf2 = cell_frac_x**2
+gx(-1) = 0.25_num + cf2 + cell_frac_x
+gx( 0) = 1.5_num - 2.0_num * cf2
+gx( 1) = 0.25_num + cf2 - cell_frac_x
+f_part = &amp;amp;
+gx(-1) * F(cell_x1-1) &amp;amp;
++ gx( 0) * F(cell_x1 ) &amp;amp;
++ gx( 1) * F(cell_x1+1)
+&lt;/code>&lt;/pre>
+&lt;p>where &lt;code>f_part&lt;/code> is the field at the particle location. Note that
+this has been simplified a little for brevity. Just the triangle shape
+function is given.
+In 2D or 3D, you just calculate gy
+in the same manner as gx and calculate the weight over all the cells affected
+by the individual 1D shape functions. In 2D this looks like:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> f_part = 0.0_num
+DO iy = sf_min, sf_max
+DO ix = sf_min, sf_max
+f_part = f_part + f(cell_x+ix, cell_y+iy) * gx(ix) * gy(iy)
+ENDDO
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>The variables &lt;code>sf_min&lt;/code> and &lt;code>sf_max&lt;/code> contain the shape
+function order parameters which indicate the cells each side of the cell
+containing the particle which are overlapped by the particle shape function.
+They are defined in &lt;code>shared_data.F90&lt;/code> and should only be changed
+by the developer if a new particle shape function is being added.
+Although provided here as pseudo-code for the particle push, it should be
+noted that the actual particle push unrolls these loops for the sake of speed.&lt;/p>
+&lt;p>Inside the particle pusher the $E$ and $B$ fields are not cell centred fields,
+but Yee staggered. This means that there is a small change to the above
+mentioned example. In 1D this change looks like&lt;/p>
+&lt;pre>&lt;code class="language-perl"> REAL(num) :: cell_x_r, cell_frac_x
+INTEGER :: cell_x1, cell_x2
+REAL(num) :: gx(-2:2), hx(-2:2)
+TYPE(particle), POINTER :: current
+part_x = current%part_pos(1) - x_min_local
+! Work out the grid cell number for the particle.
+! Not an integer in general.
+cell_x_r = part_x / dx
+! Round cell position to nearest cell
+cell_x1 = FLOOR(cell_x_r + 0.5_num)
+! Calculate fraction of cell between nearest cell boundary and particle
+cell_frac_x = REAL(cell_x1, num) - cell_x_r
+cell_x1 = cell_x1 + 1
+! Calculate weights
+INCLUDE 'include/triangle/gx.inc'
+! Now redo shifted by half a cell due to grid stagger.
+! Use shifted version for ex in X, ey in Y, ez in Z
+! And in Y&amp;amp;Z for bx, X&amp;amp;Z for by, X&amp;amp;Y for bz
+cell_x2 = FLOOR(cell_x_r)
+cell_frac_x = REAL(cell_x2, num) - cell_x_r + 0.5_num
+cell_x2 = cell_x2 + 1
+! Calculate weights
+INCLUDE 'include/triangle/hx_dcell.inc'
+! bx is cell centred
+bx_part = 0.0_num
+DO ix = sf_min, sf_max
+bx_part = bx_part + bx(cell_x1+ix) * gx(ix)
+ENDDO
+! ex is staggered 1/2 a cell to the right
+ex_part = 0.0_num
+DO ix = sf_min, sf_max
+ex_part = ex_part + ex(cell_x2+ix) * hx(ix)
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>In 2D and 3D, you just combine the shifted and unshifted shape functions and
+associated cell positions depending on the position of the variable in the
+cell. Therefore, in 3D and using the loop notation for clarity you would get:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> DO iz = sf_min, sf_max
+DO iy = sf_min, sf_max
+DO ix = sf_min, sf_max
+ex_part = ex_part + hx(ix) * gy(iy) * gz(iz) * &amp;amp;
+ex(cell_x2+ix, cell_y1+iy, cell_z1+iz)
+ENDDO
+ENDDO
+ENDDO
+DO iz = sf_min, sf_max
+DO iy = sf_min, sf_max
+DO ix = sf_min, sf_max
+bx_part = bx_part + gx(ix) * hy(iy) * hz(iz) * &amp;amp;
+bx(cell_x2+ix, cell_y1+iy, cell_z1+iz)
+ENDDO
+ENDDO
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>Since $E_x$ is staggered half a grid cell in the x direction, whereas $B_x$ is
+staggered by half a grid cell in the y and z directions.&lt;/p>
+&lt;h2 id="writing-macro-particle-properties-on-the-grid">Writing macro-particle properties on the grid&lt;/h2>
+&lt;p>The next stage is to consider how to copy macro-particle
+properties on the grid. This is very similar to the function for calculating
+grid variables at the particle location and, for each grid point $x_i$,
+consists of integrating the part of the particle shape function which overlaps
+the $i^{th}$ cell. That is&lt;/p>
+&lt;p>$$
+F(i) = Data \int^{x_i+\frac{\Delta x}{2}}_{x_i-\frac{\Delta x}{2}} S(X-x) dx
+$$&lt;/p>
+&lt;p>Where $Data$ is the particle property to be copied onto the grid. In EPOCH,
+since the particle shape function is known to go to zero outside a distance of
+$2 \Delta x$ from the maximum, the maximum number of cells that can possibly be
+overlapped by a given particle shape function is 3; the cell containing the
+particle maximum and the two cells to either side. Performing the integration
+using the triangular shape function given above gives the result&lt;/p>
+&lt;p>&lt;img src="/developer/part_to_grid.png" alt="Particle weight to grid">&lt;/p>
+&lt;p>When this is translated into the code, it looks very similar to that presented
+for the case where grid properties are interpolated to the particle
+position. This form is used in the particle pusher to perform the current
+update and in the routines in &lt;code>src/io/calc_df.F90&lt;/code> to copy particle
+properties onto the grid for output. The form from calc_df is rather clearer
+and easier to see in operation. In 1D it looks like:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> cell_x_r = (current%part_pos - x_min_local) / dx + 1.5_num
+cell_x = FLOOR(cell_x_r)
+cell_frac_x = REAL(cell_x, num) - cell_x_r + 0.5_num
+CALL particle_to_grid(cell_frac_x, gx)
+wdata = part_m * fac
+DO ix = sf_min, sf_max
+data_array(cell_x+ix) = data_array(cell_x+ix) + gx(ix) * wdata
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;p>Once again multi-dimensional codes just have the weighting functions multiplied
+together.&lt;/p>
+&lt;pre>&lt;code class="language-perl"> DO iy = sf_min, sf_max
+DO ix = sf_min, sf_max
+data_array(cell_x+ix, cell_y+iy) = &amp;amp;
+data_array(cell_x+ix, cell_y+iy) + gx(ix) * gy(iy) * wdata
+ENDDO
+ENDDO
+&lt;/code>&lt;/pre>
+&lt;h2 id="other-particle-shapes">Other particle shapes&lt;/h2>
+&lt;p>The previous sections dealt with the default macro-particle shape (triangular).
+EPOCH also supports TOPHAT and BSPLINE particle shapes, although the
+implementation of these can be different. Interpolating fields to particles and
+writing particle properties to the grid is performed using the same method as
+before, but for an altered shape function for TOPHAT:&lt;/p>
+&lt;p>&lt;img src="/developer/tophat.png" alt="TOPHAT shape">&lt;/p>
+&lt;p>and for BSPLINE:&lt;/p>
+&lt;p>&lt;img src="/developer/bspline.png" alt="BSPLINE shape">&lt;/p>
+&lt;p>In the TRIANGLE and BSPLINE set-ups, the particle shape extends over a size of
+$2\Delta x$ and $4\Delta x$. Unless the paricle centre is on a cell boundary,
+the shape will always extend over 3 or 5 cells respectively. However, the TOPHAT
+shape has a size of $1 \Delta x$, which is an odd number of cell-sizes. If we
+evaluate this shape at the particle centre, the shape may extend over the
+cell on the low-$x$ side, or the high-$x$ side. To simplify the code, we
+evaluate the TOPHAT shape position from the low-$x$, low-$y$, low-$z$ corner of
+the shape, such that the shape always extends over the current cell and the
+higher cell only. This is why the cell-calculation for TOPHAT differs from the
+other shapes, in lines like:&lt;/p>
+&lt;pre>&lt;code>#ifdef PARTICLE_SHAPE_TOPHAT
+cell_x_r = part_x * idx - 0.5_num
+cell_y_r = part_y * idy - 0.5_num
+#else
+cell_x_r = part_x * idx
+cell_y_r = part_y * idy
+#endif
+&lt;/code>&lt;/pre></description></item></channel></rss>

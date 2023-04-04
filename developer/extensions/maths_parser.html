@@ -1,0 +1,106 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="When an extension is intended for a new release, the temporary custom extensions are not appropriate. In these cases, it is possible to permanently add functions and constants to EPOCH&rsquo;s maths parser."><link rel=alternate hreflang=en-us href=/developer/extensions/maths_parser.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/developer/extensions/maths_parser.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/developer/extensions/maths_parser.html"><meta property="og:title" content="Maths Parser | EPOCH"><meta property="og:description" content="When an extension is intended for a new release, the temporary custom extensions are not appropriate. In these cases, it is possible to permanently add functions and constants to EPOCH&rsquo;s maths parser."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2023-04-04T13:41:14+01:00"><title>Maths Parser | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/developer.html>Overview</a><ul class="nav docs-sidenav"><li><a href=/developer/source_code_files.html>Source code files</a></li><li><a href=/developer/makefile.html>Makefile</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/core_structure.html>Core Structure</a><ul class="nav docs-sidenav"><li><a href=/developer/core_structure/basic_structures.html>Basic Structures</a></li><li><a href=/developer/core_structure/macro_particles.html>Particles</a></li><li><a href=/developer/core_structure/linked_lists.html>Linked Lists</a></li><li><a href=/developer/core_structure/partlist.html>Partlist</a></li><li><a href=/developer/core_structure/field_solver.html>Field Solver</a></li><li><a href=/developer/core_structure/particle_pusher.html>Particle Pusher</a></li><li><a href=/developer/core_structure/shape_functions.html>Weighting Functions</a></li><li><a href=/developer/core_structure/current_solver.html>Current solver</a></li><li><a href=/developer/core_structure/boundary_conditions.html>Boundary Conditions</a></li><li><a href=/developer/core_structure/parallelism.html>Parallelism</a></li><li><a href=/developer/core_structure/precompiler_flags.html>Pre-compilation Flags</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/input_output.html>Input Output</a><ul class="nav docs-sidenav"><li><a href=/developer/input_output/basic_output.html>Basic Output</a></li><li><a href=/developer/input_output/string_handling.html>String Handling</a></li><li><a href=/developer/input_output/error_codes.html>Error Codes</a></li><li><a href=/developer/input_output/adding_outputs.html>Adding Outputs</a></li><li><a href=/developer/input_output/custom_maths_parser.html>Custom Maths Parser</a></li><li><a href=/developer/input_output/custom_deck.html>Custom Deck</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/extensions.html>Extending EPOCH</a><ul class="nav docs-sidenav"><li><a href=/developer/extensions/input_deck.html>Input Deck</a></li><li class=active><a href=/developer/extensions/maths_parser.html>Maths Parser</a></li><li><a href=/developer/extensions/new_modules.html>New Module</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#adding-the-new-tokenizer-handle>Adding the new tokenizer handle</a></li><li><a href=#adding-the-new-function-or-constant-to-the-tokenizer>Adding the new function or constant to the tokenizer</a></li><li><a href=#implementing-the-function-or-constant-in-the-evaluator>Implementing the function or constant in the evaluator</a></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Maths Parser</h1><div class=article-style><p>When an extension is intended for a new release, the temporary custom extensions
+are not appropriate. In these cases, it is possible to permanently add functions
+and constants to
+EPOCH&rsquo;s maths parser. Although adding new operators is possible, it is
+sufficiently likely to cause problems with the operation of the maths parser
+that it is formally not recommended by the author of the program, and hence is
+not documented here.</p><h2 id=adding-the-new-tokenizer-handle>Adding the new tokenizer handle</h2><p>When adding a new function or constant to the maths parser using the temporary
+routines, there are two calls (<code>register_function</code> and
+<code>register_constant</code>) which give a numerical handle. This is the
+token used to represent that function or constant after the text has been parsed
+(remember that EPOCH&rsquo;s maths parser tokenizes before evaluation!). When
+permanently adding objects to the maths parser, the tokenizer handles have to
+be set up manually. This takes place in <code>src/shared_data.F90</code> in
+the module <code>shared_parser_data</code>. There are several lines which
+look like:</p><pre><code class=language-perl> INTEGER, PARAMETER :: c_const_ix = 40
+ INTEGER, PARAMETER :: c_const_iy = 41
+ .
+ .
+ .
+ INTEGER, PARAMETER :: c_func_interpolate = 22
+ INTEGER, PARAMETER :: c_func_tanh = 23
+</code></pre><p>Constants beginning with <code>c_const_</code> are tokenizer handles for
+constants, and those beginning with <code>c_func_</code> are tokenizer handles
+for functions. Each number must be unique and has to be less than
+the lower bound of values reserved for temporary or deck
+specified values. This means that any tokenizer handle for a function has to be
+less than the value of the variable <code>c_func_custom_lowbound</code> and
+any handle for a constant must be less than
+<code>c_const_deck_lowbound</code>. It is acceptable to simply increase the
+value of <code>c_func_custom_lowbound</code> and
+<code>c_const_deck_lowbound</code> to
+allow the use of more values for internal constants and functions, although
+care should be taken since this could lead to performance issues.
+If <code>c_const_deck_lowbound</code> is increased then the constant
+<code>c_constant_custom_lowbound</code> should be increased by the same
+amount (the values between <code>c_const_deck_lowbound</code> and
+<code>c_constant_custom_lowbound-1</code> are used for constants specified
+inside the input deck while values greater than or equal to
+<code>c_constant_custom_lowbound</code> are used for constants specified
+by <code>register_constant</code>.</p><p>Once the tokenizer handle is specified in <code>shared_parser_data</code>, it
+is now possible to extend the main areas of the maths parser. Note that from
+here on, you MUST always use the constant named handle, NEVER the numerical
+value that you specified for the value of the handle. If this is not done
+then combining functions and constants from several sources becomes much harder.</p><h2 id=adding-the-new-function-or-constant-to-the-tokenizer>Adding the new function or constant to the tokenizer</h2><p>The next stage is to add the string representation of your constant or function
+to the tokenizer routines in
+<code>src/parser/tokenizer_blocks.f90</code>. This is very simple to do, just
+find either the function <code>as_constant</code> or <code>as_function</code>
+and look at the existing code. These functions are just long lists of
+<code>str_cmp</code> commands followed by code to deal with custom
+functions/constants. To add the new code, create an additional line such as:</p><pre><code class=language-perl> IF (str_cmp(name, &quot;my_const&quot;)) as_constant = c_const_my_const
+ .
+ .
+ .
+ IF (str_cmp(name, &quot;my_func&quot;))  as_function = c_func_my_func
+</code></pre><p>Note that neither routine returns immediately after recognising the name of the
+function/constant. This allows users to override built in constants or
+functions with custom versions using <code>register_constant}</code>
+and <code>register_function</code>. This is not significant, since tokenizing
+should never be used in a speed critical part of the code.</p><h2 id=implementing-the-function-or-constant-in-the-evaluator>Implementing the function or constant in the evaluator</h2><p>The evaluator is the part of the code that actually takes the streams of tokens
+produced by the tokenizer and evaluates them into a number. The relevant parts
+of the evaluator for adding new constants or functions are in
+<code>src/parser/evaluator_blocks.f90</code> and the functions which may need
+changing are <code>do_constant</code> and <code>do_functions</code>. These are
+both passed up to five parameters:</p><ul><li><code>INTEGER :: opcode</code> - The operation code, this is the tokenizer handle
+which was defined in <code>shared_parser_data</code>.</li><li><code>INTEGER :: ix, iy, iz</code> - The position of the current evaluation in the
+domain. If your function or constant behaves differently at different points
+in space then you should use these parameters to reference the correct point
+of an array.</li><li><code>INTEGER :: errcode</code> - This should be set to an error code, usually
+<code>c_err_bad_value</code> if for some reason it is not possible to evaluate your
+constant or function.</li></ul><p>The rest of the routine to set a constant is as simple as testing for the
+tokenizer handle already set up in <code>shared_parser_data</code> and then
+calling the subroutine <code>push_on_eval</code>. This pushes the final
+constant onto the evaluation stack which is used by the RPN parser. The basic
+sequence for functions is similar except for the addition of a code to read
+the values that the function takes. This is again the subroutine
+<code>get_values</code> which is also used in custom_function. The calling
+sequence in <code>do_function</code> looks like:</p><pre><code class=language-perl> IF (opcode .EQ. c_func_gauss) THEN
+   CALL get_values(3, values)
+   CALL push_on_eval(EXP(-((values(1)-values(2))/values(3))**2))
+   RETURN
+ ENDIF
+</code></pre><p>Simply call the <code>get_values</code> subroutine, passing the number of
+required parameters and an array of type <code>REAL(num)</code> which is at
+least as long as the number of required parameters. The array is populated
+by the values passed into the function. Constants and maths expressions are
+already evaluated by the time that this section of code is reached, so there is
+no need to deal with further parsing. Next, simply call
+<code>push_on_eval</code> to push the result of your function onto the
+evaluation stack.</p></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/developer/extensions/input_deck.html rel=next>Input Deck</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/developer/extensions/new_modules.html rel=prev>New Module</a></div></div></div></div><div class=body-footer><p>Last updated on Apr 4, 2023</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>

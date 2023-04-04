@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>EPOCH Developer Documentation | EPOCH</title><link>/developer.html</link><atom:link href="/developer/index.xml" rel="self" type="application/rss+xml"/><description>EPOCH Developer Documentation</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>EPOCH Developer Documentation</title><link>/developer.html</link></image><item><title>EPOCH Makefile</title><link>/developer/makefile.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/makefile.html</guid><description>&lt;p>The makefile supplied with EPOCH is a standard GNU make makefile, which must
+be user modified to allow a developer to add new files to the code. EPOCH&amp;rsquo;s
+makefile is quite large, so an explanation of how to add new files and new
+directories is given below.&lt;/p>
+&lt;h2 id="adding-a-new-file-to-be-compiled-with-epoch">Adding a new file to be compiled with EPOCH&lt;/h2>
+&lt;p>There are three things that must be done to cause EPOCH to compile a new
+file and link it into the final code. Assume that you&amp;rsquo;re adding a file called
+&amp;ldquo;newfile.F90&amp;rdquo;. First, find the line which sets the environment variable
+&lt;code>SRCFILES&lt;/code> and add a new parameter which reads &amp;ldquo;newfile.F90&amp;rdquo;. This tells the
+makefile to compile the final code using your new file, the
+next thing to do is to add a line which tells the code about the dependencies
+for your file. Lower down in the makefile, you&amp;rsquo;ll find a section with lines
+which look like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">balance.o: balance.F90 boundary.o mpi_subtype_control.o partlist.o
+&lt;/code>&lt;/pre>
+&lt;p>Add a new line for describing all the FILES (NOT modules) which are used by
+your new file. If you USE shared_data, mpi_subtype_control and stack in
+your file then the line would look like:&lt;/p>
+&lt;pre>&lt;code class="language-perl">newfile.o: newfile.F90 shared_data.o mpi_subtype_control.o stack.o
+&lt;/code>&lt;/pre>
+&lt;p>Note the structure of the line with ONLY the source file for the new file
+specified, all other used files specify the intermediate .o files. The
+remaining element of the makefile which needs to be modified is to add your
+new file as a dependency to all the files which USE modules contained in your
+new file. This is achieved very simply by adding &amp;ldquo;newfile.o&amp;rdquo; to the dependency
+list for those files which USE your modules. For example if you&amp;rsquo;ve written new
+boundary conditions and USE your modules in boundary.f90, you&amp;rsquo;d just change
+the line for boundary.f90 from:&lt;/p>
+&lt;pre>&lt;code class="language-perl">boundary.o: boundary.f90 deck_io_block.o particle_temperature.o partlist.o
+&lt;/code>&lt;/pre>
+&lt;p>to&lt;/p>
+&lt;pre>&lt;code class="language-perl">boundary.o: boundary.f90 deck_io_block.o particle_temperature.o partlist.o \
+newfile.o
+&lt;/code>&lt;/pre>
+&lt;p>Note that the backslash characters are line continuation marks in makefiles.&lt;/p>
+&lt;h2 id="adding-new-directories-to-epochs-makefile">Adding new directories to EPOCH&amp;rsquo;s makefile&lt;/h2>
+&lt;p>If you want to add an entire new directory to the EPOCH compile path then
+you need to add it to the definition of the variable &lt;code>VPATH&lt;/code>.
+Remember to use the variable &lt;code>$(SRCDIR)&lt;/code> rather than hard-coding
+&lt;code>src&lt;/code> into the path.&lt;/p></description></item><item><title>General layout of the EPOCH code</title><link>/developer/source_code_files.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/source_code_files.html</guid><description>&lt;p>The names of the source files in EPOCH are fairly self explanatory but, for
+clarity, they are explained here. Some files have the normal Fortran file
+extension &lt;code>.f90&lt;/code>, while some have the slightly unusual &lt;code>.F90&lt;/code>. The difference is
+that files with the &lt;code>.F90&lt;/code> extension are passed through the preprocessor before
+they are compiled allowing the use of precompiler directives (the &lt;code>#ifdef&lt;/code>
+commands).&lt;/p>
+&lt;h2 id="directories">Directories&lt;/h2>
+&lt;p>All source files are contained in the &lt;code>src&lt;/code> directory and its
+subdirectories. There is a stylistic reason for the layout of the files, which
+is explained here&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>src&lt;/code> - Files in this directory are the core files for the
+basic EPOCH code, such as the field solvers, the particle pusher, the
+boundary conditions and the lasers.&lt;/li>
+&lt;li>&lt;code>src/deck&lt;/code> - Files in this directory are responsible for
+dealing with the permanent input deck parser and include the core parts of
+the deck handler, and also the routines which deal with the blocks in the
+input deck files.&lt;/li>
+&lt;li>&lt;code>src/housekeeping&lt;/code> - Files in this directory deal with those
+parts of the code operation which are not physics; including the load
+balancer, the MPI setup routines and the moving window.&lt;/li>
+&lt;li>&lt;code>src/include&lt;/code> - This directory contains the shape function
+code fragments which are inserted into the particle push at compile time.&lt;/li>
+&lt;li>&lt;code>src/io&lt;/code> - The files involved in all I/O activities, including
+the distribution functions and the particle probes.&lt;/li>
+&lt;li>&lt;code>src/parser&lt;/code> - The files for the maths expression parser are
+in this directory, including both the core implementation of the shunting yard
+algorithm and the routines for implementing the permanent functions,
+constants and operators for the input deck.&lt;/li>
+&lt;li>&lt;code>src/physics_packages&lt;/code> - Contains routines which implement
+additional physics for the code.&lt;/li>
+&lt;li>&lt;code>src/user_interaction&lt;/code> - Contains any Fortran routines which
+a user has to modify to use the code with internal initial conditions, or to
+temporarily extend the maths parser or the input deck.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-src">The files in &lt;code>src&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>boundary.F90&lt;/code> - Includes all boundary conditions except laser
+and transmissive boundaries; including field and particle MPI boundaries, and
+field and particle domain boundaries.&lt;/li>
+&lt;li>&lt;code>constants.F90&lt;/code> - A collection of physical constants, and also integer flags
+for I/O, boundaries, and other variables.&lt;/li>
+&lt;li>&lt;code>epoch1d.F90&lt;/code>, &lt;code>epoch2d.F90&lt;/code>, &lt;code>epoch3d.F90 &lt;/code> - Main driver for the code.
+Reading this routine gives the basic layout of the code flow.&lt;/li>
+&lt;li>&lt;code>fields.f90&lt;/code> - The Maxwell field solver.&lt;/li>
+&lt;li>&lt;code>laser.f90&lt;/code> - Includes laser and transmissive boundary
+conditions for each boundary and also the housekeeping routines for the laser
+objects.&lt;/li>
+&lt;li>&lt;code>particles.F90&lt;/code> - The particle pusher.&lt;/li>
+&lt;li>&lt;code>shared_data.F90&lt;/code> - This file includes all the global variable
+and type definitions. Usually new variables should be defined in this file.&lt;/li>
+&lt;li>&lt;code>gen_commit_string&lt;/code> - This is a script used to generate an ID
+string when compiling the code.&lt;/li>
+&lt;li>&lt;code>gen_src_module&lt;/code> - This is a script which is used at build
+time to generate a Fortran module containing the source code. This is used for
+embedding the EPOCH source code into restart dumps.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-srcdeck">The files in &lt;code>src/deck&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>deck.F90&lt;/code> - The main input deck routines. Deals with opening
+files, reading data and MPI distribution of the data to all processes. Also
+includes the routines which deal with calling the right reader routines to
+deal with a given block.&lt;/li>
+&lt;li>&lt;code>deck_boundaries_block.f90&lt;/code> - Reader routine for the
+&amp;ldquo;boundaries&amp;rdquo; block of the input deck.&lt;/li>
+&lt;li>&lt;code>deck_bremsstrahlung_block.f90&lt;/code> - Reader routine for the
+&amp;ldquo;bremsstrahlung&amp;rdquo; block of the input deck.&lt;/li>
+&lt;li>&lt;code>deck_collision_block.f90&lt;/code> - Reader routine for &amp;ldquo;collision&amp;rdquo;
+blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_constant_block.f90&lt;/code> - Reader routine for &amp;ldquo;constant&amp;rdquo;
+blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_control_block.f90&lt;/code> - Reader routine for &amp;ldquo;control&amp;rdquo;
+block in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_dist_fn_block.f90&lt;/code> - Reader routine for &amp;ldquo;dist_fn&amp;rdquo;
+blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_fields_block.f90&lt;/code> - Reader routine for &amp;ldquo;fields&amp;rdquo;
+blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_io_block.F90&lt;/code> - Reader routine for the &amp;ldquo;io&amp;rdquo; block in
+the input deck.&lt;/li>
+&lt;li>&lt;code>deck_io_global_block.F90&lt;/code> - Reader routine for the &amp;ldquo;io_global&amp;rdquo; block in
+the input deck.&lt;/li>
+&lt;li>&lt;code>deck_laser_block.f90&lt;/code> - Reader routine for &amp;ldquo;laser&amp;rdquo; blocks
+in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_part_from_file_block.F90&lt;/code> - Reader routine for the &amp;ldquo;part_from_file&amp;rdquo;
+block in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_particle_probe_block.F90&lt;/code> - Reader routine for
+&amp;ldquo;particle_probe&amp;rdquo; blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_species_block.F90&lt;/code> - Reader routine for &amp;ldquo;species&amp;rdquo;
+blocks in the input deck. This contains scripts which create the species_list
+array which holds the particle lists for each species.&lt;/li>
+&lt;li>&lt;code>deck_stencil_block.F90&lt;/code> - Reader routine for &amp;ldquo;stencil&amp;rdquo;
+blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_subset_block.F90&lt;/code> - Reader routine for &amp;ldquo;subset&amp;rdquo;
+blocks in the input deck.&lt;/li>
+&lt;li>&lt;code>deck_window_block.f90&lt;/code> - Reader routine for the &amp;ldquo;window&amp;rdquo;
+block in the input deck.&lt;/li>
+&lt;li>&lt;code>strings.f90&lt;/code> - Basic string handling routines such as
+&amp;ldquo;str_cmp&amp;rdquo; and routines for converting strings to numbers WITHOUT using the
+maths parser are covered in this routine.&lt;/li>
+&lt;li>&lt;code>strings_advanced.f90&lt;/code> - The routines which pass maths along
+to the maths parser routines are here.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-srchousekeeping">The files in &lt;code>src/housekeeping&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>balance.F90&lt;/code> - Contains the routines for the load balancer
+and related routines.&lt;/li>
+&lt;li>&lt;code>current_smooth.F90&lt;/code> - Contains the current smoothing routines.&lt;/li>
+&lt;li>&lt;code>epoch_source_info_dummy.f90&lt;/code> - A dummy module used when the
+code is being built without the ability to write the source code into restart
+dumps.&lt;/li>
+&lt;li>&lt;code>finish.F90&lt;/code> - Deallocates fields, species, subsets and physics packages at
+the end of the simulation.&lt;/li>
+&lt;li>&lt;code>mpi_routines.F90&lt;/code> - Contains the routines dealing with the
+setup of the MPI layer and the creation of the communicator. Also allocates
+all arrays for the first time before load balancing.&lt;/li>
+&lt;li>&lt;code>mpi_subtype_control.f90&lt;/code> - Contains the routines that setup
+the mpi types required by the I/O subsystem.&lt;/li>
+&lt;li>&lt;code>particle_id_hash.F90&lt;/code> - Stores scripts responsible for identifying particles
+in persistent subsets.&lt;/li>
+&lt;li>&lt;code>particle_pointer_advance.f90&lt;/code> - Contains subroutines which
+walk through the lists of particles and species for I/O purposes.&lt;/li>
+&lt;li>&lt;code>partlist.F90&lt;/code> - Contains the routines which deal with the
+particle lists which are used for inter-processor communication of particles.&lt;/li>
+&lt;li>&lt;code>prefetch.F90&lt;/code> - Hold scripts for pre-fetching particles. This requires Intel
+compilation of the code, and can improve performance.&lt;/li>
+&lt;li>&lt;code>random_generator.f90&lt;/code> - Contains the random number generator
+routines.&lt;/li>
+&lt;li>&lt;code>redblack_module.f90&lt;/code> - Contains MPI routines used for the load-balancer.&lt;/li>
+&lt;li>&lt;code>setup.F90&lt;/code> - Deals with the setup of the grids and domains and
+restarting from previous output dumps.&lt;/li>
+&lt;li>&lt;code>shape_functions.F90&lt;/code> - Contains the particle shape functions
+used for calculating the particle weighting.&lt;/li>
+&lt;li>&lt;code>split_particle.F90&lt;/code> - Is the implementation of a
+demonstration of particle splitting routines.&lt;/li>
+&lt;li>&lt;code>terminal_controls.F90&lt;/code> - Makes the logo colourful on startup.&lt;/li>
+&lt;li>&lt;code>timer.f90&lt;/code> - Tracks the run-time of the code.&lt;/li>
+&lt;li>&lt;code>utilities.f90&lt;/code> - Contains growable arrays used by the species
+block parser.&lt;/li>
+&lt;li>&lt;code>version_data.F90&lt;/code> - Contains version information for the
+current EPOCH code.&lt;/li>
+&lt;li>&lt;code>welcome.F90&lt;/code> - The routine which prints the banner message and
+compiler options info.&lt;/li>
+&lt;li>&lt;code>window.F90&lt;/code> - The routines which deal with the moving window.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-srcio">The files in &lt;code>src/io&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>calc_df.F90&lt;/code> - Despite the slightly confusing name, this
+subroutine deals with derived functions like number density, charge density
+and mass density.&lt;/li>
+&lt;li>&lt;code>diagnostics.F90&lt;/code> - Contains the routines which actually dump
+the data, decide what to dump and also the routine to calculate the timestep.&lt;/li>
+&lt;li>&lt;code>dist_fn.F90&lt;/code> - Contains the routines to calculate the
+distribution functions, and also the routines handling the requests for
+distribution functions.&lt;/li>
+&lt;li>&lt;code>iterators.F90&lt;/code> - Contains the iterator functions used to write
+particle data into SDF files.&lt;/li>
+&lt;li>&lt;code>probes.F90&lt;/code> - Contains the routines which write the data from
+the particle probes. Also includes the routines which deal with user requests
+to add new particle probes.&lt;/li>
+&lt;li>&lt;code>simple_io.f90&lt;/code> - Contains routines for performing the simple
+binary I/O required by species_external and fields_external blocks.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-srcparser">The files in &lt;code>src/parser&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>evaluate.f90&lt;/code> - Contains the routines which actually evaluate
+a tokenized expression. The core of this is a simple implementation of an
+RPN calculator.&lt;/li>
+&lt;li>&lt;code>evaluator_blocks.f90&lt;/code> - Contains the routines which evaluate
+a given token into a numerical values. Actually implements the functions,
+constants and operators in EPOCH&amp;rsquo;s maths parser.&lt;/li>
+&lt;li>&lt;code>shunt.F90&lt;/code> - EPOCH&amp;rsquo;s implementation of the
+&amp;ldquo;shunting yard&amp;rdquo; algorithm used to simultaneously tokenize the input and
+convert it from infix notation to RPN.&lt;/li>
+&lt;li>&lt;code>stack.f90&lt;/code> - Deals with routines for pushing onto and popping
+off stacks.&lt;/li>
+&lt;li>&lt;code>tokenizer_blocks.f90&lt;/code> - Deal with converting strings found
+in a string being tokenized into tokens. Essentially a large collection of
+&amp;ldquo;str_cmp&amp;rdquo; commands testing a string against a known name.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-srcphysics_packages">The files in &lt;code>src/physics_packages&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>TABLES&lt;/code> - Subdirectory containing tables
+for QED emissions, bremsstrahlung radiation, and both collisional and field
+ionisation.&lt;/li>
+&lt;li>&lt;code>background_collisions.F90&lt;/code> - Package handling particle collisions for special
+cases. Faster than the &lt;code>collisions.F90&lt;/code> model, but assumes a heavy species
+remains immobile during the collision. Appropriate for hot electron scatter
+through cold ions.&lt;/li>
+&lt;li>&lt;code>bethe_heitler.F90&lt;/code> - Package sampling pair-production via the Bethe-Heitler
+process. This is run during the bremsstrahlung update.&lt;/li>
+&lt;li>&lt;code>bremsstrahlung.F90&lt;/code> - Runs bremsstrahlung radiation of electrons and positrons,
+discussed in Appendix B of
+&lt;a href="https://aip.scitation.org/doi/10.1063/5.0055398" target="_blank" rel="noopener">Morris et al&lt;/a>.&lt;/li>
+&lt;li>&lt;code>collision_ionise.F90&lt;/code> - Package sampling collisional ionisation triggered by
+incident electrons. See
+&lt;a href="https://aip.scitation.org/doi/abs/10.1063/5.0126336" target="_blank" rel="noopener">here&lt;/a>
+for details.&lt;/li>
+&lt;li>&lt;code>collisions.F90&lt;/code> - Package handling particle collisions. Estimates the
+number of binary Coulomb collisions over a simulation time-step, and samples a
+cumulative scatter angle. See
+&lt;a href="https://aip.scitation.org/doi/abs/10.1063/1.4742167" target="_blank" rel="noopener">here&lt;/a>
+for details.&lt;/li>
+&lt;li>&lt;code>file_injectors.F90&lt;/code> - Injects particles from user-written text files (ASCII).&lt;/li>
+&lt;li>&lt;code>injectors.F90&lt;/code> - Package dealing with particle injection through
+a boundary. Currently this handles drifting and non-drifting Maxwellian and
+flux-Maxwellian distributions.&lt;/li>
+&lt;li>&lt;code>ionise.F90&lt;/code> - Physics package dealing with field ionisation.
+Field ionisation consists of three distinct regimes; multiphoton in which
+ionisation is best described as absorption of multiple photons, tunnelling
+in which deformation of the atomic Coulomb potential is the dominant factor,
+and barrier suppression ionisation in which the electric field is strong enough
+for an electron to escape classically. It is possible to turn off multiphoton or
+barrier suppression ionisation through the input deck.&lt;/li>
+&lt;li>&lt;code>numerics.f90&lt;/code> - Some additional numerics
+routines, primarily for the photons (QED) package.&lt;/li>
+&lt;li>&lt;code>photons.F90&lt;/code> - Package for some QED effects.
+Models Breit-Wheeler pair production, synchrotron emission and radiation
+reaction as described in
+&lt;a href="http://iopscience.iop.org/article/10.1088/0741-3335/53/1/015009" target="_blank" rel="noopener">Duclous et al&lt;/a> and
+&lt;a href="https://www.sciencedirect.com/science/article/pii/S0021999113008061?via" target="_blank" rel="noopener">Ridgers et al&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-files-in-srcuser_interaction">The files in &lt;code>src/user_interaction&lt;/code>&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>custom_deck.f90&lt;/code> - This file is where and end user can
+temporarily extend the input deck.&lt;/li>
+&lt;li>&lt;code>custom_laser.f90&lt;/code> - The file where an end user specifies
+laser time profiles without using the input deck.&lt;/li>
+&lt;li>&lt;code>custom_parser.f90&lt;/code> - The file where an end user can
+temporarily add new functions and constants to the input deck.&lt;/li>
+&lt;li>&lt;code>deltaf_loader.F90&lt;/code> - Sets up parameters for the delta-f model.&lt;/li>
+&lt;li>&lt;code>helper.F90&lt;/code> - This file contains all the internal workings of
+the autoloader. This is in user_interaction for historical reasons, since
+early versions of the code required the end user to modify some parts of the
+functions contained in this file. As the autoloader has increased in
+complexity, this has ceased to be the case, so it is likely that soon this
+file will be move to &amp;ldquo;housekeeping&amp;rdquo;.&lt;/li>
+&lt;li>&lt;code>ic_module.f90&lt;/code> - This file is where the internal and manual
+initial conditions are set.&lt;/li>
+&lt;li>&lt;code>particle_temperature.F90&lt;/code> - Contains the routines for
+thermally loading a particle species.&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,266 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="Collections of particles in EPOCH are represented by the particle_list object. These objects abstract much of the operation of the linked lists, including adding and removing particles and sending particles to other processors."><link rel=alternate hreflang=en-us href=/developer/core_structure/partlist.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/developer/core_structure/partlist.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/developer/core_structure/partlist.html"><meta property="og:title" content="Partlist | EPOCH"><meta property="og:description" content="Collections of particles in EPOCH are represented by the particle_list object. These objects abstract much of the operation of the linked lists, including adding and removing particles and sending particles to other processors."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2023-04-04T13:41:14+01:00"><title>Partlist | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/developer.html>Overview</a><ul class="nav docs-sidenav"><li><a href=/developer/source_code_files.html>Source code files</a></li><li><a href=/developer/makefile.html>Makefile</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/core_structure.html>Core Structure</a><ul class="nav docs-sidenav"><li><a href=/developer/core_structure/basic_structures.html>Basic Structures</a></li><li><a href=/developer/core_structure/macro_particles.html>Particles</a></li><li><a href=/developer/core_structure/linked_lists.html>Linked Lists</a></li><li class=active><a href=/developer/core_structure/partlist.html>Partlist</a></li><li><a href=/developer/core_structure/field_solver.html>Field Solver</a></li><li><a href=/developer/core_structure/particle_pusher.html>Particle Pusher</a></li><li><a href=/developer/core_structure/shape_functions.html>Weighting Functions</a></li><li><a href=/developer/core_structure/current_solver.html>Current solver</a></li><li><a href=/developer/core_structure/boundary_conditions.html>Boundary Conditions</a></li><li><a href=/developer/core_structure/parallelism.html>Parallelism</a></li><li><a href=/developer/core_structure/precompiler_flags.html>Pre-compilation Flags</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/input_output.html>Input Output</a><ul class="nav docs-sidenav"><li><a href=/developer/input_output/basic_output.html>Basic Output</a></li><li><a href=/developer/input_output/string_handling.html>String Handling</a></li><li><a href=/developer/input_output/error_codes.html>Error Codes</a></li><li><a href=/developer/input_output/adding_outputs.html>Adding Outputs</a></li><li><a href=/developer/input_output/custom_maths_parser.html>Custom Maths Parser</a></li><li><a href=/developer/input_output/custom_deck.html>Custom Deck</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/extensions.html>Extending EPOCH</a><ul class="nav docs-sidenav"><li><a href=/developer/extensions/input_deck.html>Input Deck</a></li><li><a href=/developer/extensions/maths_parser.html>Maths Parser</a></li><li><a href=/developer/extensions/new_modules.html>New Module</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#create_empty_partlist>create_empty_partlist</a></li><li><a href=#create_unsafe_partlist>create_unsafe_partlist</a></li><li><a href=#create_unsafe_partlist_by_tail>create_unsafe_partlist_by_tail</a></li><li><a href=#create_allocated_partlist>create_allocated_partlist</a></li><li><a href=#create_filled_partlist>create_filled_partlist</a></li><li><a href=#test_partlist>test_partlist</a></li><li><a href=#destroy_partlist>destroy_partlist</a></li><li><a href=#copt_partlist>copt_partlist</a></li><li><a href=#append_partlist>append_partlist</a></li><li><a href=#add_particle_to_partlist>add_particle_to_partlist</a></li><li><a href=#remove_particle_from_partlist>remove_particle_from_partlist</a></li><li><a href=#setup_partlists>setup_partlists</a></li><li><a href=#pack_particle-and-unpack_particle>pack_particle and unpack_particle</a></li><li><a href=#display_particle>display_particle</a></li><li><a href=#compare_particles>compare_particles</a></li><li><a href=#test_packed_particles>test_packed_particles</a></li><li><a href=#partlist_send>partlist_send</a></li><li><a href=#partlist_recv>partlist_recv</a></li><li><a href=#partlist_send_recv>partlist_send_recv</a></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Partlist</h1><div class=article-style><p>Collections of particles in EPOCH are represented by the <code>particle_list</code>
+object. These objects abstract much of the operation of the linked lists,
+including adding and removing particles and sending particles to other
+processors. This page details the functions present in
+<code>src/housekeeping/partlist.F90</code>, which details how particle lists are formed.</p><h2 id=create_empty_partlist>create_empty_partlist</h2><pre><code class=language-perl>SUBROUTINE create_empty_partlist(partlist)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+</code></pre><p><code>create_empty_partlist</code> is a routine which takes a particle_list
+object and sets it up so that it points to no particles at all. It should be
+used on newly allocated particle_list objects and when a particle_list has
+served its purpose. It DOES NOT destroy the particles linked in the list at
+the point that it is called. If the user wishes to delete all the particles in a
+particle_list then the routine <code>destroy_partlist</code> should be used
+instead.</p><h2 id=create_unsafe_partlist>create_unsafe_partlist</h2><pre><code class=language-perl>SUBROUTINE create_unsafe_partlist(partlist, a_particle, &amp;
+    n_elements)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: a_particle
+INTEGER(KIND=8), INTENT(IN) :: n_elements
+</code></pre><p><code>create_unsafe_partlist</code> is a routine which allows the creation of
+a particle_list which represents a subset of another particle list. This subset
+is defined as starting at the particle pointed to by <code>a_particle</code>
+and extending for <code>n_elements</code> elements. The new particle_list is
+then flagged as &ldquo;unsafe&rdquo; because if it is destroyed for any reason then it
+will affect other particle lists. Many particle_list functions can only work
+on safe particle lists.</p><h2 id=create_unsafe_partlist_by_tail>create_unsafe_partlist_by_tail</h2><pre><code class=language-perl>SUBROUTINE create_unsafe_partlist_by_tail(partlist, head, &amp;
+    tail)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: head, tail
+</code></pre><p><code>create_unsafe_partlist_by_tail</code> is almost identical to
+<code>create_unsafe_partlist</code>, but instead of specifying the first
+particle and a number of elements, the user specifies the first and last
+elements in the subset of the particle list. If the particle objects specified
+for head and tail are not in the same partlist or tail actually comes before
+head then the routine will fail in an undefined manner.</p><h2 id=create_allocated_partlist>create_allocated_partlist</h2><pre><code class=language-perl>SUBROUTINE create_allocated_partlist(partlist, n_elements)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+INTEGER(KIND=8), INTENT(IN) :: n_elements
+</code></pre><p><code>create_allocated_partlist</code> is a helper routine to setup a new
+particle_list and create <code>n_elements</code> new particle objects already
+in place in the list.</p><p>You should always use this routine when creating large numbers of new particle
+objects since there is no guarantee that the internal structure of the
+particle_list objects will not change in the future. This routine will
+be modified to reflect any changes in the underlying code.</p><h2 id=create_filled_partlist>create_filled_partlist</h2><pre><code class=language-perl>SUBROUTINE create_filled_partlist(partlist, data_in, &amp;
+    n_elements)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+REAL(num), DIMENSION(:), INTENT(IN) :: data_in
+INTEGER(KIND=8), INTENT(IN) :: n_elements
+</code></pre><p><code>create_filled_partlist</code> is a helper routine to setup a new
+particle_list and create <code>n_elements</code> new particle objects already
+in place in the list. These new particle objects are then assigned properties
+from the array <code>data_in</code> where the particle properties are contained
+in packed form. The particle data is unpacked from the array using the
+<code>unpack_particle</code> routine.</p><p>You should always use this routine, if possible, when copying particles out of
+packed format since there is no guarantee that the internal structure of the
+particle_list objects will not change in the future. This routine will
+be modified to reflect any changes in the underlying code.</p><h2 id=test_partlist>test_partlist</h2><pre><code class=language-perl>FUNCTION test_partlist(partlist)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+</code></pre><p><code>test_partlist</code> is a routine which tests for various possible types
+of error within a particle_list object. It has a number of possible return
+codes for different errors, using negative values for errors so severe that
+the main tests cannot be run, or with a bitmask for errors in the main tests.
+The return codes are:</p><ul><li>0 - No error, particle_list has passed all tests.</li><li>-1 - Either the head or tail of the particle_list object is NULL. This is
+a serious error and usually means that there is a serious error inside the
+particle_list routines.</li></ul><p>The other error codes are returned as a bitmask and mean the following</p><ul><li>1 - A particle_list marked as safe has a head element which is linked to
+a preceding particle object.</li><li>2 - A particle_list marked as safe has a tail element which is linked to
+a proceding particle object.</li><li>4 - The count property of a particle_list does not correspond to the
+actual number of objects linked between the head and tail objects. This error
+code on its own usually means that the count property has been modified
+improperly.</li></ul><p>Note that this routine is only intended for debugging and is very slow. It
+should never be used by the code in normal operation and all routines should be
+written in such a way that it is impossible for a particle_list object to
+become corrupted.</p><h2 id=destroy_partlist>destroy_partlist</h2><pre><code class=language-perl>SUBROUTINE destroy_partlist(partlist)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+</code></pre><p><code>destroy_partlist</code> is a helper routine to delete all the particles
+attached to a particle_list and free up the memory that they use. It also
+guarantees to leave the particle_list object itself in a blank state where new
+particles can be added to it. It DOES NOT delete the particle_list object
+itself, since it does not know whether or not the particle_list is dynamically
+allocated. If using dynamically allocated particle_list objects then it is up
+to the user to deallocate them AFTER the attached particles are destroyed using
+<code>destroy_partlist</code>.</p><p>If a particle_list is deleted without deleting the attached particle objects,
+either using this routine or explicitly by the user, then the particles will
+become orphaned and sit around using memory until the code ends. If this
+happens regularly then the code will quickly crash, usually with a SIG_SEGV
+error.</p><h2 id=copt_partlist>copt_partlist</h2><pre><code class=language-perl>SUBROUTINE copy_partlist(partlist1, partlist2)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist1, partlist2
+</code></pre><p><code>copy_partlist</code> is a routine which sets <code>partlist2</code> to
+point to the same linked list of particles as <code>partlist1</code>. It does
+not copy the particles, just sets the head and tail pointers of
+<code>partlist1</code> to point to the same particle objects as
+<code>partlist1</code>.</p><h2 id=append_partlist>append_partlist</h2><pre><code class=language-perl>SUBROUTINE append_partlist(head, tail)
+  
+TYPE(particle_list), INTENT(INOUT) :: head, tail
+</code></pre><p><code>append_partlist</code> is a routine which takes the particles
+attached to the particle_list object <code>tail</code> and adds them to the
+end of the linked list for particle_list <code>head</code>. The particle_list
+<code>tail</code> is then set to be an empty particle_list.</p><p>This routine can only append one safe particle_list to another safe
+particle_list.</p><h2 id=add_particle_to_partlist>add_particle_to_partlist</h2><pre><code class=language-perl>SUBROUTINE add_particle_to_partlist(partlist, new_particle)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: new_particle
+</code></pre><p><code>add_particle_to_partlist</code> adds a new
+particle (<code>new_particle</code>) to the end of the linked list of
+particles in the particle_list object <code>partlist</code>. It deals with
+cases of empty particle_list objects automatically.</p><p>If you want to add a new particle to the end of a particle list you should
+always use this routine.</p><h2 id=remove_particle_from_partlist>remove_particle_from_partlist</h2><pre><code class=language-perl>SUBROUTINE remove_particle_from_partlist(partlist, &amp;
+    a_particle)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+TYPE(particle), POINTER :: a_particle
+</code></pre><p><code>remove_particle_from_partlist</code> removes the particle object
+specified by <code>a_particle</code> from the particle_list object given by
+<code>partlist</code>. Be very careful that <code>a_particle</code> is indeed
+in the linked list pointed to by <code>partlist</code>, otherwise it is possible
+for the particle_list object which really does contain <code>a_particle</code>
+to be left with an invalid pointer as its head or tail element if
+<code>a_particle</code> is either the head or tail element.</p><p>Although this routine does work with unsafe particle_list objects, you should
+be very careful using it in this case as it can break the head or tail element
+of the primary particle_list which the unsafe particle_list is a subset of.
+As a general rule, you should only use this routine to remove particles from a
+simple particle_list which is a singly referenced primary, safe particle_list.</p><h2 id=setup_partlists>setup_partlists</h2><pre><code class=language-perl>SUBROUTINE setup_partlists()
+  
+
+</code></pre><p><code>setup_partlists</code> is a routine which is called once when EPOCH
+first starts. It sets the variable <code>nvars</code> which is the number of
+REAL(num) values required to contain all the information about a
+single particle object needed when a particle is transferred to another
+processor. How the information is packed and unpacked from the particle object
+into an array of REAL(num) values is controlled in the functions
+<code>pack_particle</code> and <code>unpack_particle</code>.</p><p>If the particle type gains additional properties as the result of preprocessor
+directives then there should be a line which increments <code>nvars</code> by
+the correct number when that preprocessor directive is active. For example:</p><pre><code class=language-perl>#ifdef PER_PARTICLE_CHARGE_MASS
+ nvar = nvar+2
+#endif
+</code></pre><h2 id=pack_particle-and-unpack_particle>pack_particle and unpack_particle</h2><pre><code class=language-perl>SUBROUTINE   pack_particle(array, a_particle)
+SUBROUTINE unpack_particle(array, a_particle)
+  
+REAL(num), DIMENSION(:), INTENT(INOUT) :: array
+TYPE(particle), POINTER :: a_particle
+</code></pre><p><code>pack_particle</code> and <code>unpack_particle</code> are subroutines
+which are used to copy all the information about a particle
+necessary for the particle to be transferred to another processor into a
+temporary array before sending to another processor. If a new particle property
+has been added to the particle then these routines must be modified to allow
+the copying of the new data into the array. The parameter <code>array</code> is
+a REAL(num) array of length <code>nvars</code> and is the array into which the
+data either must be packed or from which it must be
+unpacked. <code>a_particle</code> is the particle object which must either have
+its data copied into the array or be
+populated with data from the array. No restriction is placed on how the
+data should be packed into the data array, but obviously
+<code>pack_particle</code> and <code>unpack_particle</code> must be inverse
+operations so that particles packed by one processor can be unpacked correctly
+by another processor.</p><p>Since it is very unlikely that EPOCH will be run on anything other than a
+homogeneous cluster, it is acceptable to use the Fortran <code>TRANSFER</code>
+function to pack incompatible data types into the <code>array</code> array. Just
+make sure that <code>nvars</code> is defined in <code>setup_partlists</code>
+to be long enough to contain all the information. More documentation on the
+<code>TRANSFER</code> function (which is rarely used and dangerous!) can be
+found
+<a href=http://www.macresearch.org/%advanced_fortran_90_callbacks_with_the_transfer_function target=_blank rel=noopener>here</a>.</p><h2 id=display_particle>display_particle</h2><pre><code class=language-perl>SUBROUTINE display_particle(a_particle)
+  
+TYPE(particle), POINTER :: a_particle
+</code></pre><p>Displays the key information about a particle given by the parameter
+<code>a_particle</code>. Used by <code>compare_particles</code>.</p><h2 id=compare_particles>compare_particles</h2><pre><code class=language-perl>FUNCTION compare_particles(particle1, particle2)
+  
+TYPE(particle), POINTER :: particle1, particle2
+LOGICAL :: compare_particles
+</code></pre><p>Compares all the properties of two particle objects and displays the
+information if they don&rsquo;t match. Used internally by
+<code>test_packed_particles</code>. If the particle object is extended then
+this routine should also be modified to test for equivalence of the new
+properties.</p><h2 id=test_packed_particles>test_packed_particles</h2><pre><code class=language-perl>FUNCTION test_packed_particles(partlist, array, &amp;
+    npart_in_data)
+  
+TYPE(particle_list), INTENT(IN) :: partlist
+REAL(num), DIMENSION(:), INTENT(IN) :: array
+INTEGER(KIND=8), INTENT(IN) :: npart_in_data
+LOGICAL :: test_packed_particles
+</code></pre><p><code>test_packed_particles</code> is a routine which checks that a packed
+array of particles can be successfully unpacked back into particle objects. The
+parameters are:</p><ul><li><code>partlist</code> - The particle_list corresponding to the original
+unpacked particles.</li><li><code>array</code> - The REAL(num) array containing the packed data.</li><li><code>npart_in_data</code> - The number of particles which were packed
+into <code>array</code>.</li></ul><p>The routine tests that the number of particles in the particle_list match the
+number believed to be in the data array, that the length of the data array is
+correct and then unpacks each particle in turn from the data array and uses the
+<code>compare_particles</code> function to compare the particles with the
+original versions in the particle_list. If any particles fail the comparison
+then an error is output to stdout and the function returns a value of
+<code>.FALSE.</code>. The error message includes the processor
+rank on which the problem occurs but the routine does not specifically include
+any MPI commands, so it is possible to call the routine on a subset of
+processors.</p><h2 id=partlist_send>partlist_send</h2><pre><code class=language-perl>SUBROUTINE partlist_send(partlist, dest)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+INTEGER, INTENT(IN) :: dest
+</code></pre><p><code>partlist_send</code> is a routine for sending all the particles in the
+particle_list object <code>partlist</code> to another processor. The
+destination processor is identified by its rank which is given by the
+<code>dest</code> parameter. The routine does not destroy the particle_list
+object which is given to it.</p><p><code>partlist_send</code> uses MPI blocking sends, so unless a matching
+<code>partlist_recv</code> has been posted on <code>dest</code> then the
+routine will deadlock. It would be fairly simple to write a non-blocking
+version of <code>partlist_send</code>, but at present no need for such a
+routine has been found.</p><h2 id=partlist_recv>partlist_recv</h2><pre><code class=language-perl>SUBROUTINE partlist_recv(partlist, src)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist
+INTEGER, INTENT(IN) :: src
+</code></pre><p><code>partlist_recv</code> is a routine for receiving particles sent by a call
+to <code>partlist_send</code> and loading them into the particle_list object
+<code>partlist</code>. The source processor is identified by its rank which is
+given by the <code>src</code> parameter. The routine destroys the particle_list
+which it is given and indeed will leave orphaned particles if it is not given
+an empty particle_list to receive the data.</p><ul><li><p><code>partlist_recv</code> uses MPI blocking receives, so unless a
+matching <code>partlist_send</code> has been posted on <code>src</code> then
+the routine will deadlock. It would be fairly simple to write a non-blocking
+version of <code>partlist_recv</code>, but at present no need for such a
+routine has been found.</p></li><li><p>Although it is not possible to directly use <code>partlist_recv</code>
+to add new particles onto an existing particle_list, it is only two lines to
+do this. First call <code>partlist_recv</code> with a temporary
+particle_list to receive the data and then use <code>append_partlist</code>
+to attach the particles to the end of the already populated list.</p></li></ul><h2 id=partlist_send_recv>partlist_send_recv</h2><pre><code class=language-perl>SUBROUTINE partlist_send_recv(partlist_send, &amp;
+    partlist_recv, dest, src)
+  
+TYPE(particle_list), INTENT(INOUT) :: partlist_send
+TYPE(particle_list), INTENT(INOUT) :: partlist_recv
+INTEGER, INTENT(IN) :: dest, src
+</code></pre><p><code>partlist_sendrecv</code> is a routine equivalent to
+<code>MPI_SENDRECV</code> in that it allows overlapping sends and receives to
+be written in a single line rather than the end user having to split processors
+into red/black ordered pairs for communication. It sends the particle data in
+<code>partlist_send</code> to the processor with rank <code>dest</code> and
+receives particle data sent by processor <code>src</code> and stores it in the
+particle_list <code>partlist_recv</code>. The routine is destructive to both
+sending and receiving particle_lists, and can lead to orphaned particles if a
+filled particle_list is passed as <code>partlist_recv</code>. this is the
+routine which is used in the particle boundary conditions.</p><ul><li><p><code>partlist_sendrecv</code> uses MPI blocking sendrecv commands, so
+should be used in matching pairs or the routine will deadlock.</p></li><li><p>Although it is not possible to directly use
+<code>partlist_sendrecv</code> to add new particles onto an existing
+particle_list, it is only two lines to do this. First call
+<code>partlist_sendrecv</code> with a temporary particle_list to receive the
+data and then use <code>append_partlist</code> to attach the particles to
+the end of the already populated list.</p></li></ul></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/developer/core_structure/macro_particles.html rel=next>Particles</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/developer/core_structure/precompiler_flags.html rel=prev>Pre-compilation Flags</a></div></div></div></div><div class=body-footer><p>Last updated on Apr 4, 2023</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>

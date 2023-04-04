@@ -1,0 +1,209 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="The key feature of a PIC code controlling the smoothness of the solution is the particle shape function. That is the function that describes the assumed distribution of the real particles making up a macro-particle."><link rel=alternate hreflang=en-us href=/developer/core_structure/shape_functions.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/developer/core_structure/shape_functions.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/developer/core_structure/shape_functions.html"><meta property="og:title" content="Weighting Functions | EPOCH"><meta property="og:description" content="The key feature of a PIC code controlling the smoothness of the solution is the particle shape function. That is the function that describes the assumed distribution of the real particles making up a macro-particle."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2023-04-04T13:41:14+01:00"><title>Weighting Functions | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/developer.html>Overview</a><ul class="nav docs-sidenav"><li><a href=/developer/source_code_files.html>Source code files</a></li><li><a href=/developer/makefile.html>Makefile</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/core_structure.html>Core Structure</a><ul class="nav docs-sidenav"><li><a href=/developer/core_structure/basic_structures.html>Basic Structures</a></li><li><a href=/developer/core_structure/macro_particles.html>Particles</a></li><li><a href=/developer/core_structure/linked_lists.html>Linked Lists</a></li><li><a href=/developer/core_structure/partlist.html>Partlist</a></li><li><a href=/developer/core_structure/field_solver.html>Field Solver</a></li><li><a href=/developer/core_structure/particle_pusher.html>Particle Pusher</a></li><li class=active><a href=/developer/core_structure/shape_functions.html>Weighting Functions</a></li><li><a href=/developer/core_structure/current_solver.html>Current solver</a></li><li><a href=/developer/core_structure/boundary_conditions.html>Boundary Conditions</a></li><li><a href=/developer/core_structure/parallelism.html>Parallelism</a></li><li><a href=/developer/core_structure/precompiler_flags.html>Pre-compilation Flags</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/input_output.html>Input Output</a><ul class="nav docs-sidenav"><li><a href=/developer/input_output/basic_output.html>Basic Output</a></li><li><a href=/developer/input_output/string_handling.html>String Handling</a></li><li><a href=/developer/input_output/error_codes.html>Error Codes</a></li><li><a href=/developer/input_output/adding_outputs.html>Adding Outputs</a></li><li><a href=/developer/input_output/custom_maths_parser.html>Custom Maths Parser</a></li><li><a href=/developer/input_output/custom_deck.html>Custom Deck</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/developer/extensions.html>Extending EPOCH</a><ul class="nav docs-sidenav"><li><a href=/developer/extensions/input_deck.html>Input Deck</a></li><li><a href=/developer/extensions/maths_parser.html>Maths Parser</a></li><li><a href=/developer/extensions/new_modules.html>New Module</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#interpolating-grid-variables-to-macro-particles>Interpolating grid variables to macro-particles</a></li><li><a href=#writing-macro-particle-properties-on-the-grid>Writing macro-particle properties on the grid</a></li><li><a href=#other-particle-shapes>Other particle shapes</a></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Weighting Functions</h1><div class=article-style><p>The key feature of a PIC code controlling the smoothness of the solution is the
+particle shape function. That is the function that describes the assumed
+distribution of the real particles making up a macro-particle. The simplest
+solution is to assume that the macro-particles uniformly fill the cell in which
+the macro-particle is located. This has the advantages of speed and simplicity
+but produces very noisy solutions. The next simplest approach is to assume a
+triangular shape function with the peak of the triangle located at the position
+of the macro-particle and a width of $ 2 \Delta x$, as illustrated below.</p><p><img src=/developer/shape.png alt="Second order particle shape function"></p><p><img src=/developer/tri_eq.png alt="Triangular shape function"></p><p>This is the approach used
+in EPOCH and is a good trade-off between cleanness of solution and
+speed. Higher order methods based on spline interpolation can be used and do
+produce smoother solutions, but they are significantly slower and the benefits
+of the schemes can easily be overstated. EPOCH does now include an option to
+use 3rd order b-spline interpolation in all parts of the code. This option is
+enabled with the <code>-DPARTICLE_SHAPE_BSPLINE3</code> compile time option
+in the makefile.</p><p>Functions derived from the particle shape function appear in two places in the
+core solver: when the EM fields are interpolated to the position of the
+macro-particle and when the current is updated and properties of the
+macro-particle are copied onto the grid. These two uses of the shape function
+are conceptually similar, but have different forms.</p><h2 id=interpolating-grid-variables-to-macro-particles>Interpolating grid variables to macro-particles</h2><p>To derive the equations for calculating the field acting on a particle,
+you calculate the overlap of the particle shape function with the function
+representing the fields on the grid. In EPOCH, the fields are approximated at
+first order so that the field is constant over each cell. Consider a particle
+with position $X$, where $X$ lies in the cell centred at $x_i$ and grid
+spacing $\Delta x$. The integral is split into four parts; that part of the
+shape function which overlaps with the cell $x_{i-1}$, the part of the shape
+function from the left boundary of $x_i$ to the point of the triangle, the part
+of the shape function from the point of the triangle to the right hand edge of
+$x_i$ and finally that part of the shape function which overlaps cell
+$x_{i+1}$. Assuming that fields are constant inside each cell ($F_i$), this
+takes the form</p><p><img src=/developer/shape_weight.png alt="Fields interpolated to particle position"></p><p>Performing these integrals and remembering that $x_{i-1}+\frac{\Delta x}{2}$ is
+equal to $x_i-\frac{\Delta x}{2}$ since the grid is uniformly spaced with
+spacing $\Delta x$, this gives a final formula for the field at a particle of</p><p><img src=/developer/shape_weight_final.png alt="Simplified fields interpolated to particle position"></p><p>In the code calculating the strength of a cell centred field on the particle
+is done as follows.</p><pre><code class=language-perl> REAL(num) :: cell_x_r, cell_frac_x
+ INTEGER :: cell_x1
+ REAL(num) :: gx(-2:2)
+ TYPE(particle), POINTER :: current
+
+ part_x  = current%part_pos(1) - x_min_local
+
+ ! Work out the grid cell number for the particle.
+ ! Not an integer in general.
+ cell_x_r = part_x / dx
+
+ ! Round cell position to nearest cell
+ cell_x1 = FLOOR(cell_x_r + 0.5_num)
+ ! Calculate fraction of cell between nearest cell boundary and particle
+ cell_frac_x = REAL(cell_x1, num) - cell_x_r
+ cell_x1 = cell_x1 + 1
+
+ cf2 = cell_frac_x**2
+ gx(-1) = 0.25_num + cf2 + cell_frac_x
+ gx( 0) = 1.5_num - 2.0_num * cf2
+ gx( 1) = 0.25_num + cf2 - cell_frac_x
+
+ f_part = &amp;
+       gx(-1) * F(cell_x1-1) &amp;
+     + gx( 0) * F(cell_x1  ) &amp;
+     + gx( 1) * F(cell_x1+1)
+</code></pre><p>where <code>f_part</code> is the field at the particle location. Note that
+this has been simplified a little for brevity. Just the triangle shape
+function is given.
+In 2D or 3D, you just calculate gy
+in the same manner as gx and calculate the weight over all the cells affected
+by the individual 1D shape functions. In 2D this looks like:</p><pre><code class=language-perl> f_part = 0.0_num
+ DO iy = sf_min, sf_max
+   DO ix = sf_min, sf_max
+     f_part = f_part + f(cell_x+ix, cell_y+iy) * gx(ix) * gy(iy)
+   ENDDO
+ ENDDO
+</code></pre><p>The variables <code>sf_min</code> and <code>sf_max</code> contain the shape
+function order parameters which indicate the cells each side of the cell
+containing the particle which are overlapped by the particle shape function.
+They are defined in <code>shared_data.F90</code> and should only be changed
+by the developer if a new particle shape function is being added.
+Although provided here as pseudo-code for the particle push, it should be
+noted that the actual particle push unrolls these loops for the sake of speed.</p><p>Inside the particle pusher the $E$ and $B$ fields are not cell centred fields,
+but Yee staggered. This means that there is a small change to the above
+mentioned example. In 1D this change looks like</p><pre><code class=language-perl> REAL(num) :: cell_x_r, cell_frac_x
+ INTEGER :: cell_x1, cell_x2
+ REAL(num) :: gx(-2:2), hx(-2:2)
+ TYPE(particle), POINTER :: current
+
+ part_x  = current%part_pos(1) - x_min_local
+
+ ! Work out the grid cell number for the particle.
+ ! Not an integer in general.
+ cell_x_r = part_x / dx
+
+ ! Round cell position to nearest cell
+ cell_x1 = FLOOR(cell_x_r + 0.5_num)
+ ! Calculate fraction of cell between nearest cell boundary and particle
+ cell_frac_x = REAL(cell_x1, num) - cell_x_r
+ cell_x1 = cell_x1 + 1
+
+ ! Calculate weights
+ INCLUDE 'include/triangle/gx.inc'
+
+ ! Now redo shifted by half a cell due to grid stagger.
+ ! Use shifted version for ex in X, ey in Y, ez in Z
+ ! And in Y&amp;Z for bx, X&amp;Z for by, X&amp;Y for bz
+ cell_x2 = FLOOR(cell_x_r)
+ cell_frac_x = REAL(cell_x2, num) - cell_x_r + 0.5_num
+ cell_x2 = cell_x2 + 1
+
+ ! Calculate weights
+ INCLUDE 'include/triangle/hx_dcell.inc'
+
+ ! bx is cell centred
+ bx_part = 0.0_num
+ DO ix = sf_min, sf_max
+   bx_part = bx_part + bx(cell_x1+ix) * gx(ix)
+ ENDDO
+
+ ! ex is staggered 1/2 a cell to the right
+ ex_part = 0.0_num
+ DO ix = sf_min, sf_max
+   ex_part = ex_part + ex(cell_x2+ix) * hx(ix)
+ ENDDO
+</code></pre><p>In 2D and 3D, you just combine the shifted and unshifted shape functions and
+associated cell positions depending on the position of the variable in the
+cell. Therefore, in 3D and using the loop notation for clarity you would get:</p><pre><code class=language-perl> DO iz = sf_min, sf_max
+   DO iy = sf_min, sf_max
+     DO ix = sf_min, sf_max
+       ex_part = ex_part + hx(ix) * gy(iy) * gz(iz) * &amp;
+           ex(cell_x2+ix, cell_y1+iy, cell_z1+iz)
+     ENDDO
+   ENDDO
+ ENDDO
+
+ DO iz = sf_min, sf_max
+   DO iy = sf_min, sf_max
+     DO ix = sf_min, sf_max
+       bx_part = bx_part + gx(ix) * hy(iy) * hz(iz) * &amp;
+           bx(cell_x2+ix, cell_y1+iy, cell_z1+iz)
+     ENDDO
+   ENDDO
+ ENDDO
+</code></pre><p>Since $E_x$ is staggered half a grid cell in the x direction, whereas $B_x$ is
+staggered by half a grid cell in the y and z directions.</p><h2 id=writing-macro-particle-properties-on-the-grid>Writing macro-particle properties on the grid</h2><p>The next stage is to consider how to copy macro-particle
+properties on the grid. This is very similar to the function for calculating
+grid variables at the particle location and, for each grid point $x_i$,
+consists of integrating the part of the particle shape function which overlaps
+the $i^{th}$ cell. That is</p><p>$$
+F(i) = Data \int^{x_i+\frac{\Delta x}{2}}_{x_i-\frac{\Delta x}{2}} S(X-x) dx
+$$</p><p>Where $Data$ is the particle property to be copied onto the grid. In EPOCH,
+since the particle shape function is known to go to zero outside a distance of
+$2 \Delta x$ from the maximum, the maximum number of cells that can possibly be
+overlapped by a given particle shape function is 3; the cell containing the
+particle maximum and the two cells to either side. Performing the integration
+using the triangular shape function given above gives the result</p><p><img src=/developer/part_to_grid.png alt="Particle weight to grid"></p><p>When this is translated into the code, it looks very similar to that presented
+for the case where grid properties are interpolated to the particle
+position. This form is used in the particle pusher to perform the current
+update and in the routines in <code>src/io/calc_df.F90</code> to copy particle
+properties onto the grid for output. The form from calc_df is rather clearer
+and easier to see in operation. In 1D it looks like:</p><pre><code class=language-perl> cell_x_r = (current%part_pos - x_min_local) / dx + 1.5_num
+ cell_x = FLOOR(cell_x_r)
+ cell_frac_x = REAL(cell_x, num) - cell_x_r + 0.5_num
+
+ CALL particle_to_grid(cell_frac_x, gx)
+
+ wdata = part_m * fac
+ DO ix = sf_min, sf_max
+   data_array(cell_x+ix) = data_array(cell_x+ix) + gx(ix) * wdata
+ ENDDO
+</code></pre><p>Once again multi-dimensional codes just have the weighting functions multiplied
+together.</p><pre><code class=language-perl> DO iy = sf_min, sf_max
+   DO ix = sf_min, sf_max
+     data_array(cell_x+ix, cell_y+iy) = &amp;
+         data_array(cell_x+ix, cell_y+iy) + gx(ix) * gy(iy) * wdata
+   ENDDO
+ ENDDO
+</code></pre><h2 id=other-particle-shapes>Other particle shapes</h2><p>The previous sections dealt with the default macro-particle shape (triangular).
+EPOCH also supports TOPHAT and BSPLINE particle shapes, although the
+implementation of these can be different. Interpolating fields to particles and
+writing particle properties to the grid is performed using the same method as
+before, but for an altered shape function for TOPHAT:</p><p><img src=/developer/tophat.png alt="TOPHAT shape"></p><p>and for BSPLINE:</p><p><img src=/developer/bspline.png alt="BSPLINE shape"></p><p>In the TRIANGLE and BSPLINE set-ups, the particle shape extends over a size of
+$2\Delta x$ and $4\Delta x$. Unless the paricle centre is on a cell boundary,
+the shape will always extend over 3 or 5 cells respectively. However, the TOPHAT
+shape has a size of $1 \Delta x$, which is an odd number of cell-sizes. If we
+evaluate this shape at the particle centre, the shape may extend over the
+cell on the low-$x$ side, or the high-$x$ side. To simplify the code, we
+evaluate the TOPHAT shape position from the low-$x$, low-$y$, low-$z$ corner of
+the shape, such that the shape always extends over the current cell and the
+higher cell only. This is why the cell-calculation for TOPHAT differs from the
+other shapes, in lines like:</p><pre><code>#ifdef PARTICLE_SHAPE_TOPHAT
+          cell_x_r = part_x * idx - 0.5_num
+          cell_y_r = part_y * idy - 0.5_num
+#else
+          cell_x_r = part_x * idx
+          cell_y_r = part_y * idy
+#endif
+</code></pre></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/developer/core_structure/precompiler_flags.html rel=next>Pre-compilation Flags</a></div></div></div></div><div class=body-footer><p>Last updated on Apr 4, 2023</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Extending EPOCH | EPOCH</title><link>/developer/extensions.html</link><atom:link href="/developer/extensions/index.xml" rel="self" type="application/rss+xml"/><description>Extending EPOCH</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Extending EPOCH</title><link>/developer/extensions.html</link></image><item><title>Input Deck</title><link>/developer/extensions/input_deck.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/extensions/input_deck.html</guid><description>&lt;p>While using the &lt;code>custom_deck&lt;/code> subroutine is a good way of passing
+parameters into the code or for temporary additions, it is not suitable for
+permanent additions to the code. Adding new blocks to the code permanently is
+very similar to doing it temporarily, but requires changes to some of the
+subroutines in &lt;code>deck.F90&lt;/code>.&lt;/p>
+&lt;p>There are six subroutines which may need to be changed to add new blocks to
+the deck. These are&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>deck_initialise&lt;/code> - Called before parsing of the input
+deck is begun.&lt;/li>
+&lt;li>&lt;code>deck_finalise&lt;/code> - Called after parsing of the input
+deck is complete.&lt;/li>
+&lt;li>&lt;code>start_block(block_name)&lt;/code> - Called when the deck directive
+&lt;code>begin:block_name&lt;/code> appears in a deck file.&lt;/li>
+&lt;li>&lt;code>end_block(block_name)&lt;/code> - Called when the deck directive
+&lt;code>end:block_name&lt;/code> appears in a deck file.&lt;/li>
+&lt;li>&lt;code>handle_block(block_name, block_element, block_value)&lt;/code> -
+Called once for each element in a block.&lt;/li>
+&lt;li>&lt;code>check_compulsory_blocks(errcode_deck)&lt;/code> - Called once when
+the deck file has been read to check that all necessary blocks have been
+populated.&lt;/li>
+&lt;/ul>
+&lt;p>There is one final variable which is important for modifying the input deck,
+&lt;code>deck_state&lt;/code>. The input deck parser routine used to read the main
+input deck uses the variable &lt;code>deck_state&lt;/code> to
+determine which stage of parsing the deck is required. The possible values of
+&lt;code>deck_state&lt;/code> are&lt;/p>
+&lt;ul>
+&lt;li>c_ds_first - The first pass through the deck, before memory has been
+allocated.&lt;/li>
+&lt;li>c_ds_last - After the initial deck pass, all arrays and lists are
+allocated. The deck is then parsed a final time so that allocated memory
+can be populated with initial conditions.&lt;/li>
+&lt;/ul>
+&lt;p>These constants are defined in &lt;code>shared_data.F90&lt;/code>.&lt;/p>
+&lt;p>The layout of &lt;code>deck_initialise&lt;/code> and &lt;code>deck_finalise&lt;/code> is
+extremely simple. They just call &lt;code>*_deck_initialise&lt;/code> or
+&lt;code>*_deck_finalise&lt;/code> for each of the possible block types.
+&lt;code>start_block&lt;/code> and &lt;code>end_block&lt;/code> are also fairly
+straightforward. They examine the block name and call the
+&lt;code>*_block_start&lt;/code> or &lt;code>*_block_end&lt;/code> routine
+corresponding to the current block.&lt;/p>
+&lt;p>The &lt;code>handle_block&lt;/code> routine acts in a similar manner except
+that it also does some error handling.
+At the simplest level the routine simply calls another function which
+takes the block_element and block_value as
+parameters and returns an error code
+determining the success or failure of reading the element.&lt;/p>
+&lt;p>The final routine is &lt;code>check_compulsory_blocks&lt;/code> which is used to
+check that all the needed elements of the input deck have been set. A single
+parameter &lt;code>errcode_deck&lt;/code> is passed in. The routine
+checks &lt;code>deck_state&lt;/code> to make sure that it is the last pass
+through the deck. It then goes through and calls functions to check that
+all the necessary parts of a block have been set. The subroutines are contained
+in the same file as the routine which is called in &lt;code>handle_block&lt;/code> to
+handle elements of the block. The error handler functions should return an
+error code, usually
+&lt;code>c_err_missing_elements&lt;/code>. The
+return code from the error handler function should then be &lt;code>IOR&lt;/code>-ed
+with &lt;code>errcode_deck&lt;/code> to allow error codes to be returned from
+several different checks with errors occurring.&lt;/p>
+&lt;h2 id="the-element-handler-routines-for-deck-elements">The element handler routines for deck elements&lt;/h2>
+&lt;p>The exact form of the handler routines is up to the end user. The only
+&lt;em>requirements&lt;/em> are that the routine should return an error code detailing
+whether or not there are any problems with reading the block and that the error
+code should be &lt;code>c_err_none&lt;/code> if either the element name or element
+value are the special constant &lt;code>blank&lt;/code>. The typical implementation
+of an element handler routine is shown in the file
+&lt;code>src/deck/deck_control_block.f90&lt;/code>, and this general layout should
+be copied for compatibility if possible.&lt;/p>
+&lt;p>Sometimes, it is useful to have each new block correspond to a new instance of
+an object in the code. An example of this in EPOCH is in
+&lt;code>src/deck/deck_laser_block.f90&lt;/code> where each new laser block in
+the input deck corresponds to a new laser being attached to a boundary. This is
+accomplished by implementing the lasers as a linked list on each boundary,
+with a new laser object being created when a laser block is started, the laser
+information being set during the main reader routine, and then the laser being
+attached to the linked list by a call to &lt;code>attach_laser&lt;/code> in
+&lt;code>src/laser.f90&lt;/code> when the block is ended. When a new laser block is
+started the process simply repeats allowing the end user to have as many lasers
+as desired.&lt;/p>
+&lt;h2 id="adding-elements-to-existing-blocks">Adding elements to existing blocks&lt;/h2>
+&lt;p>The existing blocks in the code are read in the files listed in \sect{src_deck}&lt;/p>
+&lt;p>The existing structure of the blocks is simple enough in most cases that it
+should be fairly easy to add new elements if needed. The most likely change
+needed is to change the list of variables to dump in the &lt;code>output&lt;/code>
+block. How to do this is detailed in \sect{io}.&lt;/p></description></item><item><title>Maths Parser</title><link>/developer/extensions/maths_parser.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/extensions/maths_parser.html</guid><description>&lt;p>When an extension is intended for a new release, the temporary custom extensions
+are not appropriate. In these cases, it is possible to permanently add functions
+and constants to
+EPOCH&amp;rsquo;s maths parser. Although adding new operators is possible, it is
+sufficiently likely to cause problems with the operation of the maths parser
+that it is formally not recommended by the author of the program, and hence is
+not documented here.&lt;/p>
+&lt;h2 id="adding-the-new-tokenizer-handle">Adding the new tokenizer handle&lt;/h2>
+&lt;p>When adding a new function or constant to the maths parser using the temporary
+routines, there are two calls (&lt;code>register_function&lt;/code> and
+&lt;code>register_constant&lt;/code>) which give a numerical handle. This is the
+token used to represent that function or constant after the text has been parsed
+(remember that EPOCH&amp;rsquo;s maths parser tokenizes before evaluation!). When
+permanently adding objects to the maths parser, the tokenizer handles have to
+be set up manually. This takes place in &lt;code>src/shared_data.F90&lt;/code> in
+the module &lt;code>shared_parser_data&lt;/code>. There are several lines which
+look like:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> INTEGER, PARAMETER :: c_const_ix = 40
+INTEGER, PARAMETER :: c_const_iy = 41
+.
+.
+.
+INTEGER, PARAMETER :: c_func_interpolate = 22
+INTEGER, PARAMETER :: c_func_tanh = 23
+&lt;/code>&lt;/pre>
+&lt;p>Constants beginning with &lt;code>c_const_&lt;/code> are tokenizer handles for
+constants, and those beginning with &lt;code>c_func_&lt;/code> are tokenizer handles
+for functions. Each number must be unique and has to be less than
+the lower bound of values reserved for temporary or deck
+specified values. This means that any tokenizer handle for a function has to be
+less than the value of the variable &lt;code>c_func_custom_lowbound&lt;/code> and
+any handle for a constant must be less than
+&lt;code>c_const_deck_lowbound&lt;/code>. It is acceptable to simply increase the
+value of &lt;code>c_func_custom_lowbound&lt;/code> and
+&lt;code>c_const_deck_lowbound&lt;/code> to
+allow the use of more values for internal constants and functions, although
+care should be taken since this could lead to performance issues.
+If &lt;code>c_const_deck_lowbound&lt;/code> is increased then the constant
+&lt;code>c_constant_custom_lowbound&lt;/code> should be increased by the same
+amount (the values between &lt;code>c_const_deck_lowbound&lt;/code> and
+&lt;code>c_constant_custom_lowbound-1&lt;/code> are used for constants specified
+inside the input deck while values greater than or equal to
+&lt;code>c_constant_custom_lowbound&lt;/code> are used for constants specified
+by &lt;code>register_constant&lt;/code>.&lt;/p>
+&lt;p>Once the tokenizer handle is specified in &lt;code>shared_parser_data&lt;/code>, it
+is now possible to extend the main areas of the maths parser. Note that from
+here on, you MUST always use the constant named handle, NEVER the numerical
+value that you specified for the value of the handle. If this is not done
+then combining functions and constants from several sources becomes much harder.&lt;/p>
+&lt;h2 id="adding-the-new-function-or-constant-to-the-tokenizer">Adding the new function or constant to the tokenizer&lt;/h2>
+&lt;p>The next stage is to add the string representation of your constant or function
+to the tokenizer routines in
+&lt;code>src/parser/tokenizer_blocks.f90&lt;/code>. This is very simple to do, just
+find either the function &lt;code>as_constant&lt;/code> or &lt;code>as_function&lt;/code>
+and look at the existing code. These functions are just long lists of
+&lt;code>str_cmp&lt;/code> commands followed by code to deal with custom
+functions/constants. To add the new code, create an additional line such as:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> IF (str_cmp(name, &amp;quot;my_const&amp;quot;)) as_constant = c_const_my_const
+.
+.
+.
+IF (str_cmp(name, &amp;quot;my_func&amp;quot;)) as_function = c_func_my_func
+&lt;/code>&lt;/pre>
+&lt;p>Note that neither routine returns immediately after recognising the name of the
+function/constant. This allows users to override built in constants or
+functions with custom versions using &lt;code>register_constant}&lt;/code>
+and &lt;code>register_function&lt;/code>. This is not significant, since tokenizing
+should never be used in a speed critical part of the code.&lt;/p>
+&lt;h2 id="implementing-the-function-or-constant-in-the-evaluator">Implementing the function or constant in the evaluator&lt;/h2>
+&lt;p>The evaluator is the part of the code that actually takes the streams of tokens
+produced by the tokenizer and evaluates them into a number. The relevant parts
+of the evaluator for adding new constants or functions are in
+&lt;code>src/parser/evaluator_blocks.f90&lt;/code> and the functions which may need
+changing are &lt;code>do_constant&lt;/code> and &lt;code>do_functions&lt;/code>. These are
+both passed up to five parameters:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>INTEGER :: opcode&lt;/code> - The operation code, this is the tokenizer handle
+which was defined in &lt;code>shared_parser_data&lt;/code>.&lt;/li>
+&lt;li>&lt;code>INTEGER :: ix, iy, iz&lt;/code> - The position of the current evaluation in the
+domain. If your function or constant behaves differently at different points
+in space then you should use these parameters to reference the correct point
+of an array.&lt;/li>
+&lt;li>&lt;code>INTEGER :: errcode&lt;/code> - This should be set to an error code, usually
+&lt;code>c_err_bad_value&lt;/code> if for some reason it is not possible to evaluate your
+constant or function.&lt;/li>
+&lt;/ul>
+&lt;p>The rest of the routine to set a constant is as simple as testing for the
+tokenizer handle already set up in &lt;code>shared_parser_data&lt;/code> and then
+calling the subroutine &lt;code>push_on_eval&lt;/code>. This pushes the final
+constant onto the evaluation stack which is used by the RPN parser. The basic
+sequence for functions is similar except for the addition of a code to read
+the values that the function takes. This is again the subroutine
+&lt;code>get_values&lt;/code> which is also used in custom_function. The calling
+sequence in &lt;code>do_function&lt;/code> looks like:&lt;/p>
+&lt;pre>&lt;code class="language-perl"> IF (opcode .EQ. c_func_gauss) THEN
+CALL get_values(3, values)
+CALL push_on_eval(EXP(-((values(1)-values(2))/values(3))**2))
+RETURN
+ENDIF
+&lt;/code>&lt;/pre>
+&lt;p>Simply call the &lt;code>get_values&lt;/code> subroutine, passing the number of
+required parameters and an array of type &lt;code>REAL(num)&lt;/code> which is at
+least as long as the number of required parameters. The array is populated
+by the values passed into the function. Constants and maths expressions are
+already evaluated by the time that this section of code is reached, so there is
+no need to deal with further parsing. Next, simply call
+&lt;code>push_on_eval&lt;/code> to push the result of your function onto the
+evaluation stack.&lt;/p></description></item><item><title>New Module</title><link>/developer/extensions/new_modules.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/extensions/new_modules.html</guid><description>&lt;p>Adding a new module or physics package can turn out to be a very complicated
+process, but plugging it into the existing PIC-loop is usually quite
+straightforward. In this page, we will assume you have the source-code for a new
+module, and we will explain how to add it to EPOCH&amp;rsquo;s calculations.&lt;/p>
+&lt;h2 id="the-main-driver-routine">The main driver routine&lt;/h2>
+&lt;p>When adding completely new routines to the code, they should be added to the
+file &lt;code>src/epochnd.F90&lt;/code>. This routine simply calls other routines
+to perform the actual execution of the code. The first section of the code
+controls basic setup, MPI initialisation and
+initial conditions. If you wish to add new startup conditions then
+you should find the location in this routine where the
+initial conditions are setup. The code is fairly complicated, but
+there are a few key points at which the code significantly changes state.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>After the call to &lt;code>read_deck&lt;/code> the code has read the basic
+information from the input deck files and any tests or changes which have to
+be made to input deck values should be made immediately after this line. Note
+that although the variables from the deck have been set,
+none of these values have been used so allocatable
+variables have yet to be allocated. The grid does not exist at this point.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>After the call to &lt;code>open_files&lt;/code> the code has finished
+allocating all field variables, although particles may not yet have been set
+up. The grid now exists.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>There are now a series of &lt;code>IF&lt;/code> statements which test for
+things like &lt;code>IF (IOR(ictype, c_ic_autoload) .NE. 0)&lt;/code>.
+These are the lines which test for all possible states of the
+initial conditions. The last test is for the manual load routine
+(&lt;code>c_ic_manual&lt;/code>). After this test all the particles have been
+loaded and are now on their correct processor. The load balancer has now been
+called at least once so the domains may no longer be identical.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>The main loop is a simple do loop beginning with just the single command
+&lt;code>DO&lt;/code>. Inside this loop there are several calls to routines which
+actually advance the system. Most routines which can change currents should
+take place after the particle pusher but before the final update for the $E$
+and $B$ fields. These routines are&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>set_dt&lt;/code> - This routine sets the timestep.&lt;/li>
+&lt;li>&lt;code>update_eb_fields_half&lt;/code> - Time centre the $E$ and $B$
+fields.&lt;/li>
+&lt;li>&lt;code>push_particles&lt;/code> - The particle pusher.&lt;/li>
+&lt;li>&lt;code>reorder_particles_to_grid&lt;/code> - Groups particles into
+linked lists at each grid point. Used for the particle splitting routine,
+and binary collisions. Any routine
+which needs to have nearby particles grouped together should take place
+after the call to this routine.&lt;/li>
+&lt;li>&lt;code>split_particles&lt;/code> - The particle
+splitting operator.&lt;/li>
+&lt;li>&lt;code>reattach_particles_to_mainlist&lt;/code> - Undoes the
+particle grouping and rebuilds the main list of particles used by the
+particle pusher. Any routine which needs to have nearby particles grouped
+together should take place before the call to this routine.&lt;/li>
+&lt;li>&lt;code>update_eb_fields_final&lt;/code> - Updates the $E$ and $B$
+fields to the full timestep.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>After the call to &lt;code>update_eb_fields_final&lt;/code> the code is
+ready for another timestep. Any routines which do not change the time
+integrated properties of the code (like the moving window) should come after
+this call.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-particle-reordering-routine">The particle reordering routine&lt;/h2>
+&lt;p>After &lt;code>reorder_particles_to_grid&lt;/code>, the particles have been moved to
+particle-lists unique to each cell. The main list
+&lt;code>species(ispecies)%attached_list&lt;/code> is empty and cannot be used
+during this period. The particles should now be accessed using the variable
+&lt;code>species(ispecies)%secondary_list(ix,iy,iz)&lt;/code> which is the array of
+linked lists. This array is allocated on the call to
+&lt;code>reorder_particles_to_grid&lt;/code> and deallocated on the call to
+&lt;code>reattach_particles_to_mainlist&lt;/code>, and should not be used outside
+the section of code between these two calls. The particles themselves remain
+unchanged. No attempt is made to check that particles do not cross processor
+boundaries in this section, so if a particle&amp;rsquo;s position is changed, it is up to
+the user to ensure that the particle is transferred to another processor if
+required. However, if a particle is transferred to another processor, it is
+acceptable to relink it to &lt;code>species(ispecies)%attached_list&lt;/code> since
+the other lists are simply appended to that list when the particles are
+reattached to the main list.&lt;/p>
+&lt;p>You should avoid using these routines if possible, as they have a significant
+impact on performance. However, this remains the best method for cycling through
+processes which require particles to interact with other particles within the
+same cell, such as collisions or collisional ionisation. It is likely that new
+physics modules for two-body interactions between incident and target particles
+will also need to use this method (especially if the target particle changes).&lt;/p></description></item></channel></rss>
