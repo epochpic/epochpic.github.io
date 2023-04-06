@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: output block
-linktitle: output block
+title: Output block
+linktitle: Output block
 weight: 150
 menu:
   documentation:
     parent: Input deck
-    weight: 80
+    weight: 10
 ---
 
 This block contains information about when and how to dump output files.

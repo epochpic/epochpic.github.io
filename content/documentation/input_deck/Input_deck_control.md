@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: control block
-linktitle: control block
+title: Control block
+linktitle: Control block
 weight: 90
 menu:
   documentation:
     parent: Input deck
-    weight: 20
+    weight: 10
 ---
 
 The *control* block contains information about the general code setup.
@@ -132,8 +132,12 @@ particle push. This can help to reduce noise and self-heating in a
 simulation. The smoothing function used is the same as that outlined in
 Buneman [^1]. The default value is "F".
 - `field_ionisation` - Logical flag which turns on field
-ionisation. See [here][Input_deck_species__ionisation]
-.
+ionisation. See [here][Input_deck_species__ionisation].
+- `physics_table_location` - EPOCH expects you to run the code from the 
+`epoch1d`, `epoch2d` or `epoch3d` directories, so all paths are relative to 
+this. If you can't run the code from here, you must manually specify the 
+location of the TABLES file by setting this key to something like: 
+`"/absolute/path/to/epoch/epoch2d/src/physics_packages/TABLES"`
 - `use_bsi` - Logical flag which turns on barrier
 suppression ionisation correction to the tunnelling ionisation model for
 high intensity lasers. See
@@ -533,6 +537,6 @@ Comptes Rendus Mcanique, 2014
 [Input_deck_control__stencil_block]: /documentation/input_deck/input_deck_control#stencil_block
 [Input_deck_output_block]: /documentation/input_deck/input_deck_output_block
 [Input_deck_species]: /documentation/input_deck/input_deck_species
-[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species#ionisation
+[Input_deck_species__ionisation]: /documentation/input_deck/input_deck_species.html#ionisation
 [Input_deck_species__particle_migration_between_species]: /documentation/input_deck/input_deck_species#particle_migration_between_species
 [Maths_parser__constants]: /documentation/code_details/maths_parser#constants

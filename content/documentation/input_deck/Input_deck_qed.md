@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: qed block
-linktitle: qed block
+title: QED block
+linktitle: QED block
 weight: 200
 menu:
   documentation:
     parent: Input deck
-    weight: 120
+    weight: 10
 ---
 
 This block contains information about QED pair production. See [EPOCH

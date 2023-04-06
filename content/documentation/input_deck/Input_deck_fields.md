@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: fields block
-linktitle: fields block
+title: Fields block
+linktitle: Fields block
 weight: 130
 menu:
   documentation:
     parent: Input deck
-    weight: 60
+    weight: 10
 ---
 
 This block contains information about the EM fields specified at the

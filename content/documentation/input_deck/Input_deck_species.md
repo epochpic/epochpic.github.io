@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: species block
-linktitle: species block
-weight: 110
+title: Species block
+linktitle: Species block
+weight: 10
 menu:
   documentation:
     parent: Input deck
-    weight: 40
+    weight: 10
 ---
 
 This block contains information about the species of particles which are
@@ -302,9 +302,10 @@ mechanisms is given below, where non-relevant lines have been omitted.
 
 ```perl
 begin:control
-   use_multi_photon = T
+   use_multiphoton = T
    use_bsi = F
    field_ionisation = T
+   physics_table_location = "/absolute/path/to/epoch/epoch2d/src/physics_packages/TABLES"
 end:control
 
 begin:collisions
@@ -335,6 +336,11 @@ A full summary of the keys used in ionisation has been provided below:
   
 -   `use_collisional_ionisation` - Switches on ionisation by collisional
     electron impact.
+
+-   `physics_table_location` - If running the code from a non-standard 
+    directory, you will need to specify a path to the physics tables. This can 
+    be skipped if you run the code from the `epoch1d`, `epoch2d`, or `epoch3d` 
+    directories.
   
 -   `ci_n_step` - Only performs the collisional ionisation calculation
     once every _n_ steps, where _n_ is set by this parameter. This is done 

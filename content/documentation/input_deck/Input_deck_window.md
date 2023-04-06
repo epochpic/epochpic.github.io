@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: window block
-linktitle: window block
+title: Window block
+linktitle: Window block
 weight: 140
 menu:
   documentation:
     parent: Input deck
-    weight: 70
+    weight: 10
 ---
 
 This block contains information about the moving window if the code is

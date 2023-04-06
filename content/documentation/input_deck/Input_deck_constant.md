@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: constant block
-linktitle: constant block
+title: Constant block
+linktitle: Constant block
 weight: 220
 menu:
   documentation:
     parent: Input deck
-    weight: 140
+    weight: 10
 ---
 
 This block contains information about user defined constants and

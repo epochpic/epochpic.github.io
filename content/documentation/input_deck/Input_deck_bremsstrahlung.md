@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: bremsstrahlung block
-linktitle: bremsstrahlung block
+title: Bremsstrahlung block
+linktitle: Bremsstrahlung block
 weight: 90
 menu:
   documentation:
     parent: Input deck
-    weight: 20
+    weight: 10
 ---
 
 This block contains information about bremsstrahlung radiation. See [EPOCH

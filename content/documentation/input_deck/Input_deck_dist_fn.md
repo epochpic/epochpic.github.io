@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: dist_fn block
-linktitle: dist_fn block
+title: Dist_fn block
+linktitle: Dist_fn block
 weight: 170
 menu:
   documentation:
     parent: Input deck
-    weight: 100
+    weight: 10
 ---
 
 This block contains information about distribution functions that should

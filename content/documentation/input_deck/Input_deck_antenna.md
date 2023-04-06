@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: Input deck antenna
-linktitle: Input deck antenna
-weight: 240
+title: Antenna block
+linktitle: Antenna block
+weight: 10
 menu:
   documentation:
     parent: Input deck
-    weight: 160
+    weight: 10
 ---
 
 Antennae allow you to specify currents in the simulation domain that are

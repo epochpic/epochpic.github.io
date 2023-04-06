@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: injector block
-linktitle: injector block
+title: Injector block
+linktitle: Injector block
 weight: 230
 menu:
   documentation:
     parent: Input deck
-    weight: 150
+    weight: 10
 ---
 
 The *injector* block specifies a particle source to be introduced

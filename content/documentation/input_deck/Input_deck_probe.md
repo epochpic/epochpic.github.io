@@ -3,13 +3,13 @@ draft: false
 toc: true
 type: docs
 
-title: probe block
-linktitle: probe block
+title: Probe block
+linktitle: Probe block
 weight: 180
 menu:
   documentation:
     parent: Input deck
-    weight: 110
+    weight: 10
 ---
 
 This block contains information about particle probes used for output.
