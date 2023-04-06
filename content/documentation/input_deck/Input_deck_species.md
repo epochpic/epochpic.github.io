@@ -20,7 +20,9 @@ input deck.
 # Basics
 
 The next section of the input deck describes the particle species used
-in the code. An example species block for any EPOCH code is given below.
+in the code. An example species block for any EPOCH code is given below. In this 
+example, `den_max` is a parameter created by the user in a 
+[constant block](/documentation/input_deck/input_deck_constant.html).
 
 ```perl
 begin:species
@@ -37,7 +39,7 @@ begin:species
    number_density_min = 0.1 * den_max
    number_density = if(abs(x) lt thick, den_max, 0.0)
    number_density = if((x gt -thick) and (abs(y) gt 2e-6), \
-                        0.0, number_density(Carbon))
+                        0.0, number_density(Electron))
 end:species
 
 begin:species
@@ -160,8 +162,8 @@ soon as a number_density= line has been read, the values are calculated
 for the whole domain and are available for reuse on the right hand side
 of an expression. This is seen in the above example in the first two
 lines for the Electron species, where the number density is first set
-and then corrected. If you wish to specify the number density in parts
-per cubic metre then you can divide by the "cc" constant (see
+and then corrected. If you wish0 to specify the number density in parts
+per cubic centimetre then you can divide by the "cc" constant (see
 [here][Maths_parser__constants]). This parameter is
 mandatory. "density" is accepted as an alias.
 - `number_density_min` - Minimum particle number density in
