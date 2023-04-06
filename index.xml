@@ -214,7 +214,9 @@ input deck&lt;/a> for more information on the
 input deck.&lt;/p>
 &lt;h1 id="basics">Basics&lt;/h1>
 &lt;p>The next section of the input deck describes the particle species used
-in the code. An example species block for any EPOCH code is given below.&lt;/p>
+in the code. An example species block for any EPOCH code is given below. In this
+example, &lt;code>den_max&lt;/code> is a parameter created by the user in a
+&lt;a href="/documentation/input_deck/input_deck_constant.html">constant block&lt;/a>.&lt;/p>
 &lt;pre>&lt;code class="language-perl">begin:species
 name = Electron
 charge = -1.0
@@ -228,7 +230,7 @@ temp_y = temp_x(Electron)
 number_density_min = 0.1 * den_max
 number_density = if(abs(x) lt thick, den_max, 0.0)
 number_density = if((x gt -thick) and (abs(y) gt 2e-6), \
-0.0, number_density(Carbon))
+0.0, number_density(Electron))
 end:species
 begin:species
 name = Carbon
@@ -359,8 +361,8 @@ soon as a number_density= line has been read, the values are calculated
 for the whole domain and are available for reuse on the right hand side
 of an expression. This is seen in the above example in the first two
 lines for the Electron species, where the number density is first set
-and then corrected. If you wish to specify the number density in parts
-per cubic metre then you can divide by the &amp;ldquo;cc&amp;rdquo; constant (see
+and then corrected. If you wish0 to specify the number density in parts
+per cubic centimetre then you can divide by the &amp;ldquo;cc&amp;rdquo; constant (see
 &lt;a href="/documentation/code_details/maths_parser#constants">here&lt;/a>). This parameter is
 mandatory. &amp;ldquo;density&amp;rdquo; is accepted as an alias.&lt;/li>
 &lt;li>&lt;code>number_density_min&lt;/code> - Minimum particle number density in
