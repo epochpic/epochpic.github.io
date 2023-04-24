@@ -9967,7 +9967,352 @@ impact on performance. However, this remains the best method for cycling through
 processes which require particles to interact with other particles within the
 same cell, such as collisions or collisional ionisation. It is likely that new
 physics modules for two-body interactions between incident and target particles
-will also need to use this method (especially if the target particle changes).&lt;/p></description></item><item><title>Parallelism</title><link>/developer/core_structure/parallelism.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/parallelism.html</guid><description>&lt;p>EPOCH is a massively parallel code written using standard MPI. Due to the
+will also need to use this method (especially if the target particle changes).&lt;/p></description></item><item><title>New Particle Variable</title><link>/developer/extensions/new_particle_variable.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/extensions/new_particle_variable.html</guid><description>&lt;p>Sometimes you may wish to output a new variable associated with a
+particle. Such extensions may be specific to a
+particular task, and may be too niche to be added to the core EPOCH code.
+Alternatively, users may wish to quickly add new particle variables, without
+submitting a request to the developers and waiting for a new release. This
+section will detail how to define a new particle variable, and how to dump it
+to SDF files.&lt;/p>
+&lt;p>There are multiple parts of the code which need to be modified to create and print
+a new particle variable, these are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Makefile&lt;/code>: New pre-compiler option to deactivate new variable when not needed (for speed)&lt;/li>
+&lt;li>&lt;code>shared_data.F90&lt;/code>: Give the particle datatype a new variable&lt;/li>
+&lt;li>&lt;code>housekeeping/welcome.F90&lt;/code>: Alert the user when the code is compiled with your new option&lt;/li>
+&lt;li>&lt;code>housekeeping/partlist.F90&lt;/code>: As particles move between MPI ranks, move your new variable with them&lt;/li>
+&lt;li>&lt;code>constants.F90&lt;/code>: Create tags for the new output and compiler flag&lt;/li>
+&lt;li>&lt;code>deck/deck_io_block.F90&lt;/code>: Lets the output block see the new output variable&lt;/li>
+&lt;li>&lt;code>io/diagnostics.F90&lt;/code>: Writes the new variable to the SDF file&lt;/li>
+&lt;li>&lt;code>io/iterators.F90&lt;/code>: Gives diagnostics.F90 variables to write to file&lt;/li>
+&lt;li>&lt;strong>Extra&lt;/strong>: The user should set the value of the new variable to something&lt;/li>
+&lt;/ul>
+&lt;p>On this page, we provide an example of how to add and output a new particle
+variable, which has actually been requested by an EPOCH user.
+When electrons emit photons in the QED package, the photon macro-particle
+contains no information about the electron which generated it. In this
+example, let us output the Lorentz $\gamma$ factor of the radiating electron
+for each emitted photon, at the time of photon emission. We will use EPOCH2D,
+although this methodology would work for any dimension of the code. In these
+examples, we will include some of the neighbouring lines of code, so you can
+get a sense of where to insert the new code for your variable.&lt;/p>
+&lt;h2 id="makefile">Makefile&lt;/h2>
+&lt;p>We want a new pre-compiler flag for the new addition. As macro-particles move
+around the simulation, they are passed between MPI ranks. The more particle
+variables to transfer, the slower the code runs. Hence, if we don&amp;rsquo;t need to use
+the new particle variables, the code should be compiled without them. This
+is achieved with new pre-compiler variables.&lt;/p>
+&lt;p>In the Makefile, there is a section with multiple commented-out pre-compiler
+flags. Let us add a new one called &amp;ldquo;extended_io&amp;rdquo;. To do this, insert a line
+such that the Makefile reads like:&lt;/p>
+&lt;pre>&lt;code># Use second order particle weighting (default is third order).
+#DEFINES += $(D)PARTICLE_SHAPE_TOPHAT
+# Use fifth order particle weighting (default is third order).
+#DEFINES += $(D)PARTICLE_SHAPE_BSPLINE3
+# Include a unique global particle ID. The first flag defines the ID using
+# an 8-byte integer, the second uses 4-bytes.
+#DEFINES += $(D)PARTICLE_ID
+#DEFINES += $(D)PARTICLE_ID4
+# Include QED routines
+DEFINES += $(D)PHOTONS
+# Extended I/O for QED routines
+DEFINES += $(D)EXTENDED_IO
+# Use the Trident process for pair production
+#DEFINES += $(D)TRIDENT_PHOTONS
+# Include bremsstrahlung routines
+#DEFINES += $(D)BREMSSTRAHLUNG
+&lt;/code>&lt;/pre>
+&lt;p>Note that we have un-commented the new extended_io flag, and the photons flag,
+as we will have to run the code with both for the new output in this example.&lt;/p>
+&lt;h2 id="constantsf90">Constants.F90&lt;/h2>
+&lt;p>Let us make new global integer flags for both the pre-compiler flag, and the
+new output.&lt;/p>
+&lt;p>For the &lt;code>EXTENDED_IO&lt;/code> pre-compiler flag, find the &lt;code>c_def...&lt;/code> list and append a
+new &lt;code>c_def_extended_io&lt;/code> variable to the end:&lt;/p>
+&lt;pre>&lt;code> INTEGER(i8), PARAMETER :: c_def_use_mpi3 = 2**25
+INTEGER(i8), PARAMETER :: c_def_bremsstrahlung = 2**26
+INTEGER(i8), PARAMETER :: c_def_probe_time = 2**27
+INTEGER(i8), PARAMETER :: c_def_extended_io = 2**28 ! New line
+&lt;/code>&lt;/pre>
+&lt;p>Next, let us make a new output flag: &lt;code>c_dump_qed_el_gamma&lt;/code>. Find the list of
+&lt;code>c_dump...&lt;/code> parameters, and add our new one to the end. Remember to update the
+&lt;code>num_vars_to_dump&lt;/code> variable with the new number of dump flags.&lt;/p>
+&lt;pre>&lt;code> INTEGER, PARAMETER :: c_dump_probe_time = 72
+INTEGER, PARAMETER :: c_dump_cou_log = 73
+INTEGER, PARAMETER :: c_dump_qed_el_gamma = 74 ! New line
+INTEGER, PARAMETER :: num_vars_to_dump = 74 ! Modified line
+&lt;/code>&lt;/pre>
+&lt;p>Note, you may wish to introduce multiple outputs with one pre-compiler flag.
+For example, the &lt;code>WORK_DONE_INTEGRATED&lt;/code> pre-compiler flag introduces &lt;em>six&lt;/em> new
+outputs.&lt;/p>
+&lt;h2 id="shared_dataf90">Shared_data.F90&lt;/h2>
+&lt;p>Here we declare a new variable for the particle data-type. Be sure to wrap this
+inside your new pre-compiler flag using &lt;code>#ifdef&lt;/code> commands (note these cannot be
+indented - the first character of these lines must be &lt;code>#&lt;/code>). In our example, we
+have called the new variable &lt;code>electron_gamma&lt;/code>.&lt;/p>
+&lt;pre>&lt;code> ! Object representing a particle
+! If you add or remove from this section then you *must* update the
+! particle pack and unpack routines
+TYPE particle
+REAL(num), DIMENSION(3) :: part_p
+REAL(num), DIMENSION(c_ndims) :: part_pos
+#ifdef EXTENDED_IO
+REAL(num) :: electron_gamma ! New line, and the surrounding ifdef, endif
+#endif
+&lt;/code>&lt;/pre>
+&lt;h2 id="welcomef90">Welcome.F90&lt;/h2>
+&lt;p>For consistency with the other EPOCH pre-compiler options, we should print a
+message when the code has been compiled with our new &lt;code>EXTENDED_IO&lt;/code>.&lt;/p>
+&lt;p>The first part of the module scans through all possible pre-compiler variables,
+and checks if any are present. Add new lines for the new pre-compiler flag.&lt;/p>
+&lt;pre>&lt;code>#ifdef PHOTONS
+found = .TRUE.
+#ifdef TRIDENT_PHOTONS
+found = .TRUE.
+#endif
+#endif
+#ifdef EXTENDED_IO
+found = .TRUE. ! New line
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>Next, a message is printed for each present module. Here we have written a
+generic message for our extended_io pre-compiler flag.&lt;/p>
+&lt;pre>&lt;code>#ifdef PHOTONS
+defines = IOR(defines, c_def_photons)
+WRITE(*,*) 'QED Effects -DPHOTONS'
+#ifdef TRIDENT_PHOTONS
+defines = IOR(defines, c_def_trident_photons)
+WRITE(*,*) 'Pair production by Trident process -DTRIDENT_PHOTONS'
+#endif
+#endif
+#ifdef EXTENDED_IO
+defines = IOR(defines, c_def_extended_io) ! New line
+WRITE(*,*) 'Additional particle variables for output -DEXTENDED_IO' ! New line
+#endif
+&lt;/code>&lt;/pre>
+&lt;h2 id="partlistf90">Partlist.F90&lt;/h2>
+&lt;p>Each MPI rank only tracks particles present within its section of the domain.
+As macro-particles move around the simulation, they can pass between cells
+controlled by different ranks. When this happens, a new particle is created on
+the new rank, its properties are set to match the properties on the old rank,
+and the particle on the old rank is destroyed. New particle variables must
+also be transferred when particles move between ranks, and this is done here.&lt;/p>
+&lt;p>There are 4 steps here:&lt;/p>
+&lt;ul>
+&lt;li>Tell the code how many variables are associated with the particle&lt;/li>
+&lt;li>Copy the variables on the old rank to an array for transfer&lt;/li>
+&lt;li>Set variables on the new rank from the transferred array&lt;/li>
+&lt;li>For new particles, initialise the particle variable&lt;/li>
+&lt;/ul>
+&lt;p>To tell the code how many variables are present, find the &lt;code>set_partlist_size&lt;/code>
+subroutine. The count of particle variables is stored in the &lt;code>nvar&lt;/code> integer.
+In this example, we only introduce one more particle variable when the code
+is compiled with &lt;code>EXTENDED_IO&lt;/code>, so add 1 to &lt;code>nvar&lt;/code> if we have compiled with
+&lt;code>EXTENEDED_IO&lt;/code>:&lt;/p>
+&lt;pre>&lt;code>#ifdef BREMSSTRAHLUNG
+nvar = nvar+1
+#endif
+#ifdef EXTENDED_IO
+nvar = nvar+1 ! New line
+#endif
+#ifdef PROBE_TIME
+nvar = nvar+1
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>Next, navigate to &lt;code>pack_particle&lt;/code> - the subroutine responsible for collecting
+particle variables to transfer to neighbouring ranks. Now we can add our new
+variable to the transfer array. Make a note of the position here - variables
+must be read in the same order they are stored.&lt;/p>
+&lt;pre>&lt;code>#ifdef BREMSSTRAHLUNG
+array(cpos) = a_particle%optical_depth_bremsstrahlung
+cpos = cpos+1
+#endif
+#ifdef EXTENDED_IO
+array(cpos) = a_particle%electron_gamma ! New line
+cpos = cpos+1 ! Only 1 new variable, so add 1
+#endif
+#ifdef PROBE_TIME
+array(cpos) = a_particle%probe_time
+cpos = cpos+1
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>Once the particle variables are packed into an array, this is sent to the
+neighbouring ranks. These call &lt;code>unpack_particle&lt;/code> to set the properties of new
+particles. The syntax for this with our new variable would be:&lt;/p>
+&lt;pre>&lt;code>#ifdef BREMSSTRAHLUNG
+a_particle%optical_depth_bremsstrahlung = array(cpos)
+cpos = cpos+1
+#endif
+#ifdef EXTENDED_IO
+a_particle%electron_gamma = array(cpos) ! New line
+cpos = cpos+1 ! Note this is also between optical_depth_bremsstrahlung and probe_time
+#endif
+#ifdef PROBE_TIME
+a_particle%probe_time = array(cpos)
+cpos = cpos+1
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>Finally, we must set the initial values for these variables. If we don&amp;rsquo;t do
+this, the code can act unpredictably. In the &lt;code>init_particle&lt;/code> subroutine, add
+the lines:&lt;/p>
+&lt;pre>&lt;code>#ifdef EXTENDED_IO
+new_particle%electron_gamma = 0.0_num ! New line
+#endif
+#ifdef PROBE_TIME
+new_particle%probe_time = 0.0_num
+#endif
+&lt;/code>&lt;/pre>
+&lt;h2 id="deck_io_blockf90">Deck_io_block.F90&lt;/h2>
+&lt;p>Unless you want to make a new physics package, a new particle variable is only
+useful if you can output it. This is done using the standard EPOCH output block.
+Recall we&amp;rsquo;ve already defined a &lt;code>c_dump_qed_el_gamma&lt;/code> flag - now we just need
+to tell EPOCH how it will appear in the input deck.&lt;/p>
+&lt;p>Navigate to &lt;code>io_block_handle_element&lt;/code>, find the &lt;code>str_cmp&lt;/code> lines which interpret
+the the deck lines, and add:&lt;/p>
+&lt;pre>&lt;code>#ifdef BREMSSTRAHLUNG
+ELSE IF (str_cmp(element, 'bremsstrahlung_optical_depth')) THEN
+elementselected = c_dump_part_opdepth_brem
+#endif
+#ifdef EXTENDED_IO
+ELSE IF (str_cmp(element, 'electron_gamma')) THEN ! New line
+elementselected = c_dump_qed_el_gamma ! New line
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>Whatever you write as the second argument to &lt;code>str_cmp&lt;/code> is how you will
+have to write the variable in the EPOCH output block. As we are keeping things
+simple in this example, we will not bother with restart dumps. The value of
+&lt;code>electron_gamma&lt;/code> will not be re-loaded when you restart the code from a
+restart dump.&lt;/p>
+&lt;h2 id="diagnosticsf90">Diagnostics.F90&lt;/h2>
+&lt;p>At this point we have declared a new particle variable, wrapped it in
+pre-compiler flags, made it visible to MPI routines, and told EPOCH it can be
+dumped. Now we actually have to write the variable to file.&lt;/p>
+&lt;p>There is a section in the &lt;code>output_routines&lt;/code> subroutine which contains lines
+with &lt;code>write_particle_variable&lt;/code> calls. Add a new one for our variable:&lt;/p>
+&lt;pre>&lt;code>#ifdef BREMSSTRAHLUNG
+CALL write_particle_variable(c_dump_part_opdepth_brem, code, &amp;amp;
+'Bremsstrahlung Depth', '', it_output_real)
+#endif
+#ifdef EXTENDED_IO
+CALL write_particle_variable(c_dump_qed_el_gamma, code, &amp;amp;
+'Emitting Electron Gamma', '', it_output_real)
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>The &lt;code>'Emitting Electron Gamma'&lt;/code> string controls how the variable will be
+labelled in the SDF file.&lt;/p>
+&lt;h2 id="iteratorsf90">Iterators.F90&lt;/h2>
+&lt;p>One of the arguments of the &lt;code>write_particle_variable&lt;/code> subroutine is a call to
+the &lt;code>it_output_real&lt;/code> function. We need to modify this function to give our new
+variable, when requested. To do this, add the following case to the
+&lt;code>it_output_real&lt;/code> function:&lt;/p>
+&lt;pre>&lt;code>#ifdef EXTENDED_IO
+CASE (c_dump_qed_el_gamma)
+DO WHILE (ASSOCIATED(cur) .AND. (part_count &amp;lt; npoint_it))
+part_count = part_count + 1
+array(part_count) = cur%electron_gamma
+cur =&amp;gt; cur%next
+END DO
+#endif
+&lt;/code>&lt;/pre>
+&lt;h2 id="setting-your-variable">Setting your variable&lt;/h2>
+&lt;p>All the previous steps are required whatever your particle
+variable is. All we need to do now is figure out how to set it. This may be
+straightforward or complicated, depending on what the variable is. We can&amp;rsquo;t
+cover every possible particle variable here, but you may find it useful if we
+finish our example, to see how one would go about it.&lt;/p>
+&lt;p>Here, we want to save the electron gamma factor when a photon has been emitted.
+Photon emission occurs in the &lt;code>generate_photon&lt;/code> subroutine of &lt;code>photons.F90&lt;/code>.
+When in this subroutine, the generating electron information can be accessed
+through the &lt;code>generating_electron&lt;/code> particle pointer. Fortunately for us, the
+electron $\gamma$ factor has already been calculated in this subroutine, and is
+given by &lt;code>generating_gamma&lt;/code>. Let us set our new particle variable to this
+value, as soon as the photon macro-particle has been created.&lt;/p>
+&lt;pre>&lt;code> CALL create_particle(new_photon)
+new_photon%part_pos = generating_electron%part_pos
+#ifdef EXTENDED_IO
+new_photon%electron_gamma = generating_gamma ! New line
+#endif
+&lt;/code>&lt;/pre>
+&lt;h2 id="testing">Testing&lt;/h2>
+&lt;p>If all has gone well, we have a new particle variable ready for printing.
+Compile EPOCH (you may need to run &lt;code>make clean&lt;/code> first if you have changed the
+pre-compiler flags).&lt;/p>
+&lt;p>It&amp;rsquo;s best to run with a small input deck for code testing. We have shrank the
+qed_rese.deck found in the source code, such that it can run in a few seconds.
+This tiny deck has been included at the end of this section.&lt;/p>
+&lt;p>When running, the code correctly generates the compiler-flag messages:&lt;/p>
+&lt;pre>&lt;code> Welcome to EPOCH2D version 4.19.1 (commit v4.19.1-7-g6a1bfa99-dirty)
+The code was compiled with the following compile time options
+*************************************************************
+QED Effects -DPHOTONS
+Additional particle variables for output -DEXTENDED_IO
+*************************************************************
+&lt;/code>&lt;/pre>
+&lt;p>When we inspect &lt;code>0001.sdf&lt;/code>, we find that 21798 macro-photons have been created,
+and all of them have an emitting electron gamma value. These range from 20 to
+1896 in this example. The input deck used for this example is given below. A
+new particle variable has been successfully created!&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 50 # in x
+ny = 50
+nparticles = nx * ny * 2
+t_end = 100e-15
+x_min = 0
+x_max = 50 * 10.0e-9
+y_min = 0
+y_max = 50 * 10.0e-9
+dt_multiplier = 0.8
+end:control
+begin:qed
+use_qed = T
+qed_start_time = 0
+produce_photons = T
+photon_energy_min = 50 * kev
+produce_pairs = F
+photon_dynamics = F
+end:qed
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = reflect
+bc_y_max = reflect
+bc_y_min = reflect
+end:boundaries
+begin:species
+name = Electron
+fraction = 0.5
+dump = T
+temperature = 0
+number_density = if (x gt 0.1*x_max, 1.0e20, 0)
+identify:electron
+end:species
+begin:species
+name = Ion
+fraction = 0.5
+dump = T
+number_density = number_density(Electron)
+temperature = 0
+identify:proton
+end:species
+begin:species
+name = Photon
+frac = 0
+dump = T
+identify:photon
+end:species
+begin:output
+dt_snapshot = t_end
+electron_gamma = always
+end:output
+begin:laser
+boundary = x_min
+intensity = 1.0e21 * 1.0e4
+lambda = 1.0e-6
+polarisation = 0.0
+phase = 0.0
+t_profile = 1
+profile = 1
+end:laser
+&lt;/code>&lt;/pre></description></item><item><title>Parallelism</title><link>/developer/core_structure/parallelism.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/core_structure/parallelism.html</guid><description>&lt;p>EPOCH is a massively parallel code written using standard MPI. Due to the
 massively parallel nature
 of EPOCH, there are MPI commands scattered throughout many parts of the code,
 although the MPI has been hidden as far as possible from the end user. The main
