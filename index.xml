@@ -543,7 +543,9 @@ may use the appropriate ionisation energy and shell binding energies.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>ionise&lt;/code> - Allows ionisation of this species, and generates additional
-particle species for each ion charge state.&lt;/p>
+particle species for each ion charge state. Here, Carbon will generate a
+Carbon1, Carbon2, and Carbon3 species. If you add a Carbon2 species block, it
+will be correctly linked to Carbon3. Only switch on &lt;code>ionise&lt;/code> for the base state.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>ionise_limit&lt;/code> - This limits the number of additional particle species to
@@ -570,8 +572,10 @@ ion charge state. The user must use this, or &lt;strong>ionisation_electron_spec
 &lt;p>Ionised states are created automatically and are named according to the
 ionising species name with a number appended. For example, with the Carbon
 species block, the species named &amp;ldquo;Carbon1&amp;rdquo;, &amp;ldquo;Carbon2&amp;rdquo; and &amp;ldquo;Carbon3&amp;rdquo;
-are automatically created. Note that for pre-ionised species like the Carbon4 block,
-species would be named &amp;ldquo;Carbon41&amp;rdquo;, &amp;ldquo;Carbon42&amp;rdquo;. These species will also
+are automatically created. Here the Carbon4 block is pre-ionised, and ends with its
+charge state. If a species name ends in its charge-state, EPOCH will recognise
+that the &amp;ldquo;base name&amp;rdquo; is Carbon, and so the Carbon4 block will create a &amp;ldquo;Carbon5&amp;rdquo;
+and &amp;ldquo;Carbon6&amp;rdquo; species. These species will also
 inherit the ``dump''
 parameter from their parent species. This behaviour can be overridden by explicitly
 adding a species block of the same name with a differing dumpmask.&lt;/p>
