@@ -356,7 +356,9 @@ A full summary of the keys used in ionisation has been provided below:
     may use the appropriate ionisation energy and shell binding energies.
   
 -   `ionise` - Allows ionisation of this species, and generates additional
-    particle species for each ion charge state.
+    particle species for each ion charge state. Here, Carbon will generate a 
+    Carbon1, Carbon2, and Carbon3 species. If you add a Carbon2 species block, it 
+    will be correctly linked to Carbon3. Only switch on `ionise` for the base state.
 
 -  `ionise_limit` - This limits the number of additional particle species to
     be generated. In this example, ion macro-particles in the Carbon species can only
@@ -379,8 +381,10 @@ A full summary of the keys used in ionisation has been provided below:
 Ionised states are created automatically and are named according to the
 ionising species name with a number appended. For example, with the Carbon
 species block, the species named "Carbon1", "Carbon2" and "Carbon3"
-are automatically created. Note that for pre-ionised species like the Carbon4 block,
-species would be named "Carbon41", "Carbon42". These species will also 
+are automatically created. Here the Carbon4 block is pre-ionised, and ends with its
+charge state. If a species name ends in its charge-state, EPOCH will recognise
+that the "base name" is Carbon, and so the Carbon4 block will create a "Carbon5" 
+and "Carbon6" species. These species will also 
 inherit the ``dump''
 parameter from their parent species. This behaviour can be overridden by explicitly
 adding a species block of the same name with a differing dumpmask.
