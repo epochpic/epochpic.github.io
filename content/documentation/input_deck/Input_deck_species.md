@@ -331,6 +331,11 @@ begin:species
   ionise = T
   ionisation_electron_species = (Electron4, Electron)
 end:species
+
+begin:species
+  name = Electron
+  identify:electron
+end:species
 ```
 A full summary of the keys used in ionisation has been provided below:
 
@@ -378,6 +383,12 @@ A full summary of the keys used in ionisation has been provided below:
     unique electron species to populate with ejected electrons from each
     ion charge state. The user must use this, or **ionisation_electron_species**.
 
+-  `identify` - Collisional ionisation considers ionisation between every electron 
+    species and every species which can be ionised. To tell EPOCH which species are
+    electrons, you must include the `identify:electron` key. EPOCH will also treat
+    particles in any ejected-electron species as particles which can trigger collisional 
+    ionisation.
+
 Ionised states are created automatically and are named according to the
 ionising species name with a number appended. For example, with the Carbon
 species block, the species named "Carbon1", "Carbon2" and "Carbon3"
@@ -406,7 +417,7 @@ using the following control block parameters:
     ionisation correction to the tunnelling ionisation model for high intensity
     lasers. The default is "T".
 
-When collisional ionisation is switched on, ionisation between all electron species and all species which may be ionised is considered - the `collide` parameter used in the collisions block has no effect on collisional ionisation. Species which may be ionised include any species with `ionise=T` set, and the ionised variants of this species up to the fully ionised state, or `ionise_limit`. For electrons, EPOCH will identify any species set as a destination for ejected electrons as an electron species, which can trigger further collisional ionisation. To mark other species as electrons for collisional ionisaiton, the `identify` key must be used. All electron aliases may be used for `identify`, including electrons created from pair production.
+When collisional ionisation is switched on, ionisation between all electron species and all species which may be ionised is considered - the `collide` parameter used in the collisions block has no effect on collisional ionisation. Species which may be ionised include any species with `ionise=T` set, and the ionised variants of this species up to the fully ionised state, or `ionise_limit`. For electrons, EPOCH will identify any species set as a destination for ejected electrons as an electron species, which can trigger further collisional ionisation. To mark other species as electrons for collisional ionisaiton, the `identify` key must be used. Any electron alias may be used for `identify`, including electrons created from pair production.
 
 # Species Boundary Conditions {#species_boundary_conditions}
 
