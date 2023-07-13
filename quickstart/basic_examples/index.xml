@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Basic examples | EPOCH</title><link>/quickstart/basic_examples.html</link><atom:link href="/quickstart/basic_examples/index.xml" rel="self" type="application/rss+xml"/><description>Basic examples</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Basic examples</title><link>/quickstart/basic_examples.html</link></image><item><title>Restart from SDF dump</title><link>/quickstart/basic_examples/restart_example.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/basic_examples/restart_example.html</guid><description>&lt;p>It can sometimes be useful to restart an &lt;strong>EPOCH&lt;/strong> simulation from an SDF file.
+Supercomputers may often place limits on job length, or systems may be prone to
+crashing, so code-restarts can help prevent CPU waste.&lt;/p>
+&lt;p>Using the &lt;strong>EPOCH&lt;/strong>
+&lt;a href="/documentation/input_deck/input_deck_output_block.html">output block&lt;/a>,
+the user is able to force the code to write restart-dumps. These differ from
+regular dumps, as they write all the particle and field properties required to
+restart the simulation. These will quite often be large and slow files to write,
+so there is a trade-off between simulation speed (no restarts) and safety (many
+restart dumps).&lt;/p>
+&lt;p>In this page we will simulate a basic laser injected into a vacuum, and run the
+simulation with and without restarts.&lt;/p>
+&lt;h2 id="no_restart">Simulation set-up&lt;/h2>
+&lt;p>Here we provide the input deck for a basic 2D simulation where a plane wave
+enters
+the simulation window through the &lt;code>x_min&lt;/code> boundary. This creates an SDF file
+containing the &lt;code>Ey&lt;/code> field every 10 fs. This is a lightweight diagnostic, and
+is not sufficient to restart the whole simulation. A plot of the electric field
+from the &lt;code>0010.sdf&lt;/code> file is also present, along with the MATLAB script which
+created it (other post-processing tools are available). Instructions on running
+EPOCH input decks are provided
+&lt;a href="/quickstart.html">here&lt;/a>.&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 500
+ny = 500
+t_end = 100 * femto
+x_min = 0.0
+x_max = 10.0e-6
+y_min = -5.0e-6
+y_max = 5.0e-6
+stdout_frequency = 10
+end:control
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = open
+bc_y_min = periodic
+bc_y_max = periodic
+end:boundaries
+begin:laser
+boundary = x_min
+intensity_w_cm2 = 1.0e15
+lambda = 1.0e-6
+profile = 1.0
+t_profile = 1.0
+end:laser
+begin:output
+dt_snapshot = 10.0e-15
+ey = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>This code took 3 seconds to run on a 4 core laptop. For the MATLAB
+post-processing, the contents of &lt;code>epoch/SDF/MATLAB&lt;/code> were copied into the
+directory containing the SDF files and &lt;code>input.deck&lt;/code>, and a plot was generated
+using this script:&lt;/p>
+&lt;pre>&lt;code class="language-MatLab">% Extract data
+data = GetDataSDF('0010.sdf');
+% Format grid
+x_edges = data.Electric_Field.Ey.grid.x;
+y_edges = data.Electric_Field.Ey.grid.y;
+x_centres = 0.5*(x_edges(2:end) + x_edges(1:end-1));
+y_centres = 0.5*(y_edges(2:end) + y_edges(1:end-1));
+[x_plot, y_plot] = meshgrid(x_centres, y_centres);
+% Create and format plot
+surf(x_plot*1.0e6, y_plot*1.0e6, data.Electric_Field.Ey.data','EdgeColor','none');
+view(2);
+xlabel('x [\mum]');
+ylabel('y [\mum]');
+cbar = colorbar;
+cbar.Label.String = 'Ey [V/m]';
+ax = gca;
+ax.FontSize = 16;
+title(sprintf('%g fs',data.time*1.0e15));
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="restart_example.png" alt="Ey field in basic example">&lt;/p>
+&lt;h2 id="restarting-from-simulation-end">Restarting from simulation end&lt;/h2>
+&lt;p>Now we have a basic script, let us run it in two simulations loading the second
+from a restart-dump. In our first run, we will reduce the run-time to 50 fs, and
+force the final dump to be restartable. We will start the second simulation from
+the 50 fs restart-dump, and run to completion.&lt;/p>
+&lt;p>For the first run, take the previous &lt;code>input.deck&lt;/code> and make some changes.
+Firstly, change &lt;code>t_end&lt;/code> in the control block from &lt;code>100 * femto&lt;/code> to &lt;code>50 * femto&lt;/code>.
+Next, add the following line to the output block:&lt;/p>
+&lt;pre>&lt;code>force_final_to_be_restartable = T
+&lt;/code>&lt;/pre>
+&lt;p>When we run this simulation, we find that we generate output files from
+&lt;code>0000.sdf&lt;/code> to &lt;code>0005.sdf&lt;/code>. If we inspect the file-sizes, we&amp;rsquo;ll see that
+&lt;code>0005.sdf&lt;/code> has a size of 18 MB, while the rest have 2 MB - our restart-dump file
+is much larger.&lt;/p>
+&lt;p>For the restarted run, change &lt;code>t_end&lt;/code> in the control block back to
+&lt;code>100 * femto&lt;/code>, and add the control block line:&lt;/p>
+&lt;pre>&lt;code>restart_snapshot = 5
+&lt;/code>&lt;/pre>
+&lt;p>When running the restarted deck, &lt;strong>EPOCH&lt;/strong> will print the lines:&lt;/p>
+&lt;pre>&lt;code> Loading snapshot for time 5.0012906556442301E-014
+Input file contains 29 blocks
+Load from restart dump OK
+&lt;/code>&lt;/pre>
+&lt;p>if run successfully. You&amp;rsquo;ll see the SDF files continue from where they left off,
+and if we were to once again print the &lt;code>Ey&lt;/code> field at &lt;code>0010.sdf&lt;/code>, we once again
+find what we had before:&lt;/p>
+&lt;p>&lt;img src="restart_example.png" alt="Ey field in basic example">&lt;/p>
+&lt;h2 id="restart-checkpoints">Restart checkpoints&lt;/h2>
+&lt;p>The previous example assumed you could split your simulation up into obvious
+chunks, but what if the nodes you run on have a tendency to crash? In this case,
+it would make more sense to make multiple restart dumps. While this could be
+achieved by replacing &lt;code>force_final_to_be_restartable&lt;/code> with &lt;code>restart_dump_every&lt;/code>
+to make multiple restart dumps, you may want to separate your restart dumps from
+your usual dumps. This can be done using multiple output blocks.&lt;/p>
+&lt;p>The previous example has been extended to produce two sets out output files, one
+labelled &lt;code>normal0000.sdf&lt;/code> to &lt;code>normal0010.sdf&lt;/code>, and the other labelled
+&lt;code>restart0000.sdf&lt;/code> to &lt;code>restart0005.sdf&lt;/code>.&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 500
+ny = 500
+t_end = 100 * femto
+x_min = 0.0
+x_max = 10.0e-6
+y_min = -5.0e-6
+y_max = 5.0e-6
+stdout_frequency = 10
+end:control
+begin:boundaries
+bc_x_min = simple_laser
+bc_x_max = open
+bc_y_min = periodic
+bc_y_max = periodic
+end:boundaries
+begin:laser
+boundary = x_min
+intensity_w_cm2 = 1.0e15
+lambda = 1.0e-6
+profile = 1.0
+t_profile = 1.0
+end:laser
+begin:output
+name = normal
+file_prefix = normal
+dt_snapshot = 10.0e-15
+ey = always
+end:output
+begin:output
+name = restart
+file_prefix = restart
+restartable = T
+dt_snapshot = 20.0e-15
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>Once we have this, we can restart from any of the restart SDF files. Because
+these files now have a prefix, we must add a line like:&lt;/p>
+&lt;pre>&lt;code>restart_snapshot = restart0004.sdf
+&lt;/code>&lt;/pre>
+&lt;p>to the control block, where we use the full file-name.&lt;/p>
+&lt;h2 id="restart-at-end-of-the-cluster-job-allocation">Restart at end of the cluster job allocation&lt;/h2>
+&lt;p>The issue with regular checkpoints is that it may be overkill for your job, and
+any CPU time spent after the final checkpoint is wasted when you come to
+restart. Also, writing a restart dump at the end of a simulation is less useful
+when you run on supercomputers, as you don&amp;rsquo;t know where you&amp;rsquo;ll be at the end of
+your maximum job time!&lt;/p>
+&lt;p>In this case, you need a way to automatically stop the simulation as you near
+the end of your allotted time, and &lt;em>then&lt;/em> write a restart dump so you can
+continue later. This can be achieved using the &lt;code>STOP&lt;/code> file.&lt;/p>
+&lt;p>While running, &lt;strong>EPOCH&lt;/strong> continuously scans the directory containing
+&lt;code>input.deck&lt;/code> for a file with a filename &lt;code>STOP&lt;/code>. When this file appears,
+&lt;strong>EPOCH&lt;/strong> completes the current time-step, writes a restart dump, ends the
+simulation, and deletes the &lt;code>STOP&lt;/code> file.&lt;/p>
+&lt;p>For example, if you were to submit an &lt;strong>EPOCH&lt;/strong> job on a super-computer with an
+allocated time of 5 hours, and you wanted the code to stop at 4 hours 30 mins
+(leaving you 30 minutes to write a restart dump), you could add the line:&lt;/p>
+&lt;pre>&lt;code>(sleep 16200; touch STOP) &amp;amp;
+&lt;/code>&lt;/pre>
+&lt;p>to your job-script just before &lt;strong>EPOCH&lt;/strong> is run. This will create a background
+process which will wait 16200 seconds, then create the &lt;code>STOP&lt;/code> file in the
+working directory of the original command. If this is the same directory as your
+input deck,
+this will stop the code with (hopefully) enough time to write the restart dump.
+You may want to check in advance how long a restart dump takes to write for your
+project.&lt;/p></description></item></channel></rss>
