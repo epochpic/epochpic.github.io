@@ -194,7 +194,10 @@ begin:output
 end:output
 ```
 
-Once we have this, we can restart from any of the restart SDF files. Because 
+As before, the `normal` dumps only contain the `Ey` data. However, because the 
+output block named `restart` contains the `restartable=T` flag, all these dumps 
+will be restart dumps. Once we have this, we can restart from any of the restart 
+SDF files. Because 
 these files now have a prefix, we must add a line like:
 
 ```
@@ -218,7 +221,8 @@ continue later. This can be achieved using the `STOP` file.
 While running, **EPOCH** continuously scans the directory containing 
 `input.deck` for a file with a filename `STOP`. When this file appears, 
 **EPOCH** completes the current time-step, writes a restart dump, ends the
-simulation, and deletes the `STOP` file.
+simulation, and deletes the `STOP` file. No lines need to be added to the 
+`input.deck` in order to use the `STOP` functionality.
 
 For example, if you were to submit an **EPOCH** job on a super-computer with an 
 allocated time of 5 hours, and you wanted the code to stop at 4 hours 30 mins 
@@ -234,4 +238,4 @@ working directory of the original command. If this is the same directory as your
 input deck, 
 this will stop the code with (hopefully) enough time to write the restart dump. 
 You may want to check in advance how long a restart dump takes to write for your 
-project.
+project, to get the timing of the `STOP` file appearence correct.
