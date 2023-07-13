@@ -145,7 +145,10 @@ restartable = T
 dt_snapshot = 20.0e-15
 end:output
 &lt;/code>&lt;/pre>
-&lt;p>Once we have this, we can restart from any of the restart SDF files. Because
+&lt;p>As before, the &lt;code>normal&lt;/code> dumps only contain the &lt;code>Ey&lt;/code> data. However, because the
+output block named &lt;code>restart&lt;/code> contains the &lt;code>restartable=T&lt;/code> flag, all these dumps
+will be restart dumps. Once we have this, we can restart from any of the restart
+SDF files. Because
 these files now have a prefix, we must add a line like:&lt;/p>
 &lt;pre>&lt;code>restart_snapshot = restart0004.sdf
 &lt;/code>&lt;/pre>
@@ -162,7 +165,8 @@ continue later. This can be achieved using the &lt;code>STOP&lt;/code> file.&lt;
 &lt;p>While running, &lt;strong>EPOCH&lt;/strong> continuously scans the directory containing
 &lt;code>input.deck&lt;/code> for a file with a filename &lt;code>STOP&lt;/code>. When this file appears,
 &lt;strong>EPOCH&lt;/strong> completes the current time-step, writes a restart dump, ends the
-simulation, and deletes the &lt;code>STOP&lt;/code> file.&lt;/p>
+simulation, and deletes the &lt;code>STOP&lt;/code> file. No lines need to be added to the
+&lt;code>input.deck&lt;/code> in order to use the &lt;code>STOP&lt;/code> functionality.&lt;/p>
 &lt;p>For example, if you were to submit an &lt;strong>EPOCH&lt;/strong> job on a super-computer with an
 allocated time of 5 hours, and you wanted the code to stop at 4 hours 30 mins
 (leaving you 30 minutes to write a restart dump), you could add the line:&lt;/p>
@@ -174,4 +178,4 @@ working directory of the original command. If this is the same directory as your
 input deck,
 this will stop the code with (hopefully) enough time to write the restart dump.
 You may want to check in advance how long a restart dump takes to write for your
-project.&lt;/p></description></item></channel></rss>
+project, to get the timing of the &lt;code>STOP&lt;/code> file appearence correct.&lt;/p></description></item></channel></rss>
