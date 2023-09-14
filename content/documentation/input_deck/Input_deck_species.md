@@ -311,7 +311,7 @@ begin:control
 end:control
 
 begin:collisions
-   use_collisional_ionisation = T 
+   collisional_ionisation = T 
    ci_n_step = 3
 end:collisions
 
@@ -341,7 +341,7 @@ A full summary of the keys used in ionisation has been provided below:
 
 -   `field_ionisation` - Switches on field ionisation.
   
--   `use_collisional_ionisation` - Switches on ionisation by collisional
+-   `collisional_ionisation` - Switches on ionisation by collisional
     electron impact.
 
 -   `physics_table_location` - If running the code from a non-standard 
