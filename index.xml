@@ -674,7 +674,7 @@ field_ionisation = T
 physics_table_location = &amp;quot;/absolute/path/to/epoch/epoch2d/src/physics_packages/TABLES&amp;quot;
 end:control
 begin:collisions
-use_collisional_ionisation = T
+collisional_ionisation = T
 ci_n_step = 3
 end:collisions
 begin:species
@@ -703,7 +703,7 @@ end:species
 &lt;p>&lt;code>field_ionisation&lt;/code> - Switches on field ionisation.&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>&lt;code>use_collisional_ionisation&lt;/code> - Switches on ionisation by collisional
+&lt;p>&lt;code>collisional_ionisation&lt;/code> - Switches on ionisation by collisional
 electron impact.&lt;/p>
 &lt;/li>
 &lt;li>
