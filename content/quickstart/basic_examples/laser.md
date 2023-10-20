@@ -12,11 +12,12 @@ menu:
 
 EPOCH can support laser sources on the boundaries, with a wide array of spatial 
 and temporal profiles. These examples provide basic input decks for simulating 
-lasers in vacuum.
+lasers in vacuum. General documentation on the EPOCH laser block can be found 
+[here](/documentation/input_deck/input_deck_laser.html)
 
 ## Simple plane wave
 
-This input deck provdies the most basic form of laser. We use uniform spatial
+This input deck provides the most basic form of laser. We use uniform spatial
 and temporal profiles, and inspect the Poynting flux in the simulation window.
 As a typical rule of thumb, allow 20 cells per wavelength to get a good 
 resolution.
