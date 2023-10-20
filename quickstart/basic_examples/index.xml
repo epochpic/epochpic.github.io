@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Basic examples | EPOCH</title><link>/quickstart/basic_examples.html</link><atom:link href="/quickstart/basic_examples/index.xml" rel="self" type="application/rss+xml"/><description>Basic examples</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Basic examples</title><link>/quickstart/basic_examples.html</link></image><item><title>Lasers</title><link>/quickstart/basic_examples/laser.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/basic_examples/laser.html</guid><description>&lt;p>EPOCH can support laser sources on the boundaries, with a wide array of spatial
 and temporal profiles. These examples provide basic input decks for simulating
-lasers in vacuum.&lt;/p>
+lasers in vacuum. General documentation on the EPOCH laser block can be found
+&lt;a href="/documentation/input_deck/input_deck_laser.html">here&lt;/a>&lt;/p>
 &lt;h2 id="simple-plane-wave">Simple plane wave&lt;/h2>
-&lt;p>This input deck provdies the most basic form of laser. We use uniform spatial
+&lt;p>This input deck provides the most basic form of laser. We use uniform spatial
 and temporal profiles, and inspect the Poynting flux in the simulation window.
 As a typical rule of thumb, allow 20 cells per wavelength to get a good
 resolution.&lt;/p>
