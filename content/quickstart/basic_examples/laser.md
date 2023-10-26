@@ -13,7 +13,7 @@ menu:
 EPOCH can support laser sources on the boundaries, with a wide array of spatial 
 and temporal profiles. These examples provide basic input decks for simulating 
 lasers in vacuum. General documentation on the EPOCH laser block can be found 
-[here](/documentation/input_deck/input_deck_laser.html)
+[here](/documentation/input_deck/input_deck_laser.html).
 
 ## Simple plane wave
 
@@ -65,25 +65,44 @@ deal with laser pulses.
 ## Laser pulse
 
 Using the maths parser, we can create a laser pulse which has a Gaussian profile
-in time and space. Here, let the full-width-at-half-maximum of the
+in time and space for the intensity distribution, $I$: 
+
+$ I(y,t) \propto e^{-(y-y_0)^2/2\sigma_y^2} e^{-(t-t_0)^2/2\sigma_t^2}$
+
+where we consider a 2D simulation with an $x$ propagating laser.
+
+Let the full-width-at-half-maximum of the
 spatial and temporal profiles be 5 $\mu m$ and 40 fs respectively for the 
-intensity $I$ distribution. The profile 
+intensity $I$ distribution. The relationship between $\sigma$ and the $fwhm$
+for a Gaussian distribution is:
+
+$\sigma = \frac{fwhm}{2\sqrt{2 \ln(2)}}$
+
+However, the profile 
 keys in the laser block describe modifications to the boundary electric fields,
 $E$, and as $I \propto E^2$, the $E$ profile must satisfy
 
-$ e^{-((y-y_0)/\sigma_y)^2}$, $ e^{-((t-t_0)/\sigma_t)^2}$
+$ E(y,t) \propto e^{-((y-y_0)/2\sigma_y)^2} e^{-((t-t_0)/2\sigma_t)^2}$
 
-Luckily, this is the same form as the `gauss(x,x_0,w)` command in the input deck
-[maths parser](/documentation/code_details/maths_parser.html). We can use
+The EPOCH [maths parser](/documentation/code_details/maths_parser.html) provides
+a special `gauss(x,x_0,w)` command for use in the input.deck, which sets a
+profile of the form:
 
-$\sigma = \frac{FWHM}{\sqrt{2\ln(2)}} $.
+$e^{-(x-x_0)^2/w^2}$
+
+Hence, we may use this `gauss` function to model the electric field profiles if
+we set
+
+$w = \frac{fwhm}{\sqrt{2\ln(2)}}$
+
+where $fwhm$ refers to the _intensity_ distribution.
 
 We can let the spatial profile peak at $y=0$. We don't want the laser to peak at
 $t=0$, as this would ignore the rising intensity. Instead, let us start when the
 laser pulse is 10% of its maximum value - the half-width-at-10%-maximum,
-$HW0.1M$. For a Gaussian beam, this is:
+$hw0.1m$. For a Gaussian beam, this is:
 
-$HW0.1M = \frac{FWHM}{2} \sqrt{\frac{\ln(10)}{\ln(2)}}$ 
+$hw0.1m = \frac{fwhm}{2} \sqrt{\frac{\ln(10)}{\ln(2)}}$ 
 
 ```perl
 begin:control
@@ -107,8 +126,8 @@ end:boundaries
 begin:constant
     t_fwhm = 40.0e-15
     y_fwhm = 5.0e-6
-    sigma_t = t_fwhm / sqrt(2*loge(2))
-    sigma_y = y_fwhm / sqrt(2*loge(2))
+    w_t = t_fwhm / sqrt(2*loge(2))
+    w_y = y_fwhm / sqrt(2*loge(2))
     t_hw01m = 0.5 * t_fwhm * sqrt(loge(10)/loge(2))
 end:constant
 
@@ -116,8 +135,8 @@ begin:laser
     boundary = x_min
     intensity_w_cm2 = 1.0e18
     lambda = 1.0e-6
-    profile = gauss(y,0,sigma_y)
-    t_profile = gauss(time,t_hw01m,sigma_t)
+    profile = gauss(y,0,w_y)
+    t_profile = gauss(time,t_hw01m,w_t)
 end:laser
 
 begin:output
@@ -128,8 +147,8 @@ end:output
 
 ![Uniform laser](laser_pulse.png)
 
-Here we see that the laser FWHM in $x$ and $y$ are 12 $\mu m$ and 5 $\mu m$ 
-respectively, where the $x$ FWHM corresponds to a temporal FWHM of 40 fs, as
+Here we see that the laser $fwhm$ in $x$ and $y$ are 12 $\mu m$ and 5 $\mu m$ 
+respectively, where the $x$ $fwhm$ corresponds to a temporal FWHM of 40 fs, as
 expected. Also, because there is little contact between the pulse and the 
 boundaries, we do not have any numerical boundary disturbance.
 
