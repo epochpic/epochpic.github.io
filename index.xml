@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>EPOCH</title><link>/</link><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><description>EPOCH</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 09 Sep 2018 00:00:00 +0000</lastBuildDate><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>EPOCH</title><link>/</link></image><item><title>Lasers</title><link>/quickstart/basic_examples/laser.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/basic_examples/laser.html</guid><description>&lt;p>EPOCH can support laser sources on the boundaries, with a wide array of spatial
 and temporal profiles. These examples provide basic input decks for simulating
 lasers in vacuum. General documentation on the EPOCH laser block can be found
-&lt;a href="/documentation/input_deck/input_deck_laser.html">here&lt;/a>&lt;/p>
+&lt;a href="/documentation/input_deck/input_deck_laser.html">here&lt;/a>.&lt;/p>
 &lt;h2 id="simple-plane-wave">Simple plane wave&lt;/h2>
 &lt;p>This input deck provides the most basic form of laser. We use uniform spatial
 and temporal profiles, and inspect the Poynting flux in the simulation window.
@@ -42,20 +42,32 @@ boundary effects are less of an issue, as simulations are expected to mainly
 deal with laser pulses.&lt;/p>
 &lt;h2 id="laser-pulse">Laser pulse&lt;/h2>
 &lt;p>Using the maths parser, we can create a laser pulse which has a Gaussian profile
-in time and space. Here, let the full-width-at-half-maximum of the
+in time and space for the intensity distribution, $I$:&lt;/p>
+&lt;p>$ I(y,t) \propto e^{-(y-y_0)^2/2\sigma_y^2} e^{-(t-t_0)^2/2\sigma_t^2}$&lt;/p>
+&lt;p>where we consider a 2D simulation with an $x$ propagating laser.&lt;/p>
+&lt;p>Let the full-width-at-half-maximum of the
 spatial and temporal profiles be 5 $\mu m$ and 40 fs respectively for the
-intensity $I$ distribution. The profile
+intensity $I$ distribution. The relationship between $\sigma$ and the $fwhm$
+for a Gaussian distribution is:&lt;/p>
+&lt;p>$\sigma = \frac{fwhm}{2\sqrt{2 \ln(2)}}$&lt;/p>
+&lt;p>However, the profile
 keys in the laser block describe modifications to the boundary electric fields,
 $E$, and as $I \propto E^2$, the $E$ profile must satisfy&lt;/p>
-&lt;p>$ e^{-((y-y_0)/\sigma_y)^2}$, $ e^{-((t-t_0)/\sigma_t)^2}$&lt;/p>
-&lt;p>Luckily, this is the same form as the &lt;code>gauss(x,x_0,w)&lt;/code> command in the input deck
-&lt;a href="/documentation/code_details/maths_parser.html">maths parser&lt;/a>. We can use&lt;/p>
-&lt;p>$\sigma = \frac{FWHM}{\sqrt{2\ln(2)}} $.&lt;/p>
+&lt;p>$ E(y,t) \propto e^{-((y-y_0)/2\sigma_y)^2} e^{-((t-t_0)/2\sigma_t)^2}$&lt;/p>
+&lt;p>The EPOCH
+&lt;a href="/documentation/code_details/maths_parser.html">maths parser&lt;/a> provides
+a special &lt;code>gauss(x,x_0,w)&lt;/code> command for use in the input.deck, which sets a
+profile of the form:&lt;/p>
+&lt;p>$e^{-(x-x_0)^2/w^2}$&lt;/p>
+&lt;p>Hence, we may use this &lt;code>gauss&lt;/code> function to model the electric field profiles if
+we set&lt;/p>
+&lt;p>$w = \frac{fwhm}{\sqrt{2\ln(2)}}$&lt;/p>
+&lt;p>where $fwhm$ refers to the &lt;em>intensity&lt;/em> distribution.&lt;/p>
 &lt;p>We can let the spatial profile peak at $y=0$. We don&amp;rsquo;t want the laser to peak at
 $t=0$, as this would ignore the rising intensity. Instead, let us start when the
 laser pulse is 10% of its maximum value - the half-width-at-10%-maximum,
-$HW0.1M$. For a Gaussian beam, this is:&lt;/p>
-&lt;p>$HW0.1M = \frac{FWHM}{2} \sqrt{\frac{\ln(10)}{\ln(2)}}$&lt;/p>
+$hw0.1m$. For a Gaussian beam, this is:&lt;/p>
+&lt;p>$hw0.1m = \frac{fwhm}{2} \sqrt{\frac{\ln(10)}{\ln(2)}}$&lt;/p>
 &lt;pre>&lt;code class="language-perl">begin:control
 nx = 700
 ny = 400
@@ -75,16 +87,16 @@ end:boundaries
 begin:constant
 t_fwhm = 40.0e-15
 y_fwhm = 5.0e-6
-sigma_t = t_fwhm / sqrt(2*loge(2))
-sigma_y = y_fwhm / sqrt(2*loge(2))
+w_t = t_fwhm / sqrt(2*loge(2))
+w_y = y_fwhm / sqrt(2*loge(2))
 t_hw01m = 0.5 * t_fwhm * sqrt(loge(10)/loge(2))
 end:constant
 begin:laser
 boundary = x_min
 intensity_w_cm2 = 1.0e18
 lambda = 1.0e-6
-profile = gauss(y,0,sigma_y)
-t_profile = gauss(time,t_hw01m,sigma_t)
+profile = gauss(y,0,w_y)
+t_profile = gauss(time,t_hw01m,w_t)
 end:laser
 begin:output
 dt_snapshot = 10 * femto
@@ -92,8 +104,8 @@ poynt_flux = always
 end:output
 &lt;/code>&lt;/pre>
 &lt;p>&lt;img src="laser_pulse.png" alt="Uniform laser">&lt;/p>
-&lt;p>Here we see that the laser FWHM in $x$ and $y$ are 12 $\mu m$ and 5 $\mu m$
-respectively, where the $x$ FWHM corresponds to a temporal FWHM of 40 fs, as
+&lt;p>Here we see that the laser $fwhm$ in $x$ and $y$ are 12 $\mu m$ and 5 $\mu m$
+respectively, where the $x$ $fwhm$ corresponds to a temporal FWHM of 40 fs, as
 expected. Also, because there is little contact between the pulse and the
 boundaries, we do not have any numerical boundary disturbance.&lt;/p>
 &lt;h2 id="focussing_a_gaussian_beam">Focussing a Gaussian Beam&lt;/h2>
@@ -7189,153 +7201,7 @@ if so.&lt;/li>
 &lt;p>This deck produces an initial condition as in the Figures in
 &lt;a href="#3d_cone">3D&lt;/a> and
 &lt;a href="#2d_cone">2D&lt;/a>
-respectively.&lt;/p>
-&lt;h1 id="focussing_a_gaussian_beam">Focussing a Gaussian Beam&lt;/h1>
-&lt;p>A laser can be driven on the boundary so that it focusses on a given
-spot. Basic details of how to do this are
-&lt;a href="https://en.wikipedia.org/wiki/Gaussian_beam" target="_blank" rel="noopener">here&lt;/a>. To summarise, using
-the paraxial approximation, the electric fields for a $x$-propagating,
-$y$-polarised Gaussian beam take the form:&lt;/p>
-&lt;p>$\pmb{E}(r,x) = E_0 \frac{w_0}{w(x)} e^{-r^2/w(x)^2} e^{-i(kx + k\frac{r^2}{2R_c(x)}-\psi(x))} \hat{\pmb{y}}$&lt;/p>
-&lt;p>where&lt;/p>
-&lt;ul>
-&lt;li>$r$ is the radial distance from the laser propagation axis&lt;/li>
-&lt;li>$x$ is axial distance along the wave, with $x=0$ at the focus&lt;/li>
-&lt;li>$E_0$ is the peak electric field amplitude at the focus&lt;/li>
-&lt;li>$w(x)$ is the beam-waist at $x$ (radial distance where field strength drops by $e^{-1}$)&lt;/li>
-&lt;li>$w_0$ is $w(x=0)$&lt;/li>
-&lt;li>$k$ is the laser wave-vector&lt;/li>
-&lt;li>$R_c(x)$ is the radius of curvature at $x$&lt;/li>
-&lt;li>$\psi(x)$ is the Gouy phase correction&lt;/li>
-&lt;/ul>
-&lt;p>If the fields on the simulation boundary are of this form,
-then the fields will propagate according to this equation, and
-a focal spot will be formed. Note that this propagation is only expected
-provided the paraxial approximation is satisfied. This implies that, for vacuum propagation, the laser
-wavelength, $\lambda$ is much smaller than the beam-waist: $\lambda &amp;laquo; w_0$.&lt;/p>
-&lt;p>The following deck
-gives an example for a laser attached to x_min. Two constant blocks are provided:
-the first gives the user control over the focused laser properties, and the
-second derives variables to be used in the laser block. The user only needs to
-touch the first, which sets the intensity full-width-at-half-maximum (related to
-beam-waist), the peak, cycle-averaged intensity, the laser wave-length and the
-distance from the $x_{min}$ boundary to the focal point.&lt;/p>
-&lt;pre>&lt;code class="language-perl">begin:control
-nx = 2400
-ny = 1200
-t_end = 100e-15
-x_min = 0
-x_max = 20e-6
-y_min = -5e-6
-y_max = 5e-6
-stdout_frequency = 100
-end:control
-begin:boundaries
-bc_x_min = simple_laser
-bc_x_max = open
-bc_y_min = open
-bc_y_max = open
-end:boundaries
-begin:constant
-I_fwhm = 2.0e-6 # FWHM of laser intensity
-I_peak_Wcm2 = 1.0e15 # 0.5 * eps0 * c * E_peak^2
-las_lambda = 1.0e-6 # Laser wavelength
-foc_dist = 5.0e-6 # Boundary to focal point distance
-end:constant
-begin:constant
-las_k = 2.0 * pi / las_lambda
-w0 = I_fwhm / sqrt(2.0 * loge(2.0)) # Beam Waist
-ray_rang = pi * w0^2 / las_lambda # Rayleigh range
-w_boundary = w0 * sqrt(1.0 + (foc_dist/ray_rang)^2) # Waist on boundary
-I_boundary = I_peak_Wcm2 * (w0 / w_boundary)^2 # Intens. on boundary
-rad_curve = foc_dist * (1.0 + (ray_rang/foc_dist)^2) # Boundary curv. rad.
-gouy = atan(-foc_dist/rad_curve) # Boundary Gouy shift
-end:constant
-begin:laser
-boundary = x_min
-intensity_w_cm2 = I_boundary
-lambda = las_lambda
-phase = las_k * y^2 / (2.0 * rad_curve) - gouy
-profile = gauss(y, 0, w_boundary)
-end:laser
-begin:output
-name = o1
-dt_snapshot = 10 * femto
-poynt_flux = always
-end:output
-&lt;/code>&lt;/pre>
-&lt;p>&lt;img src="FocussedBeam.png" alt="The focussed beam">&lt;/p>
-&lt;p>In this example, EPOCH correctly reproduces the focal point position,
-laser wavelength, and radial FWHM at the focus - however, the peak
-intensity is only $0.88\times 10^{15} \text{ Wcm}^{-2}$. This
-intensity reduction from target is due to the tight focal spot,
-with $w_0\approx 1.7$ μm being close to $\lambda = 1.0$ μm.&lt;/p>
-&lt;p>The deck is based on the laser test deck supplied with EPOCH, with a
-modified laser and longer runtime. Other classes of beam (Bessel etc)
-can be created similarly.&lt;/p>
-&lt;h1 id="angle_laser_injection">Injecting the laser at an angle&lt;/h1>
-&lt;p>By setting up a phase shift as a function of space, it is possible to force
-wavefronts to arrive at different points on the boundary at different times
-(for 2D and 3D simulations). This allows the user to inject lasers with an
-angle to the boundary normal.&lt;/p>
-&lt;h4 id="laser_angled">Angled incident laser profile&lt;/h4>
-&lt;p>&lt;img src="oblique_incidence.png" alt="Angled laser profile in EPOCH2D">&lt;/p>
-&lt;p>The setup for this is not entirely straightforward and requires a little
-bit of explanation. The above
-&lt;a href="#laser_angled">figure&lt;/a> illustrates a laser being driven at
-an angle on the $x_{min}$ boundary. Different wave fronts cross the $y$-axis
-at different places and this forms a sinusoidal profile along $y$ that
-represents the phase. The wavelength of this profile is
-given by $\lambda_\phi = \lambda / \sin\theta$, where $\lambda$ is the
-wavelength of the laser and $\theta$ is the angle of the propagation
-direction with respect to the $x$-axis. The actual phase to use will
-be $\phi(y) = -k_\phi y = -2\pi y / \lambda_\phi$. It is negative because
-the phase of the wave is propagating in the positive $y$ direction.
-It is also necessary to alter the wavelength of the driver since this
-is given in the direction perpendicular to the boundary. The new
-wavelength to use will be $\lambda\cos\theta$. The
-&lt;a href="#laser_angled">figure&lt;/a> shows
-the resulting $E_y$ field for a laser driven at an angle of $\pi / 6$. Note
-that since the boundary conditions in the code are derived for propagation
-perpendicular to the boundary, there will be artefacts on the scale of the
-grid for lasers driven at an angle.&lt;/p>
-&lt;p>The input deck used to generate this figure is given below:&lt;/p>
-&lt;pre>&lt;code class="language-perl">begin:control
-nx = 2000
-ny = 2000
-t_end = 50.e-15
-x_min = -10.0e-6
-x_max = 10.0e-6
-y_min = -10.0e-6
-y_max = 10.0e-6
-end:control
-begin:boundaries
-bc_x_min = simple_laser
-bc_x_max = simple_outflow
-bc_y_min = simple_outflow
-bc_y_max = simple_outflow
-end:boundaries
-begin:constant
-laser_angle = pi / 6 # Set angle of laser w.r.t positive x unit vector
-laser_fwhm = 2.0e-6 # Size of gaussian profile for laser electric field
-laser_wavelength = 1.0e-6
-laser_k = 2 * pi / laser_wavelength
-end:constant
-begin:laser
-boundary = x_min
-intensity_w_cm2 = 1.0e15
-profile = gauss(y, 0, laser_fwhm / (2.0 * sqrt(loge(2.0))))
-t_profile = 1
-phase = -y * laser_k * sin(laser_angle) # Vary wave-front position in space
-lambda = laser_wavelength * cos(laser_angle) # Space wave-fronts apart
-# correctly along k
-end:laser
-begin:output
-dt_snapshot = 10.e-15
-grid = always
-ey = always
-end:output
-&lt;/code>&lt;/pre></description></item><item><title>Workshop examples</title><link>/documentation/examples/workshop_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples.html</guid><description>&lt;h1 id="epoch_workshop_overview">EPOCH workshop overview&lt;/h1>
+respectively.&lt;/p></description></item><item><title>Workshop examples</title><link>/documentation/examples/workshop_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples.html</guid><description>&lt;h1 id="epoch_workshop_overview">EPOCH workshop overview&lt;/h1>
 &lt;p>The aims of the Workshop are:&lt;/p>
 &lt;ul>
 &lt;li>After the workshop you should be able to setup and run EPOCH on a
