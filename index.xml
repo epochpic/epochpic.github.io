@@ -752,7 +752,298 @@ must be non-physical. Here we see that as cell-size decreases, or particles per
 cell increases, the self-heating is reduced. Switching on current smoothing, or
 switching to a higher order macro-particle shape (B-spline) also reduces
 self-heating. All these features come at a cost of a greater runtime, so it is
-up to the user to decide how much self-heating mitigation is required.&lt;/p></description></item><item><title>Antenna block</title><link>/documentation/input_deck/input_deck_antenna.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_antenna.html</guid><description>&lt;p>Antennae allow you to specify currents in the simulation domain that are
+up to the user to decide how much self-heating mitigation is required.&lt;/p></description></item><item><title>Injectors</title><link>/quickstart/basic_examples/injectors.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/basic_examples/injectors.html</guid><description>&lt;p>It is possible to add macro-particles to the simulation window after the initial
+macro-particle load using the
+&lt;a href="/documentation/input_deck/input_deck_injector.html">injector block&lt;/a>.
+This can be done to simulate a particle
+beam passing through a boundary, or to replace macro-particles on the boundary
+of a flowing plasma volume. EPOCH provides support for two styles of injectors,
+one which is specified by plasma properties, and the other which reads particles
+from files.&lt;/p>
+&lt;h2 id="basic-plasma-injector">Basic plasma injector&lt;/h2>
+&lt;p>To demonstrate the basic injector syntax, we have created a simple example. Here
+we inject macro-electrons through the &lt;code>x_min&lt;/code> boundary, such that all electrons
+have the same momentum, and the macro-particle weights are chosen to ensure the
+injected density is $10^{10} \text{ m}^{-3}$. No macro-particles are initially
+loaded into the simulation window.&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 500
+ny = 200
+t_end = 20.0e-15
+x_min = 0
+x_max = 25e-6
+y_min = -5e-6
+y_max = 5e-6
+stdout_frequency = 100
+end:control
+begin:boundaries
+bc_x_min = open
+bc_x_max = open
+bc_y_min = open
+bc_y_max = open
+end:boundaries
+begin:species
+name = Electron
+mass = 1.0
+charge = -1.0
+end:species
+begin:injector
+boundary = x_min
+species = Electron
+number_density = 1.0e10
+drift_x = 1.0e-20
+npart_per_cell = 10
+end:injector
+begin:output
+dt_snapshot = t_end
+number_density = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="basic_injector.png" alt="Basic injector">&lt;/p>
+&lt;p>This figure shows macro-particles have been injected through the &lt;code>x_min&lt;/code>
+boundary,
+with weights set to match the desired density.&lt;/p>
+&lt;h2 id="flowing-plasma-injector">Flowing plasma injector&lt;/h2>
+&lt;p>If we set up a problem where a flowing plasma fills the simulation window, then
+the plasma will start to flow through a boundary after the initial load. As
+this happens, macro-particles will exit the simulation on one side, leaving a
+vacuum on the other side. If we added an injector to the vacuum side, then we
+can introduce a source of new macro-particles to replace the lost
+macro-particles. To do this, we can set the temperature and number density of
+the injector to match that of the initial plasma.&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 500
+ny = 200
+t_end = 20.0e-15
+x_min = 0
+x_max = 25e-6
+y_min = -5e-6
+y_max = 5e-6
+stdout_frequency = 100
+end:control
+begin:boundaries
+bc_x_min = open
+bc_x_max = open
+bc_y_min = open
+bc_y_max = open
+end:boundaries
+begin:species
+name = Electron
+mass = 1.0
+charge = -1.0
+npart = nx * ny * 10
+drift_x = 1.0e-20
+temp_ev = 1.0e3
+number_density = 1.0e10
+end:species
+begin:injector
+boundary = x_min
+species = Electron
+number_density = 1.0e10
+drift_x = 1.0e-20
+temp_ev = 1.0e3
+npart_per_cell = 10
+end:injector
+begin:output
+dt_snapshot = t_end
+number_density = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="flowing_plasma.png" alt="Flowing plasma number density">&lt;/p>
+&lt;p>Here we see that the plasma density is still uniform, even though the plasma
+is drifting towards &lt;code>x_max&lt;/code>. Particles above $6\text{ }\mu\text{m}$ were loaded
+at the start of the simulation, and those below have been replaced with
+injectors. No sign of discontinuity on the injector/initial macro-particle
+boundary is present.&lt;/p>
+&lt;h2 id="particle-bunch-injection">Particle bunch injection&lt;/h2>
+&lt;p>The profile of the injector can be modified to introduce spatial and temporal
+variation, which would be useful for describing injected particle bunches.
+We can set a Gaussian profile using the &lt;code>gauss(x,x0,w)&lt;/code> function in the
+&lt;a href="/documentation/code_details/maths_parser.html">maths parser&lt;/a>, which represents&lt;/p>
+&lt;p>$e^{-(x-x_0)^2/w^2}$&lt;/p>
+&lt;p>In this formula, $w$ is related to the Gaussian full-width-at-half-maximum
+according to&lt;/p>
+&lt;p>$w = \frac{fwhm}{2\sqrt{\ln 2}}$&lt;/p>
+&lt;p>For the temporal profile, let us simulate the full-width-at-10%-maximum. This
+means the peak should arrive in the simulation at the half-width-at-10%-maximum
+time, given by&lt;/p>
+&lt;p>$hw0.1m = \frac{fwhm}{2} \sqrt{\frac{\ln(10)}{\ln(2)}}$&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 500
+ny = 200
+t_end = 20.0e-15
+x_min = 0
+x_max = 25e-6
+y_min = -5e-6
+y_max = 5e-6
+stdout_frequency = 100
+end:control
+begin:boundaries
+bc_x_min = open
+bc_x_max = open
+bc_y_min = open
+bc_y_max = open
+end:boundaries
+begin:species
+name = Electron
+mass = 1.0
+charge = -1.0
+end:species
+begin:constant
+x_fwhm = 1.0e-6
+y_fwhm = 1.0e-6
+t_fwhm = x_fwhm / c
+w_t = t_fwhm / (2.0 * sqrt(loge(2)))
+w_y = y_fwhm / (2.0 * sqrt(loge(2)))
+t_hw01m = 0.5 * t_fwhm * sqrt(loge(10) / loge(2))
+end:constant
+begin:injector
+boundary = x_min
+species = Electron
+number_density = 1.0e10 * gauss(y,0,w_y) * gauss(time,t_hw01m,w_t)
+number_density_min = 1.0e9
+t_start = 0
+t_end = 2.0 * t_hw01m
+drift_x = 1.0e-20
+temp_ev = 1.0e3
+npart_per_cell = 10
+end:injector
+begin:output
+dt_snapshot = t_end
+number_density = always
+end:output
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="bunch_injector.png" alt="Injected bunch">&lt;/p>
+&lt;p>The injected pulse is seen to have the desired properties. Note that we have
+introduced a threshold density for macro-particle injection with&lt;/p>
+&lt;pre>&lt;code>number_density_min = 1.0e9
+&lt;/code>&lt;/pre>
+&lt;p>This line ensures that profiled densities below this value will not load
+macro-particles into the simulation. This prevents the code from loading too
+many low-weight macro-particles which would slow down the code.&lt;/p>
+&lt;h2 id="file-injectors">File injectors&lt;/h2>
+&lt;p>If the in-built density, temperature and drift do not provide the desired
+injection behaviour, or if you&amp;rsquo;re trying to inject specific particles from a
+different simulation, then you may find file-injectors useful. Here the user
+can specify the injection time, position and momentum of each injected
+macro-particle from file. Unlike other file-packages in EPOCH, the
+file-injectors read from simple text files.&lt;/p>
+&lt;p>For this simple example, let us inject a macro-electron of weight 10 into a
+2D simulation window each femtosecond. The momenta of these macro-particles will
+be set such that they are highly relativistic, with a speed close to $c$. To
+check if they have been injected correctly, let us insert a particle probe
+one micron from the injection boundary. Let us also use the &lt;code>-DPROBE_TIME&lt;/code>
+compiler flag to see the exact time macro-particles pass the probe. See the
+section on
+&lt;a href="/documentation/basic_usage/compiler_flags.html">compiler flags&lt;/a>
+for help with switching on the probe-time capability.&lt;/p>
+&lt;p>We need to use separate files for each macro-particle variable, and particles
+must be listed in chronological order of injection. For this demonstration, the
+files contain:&lt;/p>
+&lt;p>inject_t.txt&lt;/p>
+&lt;pre>&lt;code>1.0e-15
+2.0e-15
+3.0e-15
+4.0e-15
+5.0e-15
+6.0e-15
+7.0e-15
+8.0e-15
+9.0e-15
+10.0e-15
+&lt;/code>&lt;/pre>
+&lt;p>inject_w.txt&lt;/p>
+&lt;pre>&lt;code>10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+&lt;/code>&lt;/pre>
+&lt;p>inject_y.txt&lt;/p>
+&lt;pre>&lt;code>0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+&lt;/code>&lt;/pre>
+&lt;p>inject_px.txt&lt;/p>
+&lt;pre>&lt;code>1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+&lt;/code>&lt;/pre>
+&lt;p>and the input.deck reads:&lt;/p>
+&lt;pre>&lt;code>begin:control
+nx = 500
+ny = 200
+t_end = 20.0e-15
+x_min = 0
+x_max = 25e-6
+y_min = -5e-6
+y_max = 5e-6
+stdout_frequency = 100
+end:control
+begin:boundaries
+bc_x_min = open
+bc_x_max = open
+bc_y_min = open
+bc_y_max = open
+end:boundaries
+begin:species
+name = Electron
+mass = 1.0
+charge = -1.0
+end:species
+begin:injector
+boundary = x_min
+species = Electron
+inject_from_file = T
+y_data = &amp;quot;inject_y.txt&amp;quot;
+px_data = &amp;quot;inject_px.txt&amp;quot;
+w_data = &amp;quot;inject_w.txt&amp;quot;
+t_data = &amp;quot;inject_t.txt&amp;quot;
+end:injector
+begin:output
+dt_snapshot = t_end
+particle_probes = always
+end:output
+begin:probe
+name = Electron_probe
+point = (1.0e-6, 0.0)
+normal = (1.0, 0.0)
+ek_min = 0.0
+ek_max = -1.0
+include_species:Electron
+dumpmask = always
+end:probe
+&lt;/code>&lt;/pre>
+&lt;p>For injector files, the code will look in the same directory as the input.deck
+file. The full path is not required like in other file-reading blocks. If we
+open &lt;code>0001.sdf&lt;/code> (possibly using the GetDataSDF.m function in
+&lt;code>epoch/SDF/Matlab&lt;/code>), we see the times each macro-particle passes the probe. We
+can label each macro-particle by its line in the injector files, and we can
+obtain a probe-time vs file-line plot&lt;/p>
+&lt;p>&lt;img src="file_injector.png" alt="File injector times">&lt;/p>
+&lt;p>Due to the position of the probe, and the speed of the macro-particles, we
+expect these probe times to be 3.337 fs after the particle injection time. This
+matches the behaviour seen in the probe data, which shows that the file
+injectors are working as intended.&lt;/p></description></item><item><title>Antenna block</title><link>/documentation/input_deck/input_deck_antenna.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_antenna.html</guid><description>&lt;p>Antennae allow you to specify currents in the simulation domain that are
 added to the self consistent currents from the core solver. You can
 either specify the currents entirely manually or you can specify a
 frequency and a profile for each current component. You can have as many

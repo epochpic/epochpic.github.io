@@ -1,0 +1,288 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="It is possible to add macro-particles to the simulation window after the initial macro-particle load using the injector block. This can be done to simulate a particle beam passing through a boundary, or to replace macro-particles on the boundary of a flowing plasma volume."><link rel=alternate hreflang=en-us href=/quickstart/basic_examples/injectors.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/quickstart/basic_examples/injectors.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/quickstart/basic_examples/injectors.html"><meta property="og:title" content="Injectors | EPOCH"><meta property="og:description" content="It is possible to add macro-particles to the simulation window after the initial macro-particle load using the injector block. This can be done to simulate a particle beam passing through a boundary, or to replace macro-particles on the boundary of a flowing plasma volume."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2023-10-31T14:33:32+00:00"><title>Injectors | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/quickstart.html>Quick Start</a></div><div class=docs-toc-item><a class=docs-toc-link href=/quickstart/basic_examples.html>Basic examples</a><ul class="nav docs-sidenav"><li><a href=/quickstart/basic_examples/laser.html>Lasers</a></li><li><a href=/quickstart/basic_examples/particle_load.html>Particle loading</a></li><li class=active><a href=/quickstart/basic_examples/injectors.html>Injectors</a></li><li><a href=/quickstart/basic_examples/restart_example.html>Restart from SDF dump</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#basic-plasma-injector>Basic plasma injector</a></li><li><a href=#flowing-plasma-injector>Flowing plasma injector</a></li><li><a href=#particle-bunch-injection>Particle bunch injection</a></li><li><a href=#file-injectors>File injectors</a></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Injectors</h1><div class=article-style><p>It is possible to add macro-particles to the simulation window after the initial
+macro-particle load using the
+<a href=/documentation/input_deck/input_deck_injector.html>injector block</a>.
+This can be done to simulate a particle
+beam passing through a boundary, or to replace macro-particles on the boundary
+of a flowing plasma volume. EPOCH provides support for two styles of injectors,
+one which is specified by plasma properties, and the other which reads particles
+from files.</p><h2 id=basic-plasma-injector>Basic plasma injector</h2><p>To demonstrate the basic injector syntax, we have created a simple example. Here
+we inject macro-electrons through the <code>x_min</code> boundary, such that all electrons
+have the same momentum, and the macro-particle weights are chosen to ensure the
+injected density is $10^{10} \text{ m}^{-3}$. No macro-particles are initially
+loaded into the simulation window.</p><pre><code>begin:control
+    nx = 500
+    ny = 200
+    t_end = 20.0e-15
+    x_min = 0
+    x_max = 25e-6
+    y_min = -5e-6
+    y_max = 5e-6
+    stdout_frequency = 100
+end:control
+
+begin:boundaries
+    bc_x_min = open
+    bc_x_max = open
+    bc_y_min = open
+    bc_y_max = open
+end:boundaries
+
+begin:species
+    name = Electron
+    mass = 1.0
+    charge = -1.0
+end:species
+
+begin:injector
+   boundary = x_min
+   species = Electron
+   number_density = 1.0e10
+   drift_x = 1.0e-20
+   npart_per_cell = 10
+end:injector
+
+begin:output
+    dt_snapshot = t_end
+    number_density = always
+end:output
+</code></pre><p><img src=basic_injector.png alt="Basic injector"></p><p>This figure shows macro-particles have been injected through the <code>x_min</code>
+boundary,
+with weights set to match the desired density.</p><h2 id=flowing-plasma-injector>Flowing plasma injector</h2><p>If we set up a problem where a flowing plasma fills the simulation window, then
+the plasma will start to flow through a boundary after the initial load. As
+this happens, macro-particles will exit the simulation on one side, leaving a
+vacuum on the other side. If we added an injector to the vacuum side, then we
+can introduce a source of new macro-particles to replace the lost
+macro-particles. To do this, we can set the temperature and number density of
+the injector to match that of the initial plasma.</p><pre><code>begin:control
+    nx = 500
+    ny = 200
+    t_end = 20.0e-15
+    x_min = 0
+    x_max = 25e-6
+    y_min = -5e-6
+    y_max = 5e-6
+    stdout_frequency = 100
+end:control
+
+begin:boundaries
+    bc_x_min = open
+    bc_x_max = open
+    bc_y_min = open
+    bc_y_max = open
+end:boundaries
+
+begin:species
+    name = Electron
+    mass = 1.0
+    charge = -1.0
+    npart = nx * ny * 10
+    drift_x = 1.0e-20
+    temp_ev = 1.0e3
+    number_density = 1.0e10
+end:species
+
+begin:injector
+   boundary = x_min
+   species = Electron
+   number_density = 1.0e10
+   drift_x = 1.0e-20
+   temp_ev = 1.0e3
+   npart_per_cell = 10
+end:injector
+
+begin:output
+    dt_snapshot = t_end
+    number_density = always
+end:output
+</code></pre><p><img src=flowing_plasma.png alt="Flowing plasma number density"></p><p>Here we see that the plasma density is still uniform, even though the plasma
+is drifting towards <code>x_max</code>. Particles above $6\text{ }\mu\text{m}$ were loaded
+at the start of the simulation, and those below have been replaced with
+injectors. No sign of discontinuity on the injector/initial macro-particle
+boundary is present.</p><h2 id=particle-bunch-injection>Particle bunch injection</h2><p>The profile of the injector can be modified to introduce spatial and temporal
+variation, which would be useful for describing injected particle bunches.
+We can set a Gaussian profile using the <code>gauss(x,x0,w)</code> function in the
+<a href=/documentation/code_details/maths_parser.html>maths parser</a>, which represents</p><p>$e^{-(x-x_0)^2/w^2}$</p><p>In this formula, $w$ is related to the Gaussian full-width-at-half-maximum
+according to</p><p>$w = \frac{fwhm}{2\sqrt{\ln 2}}$</p><p>For the temporal profile, let us simulate the full-width-at-10%-maximum. This
+means the peak should arrive in the simulation at the half-width-at-10%-maximum
+time, given by</p><p>$hw0.1m = \frac{fwhm}{2} \sqrt{\frac{\ln(10)}{\ln(2)}}$</p><pre><code>begin:control
+    nx = 500
+    ny = 200
+    t_end = 20.0e-15
+    x_min = 0
+    x_max = 25e-6
+    y_min = -5e-6
+    y_max = 5e-6
+    stdout_frequency = 100
+end:control
+
+begin:boundaries
+    bc_x_min = open
+    bc_x_max = open
+    bc_y_min = open
+    bc_y_max = open
+end:boundaries
+
+begin:species
+    name = Electron
+    mass = 1.0
+    charge = -1.0
+end:species
+
+begin:constant
+    x_fwhm = 1.0e-6
+    y_fwhm = 1.0e-6
+    t_fwhm = x_fwhm / c
+    w_t = t_fwhm / (2.0 * sqrt(loge(2)))
+    w_y = y_fwhm / (2.0 * sqrt(loge(2)))
+    t_hw01m = 0.5 * t_fwhm * sqrt(loge(10) / loge(2))
+end:constant
+
+begin:injector
+   boundary = x_min
+   species = Electron
+   number_density = 1.0e10 * gauss(y,0,w_y) * gauss(time,t_hw01m,w_t)
+   number_density_min = 1.0e9
+   t_start = 0
+   t_end = 2.0 * t_hw01m
+   drift_x = 1.0e-20
+   temp_ev = 1.0e3
+   npart_per_cell = 10
+end:injector
+
+begin:output
+    dt_snapshot = t_end
+    number_density = always
+end:output
+</code></pre><p><img src=bunch_injector.png alt="Injected bunch"></p><p>The injected pulse is seen to have the desired properties. Note that we have
+introduced a threshold density for macro-particle injection with</p><pre><code>number_density_min = 1.0e9
+</code></pre><p>This line ensures that profiled densities below this value will not load
+macro-particles into the simulation. This prevents the code from loading too
+many low-weight macro-particles which would slow down the code.</p><h2 id=file-injectors>File injectors</h2><p>If the in-built density, temperature and drift do not provide the desired
+injection behaviour, or if you&rsquo;re trying to inject specific particles from a
+different simulation, then you may find file-injectors useful. Here the user
+can specify the injection time, position and momentum of each injected
+macro-particle from file. Unlike other file-packages in EPOCH, the
+file-injectors read from simple text files.</p><p>For this simple example, let us inject a macro-electron of weight 10 into a
+2D simulation window each femtosecond. The momenta of these macro-particles will
+be set such that they are highly relativistic, with a speed close to $c$. To
+check if they have been injected correctly, let us insert a particle probe
+one micron from the injection boundary. Let us also use the <code>-DPROBE_TIME</code>
+compiler flag to see the exact time macro-particles pass the probe. See the
+section on
+<a href=/documentation/basic_usage/compiler_flags.html>compiler flags</a>
+for help with switching on the probe-time capability.</p><p>We need to use separate files for each macro-particle variable, and particles
+must be listed in chronological order of injection. For this demonstration, the
+files contain:</p><p>inject_t.txt</p><pre><code>1.0e-15
+2.0e-15
+3.0e-15
+4.0e-15
+5.0e-15
+6.0e-15
+7.0e-15
+8.0e-15
+9.0e-15
+10.0e-15
+</code></pre><p>inject_w.txt</p><pre><code>10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+</code></pre><p>inject_y.txt</p><pre><code>0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+</code></pre><p>inject_px.txt</p><pre><code>1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+1.0e-20
+</code></pre><p>and the input.deck reads:</p><pre><code>begin:control
+    nx = 500
+    ny = 200
+    t_end = 20.0e-15
+    x_min = 0
+    x_max = 25e-6
+    y_min = -5e-6
+    y_max = 5e-6
+    stdout_frequency = 100
+end:control
+
+begin:boundaries
+    bc_x_min = open
+    bc_x_max = open
+    bc_y_min = open
+    bc_y_max = open
+end:boundaries
+
+begin:species
+    name = Electron
+    mass = 1.0
+    charge = -1.0
+end:species
+
+begin:injector
+    boundary = x_min
+    species = Electron
+    inject_from_file = T 
+    y_data = &quot;inject_y.txt&quot;
+    px_data = &quot;inject_px.txt&quot;
+    w_data = &quot;inject_w.txt&quot;
+    t_data = &quot;inject_t.txt&quot;
+end:injector
+
+begin:output
+    dt_snapshot = t_end
+    particle_probes = always
+end:output
+
+begin:probe
+   name = Electron_probe
+   point = (1.0e-6, 0.0)
+   normal = (1.0, 0.0)
+   ek_min = 0.0
+   ek_max = -1.0
+   include_species:Electron
+   dumpmask = always
+end:probe
+</code></pre><p>For injector files, the code will look in the same directory as the input.deck
+file. The full path is not required like in other file-reading blocks. If we
+open <code>0001.sdf</code> (possibly using the GetDataSDF.m function in
+<code>epoch/SDF/Matlab</code>), we see the times each macro-particle passes the probe. We
+can label each macro-particle by its line in the injector files, and we can
+obtain a probe-time vs file-line plot</p><p><img src=file_injector.png alt="File injector times"></p><p>Due to the position of the probe, and the speed of the macro-particles, we
+expect these probe times to be 3.337 fs after the particle injection time. This
+matches the behaviour seen in the probe data, which shows that the file
+injectors are working as intended.</p></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/quickstart/basic_examples/particle_load.html rel=next>Particle loading</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/quickstart/basic_examples/restart_example.html rel=prev>Restart from SDF dump</a></div></div></div></div><div class=body-footer><p>Last updated on Oct 31, 2023</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>
