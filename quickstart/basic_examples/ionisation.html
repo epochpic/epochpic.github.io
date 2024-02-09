@@ -1,0 +1,172 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="Particles within an EPOCH simulation have the option to be ionised through either field ionisation, or electron-impact collisional ionisation. The keys required to set up ionisation are found in multiple blocks, and a summary may be found in the species block documentation."><link rel=alternate hreflang=en-us href=/quickstart/basic_examples/ionisation.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/quickstart/basic_examples/ionisation.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/quickstart/basic_examples/ionisation.html"><meta property="og:title" content="Ionisation | EPOCH"><meta property="og:description" content="Particles within an EPOCH simulation have the option to be ionised through either field ionisation, or electron-impact collisional ionisation. The keys required to set up ionisation are found in multiple blocks, and a summary may be found in the species block documentation."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2024-02-09T14:07:06+01:00"><title>Ionisation | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/quickstart.html>Quick Start</a></div><div class=docs-toc-item><a class=docs-toc-link href=/quickstart/basic_examples.html>Basic examples</a><ul class="nav docs-sidenav"><li><a href=/quickstart/basic_examples/laser.html>Lasers</a></li><li><a href=/quickstart/basic_examples/particle_load.html>Particle loading</a></li><li><a href=/quickstart/basic_examples/injectors.html>Injectors</a></li><li class=active><a href=/quickstart/basic_examples/ionisation.html>Ionisation</a></li><li><a href=/quickstart/basic_examples/restart_example.html>Restart from SDF dump</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#field-ionisation>Field ionisation</a></li><li><a href=#collisional-ionisation>Collisional ionisation</a></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Ionisation</h1><div class=article-style><p>Particles within an EPOCH simulation have the option to be ionised through
+either field ionisation, or electron-impact collisional ionisation. The keys
+required to set up ionisation are found in multiple blocks, and a summary may be
+found in the
+<a href=/documentation/input_deck/input_deck_species.html>species block</a>
+documentation. This page provides simple demos for the ionisation packages.</p><p>In general, the user defines an initial ion species, and the code automatically
+generates species for the ionised states. During ionisation, a bound electron is
+released from an ion, and added to an electron species as a macro-particle.</p><h2 id=field-ionisation>Field ionisation</h2><p>In field ionisation, ions are created in the presence of strong laser fields. In
+this 1D input deck, a laser moves from the <code>x_min</code> boundary towards a block of
+neutral carbon. EPOCH can identify the ion species as neutral carbon, as the
+<code>charge</code> and <code>atomic_no</code> have been specified in the
+<a href=/documentation/input_deck/input_deck_species.html>species block</a>.</p><p>The species
+block also tells EPOCH that the <code>Carbon</code> species can be ionised since the
+<code>ionise = T</code> line is provided. The number of possible ionisation states has been
+manually cut-off at 3 by the <code>ionise_limit</code> key. When an ionisation occurs, a
+new macro-electron is generated and assigned to a species which will be
+automatically generated, as specified by <code>unique_electron_species = T</code>.</p><p>Once the ionisation keys in the species block have been activated, we need to
+tell EPOCH what kind of ionisation should occur. Here, we switch on the field
+ionisation process using the
+<a href=/documentation/input_deck/input_deck_control.html>control block</a> key
+<code>field_ionisation</code>.</p><pre><code>begin:control
+  nx = 128
+  npart = 20 * nx
+  t_end = 42.4e-15
+  x_min = 0
+  x_max = 4.0e-6
+  field_ionisation = T
+end:control
+
+begin:boundaries
+  bc_x_min = simple_laser
+  bc_x_max = open
+end:boundaries
+
+begin:laser
+  boundary = x_min
+  intensity = 3.0e15 * 1.0e4
+  lambda = 800.0e-9
+  t_profile = 1
+  t_end = 10.7e-15
+end:laser
+
+begin:species
+  name = Carbon
+  charge = 0
+  atomic_no = 6
+  mass = 1836.2 * 16.0
+  frac = 1
+  rho = if ((x lt 3.30e-6) and (x gt 3.05e-6), 1.74e24, 0)
+  ionise = T
+  ionise_limit = 3
+  unique_electron_species = T  
+end:species
+
+begin:output
+  dt_snapshot = t_end/100
+  number_density = always + species
+end:output
+</code></pre><p>Once the <code>input.deck</code> directory has been selected, <code>EPOCH</code> prints:</p><pre><code> Name of species 1 is Carbon
+ Name of species 2 is Carbon1
+ Name of species 3 is electron_from_Carbon
+ Name of species 4 is Carbon2
+ Name of species 5 is electron_from_Carbon1
+ Name of species 6 is Carbon3
+ Name of species 7 is electron_from_Carbon2
+ Initial conditions complete and valid.
+ Redistributing.          Balance: 0.254,     after: 0.507 (pre-load balance)
+ Attempting to load particles
+ Loaded 2560 particles of species &quot;Carbon&quot;
+</code></pre><p>Here we see that although only one species is present in the <code>input.deck</code>, EPOCH
+has generated species for Carbon with charge-states 1-3. If we had not included
+<code>ionise_limit</code>, we would have generated species up to fully ionised Carbon.
+Also, by setting <code>unique_electron_species = T</code>, the code has generated species
+for electrons released by specific ions during ionisation. We also see no
+macro-particles have been initially loaded into these automatically generated
+species, as only Carbon has a specified density in the <code>input.deck</code>.</p><p>Once the simulation is complete, we can plot the number densities of each
+species at different times. As can be seen below, the system originally starts
+with only neutral carbon present, but ends with carbon ions of charge-state 2
+and 3 after illumination by the laser.</p><p><img src=field_ionise_space.png alt="Spatial distribution of charge populations"></p><p>We can also plot the fraction of carbon ions in each charge-state as a function
+of time:</p><p><img src=field_ionise_rate.png alt="Charge populations over time for field ionisation"></p><h2 id=collisional-ionisation>Collisional ionisation</h2><p>In collisional ionisation, ions undergo ionisation through collisions with
+electrons. In this simulation, the domain is filled with an equal number of electrons and
+neutral carbon atoms, and collisional ionisation between the two species
+generates carbon ions and ejected electrons.</p><p>As in the field ionisation example, the <code>Carbon</code> species uses
+<code>ionise = T</code> to identify the species as one which can ionise. Without
+<code>ionise_limit</code>, we allow ionisation up to fully-ionised carbon. In this example,
+we create an empty electron species <code>Ejected_electron</code>, which will be used to
+store macro-electrons which are ejected from ions during ionisation.</p><p>As collisional ionisation refers to ionisation when electrons hit ions, the code
+needs to know which species are electron species. For the <code>Electron_beam</code>
+species, the line <code>identify:electron</code> tells EPOCH the species can trigger
+collisional ionisation. Also, EPOCH knows <code>Ejected_elctron</code> is an electron
+species, because it is identified as a species to populate with electrons
+ejected in the ionisation process from carbon ions.</p><p>Collisional ionisation is switched on using the <code>collisional_ionisation=T</code> line
+in the
+<a href=/documentation/input_deck/input_deck_collisions.html>collisions block</a>.
+Note that this does not switch on Coulomb scatter collisions between species, as
+this is a separate process from collisional ionisation.</p><pre><code>begin:control
+  nx = 128
+  npart = 200 * nx
+  t_end = 300.0e-15
+  x_min = 0
+  x_max = 4.0e-6
+end:control
+
+begin:boundaries
+  bc_x_min = periodic
+  bc_x_max = periodic
+end:boundaries
+
+begin:collisions
+  collisional_ionisation = T 
+end:collisions
+
+begin:species
+  name = Electron_beam
+  frac = 0.5
+  rho = 2.0e24
+  temp_ev = 80
+  identify:electron
+end:species
+
+begin:species
+  name = Carbon
+  charge = 0
+  atomic_no = 6
+  mass = 1836.2 * 16.0
+  frac = 0.5
+  rho = 2.0e24
+  ionise = T
+  electron_species = Ejected_electron    
+end:species
+
+begin:species
+  name = Ejected_electron
+  frac = 0
+  charge = -1
+  mass = 1
+end:species
+
+begin:output
+  dt_snapshot = t_end/100
+  number_density = always + species
+end:output
+</code></pre><p>When we run this simulation, EPOCH prints the lines:</p><pre><code> Name of species 1 is Electron_beam
+ Name of species 2 is Carbon
+ Name of species 3 is Ejected_electron
+ Name of species 4 is Carbon1
+ Name of species 5 is Carbon2
+ Name of species 6 is Carbon3
+ Name of species 7 is Carbon4
+ Name of species 8 is Carbon5
+ Name of species 9 is Carbon6
+</code></pre><p>where the ionisation species Carbon1-Carbon6 have been automatically generated.
+Initially these ionised carbon particle species contain no macro-particles.</p><p>This simulation generates some Carbon1 ions and a small number of Carbon2. The
+collisional ionisation cross section is too low here to ionise to the higher
+charge states. A plot of the population fraction over time is given here:</p><p><img src=coll_ionise_rate.png alt="Charge populations over time for collisional ionisation"></p></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/quickstart/basic_examples/injectors.html rel=next>Injectors</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/quickstart/basic_examples/restart_example.html rel=prev>Restart from SDF dump</a></div></div></div></div><div class=body-footer><p>Last updated on Feb 9, 2024</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>
