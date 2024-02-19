@@ -76,5 +76,26 @@ method, rather than delta-f is used to model this species. A comparison
 of the electric field diagnostics between standard and delta-f
 simulations shows a substantial decrease in noise.
 
-Further details of the method are provided [ in this
-pdf](Media:talk_deltaf.pdf "wikilink").
+The rest of this page features slides detailing the model:
+
+![Delta_f method](page_0000.png)
+![Delta_f method](page_0001.png)
+![Delta_f method](page_0002.png)
+![Delta_f method](page_0003.png)
+![Delta_f method](page_0004.png)
+![Delta_f method](page_0005.png)
+![Delta_f method](page_0006.png)
+![Delta_f method](page_0007.png)
+![Delta_f method](page_0008.png)
+![Delta_f method](page_0009.png)
+![Delta_f method](page_0010.png)
+![Delta_f method](page_0011.png)
+![Delta_f method](page_0012.png)
+![Delta_f method](page_0013.png)
+![Delta_f method](page_0014.png)
+![Delta_f method](page_0015.png)
+![Delta_f method](page_0016.png)
+![Delta_f method](page_0017.png)
+![Delta_f method](page_0018.png)
+![Delta_f method](page_0019.png)
+![Delta_f method](page_0020.png)
