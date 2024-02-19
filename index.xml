@@ -6617,9 +6617,28 @@ relative change to the beam species is large, and the standard PIC
 method, rather than delta-f is used to model this species. A comparison
 of the electric field diagnostics between standard and delta-f
 simulations shows a substantial decrease in noise.&lt;/p>
-&lt;p>Further details of the method are provided
-&lt;a href="Media:talk_deltaf.pdf" title="wikilink"> in this
-pdf&lt;/a>.&lt;/p></description></item><item><title>Previous versions</title><link>/documentation/code_details/previous_versions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/code_details/previous_versions.html</guid><description>&lt;h1 id="changes_between_version_3" class="1_and_4 0">Changes between version 3.1 and 4.0&lt;/h1>
+&lt;p>The rest of this page features slides detailing the model:&lt;/p>
+&lt;p>&lt;img src="page_0000.png" alt="Delta_f method">
+&lt;img src="page_0001.png" alt="Delta_f method">
+&lt;img src="page_0002.png" alt="Delta_f method">
+&lt;img src="page_0003.png" alt="Delta_f method">
+&lt;img src="page_0004.png" alt="Delta_f method">
+&lt;img src="page_0005.png" alt="Delta_f method">
+&lt;img src="page_0006.png" alt="Delta_f method">
+&lt;img src="page_0007.png" alt="Delta_f method">
+&lt;img src="page_0008.png" alt="Delta_f method">
+&lt;img src="page_0009.png" alt="Delta_f method">
+&lt;img src="page_0010.png" alt="Delta_f method">
+&lt;img src="page_0011.png" alt="Delta_f method">
+&lt;img src="page_0012.png" alt="Delta_f method">
+&lt;img src="page_0013.png" alt="Delta_f method">
+&lt;img src="page_0014.png" alt="Delta_f method">
+&lt;img src="page_0015.png" alt="Delta_f method">
+&lt;img src="page_0016.png" alt="Delta_f method">
+&lt;img src="page_0017.png" alt="Delta_f method">
+&lt;img src="page_0018.png" alt="Delta_f method">
+&lt;img src="page_0019.png" alt="Delta_f method">
+&lt;img src="page_0020.png" alt="Delta_f method">&lt;/p></description></item><item><title>Previous versions</title><link>/documentation/code_details/previous_versions.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/code_details/previous_versions.html</guid><description>&lt;h1 id="changes_between_version_3" class="1_and_4 0">Changes between version 3.1 and 4.0&lt;/h1>
 &lt;h1 id="changes_to_the_makefile">Changes to the Makefile&lt;/h1>
 &lt;p>Some changes have been made to the Makefile. These are documented
 &lt;a href="/documentation/basic_usage/compiler_flags">here&lt;/a>.
