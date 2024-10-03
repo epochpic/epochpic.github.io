@@ -123,7 +123,7 @@ fixed value for the random generator seed so that results are
 repeatable. If this flag is set to "T" then the seed will be generated
 using the system clock.
 - `nproc{x,y,z}` - Number of processes in the *x,y,z*
-directions. By default, EPOCH will try to pick the best method of
+directions (e.g. `nprocx = 4`). By default, EPOCH will try to pick the best method of
 splitting the domain amongst the available processors but occasionally
 the user may wish to override this choice.
 - `smooth_currents` - This is a logical flag. If set to "T"
