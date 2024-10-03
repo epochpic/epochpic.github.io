@@ -2889,7 +2889,7 @@ using the system clock.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>nproc{x,y,z}&lt;/code> - Number of processes in the &lt;em>x,y,z&lt;/em>
-directions. By default, EPOCH will try to pick the best method of
+directions (e.g. &lt;code>nprocx = 4&lt;/code>). By default, EPOCH will try to pick the best method of
 splitting the domain amongst the available processors but occasionally
 the user may wish to override this choice.&lt;/p>
 &lt;/li>
