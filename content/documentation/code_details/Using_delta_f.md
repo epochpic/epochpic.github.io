@@ -22,7 +22,7 @@ is implemented differently, and the equations of motion of the markers
 are not modified in this delta-f approach.
 
 The component of the currents associated with the background $f_0$ may
-be in principle be calculated analytically, but the delta-f
+in principle be calculated analytically, but the delta-f
 implementation in EPOCH assumes (but does not check) that the total
 background current is zero.
 
@@ -62,15 +62,15 @@ end:species
 
 Additional distribution function diagnostic options are supplied for the
 Delta-f version. Standard diagnostics work as usual based on the total
-distribution function $f$ but is is also possible to output the Delta-f
+distribution function $f$ but it is also possible to output the Delta-f
 component of the distribution functions by adding output_deltaf = T in
 dist_fn components of the input deck.
 
 An example input deck is supplied in the 1D version as
 twostream_deltaf.deck. This uses the delta-f method to solve the
 weak-beam two stream instability. The bulk plasma species is solved
-using the delta-f method, since this evolve very little, and mostly
-supports the Lagnmuir waves that the weak beam interacts with. The
+using the delta-f method, since this evolves very little, and mostly
+supports the Langmuir waves that the weak beam interacts with. The
 relative change to the beam species is large, and the standard PIC
 method, rather than delta-f is used to model this species. A comparison
 of the electric field diagnostics between standard and delta-f
