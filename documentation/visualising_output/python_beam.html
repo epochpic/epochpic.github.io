@@ -1,0 +1,145 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Source Themes Academic 4.8.0"><meta name=description content="BEAM BEAM (Broad EPOCH Analysis Modules) is a collection of independent yet complementary open-source tools for analysing EPOCH simulations in Python, designed to be modular so researchers can adopt only the components they require without being constrained by a rigid framework."><link rel=alternate hreflang=en-us href=/documentation/visualising_output/python_beam.html><meta name=theme-color content="#3f51b5"><script src=/js/mathjax-config.js></script><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css crossorigin=anonymous title=hl-light><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css crossorigin=anonymous title=hl-dark disabled><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin=anonymous async></script><script src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js integrity crossorigin=anonymous async></script><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap"><link rel=stylesheet href=/css/academic.css><link rel=manifest href=/index.webmanifest><link rel=icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_32x32_fill_lanczos_center_2.png><link rel=apple-touch-icon type=image/png href=/images/icon_hucf2a1ead28adac6bbe3177e5d4e4a1f0_753_192x192_fill_lanczos_center_2.png><link rel=canonical href=/documentation/visualising_output/python_beam.html><meta property="twitter:card" content="summary"><meta property="og:site_name" content="EPOCH"><meta property="og:url" content="/documentation/visualising_output/python_beam.html"><meta property="og:title" content="Python BEAM | EPOCH"><meta property="og:description" content="BEAM BEAM (Broad EPOCH Analysis Modules) is a collection of independent yet complementary open-source tools for analysing EPOCH simulations in Python, designed to be modular so researchers can adopt only the components they require without being constrained by a rigid framework."><meta property="og:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="twitter:image" content="/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png"><meta property="og:locale" content="en-us"><meta property="article:modified_time" content="2025-04-14T10:19:49+01:00"><title>Python BEAM | EPOCH</title></head><body id=top data-spy=scroll data-offset=70 data-target=#TableOfContents><aside class=search-results id=search><div class=container><section class=search-header><div class="row no-gutters justify-content-between mb-3"><div class=col-6><h1>Search</h1></div><div class="col-6 col-search-close"><a class=js-search href=#><i class="fas fa-times-circle text-muted" aria-hidden=true></i></a></div></div><div id=search-box><input name=q id=search-query placeholder=Search... autocapitalize=off autocomplete=off autocorrect=off spellcheck=false type=search></div></section><section class=section-search-results><div id=search-hits></div></section></div></aside><nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id=navbar-main><div class=container><div class="d-none d-lg-inline-flex"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><button type=button class=navbar-toggler data-toggle=collapse data-target=#navbar-content aria-controls=navbar aria-expanded=false aria-label="Toggle navigation">
+<span><i class="fas fa-bars"></i></span></button><div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none"><a class=navbar-brand href=/><img src=/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_0x70_resize_lanczos_2.png alt=EPOCH></a></div><div class="navbar-collapse main-menu-item collapse justify-content-end" id=navbar-content><ul class="navbar-nav d-md-inline-flex"><li class=nav-item><a class=nav-link href=/#about><span>Home</span></a></li><li class=nav-item><a class=nav-link href=/quickstart.html><span>Quick Start</span></a></li><li class=nav-item><a class=nav-link href=/documentation.html><span>User Guide</span></a></li><li class=nav-item><a class=nav-link href=/developer.html><span>Dev Guide</span></a></li><li class=nav-item><a class=nav-link href=/publication.html><span>Publications</span></a></li><li class=nav-item><a class=nav-link href=/license.html><span>License</span></a></li><li class=nav-item><a class=nav-link href=/contact.html><span>Contact</span></a></li></ul></div><ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2"><li class=nav-item><a class="nav-link js-search" href=#><i class="fas fa-search" aria-hidden=true></i></a></li></ul></div></nav><div class="container-fluid docs"><div class="row flex-xl-nowrap"><div class="col-12 col-md-3 col-xl-2 docs-sidebar"><form class="docs-search d-flex align-items-center"><button class="btn docs-toggle d-md-none p-0 mr-3" type=button data-toggle=collapse data-target=#docs-nav aria-controls=docs-nav aria-expanded=false aria-label="Toggle section navigation">
+<span><i class="fas fa-bars"></i></span></button>
+<input name=q type=search class=form-control placeholder=Search... autocomplete=off></form><nav class="collapse docs-links" id=docs-nav><div class=docs-toc-item><a class=docs-toc-link href=/documentation.html>Overview</a></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/basic_usage.html>Basic usage</a><ul class="nav docs-sidenav"><li><a href=/documentation/basic_usage/faq.html>FAQs</a></li><li><a href=/documentation/basic_usage/structure.html>Structure</a></li><li><a href=/documentation/basic_usage/compiling.html>Compiling</a></li><li><a href=/documentation/basic_usage/compiler_flags.html>Compiler Flags</a></li><li><a href=/documentation/basic_usage/running.html>Running</a></li><li><a href=/documentation/basic_usage/acknowledging_epoch.html>Acknowledging EPOCH</a></li><li><a href=/documentation/basic_usage/libraries.html>Libraries</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/input_deck/input_deck.html>Input deck</a><ul class="nav docs-sidenav"><li><a href=/documentation/input_deck/input_deck_antenna.html>Antenna block</a></li><li><a href=/documentation/input_deck/input_deck_boundaries.html>Boundaries block</a></li><li><a href=/documentation/input_deck/input_deck_bremsstrahlung.html>Bremsstrahlung block</a></li><li><a href=/documentation/input_deck/input_deck_collisions.html>Collisions block</a></li><li><a href=/documentation/input_deck/input_deck_constant.html>Constant block</a></li><li><a href=/documentation/input_deck/input_deck_control.html>Control block</a></li><li><a href=/documentation/input_deck/input_deck_dist_fn.html>Dist_fn block</a></li><li><a href=/documentation/input_deck/input_deck_fields.html>Fields block</a></li><li><a href=/documentation/input_deck/input_deck_injector.html>Injector block</a></li><li><a href=/documentation/input_deck/input_deck_laser.html>Laser block</a></li><li><a href=/documentation/input_deck/input_deck_output_block.html>Output block</a></li><li><a href=/documentation/input_deck/input_deck_output_global.html>Output_global block</a></li><li><a href=/documentation/input_deck/input_deck_particle_file.html>Particles_from_file block</a></li><li><a href=/documentation/input_deck/input_deck_probe.html>Probe block</a></li><li><a href=/documentation/input_deck/input_deck_qed.html>QED block</a></li><li><a href=/documentation/input_deck/input_deck_species.html>Species block</a></li><li><a href=/documentation/input_deck/input_deck_subset.html>Subset block</a></li><li><a href=/documentation/input_deck/input_deck_window.html>Window block</a></li><li><a href=/documentation/input_deck/binary_files.html>Binary files</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/code_details.html>Code details</a><ul class="nav docs-sidenav"><li><a href=/documentation/code_details/maths_parser.html>Maths parser</a></li><li><a href=/documentation/code_details/using_epoch_in_practice.html>Using EPOCH in practice</a></li><li><a href=/documentation/code_details/using_delta_f.html>Using delta f</a></li><li><a href=/documentation/code_details/previous_versions.html>Previous versions</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/visualising_output.html>Visualising output</a><ul class="nav docs-sidenav"><li><a href=/documentation/visualising_output/visualising_sdf_files_with_idl_or_gdl.html>IDL or GDL</a></li><li><a href=/documentation/visualising_output/visualising_sdf_files_with_llnl_visit.html>LLNL VisIt</a></li><li><a href=/documentation/visualising_output/python.html>Python</a></li><li class=active><a href=/documentation/visualising_output/python_beam.html>Python BEAM</a></li><li><a href=/documentation/visualising_output/python_sdf_helper.html>Python sdf_helper</a></li></ul></div><div class=docs-toc-item><a class=docs-toc-link href=/documentation/examples.html>Examples</a><ul class="nav docs-sidenav"><li><a href=/documentation/examples/basic_examples.html>Basic examples</a></li><li><a href=/documentation/examples/workshop_examples.html>Workshop examples</a></li><li><a href=/documentation/examples/workshop_examples_continued.html>Workshop examples continued</a></li></ul></div></nav></div><div class="d-none d-xl-block col-xl-2 docs-toc"><ul class="nav toc-top"><li><a href=# id=back_to_top class=docs-toc-title>Contents</a></li></ul><nav id=TableOfContents><ul><li><a href=#installation>Installation</a></li><li><a href=#citing>Citing</a></li><li><a href=#sdf-xarray>sdf-xarray: analysing EPOCH output</a><ul><li><a href=#single_file_loading>Single file loading</a></li><li><a href=#multi_file_loading>Multi file loading</a></li><li><a href=#plotting>Plotting</a></li></ul></li><li><a href=#epydeck>epydeck: Writing input deck files with Python</a><ul><li><a href=#epydeck_example>Example</a></li></ul></li><li><a href=#epyscan>epyscan: Campaign generation and parameter sampling</a><ul><li><a href=#epyscan_example>Example</a></li></ul></li></ul></nav></div><main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role=main><article class=article><div class=docs-article-container><h1>Python BEAM</h1><div class=article-style><h1 id=BEAM>BEAM</h1><p><img src=BEAM.png alt="BEAM logo"></p><p><strong>BEAM</strong> (Broad EPOCH Analysis Modules) is a collection of independent yet complementary open-source tools for analysing EPOCH simulations in Python, designed to be modular so researchers can adopt only the components they require without being constrained by a rigid framework. In line with the <strong>FAIR principles — Findable</strong>, <strong>Accessible</strong>, <strong>Interoperable</strong>, and <strong>Reusable</strong> — each package is openly published with clear documentation and versioning (Findable), distributed via public repositories (Accessible), designed to follow common standards for data structures and interfaces (Interoperable), and includes licensing and metadata to support long-term use and adaptation (Reusable). The packages are as follows:</p><ul><li><a href=https://github.com/epochpic/sdf-xarray target=_blank rel=noopener>sdf-xarray</a>: Reading and processing SDF files and converting them to
+<a href=https://docs.xarray.dev/en/stable/ target=_blank rel=noopener>xarray</a>.</li><li><a href=https://github.com/epochpic/epydeck target=_blank rel=noopener>epydeck</a>: Input deck reader and writer.</li><li><a href=https://github.com/epochpic/epyscan target=_blank rel=noopener>epyscan</a>: Create campaigns over a given parameter space using various sampling methods.</li></ul><p><img src=BEAM_PlasmaFAIR.svg alt="PlasmaFAIR logo"></p><p>Originally developed by Joel Adams and the
+<a href=https://plasmafair.github.io target=_blank rel=noopener>PlasmaFAIR</a> Team at the York Plasma Institute under the EPSRC Grant EP/V051822/1.</p><h2 id=installation>Installation</h2><p>All of the packages are available on PyPI and can be installed using pip:</p><pre><code class=language-bash>pip install sdf-xarray epydeck epyscan
+</code></pre><p>Each package can be used independently or together depending on your needs.</p><h2 id=citing>Citing</h2><p>If any of the BEAM contribute to a project that leads to publication, please acknowledge this by citing the module in question. This can be done by clicking the &ldquo;cite this repository&rdquo; button located near the top right of their respective github pages.</p><h2 id=sdf-xarray>sdf-xarray: analysing EPOCH output</h2><p><code>sdf-xarray</code> is a lightweight wrapper that reads EPOCH&rsquo;s SDF files into <code>xarray.Dataset</code> objects. This provides:</p><ul><li>Lazy loading and memory-efficient handling of large datasets</li><li>Easy slicing and plotting using <code>matplotlib</code>, <code>xarray.plot</code>, or <code>hvplot</code></li><li>Automatic normalisation of grid and variable names</li><li>Integration with Jupyter notebooks and Dask for parallel analysis</li></ul><p><strong>The key features for this module are highlighted below, for in-depth documentation please visit <a href=https://sdf-xarray.readthedocs.io>https://sdf-xarray.readthedocs.io</a></strong></p><h3 id=single_file_loading>Single file loading</h3><pre><code class=language-python>import xarray as xr
+
+ds = xr.open_dataset(&quot;0010.sdf&quot;)
+
+ds[&quot;Electric_Field_Ex&quot;]
+
+# &lt;xarray.DataArray 'Electric_Field_Ex' (X_x_px_deltaf_electron_beam: 16)&gt; Size: 128B
+# [16 values with dtype=float64]
+# Coordinates:
+#   * X_x_px_deltaf_electron_beam  (X_x_px_deltaf_electron_beam) float64 128B 1...
+# Attributes:
+#     units:    V/m
+#     full_name: &quot;Electric Field/Ex&quot;
+</code></pre><h3 id=multi_file_loading>Multi file loading</h3><p>To open a whole simulation at once, pass <code>preprocess=sdf_xarray.SDFPreprocess()</code>
+to <code>xarray.open_mfdataset</code>:</p><pre><code class=language-python>import xarray as xr
+from sdf_xarray import SDFPreprocess
+
+ds = xr.open_mfdataset(&quot;*.sdf&quot;, preprocess=SDFPreprocess())
+
+print(ds)
+
+# Dimensions:
+# time: 301, X_Grid_mid: 128, ...
+# Coordinates: (9) ...
+# Data variables: (18) ...
+# Indexes: (9) ...
+# Attributes: (22) ...
+</code></pre><p><code>SDFPreprocess</code> checks that all the files are from the same simulation, as
+ensures there&rsquo;s a <code>time</code> dimension so the files are correctly concatenated.</p><p>If your simulation has multiple <code>output</code> blocks so that not all variables are
+output at every time step, then those variables will have <code>NaN</code> values at the
+corresponding time points.</p><p>After having loaded in a series of datasets we can select a simulation file by calling the <code>.isel()</code> function where we pass in the parameter of <code>time=0</code> where <code>0</code> can be a number between <code>0</code> and the total number of simulation files.</p><p>We can also use the <code>.sel()</code> function if we know the exact simulation time we want to select. There must be a corresponding dataset with this time for it work correctly.</p><pre><code class=language-python>print(f&quot;There are a total of {ds[&quot;time&quot;].size} time steps. (This is the same as the number of SDF files in the folder)&quot;)
+# There are a total of 41 time steps. (This is the same as the number of SDF files in the folder)
+
+print(f&quot;The time steps are: {ds[&quot;time&quot;].values}&quot;)
+# The time steps are: [2.60596949e-17 5.00346143e-15 1.00069229e-14, ..., 2.00034218e-13]
+
+sim_time = ds['time'].isel(time=20).values
+print(f&quot;The time at the 20th simulation step is {sim_time:.2e} s&quot;)
+# The time at the 20th simulation step is 1.00e-13 s
+
+ds[&quot;Electric_Field_Ex&quot;].isel(time=20)
+# OR
+# ds[&quot;Electric_Field_Ex&quot;].sel(time=sim_time)
+</code></pre><h3 id=plotting>Plotting</h3><p>Since this package converts SDF files to xarray we can leverage the plotting features that are included in xarray. For example we can load in a SDF file and plot the number density of the electrons:</p><pre><code class=language-python>import xarray as xr
+
+ds = xr.open_dataset(&quot;0010.sdf&quot;)
+
+# NOTE: EPOCH saves the x and y axes into SDF files in the inverse order to that expected by xarray so we have to specify which axes is which otherwise our plot comes out inverted
+ds[&quot;Derived_Number_Density_Electron&quot;].plot(x=&quot;X_Grid_mid&quot;, y=&quot;Y_Grid_mid&quot;)
+</code></pre><p><img src=BEAM_Derived_Number_Density_Electrons.png alt="Derived Number Density Electron Plot"></p><h2 id=epydeck>epydeck: Writing input deck files with Python</h2><p>Writing large numbers of EPOCH input files by hand can be tedious and error-prone. <code>epydeck</code> (short for <em>EPOCH Python deck</em>) allows you to create and manipulate input decks in Python:</p><ul><li>Build decks using standard Python data structures</li><li>Load, modify, and save EPOCH-style <code>.deck</code> files</li><li>Designed to preserve comments and formatting where possible</li></ul><p>The interface follows the standard Python
+<a href=https://docs.python.org/3/library/json.html target=_blank rel=noopener><code>json</code></a> module:</p><ul><li><code>epydeck.load</code> to read from a <code>file</code> object</li><li><code>epydeck.loads</code> to read from an existing string</li><li><code>epydeck.dump</code> to write to a <code>file</code> object</li><li><code>epydeck.dumps</code> to write to a string</li></ul><p><strong>The key features for this module are highlighted below, for in-depth documentation please visit, for in-depth documentation please visit <a href=https://github.com/epochpic/epydeck>https://github.com/epochpic/epydeck</a></strong></p><h3 id=epydeck_example>Example</h3><pre><code class=language-python>import epydeck
+
+# Read from a file with `epydeck.load`
+with open(filename) as f:
+    deck = epydeck.load(f)
+
+print(deck.keys())
+# dict_keys(['control', 'boundaries', 'constant', 'species', 'laser', 'output_global', 'output', 'dist_fn'])
+
+# Modify the deck as a usual python dict:
+deck[&quot;species&quot;][&quot;proton&quot;][&quot;charge&quot;] = 2.0
+
+# Write to file
+with open(filename, &quot;w&quot;) as f:
+    epydeck.dump(deck, f)
+
+print(epydeck.dumps(deck))
+# ...
+# begin:species
+#   name = proton
+#   charge = 2.0
+#   mass = 1836.2
+#   fraction = 0.5
+#   number_density = if((r gt ri) and (r lt ro), den_cone, 0.0)
+#   number_density = if((x gt xi) and (x lt xo) and (r lt ri), den_cone, number_density(proton))
+#   number_density = if(x gt xo, 0.0, number_density(proton))
+# end:species
+# ...
+</code></pre><h2 id=epyscan>epyscan: Campaign generation and parameter sampling</h2><p><code>epyscan</code> (short for <em>EPOCH Python scan</em>) generates
+<a href=https://epochpic.github.io/ target=_blank rel=noopener>EPOCH</a> campaigns over a parameter space using different sampling methods. It supports the following features:</p><ul><li>Defining scans over one or more input variables</li><li>Support for grid and Latin hypercube sampling methods</li></ul><p>Parameter space to be sampled is described by a <code>dict</code> where keys
+should be in the form of <code>block_name:parameter</code>, and values should
+be dicts with the following keys:</p><ul><li><code>"min"</code>: minimum value of the parameter</li><li><code>"max"</code>: maximum value of the parameter</li><li><code>"log"</code>: (optional) <code>bool</code>, if <code>True</code> then grid is done in
+log space for this parameter</li></ul><p><strong>The key features for this module are highlighted below, for in-depth documentation please visit, for in-depth documentation please visit <a href=https://github.com/epochpic/epyscan>https://github.com/epochpic/epyscan</a></strong></p><h3 id=epyscan_example>Example</h3><pre><code class=language-python>import pathlib
+import epyscan
+import epydeck
+
+# Define the parameter space to be sampled. Here, we are varying the intensity
+# and density
+parameters = {
+  # Intensity varies logarithmically between 1.0e22 and 1.0e24
+  &quot;constant:intens&quot;: {&quot;min&quot;: 1.0e22, &quot;max&quot;: 1.0e24, &quot;log&quot;: True},
+  # Density varies logarithmically between 1.0e20 and 1.0e24
+  &quot;constant:nel&quot;: {&quot;min&quot;: 1.0e20, &quot;max&quot;: 1e24, &quot;log&quot;: True},
+}
+
+# Load a deck file to use as a template for the simulations
+with open(&quot;template_deck_filename&quot;) as f:
+  deck = epydeck.load(f)
+
+# Create a grid scan object that will generate 4 different sets of parameters 
+# within the specified ranges
+grid_scan = epyscan.GridScan(parameters, n_samples=4)
+
+# Define the root directory where the simulation folders will be saved. 
+# This directory will be created if it doesn't exist
+run_root = pathlib.Path(&quot;example_campaign&quot;)
+
+# Initialize a campaign object with the template deck and the root directory. 
+# This will manage the creation of simulation cases
+campaign = epyscan.Campaign(deck, run_root)
+
+# Generate the folders and deck files for each set of parameters in the
+# grid scan
+paths = [campaign.setup_case(sample) for sample in grid_scan]
+
+# Save the paths of the generated simulation folders to a file
+with open(&quot;paths.txt&quot;, &quot;w&quot;) as f:
+  [f.write(f&quot;{path}\n&quot;) for path in paths]
+
+# Opening paths.txt
+# example_campaign/run_0_1000000/run_0_10000/run_0_100/run_0
+# example_campaign/run_0_1000000/run_0_10000/run_0_100/run_1
+# example_campaign/run_0_1000000/run_0_10000/run_0_100/run_2
+# ...
+</code></pre></div><div class=article-widget><div class=post-nav><div class=post-nav-item><div class=meta-nav>Previous</div><a href=/documentation/visualising_output/python.html rel=next>Python</a></div><div class=post-nav-item><div class=meta-nav>Next</div><a href=/documentation/visualising_output/python_sdf_helper.html rel=prev>Python sdf_helper</a></div></div></div></div><div class=body-footer><p>Last updated on Apr 14, 2025</p></div></article><footer class=site-footer><p class=powered-by>Powered by the
+<a href=https://sourcethemes.com/academic/ target=_blank rel=noopener>Academic theme</a> for
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a>.</p></footer></main></div></div><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin=anonymous></script><script>const code_highlighting=!0</script><script>const isSiteThemeDark=!1</script><script>const search_config={indexURI:"/index.json",minLength:1,threshold:.3},i18n={no_results:"No results found",placeholder:"Search...",results:"results found"},content_type={post:"Posts",project:"Projects",publication:"Publications",talk:"Talks"}</script><script src=https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.1/anchor.min.js integrity="sha256-pB/deHc9CGfFpJRjC43imB29Rse8tak+5eXqntO94ck=" crossorigin=anonymous></script><script>anchors.add()</script><script id=search-hit-fuse-template type=text/x-template>
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script><script src=https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin=anonymous></script><script src=/js/academic.min.6f1005d1a84220e2f466ff3d8e712f31.js></script><div id=modal class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><h5 class=modal-title>Cite</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class=modal-body><pre><code class="tex hljs"></code></pre></div><div class=modal-footer><a class="btn btn-outline-primary my-1 js-copy-cite" href=# target=_blank><i class="fas fa-copy"></i> Copy</a>
+<a class="btn btn-outline-primary my-1 js-download-cite" href=# target=_blank><i class="fas fa-download"></i> Download</a><div id=modal-error></div></div></div></div></div></body></html>

@@ -7907,6 +7907,182 @@ data=sdf.read('Data/0005.sdf')
 ey = data.Electric_Field_Ey
 plt.pcolormesh(ey.grid_mid.data[0], ey.grid_mid.data[1], ey.data.T)
 plt.show()
+&lt;/code>&lt;/pre></description></item><item><title>Python BEAM</title><link>/documentation/visualising_output/python_beam.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_beam.html</guid><description>&lt;h1 id="BEAM">BEAM&lt;/h1>
+&lt;p>&lt;img src="BEAM.png" alt="BEAM logo">&lt;/p>
+&lt;p>&lt;strong>BEAM&lt;/strong> (Broad EPOCH Analysis Modules) is a collection of independent yet complementary open-source tools for analysing EPOCH simulations in Python, designed to be modular so researchers can adopt only the components they require without being constrained by a rigid framework. In line with the &lt;strong>FAIR principles — Findable&lt;/strong>, &lt;strong>Accessible&lt;/strong>, &lt;strong>Interoperable&lt;/strong>, and &lt;strong>Reusable&lt;/strong> — each package is openly published with clear documentation and versioning (Findable), distributed via public repositories (Accessible), designed to follow common standards for data structures and interfaces (Interoperable), and includes licensing and metadata to support long-term use and adaptation (Reusable). The packages are as follows:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;a href="https://github.com/epochpic/sdf-xarray" target="_blank" rel="noopener">sdf-xarray&lt;/a>: Reading and processing SDF files and converting them to
+&lt;a href="https://docs.xarray.dev/en/stable/" target="_blank" rel="noopener">xarray&lt;/a>.&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/epochpic/epydeck" target="_blank" rel="noopener">epydeck&lt;/a>: Input deck reader and writer.&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/epochpic/epyscan" target="_blank" rel="noopener">epyscan&lt;/a>: Create campaigns over a given parameter space using various sampling methods.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="BEAM_PlasmaFAIR.svg" alt="PlasmaFAIR logo">&lt;/p>
+&lt;p>Originally developed by Joel Adams and the
+&lt;a href="https://plasmafair.github.io" target="_blank" rel="noopener">PlasmaFAIR&lt;/a> Team at the York Plasma Institute under the EPSRC Grant EP/V051822/1.&lt;/p>
+&lt;h2 id="installation">Installation&lt;/h2>
+&lt;p>All of the packages are available on PyPI and can be installed using pip:&lt;/p>
+&lt;pre>&lt;code class="language-bash">pip install sdf-xarray epydeck epyscan
+&lt;/code>&lt;/pre>
+&lt;p>Each package can be used independently or together depending on your needs.&lt;/p>
+&lt;h2 id="citing">Citing&lt;/h2>
+&lt;p>If any of the BEAM contribute to a project that leads to publication, please acknowledge this by citing the module in question. This can be done by clicking the &amp;ldquo;cite this repository&amp;rdquo; button located near the top right of their respective github pages.&lt;/p>
+&lt;h2 id="sdf-xarray">sdf-xarray: analysing EPOCH output&lt;/h2>
+&lt;p>&lt;code>sdf-xarray&lt;/code> is a lightweight wrapper that reads EPOCH&amp;rsquo;s SDF files into &lt;code>xarray.Dataset&lt;/code> objects. This provides:&lt;/p>
+&lt;ul>
+&lt;li>Lazy loading and memory-efficient handling of large datasets&lt;/li>
+&lt;li>Easy slicing and plotting using &lt;code>matplotlib&lt;/code>, &lt;code>xarray.plot&lt;/code>, or &lt;code>hvplot&lt;/code>&lt;/li>
+&lt;li>Automatic normalisation of grid and variable names&lt;/li>
+&lt;li>Integration with Jupyter notebooks and Dask for parallel analysis&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>The key features for this module are highlighted below, for in-depth documentation please visit &lt;a href="https://sdf-xarray.readthedocs.io">https://sdf-xarray.readthedocs.io&lt;/a>&lt;/strong>&lt;/p>
+&lt;h3 id="single_file_loading">Single file loading&lt;/h3>
+&lt;pre>&lt;code class="language-python">import xarray as xr
+ds = xr.open_dataset(&amp;quot;0010.sdf&amp;quot;)
+ds[&amp;quot;Electric_Field_Ex&amp;quot;]
+# &amp;lt;xarray.DataArray 'Electric_Field_Ex' (X_x_px_deltaf_electron_beam: 16)&amp;gt; Size: 128B
+# [16 values with dtype=float64]
+# Coordinates:
+# * X_x_px_deltaf_electron_beam (X_x_px_deltaf_electron_beam) float64 128B 1...
+# Attributes:
+# units: V/m
+# full_name: &amp;quot;Electric Field/Ex&amp;quot;
+&lt;/code>&lt;/pre>
+&lt;h3 id="multi_file_loading">Multi file loading&lt;/h3>
+&lt;p>To open a whole simulation at once, pass &lt;code>preprocess=sdf_xarray.SDFPreprocess()&lt;/code>
+to &lt;code>xarray.open_mfdataset&lt;/code>:&lt;/p>
+&lt;pre>&lt;code class="language-python">import xarray as xr
+from sdf_xarray import SDFPreprocess
+ds = xr.open_mfdataset(&amp;quot;*.sdf&amp;quot;, preprocess=SDFPreprocess())
+print(ds)
+# Dimensions:
+# time: 301, X_Grid_mid: 128, ...
+# Coordinates: (9) ...
+# Data variables: (18) ...
+# Indexes: (9) ...
+# Attributes: (22) ...
+&lt;/code>&lt;/pre>
+&lt;p>&lt;code>SDFPreprocess&lt;/code> checks that all the files are from the same simulation, as
+ensures there&amp;rsquo;s a &lt;code>time&lt;/code> dimension so the files are correctly concatenated.&lt;/p>
+&lt;p>If your simulation has multiple &lt;code>output&lt;/code> blocks so that not all variables are
+output at every time step, then those variables will have &lt;code>NaN&lt;/code> values at the
+corresponding time points.&lt;/p>
+&lt;p>After having loaded in a series of datasets we can select a simulation file by calling the &lt;code>.isel()&lt;/code> function where we pass in the parameter of &lt;code>time=0&lt;/code> where &lt;code>0&lt;/code> can be a number between &lt;code>0&lt;/code> and the total number of simulation files.&lt;/p>
+&lt;p>We can also use the &lt;code>.sel()&lt;/code> function if we know the exact simulation time we want to select. There must be a corresponding dataset with this time for it work correctly.&lt;/p>
+&lt;pre>&lt;code class="language-python">print(f&amp;quot;There are a total of {ds[&amp;quot;time&amp;quot;].size} time steps. (This is the same as the number of SDF files in the folder)&amp;quot;)
+# There are a total of 41 time steps. (This is the same as the number of SDF files in the folder)
+print(f&amp;quot;The time steps are: {ds[&amp;quot;time&amp;quot;].values}&amp;quot;)
+# The time steps are: [2.60596949e-17 5.00346143e-15 1.00069229e-14, ..., 2.00034218e-13]
+sim_time = ds['time'].isel(time=20).values
+print(f&amp;quot;The time at the 20th simulation step is {sim_time:.2e} s&amp;quot;)
+# The time at the 20th simulation step is 1.00e-13 s
+ds[&amp;quot;Electric_Field_Ex&amp;quot;].isel(time=20)
+# OR
+# ds[&amp;quot;Electric_Field_Ex&amp;quot;].sel(time=sim_time)
+&lt;/code>&lt;/pre>
+&lt;h3 id="plotting">Plotting&lt;/h3>
+&lt;p>Since this package converts SDF files to xarray we can leverage the plotting features that are included in xarray. For example we can load in a SDF file and plot the number density of the electrons:&lt;/p>
+&lt;pre>&lt;code class="language-python">import xarray as xr
+ds = xr.open_dataset(&amp;quot;0010.sdf&amp;quot;)
+# NOTE: EPOCH saves the x and y axes into SDF files in the inverse order to that expected by xarray so we have to specify which axes is which otherwise our plot comes out inverted
+ds[&amp;quot;Derived_Number_Density_Electron&amp;quot;].plot(x=&amp;quot;X_Grid_mid&amp;quot;, y=&amp;quot;Y_Grid_mid&amp;quot;)
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="BEAM_Derived_Number_Density_Electrons.png" alt="Derived Number Density Electron Plot">&lt;/p>
+&lt;h2 id="epydeck">epydeck: Writing input deck files with Python&lt;/h2>
+&lt;p>Writing large numbers of EPOCH input files by hand can be tedious and error-prone. &lt;code>epydeck&lt;/code> (short for &lt;em>EPOCH Python deck&lt;/em>) allows you to create and manipulate input decks in Python:&lt;/p>
+&lt;ul>
+&lt;li>Build decks using standard Python data structures&lt;/li>
+&lt;li>Load, modify, and save EPOCH-style &lt;code>.deck&lt;/code> files&lt;/li>
+&lt;li>Designed to preserve comments and formatting where possible&lt;/li>
+&lt;/ul>
+&lt;p>The interface follows the standard Python
+&lt;a href="https://docs.python.org/3/library/json.html" target="_blank" rel="noopener">&lt;code>json&lt;/code>&lt;/a> module:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>epydeck.load&lt;/code> to read from a &lt;code>file&lt;/code> object&lt;/li>
+&lt;li>&lt;code>epydeck.loads&lt;/code> to read from an existing string&lt;/li>
+&lt;li>&lt;code>epydeck.dump&lt;/code> to write to a &lt;code>file&lt;/code> object&lt;/li>
+&lt;li>&lt;code>epydeck.dumps&lt;/code> to write to a string&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>The key features for this module are highlighted below, for in-depth documentation please visit, for in-depth documentation please visit &lt;a href="https://github.com/epochpic/epydeck">https://github.com/epochpic/epydeck&lt;/a>&lt;/strong>&lt;/p>
+&lt;h3 id="epydeck_example">Example&lt;/h3>
+&lt;pre>&lt;code class="language-python">import epydeck
+# Read from a file with `epydeck.load`
+with open(filename) as f:
+deck = epydeck.load(f)
+print(deck.keys())
+# dict_keys(['control', 'boundaries', 'constant', 'species', 'laser', 'output_global', 'output', 'dist_fn'])
+# Modify the deck as a usual python dict:
+deck[&amp;quot;species&amp;quot;][&amp;quot;proton&amp;quot;][&amp;quot;charge&amp;quot;] = 2.0
+# Write to file
+with open(filename, &amp;quot;w&amp;quot;) as f:
+epydeck.dump(deck, f)
+print(epydeck.dumps(deck))
+# ...
+# begin:species
+# name = proton
+# charge = 2.0
+# mass = 1836.2
+# fraction = 0.5
+# number_density = if((r gt ri) and (r lt ro), den_cone, 0.0)
+# number_density = if((x gt xi) and (x lt xo) and (r lt ri), den_cone, number_density(proton))
+# number_density = if(x gt xo, 0.0, number_density(proton))
+# end:species
+# ...
+&lt;/code>&lt;/pre>
+&lt;h2 id="epyscan">epyscan: Campaign generation and parameter sampling&lt;/h2>
+&lt;p>&lt;code>epyscan&lt;/code> (short for &lt;em>EPOCH Python scan&lt;/em>) generates
+&lt;a href="https://epochpic.github.io/" target="_blank" rel="noopener">EPOCH&lt;/a> campaigns over a parameter space using different sampling methods. It supports the following features:&lt;/p>
+&lt;ul>
+&lt;li>Defining scans over one or more input variables&lt;/li>
+&lt;li>Support for grid and Latin hypercube sampling methods&lt;/li>
+&lt;/ul>
+&lt;p>Parameter space to be sampled is described by a &lt;code>dict&lt;/code> where keys
+should be in the form of &lt;code>block_name:parameter&lt;/code>, and values should
+be dicts with the following keys:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>&amp;quot;min&amp;quot;&lt;/code>: minimum value of the parameter&lt;/li>
+&lt;li>&lt;code>&amp;quot;max&amp;quot;&lt;/code>: maximum value of the parameter&lt;/li>
+&lt;li>&lt;code>&amp;quot;log&amp;quot;&lt;/code>: (optional) &lt;code>bool&lt;/code>, if &lt;code>True&lt;/code> then grid is done in
+log space for this parameter&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>The key features for this module are highlighted below, for in-depth documentation please visit, for in-depth documentation please visit &lt;a href="https://github.com/epochpic/epyscan">https://github.com/epochpic/epyscan&lt;/a>&lt;/strong>&lt;/p>
+&lt;h3 id="epyscan_example">Example&lt;/h3>
+&lt;pre>&lt;code class="language-python">import pathlib
+import epyscan
+import epydeck
+# Define the parameter space to be sampled. Here, we are varying the intensity
+# and density
+parameters = {
+# Intensity varies logarithmically between 1.0e22 and 1.0e24
+&amp;quot;constant:intens&amp;quot;: {&amp;quot;min&amp;quot;: 1.0e22, &amp;quot;max&amp;quot;: 1.0e24, &amp;quot;log&amp;quot;: True},
+# Density varies logarithmically between 1.0e20 and 1.0e24
+&amp;quot;constant:nel&amp;quot;: {&amp;quot;min&amp;quot;: 1.0e20, &amp;quot;max&amp;quot;: 1e24, &amp;quot;log&amp;quot;: True},
+}
+# Load a deck file to use as a template for the simulations
+with open(&amp;quot;template_deck_filename&amp;quot;) as f:
+deck = epydeck.load(f)
+# Create a grid scan object that will generate 4 different sets of parameters
+# within the specified ranges
+grid_scan = epyscan.GridScan(parameters, n_samples=4)
+# Define the root directory where the simulation folders will be saved.
+# This directory will be created if it doesn't exist
+run_root = pathlib.Path(&amp;quot;example_campaign&amp;quot;)
+# Initialize a campaign object with the template deck and the root directory.
+# This will manage the creation of simulation cases
+campaign = epyscan.Campaign(deck, run_root)
+# Generate the folders and deck files for each set of parameters in the
+# grid scan
+paths = [campaign.setup_case(sample) for sample in grid_scan]
+# Save the paths of the generated simulation folders to a file
+with open(&amp;quot;paths.txt&amp;quot;, &amp;quot;w&amp;quot;) as f:
+[f.write(f&amp;quot;{path}\n&amp;quot;) for path in paths]
+# Opening paths.txt
+# example_campaign/run_0_1000000/run_0_10000/run_0_100/run_0
+# example_campaign/run_0_1000000/run_0_10000/run_0_100/run_1
+# example_campaign/run_0_1000000/run_0_10000/run_0_100/run_2
+# ...
 &lt;/code>&lt;/pre></description></item><item><title>Basic examples</title><link>/documentation/examples/basic_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/basic_examples.html</guid><description>&lt;p>In this section we outline a few worked examples of setting up problems
 using the EPOCH input deck.&lt;/p>
 &lt;h1 id="electron_two_stream_instability">Electron two stream instability&lt;/h1>
@@ -8107,7 +8283,210 @@ if so.&lt;/li>
 &lt;p>This deck produces an initial condition as in the Figures in
 &lt;a href="#3d_cone">3D&lt;/a> and
 &lt;a href="#2d_cone">2D&lt;/a>
-respectively.&lt;/p></description></item><item><title>Workshop examples</title><link>/documentation/examples/workshop_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples.html</guid><description>&lt;h1 id="epoch_workshop_overview">EPOCH workshop overview&lt;/h1>
+respectively.&lt;/p></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing_the_python_sdf_readers">Installing the python sdf readers&lt;/h1>
+&lt;p>To install the python sdf readers you need to have an installation of
+python (2 or 3) with the numpy library. The automated plotting library
+requires the matplotlib library. Both numpy and matplotlib are available
+through most system package managers or are installable through
+&lt;a href="https://pip.pypa.io/en/stable/" target="_blank" rel="noopener">pip&lt;/a>.&lt;/p>
+&lt;p>Once you have a working python install, just go into one of the epoch
+directories (epoch1d, epoch2d or epoch3d) and type&lt;/p>
+&lt;p>&lt;code>make sdfutils&lt;/code>&lt;/p>
+&lt;p>This will build the SDF python library and install the sdf_helper
+wrapper and utility layer.&lt;/p>
+&lt;h1 id="using_the_sdf_helper_wrapper_layer">Using the sdf_helper wrapper layer&lt;/h1>
+&lt;p>The low level python SDF library is not user friendly, so a wrapper
+layer called sdf_helper has been written. This wrapper layer simplifies
+loading SDF files and provides simple plotting routines using
+matplotlib.&lt;/p>
+&lt;h3 id="importing_sdf_helper">Importing sdf_helper&lt;/h3>
+&lt;p>Importing sdf_helper is as simple as&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper
+&lt;/code>&lt;/pre>
+&lt;p>In these examples, the numpy and matplotlib libraries are usually loaded
+too, and an alias is created for sdf_helper, so the boilerplate code
+looks like&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+import numpy as np
+import matplotlib.pyplot as plt
+&lt;/code>&lt;/pre>
+&lt;h3 id="loading_an_sdf_file_using_sdf_helper">Loading an sdf file using sdf_helper&lt;/h3>
+&lt;p>To load a file, use the &lt;code>getdata&lt;/code> function. This function takes either a
+string which it loads as a filename, so to load the file &lt;code>Data/0010.df&lt;/code>
+you would run&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data=sh.getdata('Data/0010.sdf')
+&lt;/code>&lt;/pre>
+&lt;p>or it takes a number which is the dump number, and optionally a second
+parameter which is the directory name as a string, so you would run&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data=sh.getdata(10, 'Data')
+&lt;/code>&lt;/pre>
+&lt;p>Because memory is only allocated when needed in the SDF python reader
+there is no way of specifying which variables to load using getdata. All
+variables are available when the file is first loaded, and memory is
+allocated when the variable is first used.&lt;/p>
+&lt;h3 id="listing_the_available_variables_in_an_sdf_file">Listing the available variables in an sdf file&lt;/h3>
+&lt;p>To see what variables are available use the list_variables method&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+data=sh.getdata('Data/0010.sdf')
+sh.list_variables(data)
+&lt;/code>&lt;/pre>
+&lt;p>This produces an output that looks something like&lt;/p>
+&lt;pre>&lt;code class="language-text">CPUs_Current_rank &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [0]
+CPUs_Original_rank &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [2]
+Current_Jx &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Charge_Density &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Number_Density &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Number_Density_Left &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Derived_Number_Density_Right &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Electric_Field_Ex &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400]
+Grid_CPUs_Original_rank &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [3]
+Grid_CPUs_Original_rank_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [2]
+Grid_Grid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [401]
+Grid_Grid_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [400]
+Grid_x_px_Left &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [400, 200]
+Grid_x_px_Left_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [399, 199]
+Grid_x_px_Right &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [400, 200]
+Grid_x_px_Right_mid &amp;lt;class 'sdf.BlockPlainMesh'&amp;gt; [399, 199]
+Wall_time &amp;lt;class 'sdf.BlockConstant'&amp;gt; [1]
+dist_fn_x_px_Left &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400, 200]
+dist_fn_x_px_Right &amp;lt;class 'sdf.BlockPlainVariable'&amp;gt; [400, 200]
+&lt;/code>&lt;/pre>
+&lt;p>These are the names of the variables in the data structure. This example
+is taken from the supplied &lt;code>two_stream.deck&lt;/code> example in 1D.&lt;/p>
+&lt;h3 id="working_with_the_data_in_an_sdf_file">Working with the data in an SDF file&lt;/h3>
+&lt;p>You can access the underlying data using the names obtained from
+&lt;code>list_variables&lt;/code>&lt;/p>
+&lt;pre>&lt;code class="language-python">variable = data.Electric_Field_Ex
+&lt;/code>&lt;/pre>
+&lt;p>This returns an instance of either &lt;code>sdf.BlockPlainVariable&lt;/code> or
+&lt;code>sdf.BlockPointVariable&lt;/code> depending on whether you have requested a grid
+variable (such as Ex, Ey or a distribution function) or a particle
+variable (such as particle momentum or weight). The raw contents of the
+variable is a numpy array. It is then available using the &lt;code>data&lt;/code> element
+of these objects.&lt;/p>
+&lt;pre>&lt;code class="language-python">import numpy as np
+variable = data.Electric_Field_Ex
+raw = variable.data
+print(type(raw))
+print(np.mean(raw))
+&lt;/code>&lt;/pre>
+&lt;p>produces the output&lt;/p>
+&lt;pre>&lt;code class="language-text">&amp;lt;type 'numpy.ndarray'&amp;gt;
+-1.27980874427008e-06
+&lt;/code>&lt;/pre>
+&lt;h3 id="plotting_using_sdf_helper">Plotting using sdf_helper&lt;/h3>
+&lt;p>The sdf_helper wrapper script comes with some plotting routines. They
+are incomplete currently, but aim to provide as close as possible to
+press ready figures in a single command. You need the &lt;code>matplotlib&lt;/code>
+library to use these routines, and they are only available for 1D and 2D
+data at present. To plot data, simply provide an
+&lt;code>sdf.BlockPlainVariable&lt;/code> object to the routine &lt;code>plot_auto&lt;/code>. An example
+of plotting a 1D variable, using the &lt;code>two_stream.deck&lt;/code> example deck to
+generate the figures would be&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+import matplotlib.pyplot as plt
+plt.ion()
+data=sh.getdata('Data/0010.sdf')
+sh.plot_auto(data.Current_Jx)
+&lt;/code>&lt;/pre>
+&lt;p>This will produce a window similar to the image shown here, with slight
+difference depending on your version of matplotlib and your operating
+system. The code &lt;code>plt.ion()&lt;/code> sets matplotlib to interactive mode, so
+control will be returned to you as soon as the plot has finished
+drawing.&lt;/p>
+&lt;p>
+&lt;a href="Matplotlib1D_screenshot.png">Example 1D plot generated by sdf_helper.plot_auto&lt;/a>&lt;/p>
+&lt;p>Plotting a 2D function is the same basic idea, and the code&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf_helper as sh
+import matplotlib.pyplot as plt
+plt.ion()
+data=sh.getdata('Data/0010.sdf')
+sh.plot_auto(data.dist_fn_x_px_Right, iso=0)
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="Matplotlib2D.png" alt=" thumb \| 200px \| Example 2D plot generated bysdf_helper.plot_auto">&lt;/p>
+&lt;p>will produce the figure on the right. The procedure for variables from
+EPOCH2D data is exactly the same.&lt;/p>
+&lt;h3 id="changing_colour_tables">Changing colour tables&lt;/h3>
+&lt;p>The easiest solution to changing colour tables is to set the global
+colour table. This is done by&lt;/p>
+&lt;pre>&lt;code class="language-python">import matplotlib.pyplot as plt
+plt.set_cmap(tablename)
+&lt;/code>&lt;/pre>
+&lt;p>where &lt;code>tablename&lt;/code> is a string describing the colour table to be used.
+The available strings are given
+&lt;a href="http://matplotlib.org/users/colormaps.html" target="_blank" rel="noopener">here&lt;/a>&lt;/p>
+&lt;h3 id="some_bugs_in_matplotlib">Some bugs in matplotlib&lt;/h3>
+&lt;p>There are some bugs in matplotlib which can mean that sometimes the 2D
+images don&amp;rsquo;t render properly. If you get incorrect rendering, please
+try updating matplotlib to the latest version for your platform. If that
+doesn&amp;rsquo;t work then pass the parameter &lt;code>compatibility=True&lt;/code> to the
+&lt;code>plot_auto&lt;/code> routine. This may make the plot slightly less pretty, but
+tends to work on more platforms.&lt;/p>
+&lt;h1 id="core_python_library">Core Python library&lt;/h1>
+&lt;p>The SDF python reader allows you to read any SDF file and access any
+information within the file. It has very few user friendly features to
+assist working with the files. Some of the methods listed in the section
+on sdf_helper (notably list_variables) are not available when using
+the core library. Loading an sdf file with the core library has the
+following syntax&lt;/p>
+&lt;pre>&lt;code class="language-python">import sdf
+data=sdf.read(filename)
+&lt;/code>&lt;/pre>
+&lt;p>where filename is a string containing the name of the file to be loaded.
+This returns an sdf.BlockList object&lt;/p>
+&lt;h3 id="the_sdf" class="blocklist_object">The sdf.BlockList object&lt;/h3>
+&lt;p>The &lt;code>list_variables&lt;/code> routine is added by the sdf_helper wrapper, but
+you can check what elements are in the file by simply typing&lt;/p>
+&lt;pre>&lt;code class="language-python">data.__dict__
+&lt;/code>&lt;/pre>
+&lt;p>Which will produce an output like the following example from EPOCH2D&lt;/p>
+&lt;p>&lt;code>{'Header': {'filename': '/Users/phsiav/dev/epoch/epoch2d/Data/0005.sdf', 'file_version': 1, 'file_revision': 4, 'code_name': 'Epoch2d', 'step': 53, 'time': 2.5293132385759517e-14, 'jobid1': 1552896563, 'jobid2': 376, 'code_io_version': 1, 'restart_flag': False, 'other_domains': False, 'station_file': False}, 'Wall_time': &amp;lt;sdf.BlockConstant object at 0x11a012318&amp;gt;, 'Electric_Field_Ex': &amp;lt;sdf.BlockPlainVariable object at 0x11a012220&amp;gt;, 'Electric_Field_Ey': &amp;lt;sdf.BlockPlainVariable object at 0x11a012128&amp;gt;, 'Electric_Field_Ez': &amp;lt;sdf.BlockPlainVariable object at 0x11a012030&amp;gt;, 'Magnetic_Field_Bx': &amp;lt;sdf.BlockPlainVariable object at 0x117b2ceb8&amp;gt;, 'Magnetic_Field_By': &amp;lt;sdf.BlockPlainVariable object at 0x117b2cdc0&amp;gt;, 'Magnetic_Field_Bz': &amp;lt;sdf.BlockPlainVariable object at 0x117b2ccc8&amp;gt;, 'Grid_Grid': &amp;lt;sdf.BlockPlainMesh object at 0x117b2cbd0&amp;gt;, 'Grid_Grid_mid': &amp;lt;sdf.BlockPlainMesh object at 0x117b2cad8&amp;gt;, 'Grid_CPUs_Original_rank': &amp;lt;sdf.BlockPlainMesh object at 0x117b2c9e0&amp;gt;, 'Grid_CPUs_Original_rank_mid': &amp;lt;sdf.BlockPlainMesh object at 0x117b2c8e8&amp;gt;, 'CPUs_Original_rank': &amp;lt;sdf.BlockPlainVariable object at 0x117b2c7f0&amp;gt;, 'CPUs_Current_rank': &amp;lt;sdf.BlockPlainVariable object at 0x11a015128&amp;gt;}&lt;/code>&lt;/p>
+&lt;h3 id="the_sdf" class="blockplainvariable_object">The sdf.BlockPlainVariable object&lt;/h3>
+&lt;p>These objects represent the variables in the SDF file. It does not fully
+implement the &lt;strong>dict&lt;/strong> property, so to inspect it&amp;rsquo;s contents you
+must use&lt;/p>
+&lt;pre>&lt;code class="language-python">dir(data.Electric_Field_Ey)
+&lt;/code>&lt;/pre>
+&lt;p>which produces an output like&lt;/p>
+&lt;p>&lt;code>['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'blocklist', 'data', 'data_length', 'datatype', 'dims', 'grid', 'grid_id', 'grid_mid', 'id', 'mult', 'name', 'stagger', 'units']&lt;/code>&lt;/p>
+&lt;p>The key elements are &lt;code>data&lt;/code> which contains the raw data for the variable
+stored as a numpy array, &lt;code>dims&lt;/code> which is an array containing the number
+of elements in each dimension of the array and &lt;code>grid&lt;/code> and &lt;code>grid_mid&lt;/code>
+which refer to &lt;code>sdf.BlockPlainMesh &lt;code>objects that represent the
+grid axes that the variable is to be plotted against. Grid and grid_mid
+do similar but different things. Grid is an array of points
+corresponding to the edges of the computational cells, grid_mid to the
+midpoints. This means that all of the arrays in &lt;code>grid&lt;/code> are one element
+longer than the arrays in &lt;code>grid_mid&lt;/code>. To identify whether to use &lt;code>grid&lt;/code>
+or &lt;code>grid_mid&lt;/code> you must compare the sizes of the variable &lt;code>dims&lt;/code> array to
+the sizes of the &lt;code>grid&lt;/code> and &lt;code>grid_mid&lt;/code> sizes and &lt;em>for each axis&lt;/em> use
+the element of &lt;code>grid&lt;/code> or &lt;code>grid_mid&lt;/code> that has the same number of
+elements.&lt;/p>
+&lt;p>Important note! - 2D SDF data is loaded into Python rotated by 90
+degrees compared to the original Fortran code that generated it.&lt;/p>
+&lt;h3 id="the_sdf" class="blockplainmesh_object">The sdf.BlockPlainMesh object&lt;/h3>
+&lt;p>Once again you have to use the &lt;code>dir&lt;/code> command to output the information
+about an sdf.BlockPlainMesh object, for example in EPOCH&lt;/p>
+&lt;pre>&lt;code class="language-python">dir(data.Grid_Grid)
+&lt;/code>&lt;/pre>
+&lt;p>Which produces output like&lt;/p>
+&lt;p>&lt;code>['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'blocklist', 'data', 'data_length', 'datatype', 'dims', 'extents', 'geometry', 'id', 'labels', 'mult', 'name', 'units']&lt;/code>&lt;/p>
+&lt;p>The important element of this block is &lt;code>data&lt;/code> which is a tuple of 1D
+numpy arrays corresponding to each coordinate axis of the grid.&lt;/p>
+&lt;h3 id="plotting_a_variable_using_raw_sdf_and_raw_matplotlib">Plotting a variable using raw SDF and raw matplotlib&lt;/h3>
+&lt;ul>
+&lt;li>Warning - This is not our recommended suggestion for plotting. We
+recommend using our helper routines in sdf_helper*&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code class="language-python">import matplotlib.pyplot as plt
+import sdf
+data=sdf.read('Data/0005.sdf')
+ey = data.Electric_Field_Ey
+plt.pcolormesh(ey.grid_mid.data[0], ey.grid_mid.data[1], ey.data.T)
+plt.show()
+&lt;/code>&lt;/pre></description></item><item><title>Workshop examples</title><link>/documentation/examples/workshop_examples.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/examples/workshop_examples.html</guid><description>&lt;h1 id="epoch_workshop_overview">EPOCH workshop overview&lt;/h1>
 &lt;p>The aims of the Workshop are:&lt;/p>
 &lt;ul>
 &lt;li>After the workshop you should be able to setup and run EPOCH on a
