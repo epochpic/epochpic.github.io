@@ -15,9 +15,9 @@ menu:
 ![BEAM logo](BEAM.png)  
 *Original logo produced by Oscar Adams CC BY-SA 4.0*
 
-**BEAM** (Broad EPOCH Analysis Modules) is a collection of independent yet complementary open-source tools for analysing EPOCH simulations in Python, designed to be modular so researchers can adopt only the components they require without being constrained by a rigid framework. In line with the **FAIR principles — Findable**, **Accessible**, **Interoperable**, and **Reusable** — each package is openly published with clear documentation and versioning (Findable), distributed via public repositories (Accessible), designed to follow common standards for data structures and interfaces (Interoperable), and includes licensing and metadata to support long-term use and adaptation (Reusable). The packages are as follows:
+**BEAM** (Broad EPOCH Analysis Modules) is a collection of independent yet complementary open-source tools for analysing EPOCH simulations in Python, designed to be modular, allowing researchers to adopt only the components they require without being constrained by a rigid framework. In line with the **FAIR principles — Findable**, **Accessible**, **Interoperable**, and **Reusable** — each package is openly published with clear documentation and versioning (Findable), distributed via public repositories (Accessible), designed to follow common standards for data structures and interfaces (Interoperable), and includes licensing and metadata to support long-term use and adaptation (Reusable).
 
-- [sdf-xarray](https://github.com/epochpic/sdf-xarray): Reading and processing SDF files and converting them to [xarray](https://docs.xarray.dev/en/stable/).
+- [sdf-xarray](https://github.com/epochpic/sdf-xarray): Processing and plotting of SDF files and converting them to [xarray](https://docs.xarray.dev/en/stable/).
 - [epydeck](https://github.com/epochpic/epydeck): Input deck reader and writer.
 - [epyscan](https://github.com/epochpic/epyscan): Create campaigns over a given parameter space using various sampling methods.
 
@@ -33,11 +33,15 @@ All of the packages are available on PyPI and can be installed using pip:
 pip install sdf-xarray epydeck epyscan
 ```
 
-Each package can be used independently or together depending on your needs.
+Each package can be used independently or combined, depending on your needs.
 
-## Citing {#citing}
+## Citation {#citation}
 
-If any of the BEAM contribute to a project that leads to publication, please acknowledge this by citing the module in question. This can be done by clicking the "cite this repository" button located near the top right of their respective github pages.
+If any of the BEAM packages contribute to a project that leads to publication, please acknowledge this by citing the module in question. This can be done by clicking the "Cite this repository" button located near the top right of their respective GitHub pages.
+
+## Contribution {#contribution}
+
+We welcome contributions to the BEAM ecosystem! Whether it's reporting issues, suggesting features, or submitting pull requests, your input helps improve these tools for the community. Please follow the contribution guidelines in each repository and feel free to reach out via GitHub discussions or issues.
 
 ## sdf-xarray: analysing EPOCH output {#sdf-xarray}
 
@@ -90,15 +94,15 @@ print(ds)
 ```
 
 `SDFPreprocess` checks that all the files are from the same simulation, as
-ensures there's a `time` dimension so the files are correctly concatenated.
+ensures that there's a `time` dimension so the files are correctly concatenated.
 
 If your simulation has multiple `output` blocks so that not all variables are
 output at every time step, then those variables will have `NaN` values at the
 corresponding time points.
 
-After having loaded in a series of datasets we can select a simulation file by calling the `.isel()` function where we pass in the parameter of `time=0` where `0` can be a number between `0` and the total number of simulation files. 
+After loading a series of datasets, we can select a simulation file by calling the .isel() function and passing the parameter time=0, where 0 can be any number between 0 and the total number of simulation files.
 
-We can also use the `.sel()` function if we know the exact simulation time we want to select. There must be a corresponding dataset with this time for it work correctly.
+We can also use the `.sel()` function if we know the exact simulation time we want to select. There must be a corresponding dataset with this time for it to work correctly.
 
 ```python
 print(f"There are a total of {ds["time"].size} time steps. (This is the same as the number of SDF files in the folder)")
@@ -118,14 +122,14 @@ ds["Electric_Field_Ex"].isel(time=20)
 
 ### Plotting {#plotting}
 
-Since this package converts SDF files to xarray we can leverage the plotting features that are included in xarray. For example we can load in a SDF file and plot the number density of the electrons:
+Since this package converts SDF files to xarray, we can leverage the plotting features that are included in xarray. For example we can load in a SDF file and plot the number density of the electrons:
 
 ```python
 import xarray as xr
 
 ds = xr.open_dataset("0010.sdf")
 
-# NOTE: EPOCH saves the x and y axes into SDF files in the inverse order to that expected by xarray so we have to specify which axes is which otherwise our plot comes out inverted
+# NOTE: EPOCH saves the x and y axes in SDF files in the inverse order of what is expected by xarray, so we must specify which axis is which; otherwise, our plot will be inverted.
 ds["Derived_Number_Density_Electron"].plot(x="X_Grid_mid", y="Y_Grid_mid")
 ```
 
@@ -150,7 +154,7 @@ ani.save("Derived_Number_Density_Electron.gif", fps=5)
 
 ## epydeck: Writing input deck files with Python {#epydeck}
 
-Writing large numbers of EPOCH input files by hand can be tedious and error-prone. `epydeck` (short for *EPOCH Python deck*) allows you to create and manipulate input decks in Python:
+Writing a large number of EPOCH input files by hand can be tedious and error-prone. `epydeck` (short for *EPOCH Python deck*) allows you to create and manipulate input decks in Python:
 
 - Build decks using standard Python data structures
 - Load, modify, and save EPOCH-style `.deck` files
@@ -165,7 +169,7 @@ The interface follows the standard Python
 - `epydeck.dumps` to write to a string
 
 
-**The key features for this module are highlighted below, for in-depth documentation please visit, for in-depth documentation please visit <https://github.com/epochpic/epydeck>**
+**The key features for this module are highlighted below, for in-depth documentation please visit <https://github.com/epochpic/epydeck>**
 
 
 ### Example {#epydeck_example}
@@ -217,7 +221,7 @@ be dicts with the following keys:
 - `"log"`: (optional) `bool`, if `True` then grid is done in
   log space for this parameter
 
-**The key features for this module are highlighted below, for in-depth documentation please visit, for in-depth documentation please visit <https://github.com/epochpic/epyscan>**
+**The key features for this module are highlighted below, for in-depth documentation please visit <https://github.com/epochpic/epyscan>**
 
 ### Example {#epyscan_example}
 
@@ -244,7 +248,7 @@ with open("template_deck_filename") as f:
 grid_scan = epyscan.GridScan(parameters, n_samples=4)
 
 # Define the root directory where the simulation folders will be saved. 
-# This directory will be created if it doesn't exist
+# This directory will be created if it does not already exist
 run_root = pathlib.Path("example_campaign")
 
 # Initialize a campaign object with the template deck and the root directory. 
@@ -259,7 +263,7 @@ paths = [campaign.setup_case(sample) for sample in grid_scan]
 with open("paths.txt", "w") as f:
   [f.write(f"{path}\n") for path in paths]
 
-# Opening paths.txt
+# Example content of paths.txt
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_0
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_1
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_2
