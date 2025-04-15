@@ -129,7 +129,24 @@ ds = xr.open_dataset("0010.sdf")
 ds["Derived_Number_Density_Electron"].plot(x="X_Grid_mid", y="Y_Grid_mid")
 ```
 
-![Derived Number Density Electron Plot](BEAM_Derived_Number_Density_Electrons.png)
+![Derived Number Density Electron Plot](BEAM_Derived_Number_Density_Electron.png)
+
+### Animating {#animating}
+
+This package also contains custom functionality to generate time-resolved animations by loading in all the SDF files in a given simulation run:
+
+```python
+import xarray as xr
+from sdf_xarray import SDFPreprocess
+
+ds = xr.open_mfdataset("*.sdf", preprocess=SDFPreprocess())
+
+ani = ds["Derived_Number_Density_Electron"].epoch.animate()
+
+ani.save("Derived_Number_Density_Electron.gif", fps=5)
+```
+
+![Derived Number Density Electron Animation](BEAM_Derived_Number_Density_Electron.gif)
 
 ## epydeck: Writing input deck files with Python {#epydeck}
 
