@@ -145,12 +145,111 @@ begin:output
 end:output
 ```
 
-![Uniform laser](laser_pulse.png)
+![Gaussian pulse](laser_pulse.png)
 
 Here we see that the laser $fwhm$ in $x$ and $y$ are 12 $\mu m$ and 5 $\mu m$ 
 respectively, where the $x$ $fwhm$ corresponds to a temporal FWHM of 40 fs, as
 expected. Also, because there is little contact between the pulse and the 
 boundaries, we do not have any numerical boundary disturbance.
+
+## Angled laser pulse {#angled_laser_pulse}
+
+A Gaussian laser pulse like the one in the previous example may be injected at
+an angle into an EPOCH simulation. This is achieved by defining the spatial and
+temporal laser envelopes in a rotated co-ordinate system (temporal envelope is
+equivalent to an envelope in the laser-propagation direction). In this example,
+the parameters `y_rot` and `t_rot` will describe the transverse and longitudinal
+co-ordinates in the rotated co-ordinate system. Transformations are required
+for both the profile and the phase of the laser.
+
+EPOCH uses the provided intensity to set $B$ values parallel to the boundary - 
+on `x_min`, this sets $B_y$ and $B_z$. EPOCH sets these fields assuming the
+laser travels perpendicular to the boundary, but this will over-estimate the $B$
+fields in our rotated co-ordinate system, as part of the magnetic field will 
+also oscillate in the boundary normal direction. To correct for this, an 
+additional `cos(theta)` parameter is required for intensity in the `laser` 
+block.
+
+Finally, we must also be careful about the time when the peak laser intensity
+enters the simulation. In the previous example, we set this to the half-time at
+10% maximum, such that the laser started at 10% of its maximum intensity and 
+then increased to full. In a rotated laser, the wave-front corresponding to
+the peak intensity arrives earlier on one of the laser edges than the other. Let
+us set the injection time such that this "early edge" starts at 10% of the
+maximum intensity. We will define the $y$ position of this "early edge" to be
+the half-width at 10% maximum for the spatial profile. This way, we will
+sufficiently model the full envelope, regardless of the injection angle.
+
+Here we provide an input deck which specifies a point on the laser path, and an
+injection angle. Two constant blocks are provided: the first is for users to
+set laser parameters, and the second derives parameters in the rotated 
+co-ordinate system.
+
+```perl
+begin:control
+  nx = 500
+  ny = 500
+  t_end = 200e-15
+  x_min = 0
+  x_max = 25e-6
+  y_min = 0e-6
+  y_max = 25e-6
+  stdout_frequency = 50
+end:control
+
+begin:boundaries
+  bc_x_min = simple_laser
+  bc_x_max = open
+  bc_y_min = open
+  bc_y_max = open
+end:boundaries
+
+begin:constant
+  t_fwhm = 40.0e-15          # Temporal FWHM
+  y_fwhm = 5.0e-6            # Spatial FWHM
+  y_foc = 5.0e-6             # y co-ord on laser path
+  x_foc = 10.0e-6            # x co-ord on laser path
+  las_theta_deg = -45        # Laser angle to boundary normal
+  I_peak_Wcm2 = 1.0e19       # Peak cycle-averaged intensity
+  las_lambda = 1.0e-6        # Laser wavelength
+end:constant
+
+begin:constant
+  las_theta = las_theta_deg * pi / 180.
+  
+  y0 = y_foc - (x_foc - x_min) * tan(las_theta)
+  y_rot = y*cos(las_theta)
+  y0_rot = y0*cos(las_theta)
+  w_y = y_fwhm / sqrt(2*loge(2))
+  y_hw01m = 0.5 * y_fwhm * sqrt(loge(10)/loge(2))
+  
+  w_t = t_fwhm / sqrt(2*loge(2))
+  t_hw01m = 0.5 * t_fwhm * sqrt(loge(10)/loge(2))
+  t_rot = time - (y-y0_rot)*sin(las_theta)/c
+  t_hw01m_rot = t_hw01m + abs(y_hw01m * sin(las_theta) / c)
+  
+  I_peak_rot = I_peak_Wcm2 * cos(las_theta)
+end:constant
+
+begin:laser
+  boundary = x_min
+  intensity_w_cm2 = I_peak_rot
+  lambda = las_lambda
+  profile = gauss(y_rot, y0_rot, w_y) * gauss(t_rot, t_hw01m_rot, w_t)
+  phase = -2 * pi * (y-y0_rot) * sin(las_theta) / las_lambda
+end:laser
+
+begin:output
+  dt_snapshot = t_end / 10
+  poynt_flux = always
+end:output
+```
+
+Here, we see the Poynting flux corresponds to a rotated Gaussian pulse. The 
+expected laser trajectory is marked with a dashed line for comparison. We see
+that the wavelength, along with the spatial and temporal FWHM are as expected.
+
+![Rotated Gaussian pulse](angled_injection.png)
 
 ## Focussing a Gaussian Beam {#focussing_a_gaussian_beam}
 
