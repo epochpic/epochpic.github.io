@@ -175,9 +175,9 @@ enters the simulation. In the previous example, we set this to the half-time at
 10% maximum, such that the laser started at 10% of its maximum intensity and 
 then increased to full. In a rotated laser, the wave-front corresponding to
 the peak intensity arrives earlier on one of the laser edges than the other. Let
-us set the injection time such that this "early edge" starts at 10% of the
+us set the injection time such that this "early edge" starts at 1% of the
 maximum intensity. We will define the $y$ position of this "early edge" to be
-the half-width at 10% maximum for the spatial profile. This way, we will
+the half-width at 1% maximum for the spatial profile. This way, we will
 sufficiently model the full envelope, regardless of the injection angle.
 
 Here we provide an input deck which specifies a point on the laser path, and an
@@ -221,12 +221,12 @@ begin:constant
   y_rot = y*cos(las_theta)
   y0_rot = y0*cos(las_theta)
   w_y = y_fwhm / sqrt(2*loge(2))
-  y_hw01m = 0.5 * y_fwhm * sqrt(loge(10)/loge(2))
+  y_hw001m = 0.5 * y_fwhm * sqrt(loge(100)/loge(2)) # Half-width 1% max
   
   w_t = t_fwhm / sqrt(2*loge(2))
-  t_hw01m = 0.5 * t_fwhm * sqrt(loge(10)/loge(2))
-  t_rot = time - (y-y0_rot)*sin(las_theta)/c
-  t_hw01m_rot = t_hw01m + abs(y_hw01m * sin(las_theta) / c)
+  t_hw001m = 0.5 * t_fwhm * sqrt(loge(100)/loge(2)) # Half-width 1% max
+  t_rot = time - (y-y0)*sin(las_theta)/c
+  t_hw001m_rot = t_hw001m + abs(y_hw001m * sin(las_theta) / c)
   
   I_peak_rot = I_peak_Wcm2 * cos(las_theta)
 end:constant
@@ -235,7 +235,7 @@ begin:laser
   boundary = x_min
   intensity_w_cm2 = I_peak_rot
   lambda = las_lambda
-  profile = gauss(y_rot, y0_rot, w_y) * gauss(t_rot, t_hw01m_rot, w_t)
+  profile = gauss(y_rot, y0_rot, w_y) * gauss(t_rot, t_hw001m_rot, w_t)
   phase = -2 * pi * (y-y0_rot) * sin(las_theta) / las_lambda
 end:laser
 
