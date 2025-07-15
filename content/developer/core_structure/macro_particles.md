@@ -70,9 +70,6 @@ TYPE particle
 #elif PARTICLE_ID
     INTEGER(i8) :: id
 #endif
-#ifdef COLLISIONS_TEST
-    INTEGER :: coll_count
-#endif
 #ifdef WORK_DONE_INTEGRATED
     REAL(num) :: work_x
     REAL(num) :: work_y
@@ -120,9 +117,6 @@ And the descriptions are
 -  `INTEGER :: id` - A unique integer assigned to each particle, only set for 
   species which output the id, and only when the code is compiled with ID 
   support.
-- `INTEGER :: coll_count` - An integer present for debugging the number of
-  collisions a particle undergoes (this is not used in the current version of
-  EPOCH).
 - `REAL(num) :: work_{x,y,z}` - Work done by the electric field on the 
   particle during the last particle push, in each direction. 
   Describes work done to a single particle within the macro-particle.

@@ -129,9 +129,6 @@ type (in 1D) is:
 #elif PARTICLE_ID
     INTEGER(i8) :: id
 #endif
-#ifdef COLLISIONS_TEST
-    INTEGER :: coll_count
-#endif
 #ifdef WORK_DONE_INTEGRATED
     REAL(num) :: work_x
     REAL(num) :: work_y
@@ -179,7 +176,6 @@ The "particle" properties can be explained as follows:
 -   processor_at_t0 - The rank of the processor on which the particle
     started.
 -   id - Unique particle ID.
--   coll_count - Used for debugging the collision routines.
 -   optical_depth - Optical depth used in the QED routines.
 -   particle_energy - Particle energy used in the QED routines.
 -   optical_depth_tri - Optical depth for the trident process in the

@@ -103,7 +103,8 @@ are:
     doing benchmarking.
 -   COLLISIONS_TEST - This enables some routines for debugging the
     collision routines. It completely alters the behaviour of the code.
-    This flag should never be enabled by the end user.
+    This flag should never be enabled by the end user. Removed in
+    v4.19.7.
 -   PER_PARTICLE_CHARGE_MASS - By default, the particle charge and
     mass are specified on a per-species basis. With this flag enabled,
     charge and mass become a per-particle property. This is a legacy
