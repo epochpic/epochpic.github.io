@@ -1077,9 +1077,6 @@ INTEGER :: id
 #elif PARTICLE_ID
 INTEGER(i8) :: id
 #endif
-#ifdef COLLISIONS_TEST
-INTEGER :: coll_count
-#endif
 #ifdef WORK_DONE_INTEGRATED
 REAL(num) :: work_x
 REAL(num) :: work_y
@@ -1127,9 +1124,6 @@ particle started on. Used for debugging.&lt;/li>
 &lt;li>&lt;code>INTEGER :: id&lt;/code> - A unique integer assigned to each particle, only set for
 species which output the id, and only when the code is compiled with ID
 support.&lt;/li>
-&lt;li>&lt;code>INTEGER :: coll_count&lt;/code> - An integer present for debugging the number of
-collisions a particle undergoes (this is not used in the current version of
-EPOCH).&lt;/li>
 &lt;li>&lt;code>REAL(num) :: work_{x,y,z}&lt;/code> - Work done by the electric field on the
 particle during the last particle push, in each direction.
 Describes work done to a single particle within the macro-particle.&lt;/li>

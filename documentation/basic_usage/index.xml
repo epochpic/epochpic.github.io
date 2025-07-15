@@ -387,7 +387,8 @@ doing benchmarking.&lt;/p>
 &lt;li>
 &lt;p>COLLISIONS_TEST - This enables some routines for debugging the
 collision routines. It completely alters the behaviour of the code.
-This flag should never be enabled by the end user.&lt;/p>
+This flag should never be enabled by the end user. Removed in
+v4.19.7.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>PER_PARTICLE_CHARGE_MASS - By default, the particle charge and

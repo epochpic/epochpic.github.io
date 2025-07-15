@@ -250,9 +250,6 @@ INTEGER :: id
 #elif PARTICLE_ID
 INTEGER(i8) :: id
 #endif
-#ifdef COLLISIONS_TEST
-INTEGER :: coll_count
-#endif
 #ifdef WORK_DONE_INTEGRATED
 REAL(num) :: work_x
 REAL(num) :: work_y
@@ -299,7 +296,6 @@ particle.&lt;/li>
 &lt;li>processor_at_t0 - The rank of the processor on which the particle
 started.&lt;/li>
 &lt;li>id - Unique particle ID.&lt;/li>
-&lt;li>coll_count - Used for debugging the collision routines.&lt;/li>
 &lt;li>optical_depth - Optical depth used in the QED routines.&lt;/li>
 &lt;li>particle_energy - Particle energy used in the QED routines.&lt;/li>
 &lt;li>optical_depth_tri - Optical depth for the trident process in the
