@@ -12,7 +12,17 @@ menu:
     weight: 30
 ---
 
-# Installing the python sdf readers {#installing_the_python_sdf_readers}
+# Installing SDF via pip {#installing_sdf_via_pip}
+
+The simplest way to read sdf files in python is to use the
+[sdfr package](https://pypi.org/project/sdfr/), available via pip:
+
+`pip install sdfr`
+
+> Note the name of the required package is sdfr.
+> The similarly named sdf package is unrelated to EPOCH.
+
+# Building the python sdf readers {#building_the_python_sdf_readers}
 
 To install the python sdf readers you need to have an installation of
 python (2 or 3) with the numpy library. The automated plotting library
