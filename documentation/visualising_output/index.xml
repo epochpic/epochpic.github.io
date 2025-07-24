@@ -819,14 +819,13 @@ with open(&amp;quot;paths.txt&amp;quot;, &amp;quot;w&amp;quot;) as f:
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_1
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_2
 # ...
-&lt;/code>&lt;/pre></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing-the-python-read-via-pip-install_using_pip">Installing the python read via pip (#install_using_pip)&lt;/h1>
+&lt;/code>&lt;/pre></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing-sdf-via-pip-installing_sdf_via_pip">Installing SDF via pip (#installing_sdf_via_pip)&lt;/h1>
 &lt;p>The simplest way to read sdf files in python is to use the
 &lt;a href="https://pypi.org/project/sdfr/" target="_blank" rel="noopener">sdfr package&lt;/a>, available via pip:&lt;/p>
 &lt;p>&lt;code>pip install sdfr&lt;/code>&lt;/p>
 &lt;blockquote>
 &lt;p>[!IMPORTANT]
-Note the name of the required package is sdfr.
-The similarly named sdf package is unrelated to EPOCH.&lt;/p>
+Note the name of the required package is sdfr. The similarly named sdf package is unrelated to EPOCH.&lt;/p>
 &lt;/blockquote>
 &lt;h1 id="building_the_python_sdf_readers">Building the python sdf readers&lt;/h1>
 &lt;p>To install the python sdf readers you need to have an installation of
