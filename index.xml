@@ -8170,13 +8170,13 @@ if so.&lt;/li>
 &lt;p>This deck produces an initial condition as in the Figures in
 &lt;a href="#3d_cone">3D&lt;/a> and
 &lt;a href="#2d_cone">2D&lt;/a>
-respectively.&lt;/p></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing-sdf-via-pip-installing_sdf_via_pip">Installing SDF via pip (#installing_sdf_via_pip)&lt;/h1>
+respectively.&lt;/p></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing_sdf_via_pip">Installing SDF via pip&lt;/h1>
 &lt;p>The simplest way to read sdf files in python is to use the
 &lt;a href="https://pypi.org/project/sdfr/" target="_blank" rel="noopener">sdfr package&lt;/a>, available via pip:&lt;/p>
 &lt;p>&lt;code>pip install sdfr&lt;/code>&lt;/p>
 &lt;blockquote>
-&lt;p>[!IMPORTANT]
-Note the name of the required package is sdfr. The similarly named sdf package is unrelated to EPOCH.&lt;/p>
+&lt;p>Note the name of the required package is sdfr.
+The similarly named sdf package is unrelated to EPOCH.&lt;/p>
 &lt;/blockquote>
 &lt;h1 id="building_the_python_sdf_readers">Building the python sdf readers&lt;/h1>
 &lt;p>To install the python sdf readers you need to have an installation of
