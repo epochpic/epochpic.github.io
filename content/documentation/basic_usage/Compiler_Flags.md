@@ -108,7 +108,7 @@ are:
 -   PER_PARTICLE_CHARGE_MASS - By default, the particle charge and
     mass are specified on a per-species basis. With this flag enabled,
     charge and mass become a per-particle property. This is a legacy
-    flag which will be removed soon.
+    flag which will be removed in version 4.21.0.
 -   PARSER_CHECKING - Setting this flag adds code which checks for
     valid values on evaluated deck expressions. This slows down the code
     but may be required if floating point exceptions are enabled.
