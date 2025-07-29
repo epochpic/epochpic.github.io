@@ -819,7 +819,11 @@ with open(&amp;quot;paths.txt&amp;quot;, &amp;quot;w&amp;quot;) as f:
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_1
 # example_campaign/run_0_1000000/run_0_10000/run_0_100/run_2
 # ...
-&lt;/code>&lt;/pre></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing_sdf_via_pip">Installing SDF via pip&lt;/h1>
+&lt;/code>&lt;/pre></description></item><item><title>OpenPMD Conversion</title><link>/documentation/visualising_output/openpmd_conversion.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/openpmd_conversion.html</guid><description>&lt;h1 id="openpmd-conversion">OpenPMD Conversion&lt;/h1>
+&lt;p>An
+&lt;a href="https://github.com/denisbertini/mpi-sdf2opmd" target="_blank" rel="noopener">externally developed tool&lt;/a> to
+convert SDF files to the
+&lt;a href="https://www.openpmd.org" target="_blank" rel="noopener">OpenPMD&lt;/a> format is available.&lt;/p></description></item><item><title>Python sdf_helper</title><link>/documentation/visualising_output/python_sdf_helper.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/visualising_output/python_sdf_helper.html</guid><description>&lt;h1 id="installing_sdf_via_pip">Installing SDF via pip&lt;/h1>
 &lt;p>The simplest way to read sdf files in python is to use the
 &lt;a href="https://pypi.org/project/sdfr/" target="_blank" rel="noopener">sdfr package&lt;/a>, available via pip:&lt;/p>
 &lt;p>&lt;code>pip install sdfr&lt;/code>&lt;/p>
