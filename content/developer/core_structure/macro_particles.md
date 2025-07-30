@@ -248,8 +248,6 @@ called `particle_species`, which in 2D is defined as:
 
     ! particle cell division
     INTEGER(i8) :: global_count
-    LOGICAL :: split
-    INTEGER(i8) :: npart_max
     ! Secondary list
     TYPE(particle_list), DIMENSION(:,:), POINTER :: secondary_list
 
@@ -368,13 +366,6 @@ below.
   physics packages.
 - `INTEGER(i8) :: global_count` - The number of particles from this species
   summed over all ranks.
--  `LOGICAL :: split` - EPOCH includes a very early version of a particle
-  splitting operator. It works mechanically but has undesirable properties at
-  present. If this flag is true then the code attempts to split the particles
-  when the pseudoparticle number density drops too low.
--  `INTEGER(KIND=8) :: npart_max` - Used with the particle splitting
-  operator. When the total number of particles equals this number, further
-  particle splitting is suppressed.
 -  `TYPE(particle_list), DIMENSION(:,:,:), POINTER :: secondary_list` - This
   describes an array of particle lists. The subroutine 
   `reorder_particles_to_grid` allocates
