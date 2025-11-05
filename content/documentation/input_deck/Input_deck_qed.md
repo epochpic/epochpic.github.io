@@ -39,6 +39,12 @@ the emitted photons are not tracked. The default is "F".
 Radiation reaction is calculated for photons of all energies, but
 photons with energy below this cutoff are not tracked. The default is 0.
 
+- `photon_sample_fraction` - Downscales photon production by only
+producing photons during emissions events at the given rate while
+increasing the weight of emitted photons by a factor of the reciprocal
+of the fraction in order to preserve total real photons. This needs to be
+a number in the range of 0 to 1. The default is 1.
+
 - `photon_dynamics` - Logical flag which specifies whether
 to push photons. If "F" then photons are generated, but their motion
 through the domain is not simulated and they stay where they were
