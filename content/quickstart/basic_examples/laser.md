@@ -306,7 +306,7 @@ end:boundaries
 
 begin:constant
     I_fwhm = 2.0e-6          # FWHM of laser intensity
-    I_peak_Wcm2 = 1.0e15     # 0.5 * eps0 * c * E_peak^2
+    I_peak_Wcm2 = 1.0e15     # Peak cycle-averaged intensity of the laser, 0.5 * eps0 * c * E_peak^2
     las_lambda = 1.0e-6      # Laser wavelength
     foc_dist = 5.0e-6        # Boundary to focal point distance
 end:constant
@@ -316,9 +316,10 @@ begin:constant
     w0 = I_fwhm / sqrt(2.0 * loge(2.0))                  # Beam Waist
     ray_rang = pi * w0^2 / las_lambda                    # Rayleigh range
     w_boundary = w0 * sqrt(1.0 + (foc_dist/ray_rang)^2)  # Waist on boundary
-    I_boundary = I_peak_Wcm2 * (w0 / w_boundary)^2       # Intens. on boundary
+    # In 3D I_boundary should be changed to: I_peak_Wcm2 * (w0 / w_boundary)^2
+    I_boundary = I_peak_Wcm2 * (w0 / w_boundary)^1       # Intens. on boundary
     rad_curve = foc_dist * (1.0 + (ray_rang/foc_dist)^2) # Boundary curv. rad.
-    gouy = atan(-foc_dist/rad_curve)                     # Boundary Gouy shift
+    gouy = atan(-foc_dist/ray_rang)                      # Boundary Gouy shift
 end:constant
 
 begin:laser
