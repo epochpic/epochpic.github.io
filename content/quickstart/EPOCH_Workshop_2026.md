@@ -1,4 +1,13 @@
-# EPOCH Workshop 2026
+---
+draft: false
+toc: true
+type: docs
+
+title: EPOCH Workshop 2026
+menu:
+  quickstart:
+    parent: Quick Start
+---
 
 The workshop will consist of a mixture of talks and practical sessions. In the practical session you will be encouraged to work on a 'project' of your choice and of interest to your research. Demonstrators will be on hand to help with problem setup and answer questions. The workshop has **no registration fee** but you need to register [here](https://forms.gle/HHcYd9LSFYyxN8iz6).
 
