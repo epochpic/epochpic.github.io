@@ -4856,6 +4856,13 @@ Radiation reaction is calculated for photons of all energies, but
 photons with energy below this cutoff are not tracked. The default is 0.&lt;/p>
 &lt;/li>
 &lt;li>
+&lt;p>&lt;code>photon_sample_fraction&lt;/code> - Downscales photon production by only
+producing photons during emissions events at the given rate while
+increasing the weight of emitted photons by a factor of the reciprocal
+of the fraction in order to preserve total real photons. This needs to be
+a number in the range of 0 to 1. The default is 1.&lt;/p>
+&lt;/li>
+&lt;li>
 &lt;p>&lt;code>photon_dynamics&lt;/code> - Logical flag which specifies whether
 to push photons. If &amp;ldquo;F&amp;rdquo; then photons are generated, but their motion
 through the domain is not simulated and they stay where they were
