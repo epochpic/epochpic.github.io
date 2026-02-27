@@ -9794,7 +9794,193 @@ Plasma Phys. Contr. F., vol. 53, no. 1, p. 015009,
 &lt;a href="http://iopscience.iop.org/article/10.1088/0741-3335/53/1/015009" target="_blank" rel="noopener">1&lt;/a>.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/section></description></item><item><title>Adding Outputs</title><link>/developer/input_output/adding_outputs.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/input_output/adding_outputs.html</guid><description>&lt;h2 id="adding-a-derived-variable">Adding a derived variable&lt;/h2>
+&lt;/section></description></item><item><title/><link>/quickstart/epoch_workshop_2026.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/epoch_workshop_2026.html</guid><description>&lt;h1 id="epoch-workshop-2026">EPOCH Workshop 2026&lt;/h1>
+&lt;p>The workshop will consist of a mixture of talks and practical sessions. In the practical session you will be encouraged to work on a &amp;lsquo;project&amp;rsquo; of your choice and of interest to your research. Demonstrators will be on hand to help with problem setup and answer questions. The workshop has &lt;strong>no registration fee&lt;/strong> but you need to register
+&lt;a href="https://forms.gle/HHcYd9LSFYyxN8iz6" target="_blank" rel="noopener">here&lt;/a>.&lt;/p>
+&lt;h2 id="thursday-23rd-april">Thursday 23rd April&lt;/h2>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Start time&lt;/th>
+&lt;th>Format&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;th>Presenters&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>10:00&lt;/td>
+&lt;td>Break&lt;/td>
+&lt;td>Welcome mingle&lt;/td>
+&lt;td>Chris Ridgers&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>10:30&lt;/td>
+&lt;td>Talk&lt;/td>
+&lt;td>Fire safety briefing&lt;/td>
+&lt;td>Chris Ridgers&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>10:35&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>Introduction to
+&lt;a href="https://epochpic.github.io" target="_blank" rel="noopener">EPOCH&lt;/a>&lt;/td>
+&lt;td>Stuart Morris&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>11:05&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>Visualisation with
+&lt;a href="https://sdf-xarray.readthedocs.io" target="_blank" rel="noopener">sdf-xarray&lt;/a>&lt;/td>
+&lt;td>Joel Adams&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>11:35&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Code installation &amp;amp; visualisation&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>12:15&lt;/td>
+&lt;td>Lunch&lt;/td>
+&lt;td>Alfven room - sponsored by the &lt;strong>Central Laser Facility&lt;/strong>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>13:15&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>EPOCH field solver, lasers, boundaries&lt;/td>
+&lt;td>Stuart Morris&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>13:45&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Pick project, start project work&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>14:15&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>EPOCH macro-particles, currents, pushers&lt;/td>
+&lt;td>Stuart Morris&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>14:45&lt;/td>
+&lt;td>Break&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>15:00&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Project work&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>15:45&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>EPOCH physics packages&lt;/td>
+&lt;td>Stuart Morris&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>16:15&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Project work&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>17:00&lt;/td>
+&lt;td>End&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Chris Ridgers&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>18:00&lt;/td>
+&lt;td>Social&lt;/td>
+&lt;td>Brew York&lt;/td>
+&lt;td>Self-organise&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="friday-24th-april">Friday 24th April&lt;/h2>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Start time&lt;/th>
+&lt;th>Format&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;th>Presenters&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>10:00&lt;/td>
+&lt;td>Break&lt;/td>
+&lt;td>Welcome mingle&lt;/td>
+&lt;td>Chris Ridgers&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>10:30&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>EPOCH diagnostics, probes, averaging, subsets&lt;/td>
+&lt;td>Stuart Morris&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>11:00&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Project work&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>12:15&lt;/td>
+&lt;td>Lunch&lt;/td>
+&lt;td>Alfven room - sponsored by &lt;strong>First Light Fusion Ltd.&lt;/strong>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>13:15&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>EPOCH extra: hybrid, cylindrical, low-temp&lt;/td>
+&lt;td>Tom Goffrey&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>13:45&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Finalise project work&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>15:30&lt;/td>
+&lt;td>Break&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>15:45&lt;/td>
+&lt;td>Practical&lt;/td>
+&lt;td>Laptop &amp;ldquo;poster-session&amp;rdquo;&lt;/td>
+&lt;td>All&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>16:30&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>Discussion, EPAC, EPOC++, feature request(s)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>17:00&lt;/td>
+&lt;td>End&lt;/td>
+&lt;td>Closing&lt;/td>
+&lt;td>Chris Ridgers&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>18:00&lt;/td>
+&lt;td>Social&lt;/td>
+&lt;td>Free-format&lt;/td>
+&lt;td>Self-organise&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item><item><title>Adding Outputs</title><link>/developer/input_output/adding_outputs.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/developer/input_output/adding_outputs.html</guid><description>&lt;h2 id="adding-a-derived-variable">Adding a derived variable&lt;/h2>
 &lt;p>Derived variables are variables which are defined on the
 Cartesian spatial grid but are not directly updated by the solver. They are
 calculated when needed for output or for use in other physics packages. The
