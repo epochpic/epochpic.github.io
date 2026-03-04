@@ -305,7 +305,7 @@ begin:boundaries
 end:boundaries
 
 begin:constant
-  I_0_Wcm2 = 1e16 # Peak cycle-averaged intensity of the laser (Wm^-2)
+  I_0_Wcm2 = 1e16 # Peak cycle-averaged intensity of the laser (Wcm^-2)
   I_0 = I_0_Wcm2 * 1e4
   lambda_L = 1e-6 # Wavelength of the laser
   r_fwhm_L = 2e-6 # Intensity fwhm in r
