@@ -287,14 +287,14 @@ distance from the $x\_{min}$ boundary to the focal point.
 
 ```perl
 begin:control
-    nx = 2400
-    ny = 1200
-    t_end = 100e-15
-    x_min = 0
-    x_max = 20e-6
-    y_min = -5e-6
-    y_max = 5e-6
-    stdout_frequency = 100
+  t_end = 70e-15
+  nx = 1000
+  ny = 500
+  x_min = -5e-6
+  x_max = 15e-6
+  y_min = -5e-6
+  y_max =  5e-6
+  stdout_frequency = 100 # Print ETA
 end:control
 
 begin:boundaries
@@ -305,45 +305,52 @@ begin:boundaries
 end:boundaries
 
 begin:constant
-    I_fwhm = 2.0e-6          # FWHM of laser intensity
-    I_peak_Wcm2 = 1.0e15     # Peak cycle-averaged intensity of the laser, 0.5 * eps0 * c * E_peak^2
-    las_lambda = 1.0e-6      # Laser wavelength
-    foc_dist = 5.0e-6        # Boundary to focal point distance
+  I_0_Wcm2 = 1e16 # Peak cycle-averaged intensity of the laser (Wm^-2)
+  I_0 = I_0_Wcm2 * 1e4
+  lambda_L = 1e-6 # Wavelength of the laser
+  r_fwhm_L = 2e-6 # Intensity fwhm in r
 end:constant
 
 begin:constant
-    las_k = 2.0 * pi / las_lambda    
-    w0 = I_fwhm / sqrt(2.0 * loge(2.0))                  # Beam Waist
-    ray_rang = pi * w0^2 / las_lambda                    # Rayleigh range
-    w_boundary = w0 * sqrt(1.0 + (foc_dist/ray_rang)^2)  # Waist on boundary
-    # In 3D I_boundary should be changed to: I_peak_Wcm2 * (w0 / w_boundary)^2
-    I_boundary = I_peak_Wcm2 * (w0 / w_boundary)^1       # Intens. on boundary
-    rad_curve = foc_dist * (1.0 + (ray_rang/foc_dist)^2) # Boundary curv. rad.
-    gouy = atan(-foc_dist/ray_rang)                      # Boundary Gouy shift
+  # Convert co-ordinates
+  r = sqrt(y^2)# + z^2) # Change for 3D
+
+  # Focusing distance
+  x_foc = -x_min # Boundary to focal point distance
+
+  # Phase
+  k_L = 2 * pi / lambda_L # Laser wave number
+  w_0 = r_fwhm_L / (sqrt(2*loge(2))) # Focused beam waist
+  x_Rr = pi * w_0^2 / lambda_L # Rayleigh range
+  r_c_bound = x_foc * (1 + (x_Rr/x_foc)^2) # Radius of curvature at the boundary
+  psi_Gouy = atan(-x_foc/x_Rr) # Boundary phase Gouy shift
+
+  # Spatial profile
+  w_bound = w_0 * sqrt(1 + (x_foc/x_Rr)^2)
+  I_bound = I_0 * (w_0 / w_bound)^1 # Intensity on the boundary
+  # In 3D I_boundary should be changed to: I_bound * (w_0 / w_bound)^2
 end:constant
 
 begin:laser
-    boundary = x_min
-    intensity_w_cm2 = I_boundary
-    lambda = las_lambda
-    phase = las_k * y^2 / (2.0 * rad_curve) - gouy
-    profile = gauss(y, 0, w_boundary)
+  boundary = x_min
+  intensity = I_bound
+  lambda = lambda_L
+  profile = gauss(r, 0, w_bound) # Spatial profile
+  phase = k_L * (r^2 / (2 * r_c_bound)) - psi_Gouy # Phase
 end:laser
 
 begin:output
-    name = o1
-    dt_snapshot = 10 * femto
-    poynt_flux = always
+  name = normal
+  grid = always
+  dt_snapshot = 10e-15
+  poynt_flux = always
 end:output
 ```
 
 ![The focussed beam](FocussedBeam.png)
 
-In this example, EPOCH correctly reproduces the focal point position,
-laser wavelength, and radial FWHM at the focus - however, the peak
-intensity is only $0.88\times 10^{15} \text{ Wcm}^{-2}$. This
-intensity reduction from target is due to the tight focal spot, 
-with $w_0\approx 1.7$ μm being close to $\lambda = 1.0$ μm.
+Note that the absolute maximum of the intensity is twice that of the
+peak cycle-averaged intensity because the laser is linearly polarised.
 
 The deck is based on the laser test deck supplied with EPOCH, with a
 modified laser and longer runtime. Other classes of beam (Bessel etc)
