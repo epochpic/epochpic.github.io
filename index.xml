@@ -1231,7 +1231,13 @@ Initially these ionised carbon particle species contain no macro-particles.&lt;/
 &lt;p>This simulation generates some Carbon1 ions and a small number of Carbon2. The
 collisional ionisation cross section is too low here to ionise to the higher
 charge states. A plot of the population fraction over time is given here:&lt;/p>
-&lt;p>&lt;img src="coll_ionise_rate.png" alt="Charge populations over time for collisional ionisation">&lt;/p></description></item><item><title>Antenna block</title><link>/documentation/input_deck/input_deck_antenna.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_antenna.html</guid><description>&lt;p>Antennae allow you to specify currents in the simulation domain that are
+&lt;p>&lt;img src="coll_ionise_rate.png" alt="Charge populations over time for collisional ionisation">&lt;/p></description></item><item><title>Antenna block</title><link>/documentation/input_deck/input_deck_antenna.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_antenna.html</guid><description>&lt;blockquote>
+&lt;p>&lt;strong>Warning&lt;/strong>
+This feature is not fully tested, and not included in official EPOCH
+releases. It is only available in the 5.0-devel branch for testing
+purposes.&lt;/p>
+&lt;/blockquote>
+&lt;p>Antennae allow you to specify currents in the simulation domain that are
 added to the self consistent currents from the core solver. You can
 either specify the currents entirely manually or you can specify a
 frequency and a profile for each current component. You can have as many

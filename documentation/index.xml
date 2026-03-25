@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Overview | EPOCH</title><link>/documentation.html</link><atom:link href="/documentation/index.xml" rel="self" type="application/rss+xml"/><description>Overview</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 09 Sep 2018 00:00:00 +0000</lastBuildDate><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Overview</title><link>/documentation.html</link></image><item><title>Antenna block</title><link>/documentation/input_deck/input_deck_antenna.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_antenna.html</guid><description>&lt;p>Antennae allow you to specify currents in the simulation domain that are
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Overview | EPOCH</title><link>/documentation.html</link><atom:link href="/documentation/index.xml" rel="self" type="application/rss+xml"/><description>Overview</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 09 Sep 2018 00:00:00 +0000</lastBuildDate><image><url>/images/logo_hub4b4d6a0f57638acebb5550a80c8c030_9243_300x300_fit_lanczos_2.png</url><title>Overview</title><link>/documentation.html</link></image><item><title>Antenna block</title><link>/documentation/input_deck/input_deck_antenna.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_antenna.html</guid><description>&lt;blockquote>
+&lt;p>&lt;strong>Warning&lt;/strong>
+This feature is not fully tested, and not included in official EPOCH
+releases. It is only available in the 5.0-devel branch for testing
+purposes.&lt;/p>
+&lt;/blockquote>
+&lt;p>Antennae allow you to specify currents in the simulation domain that are
 added to the self consistent currents from the core solver. You can
 either specify the currents entirely manually or you can specify a
 frequency and a profile for each current component. You can have as many
