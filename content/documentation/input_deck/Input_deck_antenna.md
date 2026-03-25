@@ -12,6 +12,12 @@ menu:
     weight: 10
 ---
 
+> **Warning**
+> This feature is not fully tested, and not included in official EPOCH
+> releases. It is only available in the 5.0-devel branch for testing
+> purposes.
+
+
 Antennae allow you to specify currents in the simulation domain that are
 added to the self consistent currents from the core solver. You can
 either specify the currents entirely manually or you can specify a
