@@ -95,10 +95,11 @@ As a quick summary:
 
 - MATLAB: To read data from the SDF file "0007.sdf", run the command: `data = GetDataSDF('0007.sdf');`. The `GetDataSDF` function is present in the folder `SDF/MATLAB`.
 
-- Python: Data may be extracted and plotted using the `sdf_helper` library, which can be built using the Makefile. Data can then be read using:
+- Python: Data may be extracted and plotted using the `sdf_helper` library, available as part of [sdfr](https://pypi.org/project/sdfr/).
+Data can then be read using:
 
 ```python 
-import sdf_helper as sh
+from sdfr import sdf_helper as sh
 data = sh.getdata(7)
 ```
 
