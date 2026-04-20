@@ -37,10 +37,11 @@ The workshop will consist of a mixture of talks and practical sessions. In the p
 | 10:30      | Lecture   | EPOCH diagnostics, probes, averaging, subsets	         | Stuart Morris |
 | 11:00      | Practical | Project work	                                             | All           |
 | 12:15      | Lunch     | Alfven room - sponsored by **First Light Fusion Ltd.**	 |               |
-| 13:15      | Lecture   | EPOCH extra: hybrid, cylindrical, low-temp                | Tom Goffrey   |
+| 13:15      | Lecture   | Studying LPI with EPOCH                                   | Ben Gosling   |
 | 13:45      | Practical | Finalise project work	                                 | All           |
-| 15:30      | Break     | 	                                                         |               |
-| 15:45      | Practical | Laptop "poster-session"	                                 | All           |
-| 16:30      | Lecture   | Discussion, EPAC, EPOC++, feature request(s)	             |               |
+| 15:15      | Break     | 	                                                         |               |
+| 15:30      | Lecture   | Beyond EPOCH: hybrid, cylindrical, EPOCpp                | Tom Goffrey   |
+| 16:00      | Practical | Laptop "poster-session"	                                 | All           |
+| 16:45      | Lecture   | Discussion, EPAC, feature request(s)	             |               |
 | 17:00      | End       | Closing	                                                 | Chris Ridgers |
 | 18:00      | Social    | Free-format	                                             | Self-organise |
