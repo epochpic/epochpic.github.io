@@ -143,8 +143,8 @@
 &lt;tr>
 &lt;td>13:15&lt;/td>
 &lt;td>Lecture&lt;/td>
-&lt;td>EPOCH extra: hybrid, cylindrical, low-temp&lt;/td>
-&lt;td>Tom Goffrey&lt;/td>
+&lt;td>Studying LPI with EPOCH&lt;/td>
+&lt;td>Ben Gosling&lt;/td>
 &lt;/tr>
 &lt;tr>
 &lt;td>13:45&lt;/td>
@@ -153,21 +153,27 @@
 &lt;td>All&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td>15:30&lt;/td>
+&lt;td>15:15&lt;/td>
 &lt;td>Break&lt;/td>
 &lt;td>&lt;/td>
 &lt;td>&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td>15:45&lt;/td>
+&lt;td>15:30&lt;/td>
+&lt;td>Lecture&lt;/td>
+&lt;td>Beyond EPOCH: hybrid, cylindrical, EPOCpp&lt;/td>
+&lt;td>Tom Goffrey&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>16:00&lt;/td>
 &lt;td>Practical&lt;/td>
 &lt;td>Laptop &amp;ldquo;poster-session&amp;rdquo;&lt;/td>
 &lt;td>All&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td>16:30&lt;/td>
+&lt;td>16:45&lt;/td>
 &lt;td>Lecture&lt;/td>
-&lt;td>Discussion, EPAC, EPOC++, feature request(s)&lt;/td>
+&lt;td>Discussion, EPAC, feature request(s)&lt;/td>
 &lt;td>&lt;/td>
 &lt;/tr>
 &lt;tr>
