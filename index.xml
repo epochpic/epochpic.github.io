@@ -10842,8 +10842,10 @@ calling &lt;code>get_values(2, values)&lt;/code> is not the same as calling
 &lt;code>get_values(1, values)&lt;/code> multiple times will return the parameters in
 &lt;em>reverse&lt;/em> order. This is normal and is a feature of how the maths parser
 operates. It is possible to use this property to write functions which have a
-variable number of parameters, but this is not recommended.&lt;/p></description></item><item><title>EPOCH Workshop 2026</title><link>/quickstart/epoch_workshop_2026.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/epoch_workshop_2026.html</guid><description>&lt;p>The workshop will consist of a mixture of talks and practical sessions. In the practical session you will be encouraged to work on a &amp;lsquo;project&amp;rsquo; of your choice and of interest to your research. Demonstrators will be on hand to help with problem setup and answer questions. The workshop has &lt;strong>no registration fee&lt;/strong> but you need to register
-&lt;a href="https://forms.gle/HHcYd9LSFYyxN8iz6" target="_blank" rel="noopener">here&lt;/a>.&lt;/p>
+variable number of parameters, but this is not recommended.&lt;/p></description></item><item><title>EPOCH Workshop 2026</title><link>/quickstart/epoch_workshop_2026.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/quickstart/epoch_workshop_2026.html</guid><description>&lt;p>The workshop will consist of a mixture of talks and practical sessions. In the practical session you will be encouraged to work on a &amp;lsquo;project&amp;rsquo; of your choice and of interest to your research. Demonstrators will be on hand to help with problem setup and answer questions. The workshop has &lt;strong>no registration fee&lt;/strong> but you need to register &lt;del>
+&lt;a href="https://forms.gle/HHcYd9LSFYyxN8iz6" target="_blank" rel="noopener">here&lt;/a>&lt;/del>.&lt;/p>
+&lt;p>Thank you very much for attending the workshop. Please fill out
+&lt;a href="https://forms.gle/29w1A4SkjF7HF4BaA" target="_blank" rel="noopener">this&lt;/a> feedback form for the event so we can know what to improve for the next one!&lt;/p>
 &lt;h2 id="thursday-23rd-april">Thursday 23rd April&lt;/h2>
 &lt;table>
 &lt;thead>
