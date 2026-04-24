@@ -9,7 +9,9 @@ menu:
     parent: Quick Start
 ---
 
-The workshop will consist of a mixture of talks and practical sessions. In the practical session you will be encouraged to work on a 'project' of your choice and of interest to your research. Demonstrators will be on hand to help with problem setup and answer questions. The workshop has **no registration fee** but you need to register [here](https://forms.gle/HHcYd9LSFYyxN8iz6).
+The workshop will consist of a mixture of talks and practical sessions. In the practical session you will be encouraged to work on a 'project' of your choice and of interest to your research. Demonstrators will be on hand to help with problem setup and answer questions. The workshop has **no registration fee** but you need to register ~~[here](https://forms.gle/HHcYd9LSFYyxN8iz6)~~.
+
+Thank you very much for attending the workshop. Please fill out [this](https://forms.gle/29w1A4SkjF7HF4BaA) feedback form for the event so we can know what to improve for the next one!
 
 ## Thursday 23rd April
 | Start time | Format	 | Description                                                        | Presenters    |
