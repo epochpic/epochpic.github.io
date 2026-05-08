@@ -207,6 +207,11 @@ only used by the bremsstrahlung radiation model.
 See
 &lt;a href="/documentation/input_deck/input_deck_bremsstrahlung">here&lt;/a>
 for details. Default value is &amp;ldquo;F&amp;rdquo;. &amp;ldquo;background&amp;rdquo; is accepted as an alias.&lt;/li>
+&lt;li>&lt;code>recombine&lt;/code> - ** The following option requires EPOCH v4.20.0 and above: **:
+Control if species should be allowed to recombine. Different recombination
+models can be enabled in the
+&lt;a href="/documentation/input_deck/input_deck_control">&lt;em>control&lt;/em>&lt;/a> block. The
+default value is &amp;ldquo;F&amp;rdquo;.&lt;/li>
 &lt;/ul>
 &lt;p>The species blocks are also used for specifying initial conditions for
 the particle species. The initial conditions in EPOCH can be specified
@@ -1213,6 +1218,19 @@ print a warning message and continue running. Setting this flag to &amp;ldquo;T&
 will force the code to abort. The default value is &amp;ldquo;F&amp;rdquo;.&lt;/p>
 &lt;/li>
 &lt;/ul>
+&lt;p>** The following options require EPOCH v4.20.0 and above: **&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>use_radiative_recombination&lt;/code> - Logical flag controlling the use of
+radiative recombination. Default value is &amp;ldquo;F&amp;rdquo;.&lt;/li>
+&lt;li>&lt;code>use_dielectronic_recombination&lt;/code> - Logical flag controlling the use of
+dielectronic recombination. Default value is &amp;ldquo;F&amp;rdquo;.&lt;/li>
+&lt;li>&lt;code>use_three_body_recombination&lt;/code> - Logical flag controlling the use of
+three body recombination. Default value is &amp;ldquo;F&amp;rdquo;.&lt;/li>
+&lt;li>&lt;code>recombine_n_step&lt;/code> - Integer flag to control use of supercycling for
+recombination. Setting this flag to be &amp;ldquo;n&amp;rdquo; will result in
+recombination being calculated every n steps. Default value is 1.&lt;/li>
+&lt;/ul>
+&lt;p>The recombination models and algorithm are described in Morris et al &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>&lt;/p>
 &lt;h1 id="maxwell_solvers">Maxwell Solvers&lt;/h1>
 &lt;p>With the default settings &amp;ldquo;field_order=2&amp;rdquo;, &amp;ldquo;maxwell_solver=yee&amp;rdquo; EPOCH
 will use the standard second order Yee scheme for solving Maxwell&amp;rsquo;s
@@ -1236,16 +1254,16 @@ regard.&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>&lt;code>maxwell_solver = lehe_{x,y,z}&lt;/code> - This setting will
-enable an extended stencil proposed by Lehe et al &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>. This stencil
+enable an extended stencil proposed by Lehe et al &lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>. This stencil
 focusses on improving the dispersion relation on the $x$-axis, please
 take this into account when defining your laser input. It is available
 in EPOCH1D, EPOCH2D and EPOCH3D. While it is not technically required to
 use a dt_multiplier smaller than unity, the value proposed by Lehe et
-al &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup> is &amp;ldquo;dt_multiplier=0.96&amp;rdquo;.&lt;/p>
+al &lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup> is &amp;ldquo;dt_multiplier=0.96&amp;rdquo;.&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;code>maxwell_solver = pukhov&lt;/code> - This setting will enable an
-extended stencil proposed by Pukhov &lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup> under the name of NDFX. It
+extended stencil proposed by Pukhov &lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup> under the name of NDFX. It
 is available in EPOCH2D and EPOCH3D. In EPOCH1D, setting
 maxwell_solver = pukhov will make the code fall back silently to
 Yee&amp;rsquo;s scheme. Pukhov&amp;rsquo;s NDFX scheme aims at improving the numerical
@@ -1258,10 +1276,10 @@ relation is best along the axis with the smallest grid spacing.&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>&lt;code>maxwell_solver = cowan&lt;/code> - This setting will enable en
-extended stencil proposed by Cowan et al &lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>. It is available only
+extended stencil proposed by Cowan et al &lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>. It is available only
 in EPOCH3D. In EPOCH1D and EPOCH2D, setting maxwell_solver = cowan
 will make the code fall back silently to Yee&amp;rsquo;s scheme. Cowan et al
-&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup> proposes to numerically calculate a time step that has the
+&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup> proposes to numerically calculate a time step that has the
 correct group velocity for the input laser. Typically these time
 steps are only slightly below the CFL condition, e.g. &amp;quot; = 0.999&amp;quot;.
 When Cowan&amp;rsquo;s scheme is reduced to 2D it is the same as Pukhov&amp;rsquo;s
@@ -1271,7 +1289,7 @@ is best along the axis with the smallest grid spacing.&lt;/p>
 &lt;li>
 &lt;p>&lt;code>maxwell_solver = custom&lt;/code> - This setting will enable full user control
 over the extended stencil coefficients. This allows for the specification
-of optimised coefficients as outlined in &lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>. This option must be
+of optimised coefficients as outlined in &lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup>. This option must be
 accompanied by a &amp;ldquo;stencil&amp;rdquo; block. See
 &lt;a href="/documentation/input_deck/input_deck_control#stencil_block">below.&lt;/a>&lt;/p>
 &lt;/li>
@@ -1287,7 +1305,7 @@ desired coefficient values.&lt;/p>
 &lt;p>&lt;img src="Stencil.png" alt="Coefficient locations for the B_z field computational stencil in2D.">
 This option allows the user to specify an extended stencil scheme that
 has been specifically optimised for the simulation grid spacing and
-timestep. See &lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup> for further details.
+timestep. See &lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup> for further details.
 or see
 &lt;a href="https://github.com/Ablinne/optimize-stencil" target="_blank" rel="noopener">6&lt;/a> for stencil
 optimization code. Note that there is no option for changing the value
@@ -1325,7 +1343,7 @@ the smoothing function to be performed. If not present defaults to
 one iteration. More iterations will produce smoother results but
 will be slower.&lt;/li>
 &lt;li>&lt;code>smooth_compensation&lt;/code> - Logical flag. If true then
-perform a compensation step (see Vay and Godfrey &lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup>) after the
+perform a compensation step (see Vay and Godfrey &lt;sup id="fnref:7">&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref">7&lt;/a>&lt;/sup>) after the
 smoothing steps are performed. Total number of iterations if true is
 smooth_iterations + 1. If not specified defaults to false&lt;/li>
 &lt;li>&lt;code>smooth_strides&lt;/code> - Either a comma separated list of
@@ -1405,37 +1423,43 @@ Computer Space Plasma Physics: Simulations Techniques and Software,
 &lt;a href="https://www.terrapub.co.jp/e-library/cspp/" target="_blank" rel="noopener">1&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:2" role="doc-endnote">
+&lt;p>S. Morris, D. O. Gericke, S. Fritzsche, J. Machado, J. P. Santos,
+and M. Afshari, &amp;ldquo;Recombination effects in laser-driven acceleration of heavy ions&amp;rdquo;,
+Phys. Rev. E 111, 065209, 2025
+&lt;a href="https://doi.org/10.1103/PhysRevE.111.065209" target="_blank" rel="noopener">7&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3" role="doc-endnote">
 &lt;p>R. Lehe, A. Lifschitz, C. Thaury, V. Malka, and X. Davoine,
 &amp;ldquo;Numerical growth of emittance in simulations of laser-wakefield
 acceleration,&amp;rdquo; Phys. Rev. Accel. Beams, vol. 16, no. 2, p.021301,
 2013
-&lt;a href="https://www.researchgate.net/publication/258097872_Numerical_growth_of_emittance_in_simulations_of_laser-wakefield_acceleration" target="_blank" rel="noopener">2&lt;/a>.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;a href="https://www.researchgate.net/publication/258097872_Numerical_growth_of_emittance_in_simulations_of_laser-wakefield_acceleration" target="_blank" rel="noopener">2&lt;/a>.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:3" role="doc-endnote">
+&lt;li id="fn:4" role="doc-endnote">
 &lt;p>Pukhov, A., &amp;ldquo;Three-dimensional electromagnetic relativistic
 particle-in-cell code VLPL (Virtual Laser Plasma Lab)&amp;rdquo;, J. Plasma
 Phys., vol. 61, no. 3, p. 425, 1999
-&lt;a href="https://www.cambridge.org/core/journals/journal-of-plasma-physics/article/three-dimensional-electromagnetic-relativistic-particle-in-cell-code-vlpl-virtual-laser-plasma-lab/7FBA476D599E2F19DFEA3F0F2F84FFAB" target="_blank" rel="noopener">3&lt;/a>.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;a href="https://www.cambridge.org/core/journals/journal-of-plasma-physics/article/three-dimensional-electromagnetic-relativistic-particle-in-cell-code-vlpl-virtual-laser-plasma-lab/7FBA476D599E2F19DFEA3F0F2F84FFAB" target="_blank" rel="noopener">3&lt;/a>.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:4" role="doc-endnote">
+&lt;li id="fn:5" role="doc-endnote">
 &lt;p>B. Cowan, D. Bruhwiler, J. Cary, E. Cormier-Michel, and C. Geddes,
 &amp;ldquo;Generalized algorithm for control of numerical dispersion in
 explicit time-domain electromagnetic simulations&amp;rdquo;, Phys. Rev.
 Accel. Beams, vol. 16, no. 4, p. 041303, 2013
-&lt;a href="https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.16.041303" target="_blank" rel="noopener">4&lt;/a>.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;a href="https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.16.041303" target="_blank" rel="noopener">4&lt;/a>.&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:5" role="doc-endnote">
+&lt;li id="fn:6" role="doc-endnote">
 &lt;p>A. Blinne, D. Schinkel, S. Kuschel, N. Elkina, S. G. Rykovanov,
 and M. Zepf, &amp;ldquo;A systematic approach to numerical dispersion in
 Maxwell solvers&amp;rdquo;, Computer Physics Communications, 00104655,
 2017
-&lt;a href="https://arxiv.org/pdf/1710.06829.pdf" target="_blank" rel="noopener">5&lt;/a>&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;a href="https://arxiv.org/pdf/1710.06829.pdf" target="_blank" rel="noopener">5&lt;/a>&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
-&lt;li id="fn:6" role="doc-endnote">
+&lt;li id="fn:7" role="doc-endnote">
 &lt;p>J. L. Vay and B. B. Godfrey,
 &amp;ldquo;Modeling of relativistic plasmas with the particle-in-cell method&amp;rdquo;,
 Comptes Rendus Mcanique, 2014
-&lt;a href="http://www.sciencedirect.com/science/article/pii/S163107211400148X" target="_blank" rel="noopener">6&lt;/a>&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;a href="http://www.sciencedirect.com/science/article/pii/S163107211400148X" target="_blank" rel="noopener">6&lt;/a>&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
 &lt;/section></description></item><item><title>Boundaries block</title><link>/documentation/input_deck/input_deck_boundaries.html</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/documentation/input_deck/input_deck_boundaries.html</guid><description>&lt;p>This block contains information about the boundary conditions for this
@@ -2948,6 +2972,22 @@ whether or not to calculate the radiation reaction force. If set to &amp;ldquo;F
 then the force is not calculated. This should nearly always be enabled
 when using the QED model. It is only provided for testing purposes. The
 default value is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>** The following options require EPOCH v4.20.0 and above: **&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>Linear_breit_wheeler&lt;/code> - Logical flag to control the use of the
+linear Breit Wheeler effect. Default value is &amp;ldquo;F&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>LBW_differential_cross&lt;/code> - Logical flag to control use of the
+differential cross section for the linear Breit Wheeler effect.
+Default value is &amp;ldquo;T&amp;rdquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>amplify_LBW_factor&lt;/code> - Real flag to artificially modify the linear
+Breit Wheeler rate. Default value is 1.0.&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;p>QED also requires that the code now know which species are electrons,
