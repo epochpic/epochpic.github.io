@@ -67,6 +67,18 @@ then the force is not calculated. This should nearly always be enabled
 when using the QED model. It is only provided for testing purposes. The
 default value is "T".
 
+** The following options require EPOCH v4.20.0 and above: **
+
+-  `Linear_breit_wheeler` - Logical flag to control the use of the
+linear Breit Wheeler effect. Default value is "F".
+
+- `LBW_differential_cross` - Logical flag to control use of the
+differential cross section for the linear Breit Wheeler effect.
+Default value is "T".
+
+- `amplify_LBW_factor` - Real flag to artificially modify the linear
+Breit Wheeler rate. Default value is 1.0.
+
 QED also requires that the code now know which species are electrons,
 positrons and photons. The species type is specified using a single
 "identify" tag in a species block. To specify an electron the block in
