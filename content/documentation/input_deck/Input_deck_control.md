@@ -308,6 +308,20 @@ calculated and is subtracted from all subsequent current depositions.
     print a warning message and continue running. Setting this flag to "T"
     will force the code to abort. The default value is "F".
 
+** The following options require EPOCH v4.20.0 and above: **
+
+ -   `use_radiative_recombination` - Logical flag controlling the use of
+      radiative recombination. Default value is "F".
+ -   `use_dielectronic_recombination` - Logical flag controlling the use of
+     dielectronic recombination. Default value is "F".
+ -   `use_three_body_recombination` - Logical flag controlling the use of
+     three body recombination. Default value is "F".
+ -   `recombine_n_step` - Integer flag to control use of supercycling for
+     recombination. Setting this flag to be "n" will result in
+     recombination being calculated every n steps. Default value is 1.
+
+The recombination models and algorithm are described in Morris et al [^7]
+
 # Maxwell Solvers {#maxwell_solvers}
 
 With the default settings "field_order=2", "maxwell_solver=yee" EPOCH
@@ -529,6 +543,11 @@ block then this will be used instead.
 "Modeling of relativistic plasmas with the particle-in-cell method",
 Comptes Rendus Mcanique, 2014
 [6](http://www.sciencedirect.com/science/article/pii/S163107211400148X)
+
+[^7]: S. Morris, D. O. Gericke, S. Fritzsche, J. Machado, J. P. Santos,
+      and M. Afshari, "Recombination effects in laser-driven acceleration of heavy ions",
+      Phys. Rev. E 111, 065209, 2025
+[7](https://doi.org/10.1103/PhysRevE.111.065209)
 
 <!-- ########################  Cross references  ######################## -->
 

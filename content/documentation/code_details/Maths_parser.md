@@ -126,6 +126,11 @@ quadrant.
     frequency $\omega$. ie.
     $n_{crit}(\omega) = \omega^2 m_0 \epsilon_0 / e^2$
 
+** The following functions require EPOCH v4.20.0 and above**
+
+ - min(a, b) - Returns the minimum of a and b
+ - max(a, b) - Returns the maximum of a and b
+
 It is also possible for an end user to specify custom functions within
 the code. An example of using a function would be:
 **length_x = exp(pi)**
