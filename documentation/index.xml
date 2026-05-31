@@ -207,7 +207,7 @@ only used by the bremsstrahlung radiation model.
 See
 &lt;a href="/documentation/input_deck/input_deck_bremsstrahlung">here&lt;/a>
 for details. Default value is &amp;ldquo;F&amp;rdquo;. &amp;ldquo;background&amp;rdquo; is accepted as an alias.&lt;/li>
-&lt;li>&lt;code>recombine&lt;/code> - ** The following option requires EPOCH v4.20.0 and above: **:
+&lt;li>&lt;code>recombine&lt;/code> - &lt;strong>The following option requires EPOCH v4.20.0 and above:&lt;/strong>:
 Control if species should be allowed to recombine. Different recombination
 models can be enabled in the
 &lt;a href="/documentation/input_deck/input_deck_control">&lt;em>control&lt;/em>&lt;/a> block. The
@@ -1218,7 +1218,7 @@ print a warning message and continue running. Setting this flag to &amp;ldquo;T&
 will force the code to abort. The default value is &amp;ldquo;F&amp;rdquo;.&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>** The following options require EPOCH v4.20.0 and above: **&lt;/p>
+&lt;p>&lt;strong>The following options require EPOCH v4.20.0 and above:&lt;/strong>&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>use_radiative_recombination&lt;/code> - Logical flag controlling the use of
 radiative recombination. Default value is &amp;ldquo;F&amp;rdquo;.&lt;/li>
@@ -2974,10 +2974,10 @@ when using the QED model. It is only provided for testing purposes. The
 default value is &amp;ldquo;T&amp;rdquo;.&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>** The following options require EPOCH v4.20.0 and above: **&lt;/p>
+&lt;p>&lt;strong>The following options require EPOCH v4.20.0 and above:&lt;/strong>&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>&lt;code>Linear_breit_wheeler&lt;/code> - Logical flag to control the use of the
+&lt;p>&lt;code>linear_breit_wheeler&lt;/code> - Logical flag to control the use of the
 linear Breit Wheeler effect. Default value is &amp;ldquo;F&amp;rdquo;.&lt;/p>
 &lt;/li>
 &lt;li>
