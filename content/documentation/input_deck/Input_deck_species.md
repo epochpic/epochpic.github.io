@@ -144,7 +144,7 @@ particle-like specifications will be ignored. Background species are currently
 only used by the bremsstrahlung radiation model. 
 See [here][Input_deck_bremsstrahlung]
 for details. Default value is "F". "background" is accepted as an alias.
-- `recombine` - ** The following option requires EPOCH v4.20.0 and above: **:
+- `recombine` - **The following option requires EPOCH v4.20.0 and above:**:
 Control if species should be allowed to recombine. Different recombination
 models can be enabled in the [*control*][Input_deck_control] block. The
 default value is "F".

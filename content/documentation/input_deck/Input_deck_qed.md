@@ -67,9 +67,9 @@ then the force is not calculated. This should nearly always be enabled
 when using the QED model. It is only provided for testing purposes. The
 default value is "T".
 
-** The following options require EPOCH v4.20.0 and above: **
+**The following options require EPOCH v4.20.0 and above:**
 
--  `Linear_breit_wheeler` - Logical flag to control the use of the
+-  `linear_breit_wheeler` - Logical flag to control the use of the
 linear Breit Wheeler effect. Default value is "F".
 
 - `LBW_differential_cross` - Logical flag to control use of the

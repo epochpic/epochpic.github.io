@@ -308,7 +308,7 @@ calculated and is subtracted from all subsequent current depositions.
     print a warning message and continue running. Setting this flag to "T"
     will force the code to abort. The default value is "F".
 
-** The following options require EPOCH v4.20.0 and above: **
+**The following options require EPOCH v4.20.0 and above:**
 
  -   `use_radiative_recombination` - Logical flag controlling the use of
       radiative recombination. Default value is "F".
